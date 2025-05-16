@@ -13,7 +13,7 @@ Alerts proactively notify you when issues are found with your infrastructure or 
 
 ### 1) Description of Programs/Tasks for the Week
 
-* **Completed the deployment** of a Python Django web application with PostgreSQL in Azure according to the tutorial - configured the environment, database and successfully deployed the application.
+## 1.1 **Completed the deployment** of a Python Django web application with PostgreSQL in Azure according to the tutorial - configured the environment, database and successfully deployed the application.
 
 
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_1.png)
@@ -23,17 +23,60 @@ https://msdocs-python-postgres-235-cmb4dccwfbf7emhx.westeurope-01.azurewebsites.
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_2.png)
 
 
-* Prepared 50% of the **demo project on alerts in Azure Monitor for the Django web application** - configured the main types of alerts (availability, performance, resource usage).
+## 1.2  Prepared 50% of the **demo project on alerts in Azure Monitor for the Django web application** - configured the main types of alerts (availability, performance, resource usage).
 
-* **Completed 50% of the learning path "Developing a Site Reliability Engineering (SRE) Strategy"** - mastered the modules on the basics of SRE and approaches to system monitoring.
+## 1.3 **Completed 50% of the learning path "Developing a Site Reliability Engineering (SRE) Strategy"** - mastered the modules on the basics of SRE and approaches to system monitoring.
 
-* Completed 100% of the course **"Data analysis with Kusto Query Language"** - mastered the basic syntax and used KQL to analyze web application logs.
+## 1.4 Completed 100% of the course **"Data analysis with Kusto Query Language"** - mastered the basic syntax and used KQL to analyze web application logs.
 
-* **Configured Application Insights for the Django application** - integrated the SDK, configured telemetry collection and data visualization.
+## 1.5  **Configured Application Insights for the Django application** - integrated the SDK, configured telemetry collection and data visualization.
 
-* Developed test scripts to generate load on the web application to demonstrate alert triggering.
+## 1.6 Developed test scripts to generate load on the web application to demonstrate alert triggering.
 
   https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/generate_400_errors.py
+
+
+### Python Script for HTTP 400 Error Generation
+
+This script is a specialized testing tool designed to simulate client-side errors by generating a variety of HTTP 400 (Bad Request) errors against web applications.
+
+#### Key Features:
+
+- **Diverse Error Generation**: Creates four distinct types of malformed requests:
+  - Invalid query parameters (including SQL injection attempts)
+  - Malformed HTTP headers
+  - Invalid HTTP methods
+  - Malformed URLs (including path traversal attempts)
+
+- **Concurrent Testing**: Supports parallel request execution through multi-threading to simulate realistic traffic patterns
+
+- **Customizable Parameters**:
+  - Number of test iterations
+  - Concurrency level
+  - Delay between requests
+  - Selection of specific error types
+
+- **Detailed Reporting**: Provides comprehensive metrics including:
+  - Success rate of generating 400 errors
+  - Distribution of error types
+  - Request processing time
+  - Performance statistics
+
+#### Use Cases:
+
+- Testing error handling of Django applications
+- Validating input validation and request parsing
+- Simulating security probing for application hardening
+- Stress testing application error handling capabilities
+
+#### Sample Command:
+
+```
+python generate_400_errors.py https://example-app.azurewebsites.net --iterations 200 --concurrency 10
+```
+
+This tool helps ensure web applications properly handle malformed requests without exposing sensitive information or experiencing performance degradation.
+  
 
 ### 2) Impressions from the Materials
 
