@@ -81,6 +81,16 @@ Alerts proactively notify you when issues are found with your infrastructure or 
 8) Suppress alerts and configure actions at-scale, https://learn.microsoft.com/ru-ru/azure/azure-monitor/alerts/alerts-processing-rules?wt.mc_id=monitor_inproduct_overview_alerts_s&tabs=portal 
 
 
+## Learning paths
+9)   Discover data analysis, https://learn.microsoft.com/en-us/training/modules/data-analytics-microsoft/
+10)  Data analysis with Kusto Query Language, https://learn.microsoft.com/en-us/training/paths/kusto-query-language/
+11)  Data analysis with Kusto Query Language, https://learn.microsoft.com/en-us/training/paths/kusto-query-language/
+12)  Analyze monitoring data with Kusto Query Language, https://learn.microsoft.com/en-us/training/paths/analyze-monitoring-data-with-kql/
+13) Data analysis in Azure Data Explorer with Kusto Query Language, https://learn.microsoft.com/en-us/training/paths/data-analysis-data-explorer-kusto-query-language/
+
+
+
+
 
 
 
