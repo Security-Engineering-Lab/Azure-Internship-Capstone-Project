@@ -30,108 +30,7 @@ This capstone project transforms standard application monitoring into a robust s
 - **Behavioral Analysis**: Creation of security baselines with alerting on suspicious deviations
 - **Defense in Depth**: Implementation of multi-layered monitoring for comprehensive coverage
 
-## 🛠️ Core Components
-
-### 1. Attack Vector Detection System
-
-```kusto
-// SQL Injection Detection
-AppServiceHTTPLogs
-| where CsUriStem contains "SELECT" or CsUriStem contains "UNION" or CsUriStem contains "DROP"
-| project TimeGenerated, CsUriStem, CsMethod, ScStatus, CIp
-| order by TimeGenerated desc
-```
-
-### 2. Authentication Security Monitoring
-
-Tracks authentication patterns and detects potential brute force attacks using custom metrics and KQL queries.
-
-### 3. Security-focused KQL Query Library
-
-Repository of specialized Kusto Query Language scripts for threat detection and security analysis.
-
-### 4. Incident Response Automation
-
-<p align="center">
-  <img src="https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/alert_workflow.png" alt="Alert Workflow" width="600">
-</p>
-
-### 5. Security Testing Framework
-
-```bash
-# Generate simulated attack patterns to test detection capabilities
-python generate_400_errors.py https://your-app.azurewebsites.net --iterations 200 --concurrency 10 --types param,url
-```
-
-## 📊 Security Value Proposition
-
-- **Visibility**: Real-time dashboard of security-relevant events and potential threats
-- **Proactive Defense**: Early detection of vulnerabilities before exploitation
-- **Compliance**: Comprehensive audit trail for security events and responses
-- **Efficiency**: Automated alerting and incident response procedures
-- **Intelligence**: Trend analysis of attack patterns for continuous improvement
-
-## 🚀 Getting Started
-
-1. Clone this repository
-2. Deploy the Django application to Azure App Service
-3. Configure Application Insights for your application
-4. Import alert templates and KQL queries
-5. Run the security testing framework to validate configurations
-
-## 📚 Documentation
-
-- [Setup Guide](docs/setup.md)
-- [Alert Configuration](docs/alerts.md)
-- [KQL Query Library](docs/kql-library.md)
-- [Testing Framework](docs/testing.md)
-- [Security Best Practices](docs/best-practices.md)
-
-## 🔗 Azure Resources
-
-<p align="center">
-  <img src="https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_2.png" alt="Azure Resources" width="700">
-</p>
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Microsoft Azure Documentation
-- Django Security Team
-- Azure Security Center Guidelines
-
----
-
-<p align="center">
-  <i>Developed as part of the Azure Internship Capstone Project</i><br>
-  <i>© 2025 Security Engineering Lab</i>
-</p>
-
-
-
----------------------------------------------
-# Azure Internship Capstone Project
-
-## Proactive Security Monitoring for Django Applications in Azure
-
-## (Previos: Create Demo Project on Alerts in Azure Monitor for Django Web Application)
-
-### Project Overview
-
-This project implements a security-focused monitoring and alerting system for Django web applications deployed in Azure. By combining Azure Monitor capabilities with security engineering principles, we've created an early warning system that detects potential security threats, anomalous behavior, and application vulnerabilities before they can be exploited.
-
-### Security Objectives
-
-- Detect and alert on potentially malicious HTTP requests and injection attempts
-- Monitor for unusual access patterns and authentication anomalies
-- Identify application vulnerabilities through error rate analysis
-- Create security baselines and detect deviations in application behavior
-- Implement defense-in-depth through multi-layer monitoring
-
-### Security Monitoring Components
+## 🛠️ Core Security Monitoring Components  Components
 
 1. **Attack Vector Detection**: Tracking and alerting on SQL injection, XSS, and path traversal attempts
 2. **Authentication Monitoring**: Identifying brute force attempts and unauthorized access patterns
@@ -150,7 +49,6 @@ This security monitoring solution enhances the application's security posture by
 - Building a security knowledge base through trend analysis of attack patterns
 
 The project serves as a security operations blueprint for Django applications in Azure, demonstrating how to transform standard application monitoring into a robust security monitoring system that aligns with the principle of "shifting security left" in the development lifecycle.
-
 
 --------------------------------------------------------------------------------------------------------------------------
 
@@ -347,6 +245,106 @@ Based on the search results, the following is evident:
 13) Data analysis in Azure Data Explorer with Kusto Query Language, https://learn.microsoft.com/en-us/training/paths/data-analysis-data-explorer-kusto-query-language/
 
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### 1. Attack Vector Detection System
+
+```kusto
+// SQL Injection Detection
+AppServiceHTTPLogs
+| where CsUriStem contains "SELECT" or CsUriStem contains "UNION" or CsUriStem contains "DROP"
+| project TimeGenerated, CsUriStem, CsMethod, ScStatus, CIp
+| order by TimeGenerated desc
+```
+
+### 2. Authentication Security Monitoring
+
+Tracks authentication patterns and detects potential brute force attacks using custom metrics and KQL queries.
+
+### 3. Security-focused KQL Query Library
+
+Repository of specialized Kusto Query Language scripts for threat detection and security analysis.
+
+### 4. Incident Response Automation
+
+<p align="center">
+  <img src="https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/alert_workflow.png" alt="Alert Workflow" width="600">
+</p>
+
+### 5. Security Testing Framework
+
+```bash
+# Generate simulated attack patterns to test detection capabilities
+python generate_400_errors.py https://your-app.azurewebsites.net --iterations 200 --concurrency 10 --types param,url
+```
+
+## 📊 Security Value Proposition
+
+- **Visibility**: Real-time dashboard of security-relevant events and potential threats
+- **Proactive Defense**: Early detection of vulnerabilities before exploitation
+- **Compliance**: Comprehensive audit trail for security events and responses
+- **Efficiency**: Automated alerting and incident response procedures
+- **Intelligence**: Trend analysis of attack patterns for continuous improvement
+
+## 🚀 Getting Started
+
+1. Clone this repository
+2. Deploy the Django application to Azure App Service
+3. Configure Application Insights for your application
+4. Import alert templates and KQL queries
+5. Run the security testing framework to validate configurations
+
+## 📚 Documentation
+
+- [Setup Guide](docs/setup.md)
+- [Alert Configuration](docs/alerts.md)
+- [KQL Query Library](docs/kql-library.md)
+- [Testing Framework](docs/testing.md)
+- [Security Best Practices](docs/best-practices.md)
+
+## 🔗 Azure Resources
+
+<p align="center">
+  <img src="https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_2.png" alt="Azure Resources" width="700">
+</p>
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Microsoft Azure Documentation
+- Django Security Team
+- Azure Security Center Guidelines
+
+---
+
+<p align="center">
+  <i>Developed as part of the Azure Internship Capstone Project</i><br>
+  <i>© 2025 Security Engineering Lab</i>
+</p>
+
+
+
+---------------------------------------------
+# Azure Internship Capstone Project
+
+## Proactive Security Monitoring for Django Applications in Azure
+
+## (Previos: Create Demo Project on Alerts in Azure Monitor for Django Web Application)
+
+### Project Overview
+
+This project implements a security-focused monitoring and alerting system for Django web applications deployed in Azure. By combining Azure Monitor capabilities with security engineering principles, we've created an early warning system that detects potential security threats, anomalous behavior, and application vulnerabilities before they can be exploited.
+
+### Security Objectives
+
+- Detect and alert on potentially malicious HTTP requests and injection attempts
+- Monitor for unusual access patterns and authentication anomalies
+- Identify application vulnerabilities through error rate analysis
+- Create security baselines and detect deviations in application behavior
+- Implement defense-in-depth through multi-layer monitoring
 
 
 
