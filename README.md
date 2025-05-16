@@ -121,15 +121,26 @@ Azure offers three main types of alerts:
 - Define the severity level
 - Click "Create alert rule" to complete
 
-## Notes for Effective Use
-- Choose the appropriate scope based on your monitoring needs
-- Carefully configure conditions to avoid alert fatigue
-- Use different severity levels for various types of alerts
-- Consider automating actions when alerts trigger for rapid response
 
 
+# Analysis of Azure Monitor Log Query Results
 
+Based on the search results, the following is evident:
 
+1. **Available Data Tables**:
+   - The following tables are currently available in Azure Monitor:
+     - `AppServiceHTTPLogs` - HTTP request logs from App Service
+     - `AzureMetrics` - standard Azure metrics
+
+2. **Missing Tables**:
+   - Previously, you encountered errors when attempting to query the `requests` and `traces` tables
+   - These tables are absent, which is confirmed by the results of the `search *` query
+
+3. **Available Data**:
+   - Logs are dated from today (5/16/2025)
+   - The most recent entry to `AppServiceHTTPLogs` was at 8:06:36.125 AM
+   - Metrics (`AzureMetrics`) are collected at 1-minute intervals
+   - Data is coming from an Azure subscription (ID starting with `/subscriptions/0023db84-3d8f-...`)
 
 
 
