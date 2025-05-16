@@ -3,13 +3,13 @@
 
 ## Task: Create Demo Project on Alerts in Azure Monitor for Django Web Application
 
-![](https://github.com/DigitalForensics-Cybersecurity/epam-cybersecurity-training/blob/main/courses/examples/images/1_AzureMonitor.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/1_AzureMonitor.png)
 
 
 ### Alerts Monitoring
 Alerts proactively notify you when issues are found with your infrastructure or application using your monitoring data in Azure Monitor. They allow you to identify and address issues before the users of your system notice them.
 
-![](https://github.com/DigitalForensics-Cybersecurity/epam-cybersecurity-training/blob/main/courses/examples/images/2_AzureMonitor.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/2_AzureMonitor.png)
 
 
 --------------------------------------------------------------------------------------------------------------------------
