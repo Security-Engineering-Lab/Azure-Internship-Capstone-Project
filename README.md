@@ -61,7 +61,7 @@ Alerts proactively notify you when issues are found with your infrastructure or 
 
 # Weekly Report: 12/05/2025 - 16/05/2025
 
-## 1 Setting Up Alerts in Azure Monitor
+##  Setting Up Alerts in Azure Monitor
 
 ## Key Steps for Alert Configuration
 
