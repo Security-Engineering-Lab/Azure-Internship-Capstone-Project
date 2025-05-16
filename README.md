@@ -9,6 +9,78 @@ Alerts proactively notify you when issues are found with your infrastructure or 
 
 --------------------------------------------------------------------------------------------------------------------------
 
+# Weekly Progress: Django App Monitoring in Azure 
+*02/05/2025 - 09/05/2025*
+
+## Achievements This Week
+
+### 🚀 Django Web Application Deployment
+Successfully deployed a Python Django web application with PostgreSQL in Azure:
+- Configured development environment and Azure resources
+- Set up PostgreSQL database and connection
+- Deployed fully functional application to Azure App Service
+
+![Azure Resources Overview](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_1.png)
+
+**Live Demo:** [msdocs-python-postgres-235](https://msdocs-python-postgres-235-cmb4dccwfbf7emhx.westeurope-01.azurewebsites.net/)
+
+### 📊 Application Monitoring Implementation
+- Integrated Application Insights SDK with Django application
+- Configured comprehensive telemetry collection
+- Designed custom dashboards for application metrics visualization
+- Implemented HTTP error tracking and performance monitoring
+
+### 🔔 Alert System Configuration (50% Complete)
+Configured multiple alert types in Azure Monitor:
+- Availability monitoring for critical endpoints
+- Performance thresholds for response times
+- Resource utilization warnings for database and app service
+- HTTP 4xx error rate tracking
+
+### 🧪 Testing Framework Development
+Created a sophisticated testing utility to validate monitoring setup:
+
+```python
+# Test your application's error handling with a single command
+python generate_400_errors.py https://your-app.azurewebsites.net --iterations 200 --concurrency 10
+```
+
+#### HTTP 400 Error Simulator Features:
+- **Multi-vector Testing:** Generates diverse malformed requests including invalid parameters, malformed headers, invalid HTTP methods, and unsafe URLs
+- **Concurrent Execution:** Simulates realistic user patterns with configurable parallel requests
+- **Detailed Analytics:** Provides real-time statistics on error generation and application responses
+- **Security Probing:** Tests application resilience against common attack patterns
+
+## Skills Development
+
+- ✅ Completed 100% of "Data Analysis with Kusto Query Language" course
+  - Applied KQL to analyze application logs and create custom monitoring queries
+  
+- ✅ Progressed through 50% of "Developing a Site Reliability Engineering (SRE) Strategy" learning path
+  - Implemented SRE best practices in monitoring configuration
+  - Applied SLA-based alerting thresholds
+
+## Next Steps
+
+- Complete remaining alert configurations including security-based alerts
+- Develop automated remediation workflows for common issues
+- Create comprehensive documentation for the monitoring system
+- Prepare final presentation demonstrating alert triggers and responses
+
+---
+
+![Azure Resource Configuration](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_2.png)
+
+> **Project Repository:** [Azure-Internship-Capstone-Project](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project)
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 # Weekly Report: 02/05/2025 - 09/05/2025
 
 ### 1) Description of Programs/Tasks for the Week
