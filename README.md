@@ -1,11 +1,42 @@
 
 # Azure Internship Capstone Project
 
-## Task: Create Demo Project on Alerts in Azure Monitor for Django Web Application
+## Proactive Security Monitoring for Django Applications in Azure
 
+## (Previos: Create Demo Project on Alerts in Azure Monitor for Django Web Application)
 
-### Alerts Monitoring
-Alerts proactively notify you when issues are found with your infrastructure or application using your monitoring data in Azure Monitor. They allow you to identify and address issues before the users of your system notice them.
+### Project Overview
+
+This project implements a security-focused monitoring and alerting system for Django web applications deployed in Azure. By combining Azure Monitor capabilities with security engineering principles, we've created an early warning system that detects potential security threats, anomalous behavior, and application vulnerabilities before they can be exploited.
+
+### Security Objectives
+
+- Detect and alert on potentially malicious HTTP requests and injection attempts
+- Monitor for unusual access patterns and authentication anomalies
+- Identify application vulnerabilities through error rate analysis
+- Create security baselines and detect deviations in application behavior
+- Implement defense-in-depth through multi-layer monitoring
+
+### Security Monitoring Components
+
+1. **Attack Vector Detection**: Tracking and alerting on SQL injection, XSS, and path traversal attempts
+2. **Authentication Monitoring**: Identifying brute force attempts and unauthorized access patterns
+3. **Security-focused KQL Queries**: Advanced threat detection using Kusto Query Language
+4. **Incident Response Automation**: Configuring security playbooks for common attack scenarios
+5. **Security Testing Framework**: Specialized tools to simulate attack vectors and validate defense mechanisms
+
+### Security Value Proposition
+
+This security monitoring solution enhances the application's security posture by:
+
+- Providing real-time visibility into potential security incidents
+- Reducing the attack surface through early vulnerability detection
+- Creating an audit trail of security-relevant events for compliance
+- Enabling rapid incident response through automated alerting
+- Building a security knowledge base through trend analysis of attack patterns
+
+The project serves as a security operations blueprint for Django applications in Azure, demonstrating how to transform standard application monitoring into a robust security monitoring system that aligns with the principle of "shifting security left" in the development lifecycle.
+
 
 --------------------------------------------------------------------------------------------------------------------------
 
