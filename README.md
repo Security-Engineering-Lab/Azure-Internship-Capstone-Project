@@ -14,8 +14,7 @@ Alerts proactively notify you when issues are found with your infrastructure or 
 
 --------------------------------------------------------------------------------------------------------------------------
 
-# Weekly Report: 05/02/2025 - 05/09/2025
-
+# Weekly Report: 02/05/2025 - 09/05/2025
 
 ### 1) Description of Programs/Tasks for the Week
 
@@ -61,6 +60,83 @@ Alerts proactively notify you when issues are found with your infrastructure or 
 2. Prepare a presentation script with a step-by-step demonstration of all aspects of working with alerts - from creating rules to responding to incidents.
 
 3. Develop a comprehensive monitoring system for a Django application using custom metrics and KQL queries to identify non-trivial performance issues.
+
+
+------------------------------------------------------------------------------------------------------------
+
+# Weekly Report: 12/05/2025 - 16/05/2025
+
+# Setting Up Alerts in Azure Monitor
+
+## Key Steps for Alert Configuration
+
+### 1. Accessing Alert Creation
+- Open Azure Monitor
+- Navigate to the "Alerts" section
+- Click "Add new alert rule"
+
+### 2. Defining the Target Resource (Scope)
+- Select the resource(s) you want to monitor
+- Available signals depend on the chosen scope:
+  * At subscription level - activity log signals are available
+  * At VM level - metric and activity log signals are available
+  * For Log Analytics workspace - log signals are available
+- Multi-resource metric alert rules are supported for specific resource types
+
+### 3. Configuring Alert Conditions
+Azure offers three main types of alerts:
+
+#### a) Metric Alerts
+- Based on time series data emitted by Azure resources
+- You need to select:
+  * A specific metric of interest
+  * Aggregation type
+  * Threshold value for triggering
+
+#### b) Log Alerts
+- Based on queries against logs stored in a Log Analytics workspace
+- Allow you to define complex scenarios for alerting
+- Utilize the Log Analytics query language (KQL)
+
+#### c) Activity Log Alerts
+- Based on events from the activity log
+- Notify you when specific events occur in your Azure environment
+
+### 4. Defining Actions When Alert Triggers
+- You can choose an existing Action Group or create a new one
+- To create a new Action Group:
+  * Provide a name for the Action Group
+  * Input the name of the action
+  * Select the action type (email, SMS, webhook, etc.)
+  * Enter relevant details for the chosen action type
+
+#### Additional Configuration for Webhooks:
+- Enter your webhook URL to receive notifications
+- It's recommended to enable the "Common Alert Schema" for standardized alert formats
+- This simplifies automation of responses through webhooks, Logic Apps, or runbooks
+
+### 5. Finalizing Settings
+- Specify the alert name and description
+- Define the severity level
+- Click "Create alert rule" to complete
+
+## Notes for Effective Use
+- Choose the appropriate scope based on your monitoring needs
+- Carefully configure conditions to avoid alert fatigue
+- Use different severity levels for various types of alerts
+- Consider automating actions when alerts trigger for rapid response
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # References:
