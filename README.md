@@ -62,10 +62,10 @@ python generate_400_errors.py https://your-app.azurewebsites.net --iterations 20
 
 ## Next Steps
 
-- Complete remaining alert configurations including security-based alerts
-- Develop automated remediation workflows for common issues
-- Create comprehensive documentation for the monitoring system
-- Prepare final presentation demonstrating alert triggers and responses
+- Complete the preparation of a full Azure Monitor alert demo for a Django web application, including all alert types (metrics, logs, availability, errors, anomalies).
+- Prepare a presentation script with a step-by-step demonstration of all aspects of working with alerts - from creating rules to responding to incidents.
+- Develop a comprehensive monitoring system for a Django application using custom metrics and KQL queries to identify non-trivial performance issues.
+
 
 ---
 
@@ -74,119 +74,7 @@ python generate_400_errors.py https://your-app.azurewebsites.net --iterations 20
 > **Project Repository:** [Azure-Internship-Capstone-Project](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project)
 
 
-
-
-
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-# Weekly Report: 02/05/2025 - 09/05/2025
-
-### 1) Description of Programs/Tasks for the Week
-
-## 1.1 **Completed the deployment** of a Python Django web application with PostgreSQL in Azure according to the tutorial - configured the environment, database and successfully deployed the application.
-
-
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_1.png)
-
-https://msdocs-python-postgres-235-cmb4dccwfbf7emhx.westeurope-01.azurewebsites.net/
-
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_2.png)
-
-
-## 1.2  Prepared 50% of the **demo project on alerts in Azure Monitor for the Django web application** - configured the main types of alerts (availability, performance, resource usage).
-
-## 1.3 **Completed 50% of the learning path "Developing a Site Reliability Engineering (SRE) Strategy"** - mastered the modules on the basics of SRE and approaches to system monitoring.
-
-## 1.4 Completed 100% of the course **"Data analysis with Kusto Query Language"** - mastered the basic syntax and used KQL to analyze web application logs.
-
-## 1.5  **Configured Application Insights for the Django application** - integrated the SDK, configured telemetry collection and data visualization.
-
-## 1.6 Developed test scripts to generate load on the web application to demonstrate alert triggering.
-
-  https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/generate_400_errors.py
-
-
-### Python Script for HTTP 400 Error Generation
-
-This script is a specialized testing tool designed to simulate client-side errors by generating a variety of HTTP 400 (Bad Request) errors against web applications.
-
-#### Key Features:
-
-- **Diverse Error Generation**: Creates four distinct types of malformed requests:
-  - Invalid query parameters (including SQL injection attempts)
-  - Malformed HTTP headers
-  - Invalid HTTP methods
-  - Malformed URLs (including path traversal attempts)
-
-- **Concurrent Testing**: Supports parallel request execution through multi-threading to simulate realistic traffic patterns
-
-- **Customizable Parameters**:
-  - Number of test iterations
-  - Concurrency level
-  - Delay between requests
-  - Selection of specific error types
-
-- **Detailed Reporting**: Provides comprehensive metrics including:
-  - Success rate of generating 400 errors
-  - Distribution of error types
-  - Request processing time
-  - Performance statistics
-
-#### Use Cases:
-
-- Testing error handling of Django applications
-- Validating input validation and request parsing
-- Simulating security probing for application hardening
-- Stress testing application error handling capabilities
-
-#### Sample Command:
-
-```
-python generate_400_errors.py https://example-app.azurewebsites.net --iterations 200 --concurrency 10
-```
-
-This tool helps ensure web applications properly handle malformed requests without exposing sensitive information or experiencing performance degradation.
-  
-
-### 2) Impressions from the Materials
-
-**Liked:**
-* Detailed instructions for deploying a Django application with clear explanations of each step.
-* Practical approach to learning KQL with the ability to immediately test queries on real data.
-* Comprehensive coverage of various aspects of SRE with an emphasis on practical application.
-* Many examples of configuring different types of alerts in the Azure Monitor documentation.
-
-**Disliked/needs changes:**
-* I would like to see more examples of using KQL specifically for analyzing web application performance problems.
-
-**I would like to learn more:**
-* Automate alert rule creation using ARM Templates or Azure CLI.
-* Correlate alerts with metrics using Advanced KQL.
-* Configure predictive alerts based on ML models in Azure Monitor.
-
-### 3) Work with a Mentor
-
-* **Conducted an analysis of the monitoring architecture for Python web applications in Azure.**
-* Developed a demonstration structure that covers the full alert lifecycle.
-* Received recommendations on using Log Analytics for advanced analysis of performance issues.
-* Worked out alert demonstration scenarios for different types of web application issues.
-
-### 4) Next Week's Agenda - Top 3 Tasks
-
-1. Complete the preparation of a full Azure Monitor alert demo for a Django web application, including all alert types (metrics, logs, availability, errors, anomalies).
-
-2. Prepare a presentation script with a step-by-step demonstration of all aspects of working with alerts - from creating rules to responding to incidents.
-
-3. Develop a comprehensive monitoring system for a Django application using custom metrics and KQL queries to identify non-trivial performance issues.
-
-
-
-
-
-
-------------------------------------------------------------------------------------------------------------
 
 # Weekly Report: 12/05/2025 - 16/05/2025
 
