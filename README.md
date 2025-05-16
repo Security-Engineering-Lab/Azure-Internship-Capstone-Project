@@ -234,6 +234,7 @@ Based on the search results, the following is evident:
 8) How to send Python logs to Applications Insights (Azure Monitor), https://www.youtube.com/watch?v=EimFeRKuVb8
 9) Python Metrics in Azure Application Insights, https://www.youtube.com/watch?app=desktop&v=ZEeVpRR25S4&t=0s
 10) Unlock the Power of Azure Monitor & Application Insights, https://www.youtube.com/watch?v=lBpWvqI-3PI
+11) SDE Bootcamp 10: Monitor your application with Zero code in Azure with Azure App insights, https://www.youtube.com/watch?v=yW8Zgp5Vy64
    
    
 
