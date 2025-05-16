@@ -226,6 +226,16 @@ Based on the search results, the following is evident:
 
 1) What Is a Capstone Project?, https://www.nu.edu/blog/what-is-a-capstone-project/
 2) How to configure an Alert Rule with Azure Monitor, https://www.youtube.com/watch?v=ps4iasnS7Qs&t=64s
+3) Introduction to Microsoft Azure Application Insights, https://www.youtube.com/watch?v=FPRo0hnHl7M
+4) Monitoring Django App with Azure Application Insights, https://blog.jcharistech.com/2022/10/31/monitoring-django-app-with-azure-application-insights/
+5) Using Azure Application Insights in a dockerized Django, https://django.fun/qa/425698/
+6) ApplicationInsightsMiddleware Class, https://learn.microsoft.com/en-us/python/api/botbuilder-applicationinsights/botbuilder.applicationinsights.django.applicationinsightsmiddleware?view=botbuilder-py-latest
+7) Django, Flask, FastAPI and Azure OpenTelemetry, https://www.youtube.com/watch?v=K_fn6nXHa0s
+8) How to send Python logs to Applications Insights (Azure Monitor), https://www.youtube.com/watch?v=EimFeRKuVb8
+9) Python Metrics in Azure Application Insights, https://www.youtube.com/watch?app=desktop&v=ZEeVpRR25S4&t=0s
+10) Unlock the Power of Azure Monitor & Application Insights, https://www.youtube.com/watch?v=lBpWvqI-3PI
+   
+   
 
 ### Onboarding
 3) Create, view, and manage metric alerts in Azure Monitor,  https://learn.microsoft.com/ru-ru/azure/azure-monitor/alerts/alerts-create-metric-alert-rule?wt.mc_id=monitor_inproduct_overview_alerts_o
