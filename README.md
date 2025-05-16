@@ -40,6 +40,8 @@ Configured multiple alert types in Azure Monitor:
 ### 🧪 Testing Framework Development
 Created a sophisticated testing utility to validate monitoring setup:
 
+https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/generate_400_errors.py
+
 ```python
 # Test your application's error handling with a single command
 python generate_400_errors.py https://your-app.azurewebsites.net --iterations 200 --concurrency 10
