@@ -97,11 +97,22 @@ python generate_400_errors.py https://your-app.azurewebsites.net --iterations 20
 
 ### 2. Defining the Target Resource (Scope)
 - Select the resource(s) you want to monitor
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/3_AzureMonitor.png)
+
 - Available signals depend on the chosen scope:
   * At subscription level - activity log signals are available
   * At VM level - metric and activity log signals are available
   * For Log Analytics workspace - log signals are available
 - Multi-resource metric alert rules are supported for specific resource types
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/4_AzureMonitor.png)
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/5_AzureMonitor.png)
+
+
+
+
 
 ### 3. Configuring Alert Conditions
 Azure offers three main types of alerts:
