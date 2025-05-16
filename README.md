@@ -30,7 +30,7 @@ This capstone project transforms standard application monitoring into a robust s
 - **Behavioral Analysis**: Creation of security baselines with alerting on suspicious deviations
 - **Defense in Depth**: Implementation of multi-layered monitoring for comprehensive coverage
 
-## 🛠️ Core Security Monitoring Components  Components
+## 🛠️ Core Security Monitoring Components  
 
 1. **Attack Vector Detection**: Tracking and alerting on SQL injection, XSS, and path traversal attempts
 2. **Authentication Monitoring**: Identifying brute force attempts and unauthorized access patterns
