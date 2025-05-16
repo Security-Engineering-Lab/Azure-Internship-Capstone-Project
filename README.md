@@ -61,7 +61,7 @@ Alerts proactively notify you when issues are found with your infrastructure or 
 
 # Weekly Report: 12/05/2025 - 16/05/2025
 
-# Setting Up Alerts in Azure Monitor
+## 1 Setting Up Alerts in Azure Monitor
 
 ## Key Steps for Alert Configuration
 
@@ -126,11 +126,6 @@ Azure offers three main types of alerts:
 - Carefully configure conditions to avoid alert fatigue
 - Use different severity levels for various types of alerts
 - Consider automating actions when alerts trigger for rapid response
-
-
-
-
-
 
 
 
