@@ -216,6 +216,9 @@ Based on the search results, the following is evident:
    - Data is coming from an Azure subscription (ID starting with `/subscriptions/0023db84-3d8f-...`)
 
 
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/8_AzureMonitor.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/9_AzureMonitor.png)
+
 
 
 
