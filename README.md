@@ -117,8 +117,6 @@ python generate_400_errors.py https://your-app.azurewebsites.net --iterations 20
 
 ### 3. Configuring Alert Conditions
 
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/7_AzureMonitor.png)
-
 Azure offers three main types of alerts:
 
 #### a) Metric Alerts
@@ -165,6 +163,8 @@ Based on the search results, the following is evident:
    - The following tables are currently available in Azure Monitor:
      - `AppServiceHTTPLogs` - HTTP request logs from App Service
      - `AzureMetrics` - standard Azure metrics
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/7_AzureMonitor.png)
 
 2. **Available Data**:
    - Logs are dated from today (5/16/2025)
