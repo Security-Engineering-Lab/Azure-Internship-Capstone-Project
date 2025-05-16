@@ -15,6 +15,11 @@ Alerts proactively notify you when issues are found with your infrastructure or 
 
 * **Completed the deployment** of a Python Django web application with PostgreSQL in Azure according to the tutorial - configured the environment, database and successfully deployed the application.
 
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_1.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_2.png)
+
+
 * Prepared 50% of the **demo project on alerts in Azure Monitor for the Django web application** - configured the main types of alerts (availability, performance, resource usage).
 
 * **Completed 50% of the learning path "Developing a Site Reliability Engineering (SRE) Strategy"** - mastered the modules on the basics of SRE and approaches to system monitoring.
