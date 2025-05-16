@@ -25,6 +25,8 @@ Alerts proactively notify you when issues are found with your infrastructure or 
 
 * Developed test scripts to generate load on the web application to demonstrate alert triggering.
 
+  https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/generate_400_errors.py
+
 ### 2) Impressions from the Materials
 
 **Liked:**
@@ -55,6 +57,10 @@ Alerts proactively notify you when issues are found with your infrastructure or 
 2. Prepare a presentation script with a step-by-step demonstration of all aspects of working with alerts - from creating rules to responding to incidents.
 
 3. Develop a comprehensive monitoring system for a Django application using custom metrics and KQL queries to identify non-trivial performance issues.
+
+
+
+
 
 
 ------------------------------------------------------------------------------------------------------------
