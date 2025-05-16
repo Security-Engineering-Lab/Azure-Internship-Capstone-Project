@@ -110,11 +110,15 @@ python generate_400_errors.py https://your-app.azurewebsites.net --iterations 20
 
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/5_AzureMonitor_.png)
 
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/6_AzureMonitor.png)
 
 
 
 
 ### 3. Configuring Alert Conditions
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/5_AzureMonitor_.png)
+
 Azure offers three main types of alerts:
 
 #### a) Metric Alerts
