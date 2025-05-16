@@ -132,11 +132,7 @@ Based on the search results, the following is evident:
      - `AppServiceHTTPLogs` - HTTP request logs from App Service
      - `AzureMetrics` - standard Azure metrics
 
-2. **Missing Tables**:
-   - Previously, you encountered errors when attempting to query the `requests` and `traces` tables
-   - These tables are absent, which is confirmed by the results of the `search *` query
-
-3. **Available Data**:
+2. **Available Data**:
    - Logs are dated from today (5/16/2025)
    - The most recent entry to `AppServiceHTTPLogs` was at 8:06:36.125 AM
    - Metrics (`AzureMetrics`) are collected at 1-minute intervals
