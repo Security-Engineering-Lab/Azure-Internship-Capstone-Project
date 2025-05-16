@@ -3,14 +3,9 @@
 
 ## Task: Create Demo Project on Alerts in Azure Monitor for Django Web Application
 
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/1_AzureMonitor.png)
-
 
 ### Alerts Monitoring
 Alerts proactively notify you when issues are found with your infrastructure or application using your monitoring data in Azure Monitor. They allow you to identify and address issues before the users of your system notice them.
-
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/2_AzureMonitor.png)
-
 
 --------------------------------------------------------------------------------------------------------------------------
 
@@ -72,7 +67,13 @@ Alerts proactively notify you when issues are found with your infrastructure or 
 
 ### 1. Accessing Alert Creation
 - Open Azure Monitor
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/1_AzureMonitor.png)
+  
 - Navigate to the "Alerts" section
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/2_AzureMonitor.png)
+  
 - Click "Add new alert rule"
 
 ### 2. Defining the Target Resource (Scope)
