@@ -171,7 +171,7 @@ To set the retention and archive duration for a table in the Azure portal:
 3) Configure the retention and archive duration in the Data retention settings section of the table configuration screen.
 
 
-## 1,5 Configure Log Analytics health status alerts
+## 1.5 Configure Log Analytics health status alerts
 
 Azure Service Health monitors the health of your cloud resources, including Log Analytics workspaces. When a Log Analytics workspace is healthy, data you collect from resources in your IT environment is available for querying and analysis in a relatively short period of time, measured as latency. When Azure Service Health detects average latency in your Log Analytics workspace, the workspace resource health status is Available.
 
