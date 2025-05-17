@@ -529,23 +529,23 @@ Choose the best response for each of the following questions.
 - Fixed-rate sampling
 
 
-# Module Assessment Answers
+### Module Assessment Answers
 
-## Question 1
+### Question 1
 **Which of the following types of platform log would store an event related to a secret key being retrieved from Azure Key Vault by an application?**
 
 The correct answer is: **Activity logs**
 
 Activity logs in Azure record all operations performed on resources at the control plane level, including retrieval of secrets from Key Vault. They track "who did what and when" for operations that affect Azure resources, including authentication events and secret access operations.
 
-## Question 2
+### Question 2
 **Which of the following Application Insights log-based metrics should be chosen for the best performance at query time?**
 
 The correct answer is: **Standard metrics**
 
 Standard metrics in Application Insights offer the best query performance because they're pre-aggregated during collection, optimized for storage and retrieval, and don't require complex query processing at runtime. This makes them significantly faster than log-based metrics, especially for large datasets.
 
-## Question 3
+### Question 3
 **Which of the following Application Insights sampling methods reduces the volume of telemetry sent from the server and user's browsers?**
 
 The correct answer is: **Adaptive sampling**
