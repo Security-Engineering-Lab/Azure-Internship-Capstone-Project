@@ -204,4 +204,29 @@ If you want to create a new alert rule, perform the following steps:
 5) Click Review and Create.
 
 
+## 1.6 Module assessment
+
+Answer the following questions
+
+Choose the best response for each of the following questions.
+
+
+1. Which Log Analytics workspace mode should be chosen in order to allow security principals to only view logs in the workspace to which they have permission irrespective of whether that log belongs to an IaaS Virtual Machine, Azure Web App, or Azure Storage?
+
+- Workspace context
+- Resource context
+- Access control mode
+
+2. An Azure subscription contains multiple Log Analytics workspace in a resource group named LogStores. Which Log Analytics RBAC role should be assigned in order to allow a security principal to be able to restore archived Log Analytics Workspace logs?
+
+- Backup Operator
+- Log Analytics Reader
+- Log Analytics Contributor
+
+3. What is the maximum value that can be configured for a default Log Analytics Workspace retention policy?
+
+- 550 Days
+- 730 Days
+- 900 Days
+
 
