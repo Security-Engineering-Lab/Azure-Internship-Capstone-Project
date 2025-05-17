@@ -229,23 +229,23 @@ Choose the best response for each of the following questions.
 - 730 Days
 - 900 Days
 
-# Module Assessment Answers
+## Module Assessment Answers
 
-## Question 1
+### Question 1
 **Which Log Analytics workspace mode should be chosen in order to allow security principals to only view logs in the workspace to which they have permission irrespective of whether that log belongs to an IaaS Virtual Machine, Azure Web App, or Azure Storage?**
 
 The correct answer is: **Resource context**
 
 Resource context mode enables granular permission control, allowing security principals to view only logs for resources they have specific permissions to access, regardless of whether those resources are VMs, Web Apps, or Storage accounts.
 
-## Question 2
+### Question 2
 **An Azure subscription contains multiple Log Analytics workspace in a resource group named LogStores. Which Log Analytics RBAC role should be assigned in order to allow a security principal to be able to restore archived Log Analytics Workspace logs?**
 
 The correct answer is: **Log Analytics Contributor**
 
 The Log Analytics Contributor role provides the necessary permissions to manage Log Analytics workspaces, including the ability to restore archived logs. Neither Backup Operator nor Log Analytics Reader roles have sufficient permissions for this task.
 
-## Question 3
+### Question 3
 **What is the maximum value that can be configured for a default Log Analytics Workspace retention policy?**
 
 The correct answer is: **730 Days**
@@ -253,3 +253,17 @@ The correct answer is: **730 Days**
 Azure Log Analytics allows data retention policies to be configured for up to 730 days (2 years) for the default retention policy. The 550 and 900 days options are incorrect.
 
 
+
+## 1.7 Summary
+
+Azure Monitor collects log data and stores it in tables. Administrators use Log Analytics in the Azure portal to configure their input data sources and conduct queries for their Azure Monitor logs. In this module you learned how to create a Log analytics workspace, how to configure access to the workspace including the details of the built-in Log Analytics RBAC roles, how to configure data retention for a Log Analytics workspace as well as how to configure Health Status Alerts for a Log Analytics Workspace.
+
+### Learn more
+You can learn more by reviewing the following documents:
+
+- Log Analytics workspace overview, https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-workspace-overview?source=recommendations
+- Create a Log Analytics workspace, https://learn.microsoft.com/en-us/azure/azure-monitor/logs/quick-create-workspace?tabs=azure-portal
+- Manage access to Log Analytics workspaces, https://learn.microsoft.com/en-us/azure/azure-monitor/logs/manage-access?tabs=portal
+- Configure data retention and archive policies in Azure Monitor Logs, https://learn.microsoft.com/en-us/azure/azure-monitor/logs/data-retention-configure?tabs=portal-3%2Cportal-1%2Cportal-2
+- Set daily cap on Log Analytics workspace, https://learn.microsoft.com/en-us/azure/azure-monitor/logs/daily-cap
+- Monitor Log Analytics workspace health, https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-workspace-health
