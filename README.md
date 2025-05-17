@@ -63,6 +63,8 @@ Successfully deployed a Python Django web application with PostgreSQL in Azure:
 - Set up PostgreSQL database and connection
 - Deployed fully functional application to Azure App Service
 
+  https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/django-postgresql-sample-app-on-azure.md
+
 ![Azure Resources Overview](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_1.png)
 
 **Live Demo:** [msdocs-python-postgres-235](https://msdocs-python-postgres-235-cmb4dccwfbf7emhx.westeurope-01.azurewebsites.net/)
