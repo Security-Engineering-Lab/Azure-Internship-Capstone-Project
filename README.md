@@ -136,7 +136,7 @@ Image 3 displays the deployment completion screen:
   - newWorkspaceTemplate
 - A "Go to resource" button to access the newly created resource
 
-## 4. Application Insights Dashboard
+#### 4. Application Insights Dashboard
 
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/10_AzureMonitor_ApplicationInsightsOverview_7.png)
 
