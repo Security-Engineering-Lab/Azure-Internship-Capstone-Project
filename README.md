@@ -73,6 +73,13 @@ Successfully deployed a Python Django web application with PostgreSQL in Azure:
 - Designed custom dashboards for application metrics visualization
 - Implemented HTTP error tracking and performance monitoring
 
+### Application Insights overview
+
+Azure Monitor Application Insights is an OpenTelemetry feature of Azure Monitor that offers application performance monitoring (APM) for live web applications. Integrating with OpenTelemetry (OTel) provides a vendor-neutral approach to collecting and analyzing telemetry data, enabling comprehensive observability of your applications.
+
+
+
+
 ### 🔔 Alert System Configuration (50% Complete)
 Configured multiple alert types in Azure Monitor:
 - Availability monitoring for critical endpoints
