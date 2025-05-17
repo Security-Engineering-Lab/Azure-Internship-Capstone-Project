@@ -136,3 +136,91 @@ Azure Monitor OpenTelemetry provides an easy way to integrate without the need f
 1) Django, Flask, FastAPI and Azure OpenTelemetry, https://www.youtube.com/watch?v=K_fn6nXHa0s
 2) Azure Monitor Opentelemetry Distro client library for Python, https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/monitor/azure-monitor-opentelemetry/README.md
 3) Connection strings in Application Insights, https://learn.microsoft.com/en-us/azure/azure-monitor/app/connection-strings
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Setting Up Azure Application Insights for Django Web Application
+
+## Step-by-Step Process Overview
+
+Based on the provided images, here's a comprehensive walkthrough of how to set up and integrate Azure Application Insights with a Django web application:
+
+## 1. Creating a New Application Insights Resource
+
+As shown in Image 1, the process begins with creating a new Application Insights resource:
+
+- **Navigate to**: Home > Monitor | Applications > Application Insights
+- **Resource Configuration**:
+  - Subscription: Azure subscription 1
+  - Resource Group: msdocs-django-postgres-tutorial-1
+  - Name: DjangoWebApp_ApplicationInsights (highlighted in red box)
+  - Region: (Europe) West Europe
+  - Log Analytics Workspace: DefaultWorkspace with unique identifier
+
+This configuration step establishes the monitoring service that will collect and analyze your Django application's telemetry data.
+
+## 2. Resource Validation and Creation
+
+Image 2 shows the validation and confirmation step:
+
+- All configuration parameters are reviewed
+- The system performs validation checks (shown as "Validation passed")
+- Details of the configured resource are displayed:
+  - Application Insights by Microsoft
+  - Resource specifications matching those entered in step 1
+- To complete the setup, click the "Create" button (highlighted in red)
+
+## 3. Deployment Confirmation
+
+Image 3 displays the deployment completion screen:
+
+- A success message: "Your deployment is complete"
+- Deployment details including:
+  - Deployment name: Microsoft.AppInsights
+  - Start time: 5/17/2025, 8:24:59 AM
+  - Correlation ID: 2a774b94-6b1d-4eb2-bedf-9820b2011457
+- Resources successfully deployed:
+  - DjangoWebApp_ApplicationInsights
+  - newWorkspaceTemplate
+- A "Go to resource" button to access the newly created resource
+
+## 4. Application Insights Dashboard
+
+Image 4 shows the Application Insights dashboard for the Django application:
+
+- The resource overview page displays essential monitoring metrics
+- Key information highlighted includes:
+  - **Connection String** (highlighted in red): This is critical for integrating with your Django application
+  - **Instrumentation Key**: 255b5d65-4b45-498c-b124-41b283997035
+- Dashboard panels showing:
+  - Failed requests
+  - Server response time
+  - Server requests
+  - Availability metrics
+- Time range filter options (30 minutes to 30 days)
+
+## Implementation in Django
+
+To integrate this Application Insights resource with your Django project:
+
+1. Copy the Connection String highlighted in Image 4
+2. Add it to your Django application's environment variables:
+   ```bash
+   APPLICATIONINSIGHTS_CONNECTION_STRING="InstrumentationKey=255b5d65-4b45-498c-b124-41b283997035;IngestionEndpoint=..."
+   ```
+3. Modify your `wsgi.py` file to include:
+   ```python
+   import os
+   from django.core.wsgi import get_wsgi_application
+   from azure.monitor.opentelemetry import configure_azure_monitor
+
+   os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yourproject.settings')
+
+   if os.environ.get("APPLICATIONINSIGHTS_CONNECTION_STRING"):
+       configure_azure_monitor()
+
+   application = get_wsgi_application()
+   ```
+
+Once integrated, your Django application will send telemetry data to Azure Application Insights, allowing you to monitor performance, track usage, and diagnose issues through the dashboard shown in Image 4.
