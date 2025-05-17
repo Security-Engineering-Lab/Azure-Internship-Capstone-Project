@@ -135,4 +135,4 @@ Azure Monitor OpenTelemetry provides an easy way to integrate without the need f
 
 1) Django, Flask, FastAPI and Azure OpenTelemetry, https://www.youtube.com/watch?v=K_fn6nXHa0s
 2) Azure Monitor Opentelemetry Distro client library for Python, https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/monitor/azure-monitor-opentelemetry/README.md
-3) 
+3) Connection strings in Application Insights, https://learn.microsoft.com/en-us/azure/azure-monitor/app/connection-strings
