@@ -154,7 +154,7 @@ Image 3 displays the deployment completion screen:
 
 #### Implementation in Django
 
-To integrate this Application Insights resource with your Django project:
+To integrate this Application Insights resource with Django project:
 
 1. Copy the Connection String highlighted in Image 4
 2. Add it to your Django application's environment variables:
