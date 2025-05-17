@@ -152,6 +152,42 @@ Image 3 displays the deployment completion screen:
 - Time range filter options (30 minutes to 30 days)
 
 
+#### Implementation in Django
+
+To integrate this Application Insights resource with your Django project:
+
+1. Copy the Connection String highlighted in Image 4
+2. Add it to your Django application's environment variables:
+   ```bash
+   APPLICATIONINSIGHTS_CONNECTION_STRING="InstrumentationKey=255b5d65-4b45-498c-b124-41b283997035;IngestionEndpoint=..."
+   ```
+
+3. Installing the Required Packages
+
+```bash
+
+# Install OpenTelemetry packages
+pip install azure-monitor-opentelemetry
+```
+
+4. Modify your `wsgi.py` file to include:
+   ```python
+   import os
+   from django.core.wsgi import get_wsgi_application
+   from azure.monitor.opentelemetry import configure_azure_monitor
+
+   os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yourproject.settings')
+
+   if os.environ.get("APPLICATIONINSIGHTS_CONNECTION_STRING"):
+       configure_azure_monitor()
+
+   application = get_wsgi_application()
+   ```
+
+
+
+
+
 ### 🔔 Alert System Configuration (50% Complete)
 Configured multiple alert types in Azure Monitor:
 - Availability monitoring for critical endpoints
