@@ -229,4 +229,27 @@ Choose the best response for each of the following questions.
 - 730 Days
 - 900 Days
 
+# Module Assessment Answers
+
+## Question 1
+**Which Log Analytics workspace mode should be chosen in order to allow security principals to only view logs in the workspace to which they have permission irrespective of whether that log belongs to an IaaS Virtual Machine, Azure Web App, or Azure Storage?**
+
+The correct answer is: **Resource context**
+
+Resource context mode enables granular permission control, allowing security principals to view only logs for resources they have specific permissions to access, regardless of whether those resources are VMs, Web Apps, or Storage accounts.
+
+## Question 2
+**An Azure subscription contains multiple Log Analytics workspace in a resource group named LogStores. Which Log Analytics RBAC role should be assigned in order to allow a security principal to be able to restore archived Log Analytics Workspace logs?**
+
+The correct answer is: **Log Analytics Contributor**
+
+The Log Analytics Contributor role provides the necessary permissions to manage Log Analytics workspaces, including the ability to restore archived logs. Neither Backup Operator nor Log Analytics Reader roles have sufficient permissions for this task.
+
+## Question 3
+**What is the maximum value that can be configured for a default Log Analytics Workspace retention policy?**
+
+The correct answer is: **730 Days**
+
+Azure Log Analytics allows data retention policies to be configured for up to 730 days (2 years) for the default retention policy. The 550 and 900 days options are incorrect.
+
 
