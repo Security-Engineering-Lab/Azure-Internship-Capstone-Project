@@ -171,5 +171,37 @@ To set the retention and archive duration for a table in the Azure portal:
 3) Configure the retention and archive duration in the Data retention settings section of the table configuration screen.
 
 
+## 1,5 Configure Log Analytics health status alerts
+
+Azure Service Health monitors the health of your cloud resources, including Log Analytics workspaces. When a Log Analytics workspace is healthy, data you collect from resources in your IT environment is available for querying and analysis in a relatively short period of time, measured as latency. When Azure Service Health detects average latency in your Log Analytics workspace, the workspace resource health status is Available.
+
+To enable recommended alert rules:
+
+1) In the Azure portal, navigate to the Log Analytics workspace. Under Monitoring, select the Alerts section and then under Enable recommended alert rules click View + enable.
+2) This will bring up the Enable recommended alert rules page.
+Screenshot of the Properties page of the Enable recommended alert rules page in a Log Analytics workspace.
+
+3) In the Alert me if section, select all the rules you want to enable.
+4) In the Notify me by section, select the way you want to be notified if an alert is triggered.
+5) Select Use an existing action group, and enter the details of the existing action group if you want to use an action group that already exists.
+6) Select Enable.
+
+If you want to create a new action group, you will perform the following steps before setting up the alert rules:
+
+1) In the Azure portal, navigate to the Azure Monitor page.
+2) In the navigation menu, select Alerts.
+3) In the toolbar, select Action groups.
+4) Select +Create.
+5) Step through the Create action group wizard.
+6) On the Notifications page, set the Notification type to Email/SMS message/Push/Voice and set Email to alerts@contoso.com.
+
+If you want to create a new alert rule, perform the following steps:
+
+1) In the Azure portal, navigate to the Log Analytics workspace. Under Monitoring, select the Alerts section. On the menu bar click the Create drop down and then click Alert rule.
+2) On the Condition page select Resource Health and then click Apply. Once you select Resource Health, the rule triggers alerts for all status changes in all Log Analytics workspaces in the subscription by default. If necessary, you can edit and modify the scope and condition at this stage.
+3) On the Actions page either select an existing action group or create a new action group.
+4) On the Details page, specify the Resource Group, Alert rule name, and a description.
+5) Click Review and Create.
+
 
 
