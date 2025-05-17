@@ -86,13 +86,13 @@ The logic model diagram visualizes components of Application Insights and how th
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/10_AzureMonitor_ApplicationInsightsOverview_2.svg)
 
 
-#### Setting Up Azure Application Insights for Django Web Application
+### Setting Up Azure Application Insights for Django Web Application
 
-## Step-by-Step Process Overview
+#### Step-by-Step Process Overview
 
 Here's a comprehensive walkthrough of how to set up and integrate Azure Application Insights with a Django web application:
 
-## 1. Creating a New Application Insights Resource
+#### 1. Creating a New Application Insights Resource
 
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/10_AzureMonitor_ApplicationInsightsOverview_4.png)
 
@@ -108,7 +108,7 @@ As shown in Image 1, the process begins with creating a new Application Insights
 
 This configuration step establishes the monitoring service that will collect and analyze your Django application's telemetry data.
 
-## 2. Resource Validation and Creation
+#### 2. Resource Validation and Creation
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/10_AzureMonitor_ApplicationInsightsOverview_5.png)
 
 Image 2 shows the validation and confirmation step:
@@ -120,7 +120,7 @@ Image 2 shows the validation and confirmation step:
   - Resource specifications matching those entered in step 1
 - To complete the setup, click the "Create" button (highlighted in red)
 
-## 3. Deployment Confirmation
+#### 3. Deployment Confirmation
 
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/10_AzureMonitor_ApplicationInsightsOverview_6.png)
 
