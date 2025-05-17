@@ -159,7 +159,7 @@ To integrate this Application Insights resource with your Django project:
 1. Copy the Connection String highlighted in Image 4
 2. Add it to your Django application's environment variables:
    ```bash
-   APPLICATIONINSIGHTS_CONNECTION_STRING="InstrumentationKey=255b5d65-4b45-498c-b124-41b283997035;IngestionEndpoint=..."
+   APPLICATIONINSIGHTS_CONNECTION_STRING="InstrumentationKey=255b5d65-XXXX-XXXX-XXXX-41b283997035;IngestionEndpoint=..."
    ```
 
 3. Installing the Required Packages
