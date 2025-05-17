@@ -192,7 +192,7 @@ Image 4 shows the Application Insights dashboard for the Django application:
 - The resource overview page displays essential monitoring metrics
 - Key information highlighted includes:
   - **Connection String** (highlighted in red): This is critical for integrating with your Django application
-  - **Instrumentation Key**: 255b5d65-4b45-498c-b124-41b283997035
+  - **Instrumentation Key**: 255bXXXX-XXXX-XXXX-XXXX-41b283997035
 - Dashboard panels showing:
   - Failed requests
   - Server response time
