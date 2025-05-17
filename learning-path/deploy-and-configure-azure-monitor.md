@@ -61,9 +61,9 @@ Once you've configured the workspace and data is being logged, you can analyze i
 
 The data in a Log Analytics workspace that you can access is determined by a combination of the following factors:
 
--The settings on the workspace itself.
--The access to resources sending data to the workspace.
--The method used to access the workspace.
+- The settings on the workspace itself.
+- The access to resources sending data to the workspace.
+- The method used to access the workspace.
 
 ### Access mode
 The access mode refers to how you access a Log Analytics workspace and defines the data you can access during the current session. The mode is determined according to the scope you select in Log Analytics.
