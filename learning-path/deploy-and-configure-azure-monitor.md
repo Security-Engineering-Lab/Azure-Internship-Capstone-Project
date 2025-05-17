@@ -82,33 +82,38 @@ You can switch which access control mode is being used by selecting the Properti
 
 Screenshot of the Properties page of a Log Analytics workspace with the Access control mode setting highlighted.
 
-Log Analytics RBAC roles
+### Log Analytics RBAC roles
 There are two built-in Log Analytics related RBAC roles. These are:
 
-Log Analytics Reader
-Log Analytics Contributor
-Log Analytics Reader
+- Log Analytics Reader
+- Log Analytics Contributor
+
+### Log Analytics Reader
+
 You can assign the Log Analytics Reader role at a particular scope to configure access to a Log Analytics workspace. Members of the Log Analytics Reader role can view all monitoring data and monitoring settings, including the configuration of Azure diagnostics on all Azure resources.
 
 Members of the Log Analytics Reader role can:
 
-View and search all monitoring data.
-View monitoring settings, including viewing the configuration of Azure diagnostics on all Azure resources.
-Log Analytics Contributor
+- View and search all monitoring data.
+- View monitoring settings, including viewing the configuration of Azure diagnostics on all Azure resources.
+
+### Log Analytics Contributor
+
 Members of the Log Analytics Contributor role can:
 
-Read all monitoring data granted by the Log Analytics Reader role.
-Edit monitoring settings for Azure resources, including:
-Adding the VM extension to VMs.
-Configuring Azure diagnostics on all Azure resources.
-Create and configure Automation accounts. Permission must be granted at the resource group or subscription level.
-Add and remove management solutions. Permission must be granted at the resource group or subscription level.
-Read storage account keys.
-Configure the collection of logs from Azure Storage.
-Configure data export rules.
-Run a search job.
-Restore archived logs.
-Log Analytics RBAC scopes
+- Read all monitoring data granted by the Log Analytics Reader role.
+- Edit monitoring settings for Azure resources, including:
+-- Adding the VM extension to VMs.
+-- Configuring Azure diagnostics on all Azure resources.
+- Create and configure Automation accounts. Permission must be granted at the resource group or subscription level.
+- Add and remove management solutions. Permission must be granted at the resource group or subscription level.
+- Read storage account keys.
+- Configure the collection of logs from Azure Storage.
+- Configure data export rules.
+- Run a search job.
+- Restore archived logs.
+
+### Log Analytics RBAC scopes
 You can configure Log Analytics role access at the following scopes:
 
 Subscription: Access to all workspaces in the subscription
