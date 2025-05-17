@@ -86,10 +86,70 @@ The logic model diagram visualizes components of Application Insights and how th
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/10_AzureMonitor_ApplicationInsightsOverview_2.svg)
 
 
+#### Setting Up Azure Application Insights for Django Web Application
+
+## Step-by-Step Process Overview
+
+Here's a comprehensive walkthrough of how to set up and integrate Azure Application Insights with a Django web application:
+
+## 1. Creating a New Application Insights Resource
+
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/10_AzureMonitor_ApplicationInsightsOverview_4.png)
+
+As shown in Image 1, the process begins with creating a new Application Insights resource:
+
+- **Navigate to**: Home > Monitor | Applications > Application Insights
+- **Resource Configuration**:
+  - Subscription: Azure subscription 1
+  - Resource Group: msdocs-django-postgres-tutorial-1
+  - Name: DjangoWebApp_ApplicationInsights (highlighted in red box)
+  - Region: (Europe) West Europe
+  - Log Analytics Workspace: DefaultWorkspace with unique identifier
+
+This configuration step establishes the monitoring service that will collect and analyze your Django application's telemetry data.
+
+## 2. Resource Validation and Creation
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/10_AzureMonitor_ApplicationInsightsOverview_5.png)
+
+Image 2 shows the validation and confirmation step:
+
+- All configuration parameters are reviewed
+- The system performs validation checks (shown as "Validation passed")
+- Details of the configured resource are displayed:
+  - Application Insights by Microsoft
+  - Resource specifications matching those entered in step 1
+- To complete the setup, click the "Create" button (highlighted in red)
+
+## 3. Deployment Confirmation
+
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/10_AzureMonitor_ApplicationInsightsOverview_6.png)
+
+Image 3 displays the deployment completion screen:
+
+- A success message: "Your deployment is complete"
+- Deployment details including:
+  - Deployment name: Microsoft.AppInsights
+  - Start time: 5/17/2025, 8:24:59 AM
+  - Correlation ID: 2a774b94-6b1d-4eb2-bedf-9820b2011457
+- Resources successfully deployed:
+  - DjangoWebApp_ApplicationInsights
+  - newWorkspaceTemplate
+- A "Go to resource" button to access the newly created resource
+
+## 4. Application Insights Dashboard
+
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/10_AzureMonitor_ApplicationInsightsOverview_7.png)
+
+- The resource overview page displays essential monitoring metrics
+- Key information highlighted includes:
+  - **Connection String** (highlighted in red): This is critical for integrating with your Django application
+  - **Instrumentation Key**: 255bXXXX-XXXX-XXXX-b124-41b28399XXXX
+- Dashboard panels showing:
+  - Failed requests
+  - Server response time
+  - Server requests
+  - Availability metrics
+- Time range filter options (30 minutes to 30 days)
 
 
 ### 🔔 Alert System Configuration (50% Complete)
