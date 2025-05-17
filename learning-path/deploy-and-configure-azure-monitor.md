@@ -561,7 +561,7 @@ You can learn more by reviewing the following documents:
 
 - Sampling in Application Insights, https://learn.microsoft.com/en-us/previous-versions/azure/azure-monitor/app/sampling
 - Monitor app performance, https://learn.microsoft.com/en-us/training/modules/monitor-app-performance/
-- Monitor your SQL deployments with SQL Insights,
-- Overview of Azure platform logs
-- Azure resource log
-- Diagnostic settings in Azure Monitor
+- Monitor your SQL deployments with SQL Insights, https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-insights-overview?view=azuresql
+- Overview of Azure platform logs, https://learn.microsoft.com/en-us/azure/azure-monitor/fundamentals/data-sources
+- Azure resource log, https://learn.microsoft.com/en-us/azure/azure-monitor/platform/resource-logs
+- Diagnostic settings in Azure Monitor, https://learn.microsoft.com/en-us/azure/azure-monitor/platform/diagnostic-settings
