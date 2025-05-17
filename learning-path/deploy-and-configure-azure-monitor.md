@@ -103,8 +103,8 @@ Members of the Log Analytics Contributor role can:
 
 - Read all monitoring data granted by the Log Analytics Reader role.
 - Edit monitoring settings for Azure resources, including:
--- Adding the VM extension to VMs.
--- Configuring Azure diagnostics on all Azure resources.
+-  Adding the VM extension to VMs.
+-  Configuring Azure diagnostics on all Azure resources.
 - Create and configure Automation accounts. Permission must be granted at the resource group or subscription level.
 - Add and remove management solutions. Permission must be granted at the resource group or subscription level.
 - Read storage account keys.
@@ -114,21 +114,23 @@ Members of the Log Analytics Contributor role can:
 - Restore archived logs.
 
 ### Log Analytics RBAC scopes
+
 You can configure Log Analytics role access at the following scopes:
 
-Subscription: Access to all workspaces in the subscription
-Resource group: Access to all workspaces in the resource group
-Resource: Access to only the specified workspace
+- Subscription: Access to all workspaces in the subscription
+- Resource group: Access to all workspaces in the resource group
+- Resource: Access to only the specified workspace
+
 For example, if you assign the Log Analytics Reader role at the resource group level, the user assigned the role will have Log Analytics Reader level access to all Log Analytics workspaces in that specific resource group.
 
 To configure Azure RBAC permissions at the workspace scope, perform the following steps:
 
-Navigate to Log analytics workspace in the Azure portal.
-Select Access control (IAM).
-Add a role assignment.
-Select Log Analytics Reader or Log Analytics Contributor and click Next.
-Add the security principal to which you wish to assign the role and click Next.
-Click Save.
+1) Navigate to Log analytics workspace in the Azure portal.
+2) Select Access control (IAM).
+3) Add a role assignment.
+4) Select Log Analytics Reader or Log Analytics Contributor and click Next.
+5) Add the security principal to which you wish to assign the role and click Next.
+6) Click Save.
 
 
 
