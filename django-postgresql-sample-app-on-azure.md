@@ -178,3 +178,22 @@ The project follows Django's MVT (Model-View-Template) architecture:
 4. **URLs** - Map URLs to view functions
 
 The application is designed to seamlessly integrate with Azure services including App Service, PostgreSQL, and Redis Cache, demonstrating a complete cloud-native web application architecture.
+
+
+### References:
+
+1) Streamlining Azure Django Deployment, https://pieces.app/blog/streamlining-azure-django-deployment
+2) Deploy Django App on Azure #1: Changing Django Code for Deployment, https://www.youtube.com/watch?v=QjEVmQ4rcWA
+3) Deploy Django App on Azure #2: Pushing our Code to GitHub with Git, https://www.youtube.com/watch?v=X2eUFKrY00Y
+4) Deploy Django App on Azure #3: Creating Microsoft Azure Resources, https://www.youtube.com/watch?v=_Gx30E3r1xk
+5) Deploy Django App on Azure #4: Deploying our Code on the Azure Portal, https://www.youtube.com/watch?v=L5oCPVr7l4c
+6) Deploying Django & React App on Microsoft Azure #1: Overview and Architecture of the Deployment, https://www.youtube.com/watch?v=4Hk_wKCsRo0
+7) Deploying Django & React App on Microsoft Azure #2: Changing Python Django Code for Deployment, https://www.youtube.com/watch?v=iG6HUlz1fZQ
+8) Deploying Django & React App on Microsoft Azure #3: Pushing the Source Code to GitHub using Git, https://www.youtube.com/watch?v=CBUq442T-Wc
+9) Deploying Django & React App on Microsoft Azure #4: Deploy Python Django Code on Microsoft Azure, https://www.youtube.com/watch?v=K15Q5fVYHN8
+10) Deploying Django & React App on Microsoft Azure #5: Deploy a Vite React JS App on Microsoft Azure, https://www.youtube.com/watch?v=LZdAvNDMvIU
+11) Deploying Django & React App on Microsoft Azure #6: Costs of Deployment and Troubleshooting, https://www.youtube.com/watch?v=k8zNgbkXFew
+12) Project code, https://github.com/NickMol/Django-React-Deploy-Tutorial
+   
+   
+
