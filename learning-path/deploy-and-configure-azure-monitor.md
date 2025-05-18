@@ -1147,4 +1147,15 @@ The correct answer is: **Ten percent of results over 750 milliseconds**
 By default, Connection Monitor will trigger a warning when 10% of test results exceed 750 milliseconds of latency. This threshold represents a balance between sensitivity to potential issues and tolerance for normal network variations. The other options either specify an incorrect percentage threshold or an incorrect latency value compared to the default Connection Monitor configuration.
 
 
+## 4.7 Summary
+
+In this module, you learned how to monitor connectivity across your Azure IaaS network resources. You learned how to create an Azure Network Watcher Connection Monitor to monitor, diagnose, and view connectivity-related metrics for your Azure deployments. You also learned how to create and configure flow logs, run diagnostics against NSGs, and use packet capture sessions to track traffic to and from a virtual machine (VM) or a scale set.
+
+#### Learn more
+
+- What is Azure Network Watcher?, https://learn.microsoft.com/en-us/azure/network-watcher/network-watcher-overview
+- Azure Network Watcher connection monitor, https://learn.microsoft.com/en-us/azure/network-watcher/connection-monitor-overview
+- Flow logging for network security groups, https://learn.microsoft.com/en-us/azure/network-watcher/nsg-flow-logs-overview?tabs=Americas
+- NSG diagnostics overview, https://learn.microsoft.com/en-us/azure/network-watcher/nsg-diagnostics-overview
+
 
