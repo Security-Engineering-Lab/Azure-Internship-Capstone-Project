@@ -1650,7 +1650,7 @@ In Exercise 4, you configure two specific alerts: an action group to send an ema
 
 > **Note**: To complete this lab you will need an **Azure subscription**.
 
-## 7 Module assessment
+## 6.7 Module assessment
 
 ## Answer the following questions
 
@@ -1678,4 +1678,25 @@ Choose the best response for each of the following questions.
 - Log alert
 
 
+# 6.8 Summary
+
+Azure Monitor is a comprehensive monitoring solution that helps you maximize the performance and availability of your cloud and hybrid resources.
+
+In this module, you learned how to:
+* Deploy and configure Log Analytics.
+* Configure monitoring for web apps.
+* Monitor compute and networking services.
+* Configure alerts.
+
+## Learn more
+
+* [Log Analytics workspace overview](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-workspace-overview)
+* [Create a Log Analytics workspace](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/quick-create-workspace)
+* [Monitor app performance](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview)
+* [Monitor your SQL deployments with SQL Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/insights/sql-insights-overview)
+* [Collect IIS logs with Azure Monitor Agent](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/data-collection-rule-azure-monitor-agent)
+* [Azure Network Watcher connection monitor](https://learn.microsoft.com/en-us/azure/network-watcher/connection-monitor-overview)
+* [Use Change Analysis in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/change/change-analysis)
+* [Action groups](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/action-groups)
+* [Create or edit an alert rule](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-create-new-alert-rule)
 
