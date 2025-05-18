@@ -1,5 +1,5 @@
 
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/0_monitoring-panel-options-small.png)
+
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/1_overview-simple.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/2_workbooks.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/3_dashboard.png)
@@ -30,6 +30,8 @@ Learn how to use Azure Monitor to provide insights into your Azure resource perf
 ## 1.1 Introduction
 
 Azure Monitor enables end-to-end monitoring of all your Azure and hybrid services and resources. This learning module gives you an overview of Azure Monitor, describes key Azure Monitor features, and helps you understand how Azure Monitor provides you with data and insights about your IT availability, performance, and health.
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/0_monitoring-panel-options-small.png)
 
 One reason for hosting workloads on Azure is the ability to scale up or scale out resources when needed, then automatically scale them back when resource needs drop off. But initially, you don't always know exactly where the capacity issues are. You can use Azure Monitor to collect metrics and logs to determine where your needs are so you can base your scaling strategy on concrete data.
 
@@ -81,6 +83,8 @@ When you run applications built on various services and resources, a key element
 Azure Monitor provides features and tools for collecting, managing, and analyzing IT data from all of your Azure, other cloud, and on-premises resources. The following diagram shows a high-level architectural view of Azure Monitor.
 
 ![Diagram that shows an overview of Azure Monitor with data sources and features that use the collected data.](https://learn.microsoft.com/en-us/training/wwl-azure/introduction-to-azure-monitor/media/azure-monitor-overview.png)
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/1_overview-simple.png)
 
 ### Data collection and storage
 
