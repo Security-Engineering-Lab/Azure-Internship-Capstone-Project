@@ -920,7 +920,7 @@ You can use Connection Monitor in the following scenarios:
 - You want to check the connectivity between your on-premises setups and the Azure VMs that host your cloud application.
 - You want to check the connectivity from multiple instances of an Azure Virtual Machine Scale Set to your Non-Azure multi-tier application.
 
-# Diagnosing network issues
+### Diagnosing network issues
 
 Connection Monitor helps you diagnose issues in your connection monitor and your network. Issues in your hybrid network are detected by the Log Analytics agents that you installed earlier. Issues in Azure are detected by the Network Watcher extension.
 
@@ -939,11 +939,11 @@ SSL certificate is expired, invalid, revoked, or incompatible.
 
 For networks whose sources are Azure VMs, the following issues can be detected:
 
-Agent issues including:
-Agent stopped
+- Agent issues including:
+- Agent stopped
 Failed DNS resolution
 No application or listener listening on the destination port and Socket could not be opened.
-VM state issues including:
+- VM state issues including:
 Starting
 Stopping
 Stopped
@@ -951,9 +951,9 @@ Deallocating
 Deallocated
 Rebooting
 Not allocated
-ARP table entry is missing.
-Traffic was blocked because of local firewall issues or NSG rules.
-Virtual network gateway issues including:
+- ARP table entry is missing.
+- Traffic was blocked because of local firewall issues or NSG rules.
+- Virtual network gateway issues including:
 Missing routes
 The tunnel between two gateways is disconnected or missing.
 The second gateway wasn't found by the tunnel.
@@ -962,14 +962,17 @@ The route was missing in Microsoft Edge.
 Traffic stopped because of system routes or user-defined route (UDR).
 Border Gateway Protocol (BGP) isn't enabled on the gateway connection.
 The dynamic IP address (DIP) probe is down at the load balancer.
-Configuring Connection Monitor
+
+### Configuring Connection Monitor
 To use Connection Monitor to measure a specific scenario, you need to perform the following general steps:
 
-Install monitoring agents.
-Create a connection monitor.
-Analyze monitoring data and set alerts.
-Diagnose issues in your network.
-Install monitoring agents
+1) Install monitoring agents.
+2) Create a connection monitor.
+3) Analyze monitoring data and set alerts.
+4) Diagnose issues in your network.
+
+### Install monitoring agents
+
 Connection Monitor relies on lightweight executable files to run connectivity checks. It supports connectivity checks from both Azure environments and on-premises environments. The executable file that you use depends on whether your VM is hosted on Azure or on-premises.
 
 Connection Monitor can use your Azure VMs or virtual machine scale sets as monitoring sources if the Network Watcher Agent virtual machine extension is installed on them. This extension is also known as the Network Watcher extension. This extension allows end-to-end monitoring and other advanced functionality.
@@ -978,50 +981,143 @@ Rules for a network security group (NSG) or firewall can block communication bet
 
 To make Connection Monitor recognize your on-premises machines as sources for monitoring, install the Log Analytics agent on the machines. Then, enable the Network Performance Monitor solution. These agents are linked to Log Analytics workspaces, so you need to set up the workspace ID and primary key before the agents can start monitoring.
 
-Create a connection monitor
+### Create a connection monitor
+
 In connection monitors that you create in Connection Monitor, you can add both on-premises machines and Azure VMs/ scale sets as sources. These connection monitors can also monitor connectivity to endpoints. The endpoints can be on Azure or any other URL or IP address.
 
 Connection Monitor includes the following entities:
 
-Connection monitor resource: A region-specific Azure resource. All the following entities are properties of a connection monitor resource.
-Endpoint: A source or destination that participates in connectivity checks. Examples of endpoints include Azure VMs/ scale sets, on-premises agents, URLs, and IP addresses.
-Test configuration: A protocol-specific configuration for a test. Based on the protocol you select, you can define the port, thresholds, test frequency, and other properties.
-Test group: The group that contains source endpoints, destination endpoints, and test configurations. A connection monitor can contain more than one test group.
-Test: The combination of a source endpoint, destination endpoint, and test configuration. A test is the most granular level at which monitoring data is available. The monitoring data includes the percentage of checks that failed and the round-trip time (RTT).
+- Connection monitor resource: A region-specific Azure resource. All the following entities are properties of a connection monitor resource.
+- Endpoint: A source or destination that participates in connectivity checks. Examples of endpoints include Azure VMs/ scale sets, on-premises agents, URLs, and IP addresses.
+- Test configuration: A protocol-specific configuration for a test. Based on the protocol you select, you can define the port, thresholds, test frequency, and other properties.
+- Test group: The group that contains source endpoints, destination endpoints, and test configurations. A connection monitor can contain more than one test group.
+- Test: The combination of a source endpoint, destination endpoint, and test configuration. A test is the most granular level at which monitoring data is available. The monitoring data includes the percentage of checks that failed and the round-trip time (RTT).
+
 To create a connection monitor, perform the following steps:
 
-In the Azure portal, go to Network Watcher.
-On the left pane, in the Monitoring section, select Connection monitor.
-On the Connection Monitor dashboard, select Create.
-On the Basics pane, enter the following details:
+1) In the Azure portal, go to Network Watcher.
+2) On the left pane, in the Monitoring section, select Connection monitor.
+3) On the Connection Monitor dashboard, select Create.
+4) On the Basics pane, enter the following details:
 Connection Monitor Name: Enter a name for your connection monitor. Use the standard naming rules for Azure resources.
 Subscription: Select a subscription for your connection monitor.
 Region: Select a region for your connection monitor. You can select only the source VMs that are created in this region.
 Workspace configuration: Choose a custom workspace or the default workspace. Your workspace holds your monitoring data. To choose a custom workspace, clear the default workspace checkbox, and then select the subscription and region for your custom workspace.
-Select Next:
-On the Test groups page, either select an existing test group or create a new one. To create a test group, provide the following information:
+5) Select Next:
+6) On the Test groups page, either select an existing test group or create a new one. To create a test group, provide the following information:
 Test group Name: Enter the name of your test group.
 Sources: Select Add sources to specify both Azure VMs and on-premises machines as sources if agents are installed on them.
 When you select a virtual network, subnet, a single VM, or a virtual machine scale set, the corresponding resource ID is set as the endpoint. By default, all VMs in the selected virtual network or subnet participate in monitoring. To reduce the scope, either select specific subnets or agents or change the value of the scope property.
 To choose on-premises agents, select the Non–Azure endpoints tab. Select from a list of on-premises hosts with a Log Analytics agent installed. Select Arc Endpoint as the Type and select the subscriptions from the Subscription dropdown list. The list of hosts that have the Azure Arc endpoint extension and the Azure Monitor Agent extension enabled are displayed.
 To choose public endpoints as destinations, select the External Addresses tab. The list of endpoints includes Office 365 test URLs and Dynamics 365 test URLs, grouped by name. You also can choose endpoints that were created in other test groups in the same connection monitor.
 To add an endpoint, at the upper right, select Add Endpoint, and then provide an endpoint name and URL, IP, or FQDN.
-The next step is to configure Alerts. Alerts allow you to be notified if tests are failing. When you create an alert, you need to specify which connection monitor test failure will trigger the alert. Specify an action group to determine what happens when the alert triggers.
-At the bottom of the pane, select Next: Review + create.
-Analyze monitoring data
+7) The next step is to configure Alerts. Alerts allow you to be notified if tests are failing. When you create an alert, you need to specify which connection monitor test failure will trigger the alert. Specify an action group to determine what happens when the alert triggers.
+8) At the bottom of the pane, select Next: Review + create.
+
+
+### Analyze monitoring data
 While monitoring endpoints, Connection Monitor re-evaluates the status of endpoints once every 24 hours. So, in case a VM gets deallocated or is turned-off during a 24-hour cycle, Connection Monitor would report an indeterminate state due to absence of data in the network path till the end of the 24-hour cycle before re-evaluating the status of the VM and reporting the VM status as deallocated.
 
 Depending on the data that the checks return, tests can have the following states:
 
-Pass: Actual values for the percentage of failed checks and round-trip time (RTT) are within the specified thresholds.
-Fail: Actual values for the percentage of failed checks or RTT exceeded the specified thresholds. If no threshold is specified, a test reaches the Fail state when the percentage of failed checks is 100.
-Warning:
+- Pass: Actual values for the percentage of failed checks and round-trip time (RTT) are within the specified thresholds.
+- Fail: Actual values for the percentage of failed checks or RTT exceeded the specified thresholds. If no threshold is specified, a test reaches the Fail state when the percentage of failed checks is 100.
+- Warning:
 If a threshold is specified and Connection Monitor observes a checks-failed percentage that's more than 80 percent of the threshold, the test is marked as Warning.
 In the absence of specified thresholds, Connection Monitor automatically assigns a threshold. When that threshold is exceeded, the test status changes to Warning. For RTT in TCP or ICMP tests, the threshold is 750 milliseconds (ms). For the checks-failed percentage, the threshold is 10 percent.
-Indeterminate: No data in the Log Analytics workspace. Check the metrics.
-Not Running: Disabled by disabling the test group.
+- Indeterminate: No data in the Log Analytics workspace. Check the metrics.
+- Not Running: Disabled by disabling the test group.
 The data that Connection Monitor collects is stored in the Log Analytics workspace. You set up this workspace when you created the connection monitor.
 
 Monitoring data is also available in Azure Monitor Metrics. You can use Log Analytics to keep your monitoring data for as long as you want. Azure Monitor stores metrics for only 30 days by default.
 
 
+## 4.4 IP flow verify and NSG diagnostics
+
+Both IP flow verify and NSG diagnostics allow you to diagnose how networking configuration might be restricting network traffic.
+
+### IP flow verify
+IP flow verify checks if a packet is allowed or denied to or from a virtual machine. The information consists of direction, protocol, local IP, remote IP, local port, and a remote port. If the packet is denied by a security group, the name of the rule that denied the packet is returned. While any source or destination IP can be chosen, IP flow verify helps administrators quickly diagnose connectivity issues from or to the internet and from or to the on-premises environment.
+
+IP flow verify looks at the rules for all Network Security Groups (NSGs) applied to the network interface, such as a subnet or virtual machine NIC. Traffic flow is then verified based on the configured settings to or from that network interface. IP flow verify is useful in confirming if a rule in a Network Security Group is blocking ingress or egress traffic to or from a virtual machine. Now along with the NSG rules evaluation, the Azure Virtual Network Manager rules will also be evaluated.
+
+Azure Virtual Network Manager (AVNM) is a management service that enables users to group, configure, deploy, and manage Virtual Networks globally across subscriptions. AVNM security configuration allows users to define a collection of rules that can be applied to one or more network groups at the global level. These security rules have a higher priority than network security group (NSG) rules. An important difference to note here is that admin rules are a resource delivered by AVNM in a central location controlled by governance and security teams, which bubble down to each VNet. NSGs are a resource controlled by the VNet owners, which apply at each subnet or NIC level.
+
+An instance of Network Watcher needs to be created in all regions where you plan to run IP flow verify. Network Watcher is a regional service and can only be run against resources in the same region. The instance used does not affect the results of IP flow verify, as any route associated with the NIC or subnet is still returned.
+
+### NSG diagnostics
+
+The NSG (Network Security Group) diagnostics is an Azure Network Watcher tool that helps you understand which network traffic is allowed or denied in your Azure virtual network along with detailed information for debugging. NSG diagnostics can help you verify that your network security group rules are set up properly. NSG diagnostics shares some functionality with IP flow verify.
+
+The NSG diagnostics tool can simulate a given flow based on the source and destination you provide. It returns whether the flow is allowed or denied with detailed information about the security rule allowing or denying the flow.
+
+To run diagnostics against an NSG, perform the following steps:
+
+1) In the search box at the top of the portal, search for and select Network Watcher.
+2) Under Network diagnostic tools, select NSG diagnostics.
+3) On the NSG diagnostics page, enter or select the following values:
+Target resource
+Target resource type. Select the resource you are diagnosing the connection to.
+Virtual machine. Select the VM you want to run the diagnostics from.
+Traffic details
+Protocol. Select TCP, UDP and/or ICMP.
+Direction. Select Inbound or Outbound.
+Source type. Select IPv4 address/CIDR or Service Tag.
+Ipv4 address/CIDR. Acceptable values are: single IP address, multiple IP addresses, single IP prefix, and multiple IP prefixes.
+Destination IP address. Acceptable values are: single IP address, multiple IP addresses, single IP prefix, multiple IP prefixes.
+Destination port. Enter * to include all ports.
+4) Select Run NSG diagnostics to run the test. Once NSG diagnostics completes checking all security rules, it displays the result. This result will indicate which rules an NSG has, and which rule is denying traffic.
+
+
+
+# 4.5 Packet capture
+
+Azure Network Watcher packet capture allows you to create packet capture sessions to track traffic to and from a virtual machine (VM) or a scale set. Packet capture helps to diagnose network anomalies both reactively and proactively. Other uses include gathering network statistics, gaining information on network intrusions, to debug client-server communications and much more.
+
+Packet capture is an extension that is remotely started through Network Watcher. This capability eases the burden of running a packet capture manually on the desired virtual machine or virtual machine scale set instance(s), which saves valuable time. Packet capture can be triggered through the portal, PowerShell, Azure CLI, or REST API. One example of how packet capture can be triggered is with virtual machine alerts. Filters are provided for the capture session to ensure you capture traffic you want to monitor. Filters are based on 5-tuple (protocol, local IP address, remote IP address, local port, and remote port) information. The captured data can be stored in the local disk or a storage blob. Packet capture requires a virtual machine extension.
+
+To implement a packet capture, perform the following steps:
+
+1) In the search box at the top of the Azure portal, enter Network Watcher and in the search results, select Network Watcher.
+2) Select Packet capture under Network diagnostic tools. Any existing packet captures are listed, regardless of their status.
+3) Select + Add to create a packet capture. In Add packet capture, enter or select values for the following settings in the Basic Details page:
+Subscription. Select the Azure subscription of the virtual machine.
+Resource group. Select the resource group of the virtual machine.
+Target type. Select Virtual machine.
+Target instance. Select the virtual machine.
+Packet capture name. Enter a name or leave the default name.
+4) Enter or select values for the following settings in the Packet capture configuration page:
+Capture location. Select Storage account, File, or Both.
+Storage account. Select your Standard storage account. This option is available if you selected Storage account or Both.
+Local file path. Enter a valid local file path where you want the capture to be saved in the target virtual machine. If you're using a Linux machine, the path must start with /var/captures.
+Maximum bytes per packet. Enter the maximum number of bytes to be captured per each packet. All bytes are captured if left blank or 0 entered.
+Maximum bytes per session. Enter the total number of bytes that are captured. Once the value is reached the packet capture stops. Up to 1 GB is captured if left blank.
+Time limit (seconds). Enter the time limit of the packet capture session in seconds. Once the value is reached the packet capture stops. Up to 5 hours (18,000 seconds) is captured if left blank.
+5) You can optionally configure the following filtering settings.
+Protocol. Filters the packet capture based on the selected protocol. Available values are TCP, UDP, or Any.
+Local IP address. Filters the packet capture for packets where the local IP address matches this value.
+Local port. Filters the packet capture for packets where the local port matches this value.
+Remote IP address. Filters the packet capture for packets where the remote IP address matches this value.
+Remote port. Filters the packet capture for packets where the remote port matches this value.
+6) Select Start packet capture. Once the time limit set on the packet capture is reached, the packet capture stops and can be reviewed.
+
+
+## 4.6 Module assessment
+
+Answer the following questions
+Choose the best response for each of the following questions.
+
+1. Which functionality in Topology should be used to determine the path that is being taken from the VM to the external data source?
+- Next Hop
+- VNet Configuration
+- DNS Settings
+
+2. What must be installed on on-premises computers in order to use Connection Monitor to diagnose latency between those computers and an Azure storage endpoint?
+- Azure Network Adapter
+- SNMP Agent
+- Log Analytics Agent
+
+4. A Connection Monitor is created between an Azure Arc enabled server in an on-premises location and an Azure storage endpoint. No warning threshold is specified so Connection Monitor uses default values for its tests. Which of the following results triggers a warning result?
+- Ten percent of results over 500 milliseconds
+- Five percent of results over 750 milliseconds
+- Ten percent of results over 750 milliseconds
