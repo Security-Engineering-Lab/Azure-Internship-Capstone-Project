@@ -1544,7 +1544,7 @@ You can learn more by reviewing the following documents:
 
 Understand how to configure monitoring of various workloads and infrastructure services using Azure Monitor.
 
-# 6.1 Introduction
+## 6.1 Introduction
 
 Welcome to this interactive skills validation experience. Completing this module helps you prepare for the **Deploy and configure Azure Monitor assessment**.
 
@@ -1567,3 +1567,76 @@ By the end of this guided exercise, you gain hands-on experience in creating and
 | **Monitor web apps** | • Enable Application Insights<br>• Disable logging for .NET core snapshot debugger<br>• Configure Web apps to be written to a Log Analytics workspace<br>• Enable file and configuration tracking for web apps |
 | **Configure monitoring for compute services** | • Create a data collection endpoint<br>• Create a data collection rule<br>• Add an IIS log collection to an existing data collection rule<br>• Configure Network Connection Monitor for a Linux IaaS virtual machine |
 | **Configure alerts** | • Create an action group to send an email<br>• Create an alert for VM CPU utilization |
+
+
+# Exercise - Prepare your Azure environment
+
+**Completed | 100 XP | 30 minutes**
+
+You must first complete the following exercise to prepare your Azure environment before you begin the lab exercises.
+
+## 6.2 Exercise: Prepare your Azure Environment
+
+### Tasks:
+* Create a Log Analytics workspace.
+* Configure Log Analytics data retention and archive policies.
+* Enable access to a Log Analytics workspace.
+
+Launch the exercise and follow the instructions. When you're done, be sure to return to this page so you can continue learning.
+
+> **Note**: To complete this lab you will need an **Azure subscription**.
+
+# 6.3 Exercise - Deploy Log Analytics
+
+This guided project consists of the four exercises:
+* **Exercise 1: Deploy Log Analytics**
+* Exercise 2: Monitor web apps
+* Exercise 3: Configure monitoring for compute services
+* Exercise 4: Configure alerts
+
+In Exercise 1, you deploy and configure a Log Analytics workspace:
+* Task 1: Create a Log Analytics workspace.
+* Task 2: Configure Log Analytics data retention and archive policies.
+* Task 3: Enable access to a Log Analytics workspace.
+
+Launch the exercise and follow the instructions. When you're done, be sure to return to this page so you can continue learning.
+
+> **Note**: To complete this lab you will need an **Azure subscription**.
+>
+
+# 6.4 Exercise - Monitor web apps
+
+This guided project consists of the four exercises:
+* Exercise 1: Deploy Log Analytics
+* **Exercise 2: Monitor web apps**
+* Exercise 3: Configure monitoring for compute services
+* Exercise 4: Configure alerts
+
+In Exercise 2, you configure monitoring for web applications.
+* Task 1: Enable Application Insights.
+* Task 2: Disable logging for .NET core snapshot debugger.
+* Task 3: Configure web app HTTP logs to be written to a Log Analytics workspace.
+* Task 4: Configure SQL Insights data to be written to a Log Analytics workspace.
+* Task 5: Enable file and configuration change tracking for web apps.
+
+Launch the exercise and follow the instructions. When you're done, be sure to return to this page so you can continue learning.
+
+> **Note**: To complete this lab you will need an **Azure subscription**.
+
+
+# 6.5 Exercise - Configure monitoring for compute services
+
+This guided project consists of the four exercises:
+* Exercise 1: Deploy Log Analytics
+* Exercise 2: Monitor web apps
+* **Exercise 3: Configure monitoring for compute services**
+* Exercise 4: Configure alerts
+
+In Exercise 3, you configure monitoring for compute services and perform tasks related to integrating IaaS virtual machines with Azure Monitor. You create a data collection endpoint and a data collection rule to collect Windows Event logs. You then add an existing IIS log collection to the data collection rule. Finally, you configure Network Connection Monitor for a Linux IaaS virtual machine.
+
+* Task 1: Create a data collection endpoint.
+* Task 2: Create a data collection rule.
+* Task 3: Add an IIS log collection to an existing data collection rule.
+* Task 4: Configure Network Connection Monitor for a Linux IaaS virtual machine.
+
+> **Note**: To complete this lab you will need an **Azure subscription**.
