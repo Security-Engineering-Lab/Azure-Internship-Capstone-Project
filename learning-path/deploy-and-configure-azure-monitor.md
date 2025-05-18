@@ -639,3 +639,170 @@ Creating a data collection rule through the Azure portal automatically deploys t
 Microsoft recommends you enable Automatic Extension Upgrade when deploying the Azure Monitor Agent. You can enable Azure Policy to automatically deploy the Azure Monitor Agent and associate it with a data collection rule each time you deploy a new IaaS VM.
 
 
+
+## 3.3 Monitor Performance with VM insights
+
+VM insights provides a quick and easy method for getting started monitoring the client workloads on your virtual machines and virtual machine scale sets. It displays an inventory of your existing VMs and provides a guided experience to enable base monitoring for them. It also monitors the performance and health of your virtual machines and virtual machine scale sets by collecting data on their running processes and dependencies on other resources. VM insights monitors key operating system performance indicators related to processor, memory, network adapter, and disk utilization.
+
+VM insights provides a set of predefined workbooks that allow you to view trending of collected performance data over time. You can view this data in a single VM from the virtual machine directly, or you can use Azure Monitor to deliver an aggregated view of multiple VMs.
+
+VM insights includes a set of performance charts that target several key performance indicators to help you determine how well a virtual machine is performing. The charts show resource utilization over a period of time. You can use them to identify bottlenecks and anomalies. You can also switch to a perspective that lists each machine to view resource utilization based on the metric selected.
+
+VM insights provides the following benefits beyond other features for monitoring VMs in Azure Monitor:
+
+- Simplified onboarding of the Azure Monitor agent and the Dependency agent, so that you can monitor a virtual machine guest operating system and workloads.
+- Pre-defined data collection rules that collect the most common set of performance data.
+- Pre-defined trending performance charts and workbooks, so that you can analyze core performance metrics from the virtual machine's guest operating system.
+- The Dependency map, which displays processes that run on each virtual machine and the interconnected components with other machines and external sources.
+Screenshot showing Performance tab in VM Insights displaying data for a VM and the processes Dependency map for that VM.
+
+### Enable VM insights
+
+To enable VM Insights, select Insights from your virtual machine's menu in the Azure portal. If VM insights isn't enabled, you see a short description of it and an option to enable it.
+
+Select Enable to open the Monitoring configuration pane. Leave the default option of Azure Monitor agent.
+
+Enabling VM insights creates a default data collection rule that doesn't include collection of processes and dependencies. To enable this collection, select Create New to create a new data collection rule.
+
+You will be asked to provide a Data collection rule name and then select Enable processes and dependencies (Map). You can't disable collection of guest performance because it's required for VM insights.
+
+You can use the default Log Analytics workspace for the subscription unless you have another workspace that you want to use.
+
+1) Select Create to create the new data collection rule.
+2) Select Configure to start VM insights configuration.
+
+### View VM performance
+
+When the deployment completes, you see views on the Performance tab in VM insights with performance data for the machine. This data shows you the values of key guest metrics over time.
+
+By default, the charts show the last 24 hours. By using the TimeRange selector, you can query for historical time ranges of up to 30 days to show past performance.
+
+The following capacity utilization charts are available:
+
+- CPU Utilization %: Defaults show the average and top 95th percentile.
+- Available Memory: Defaults show the average, top 5th, and 10th percentile.
+- Logical Disk Space Used %: Defaults show the average and 95th percentile.
+- Logical Disk IOPS: Defaults show the average and 95th percentile.
+- Logical Disk MB/s: Defaults show the average and 95th percentile.
+- Max Logical Disk Used %: Defaults show the average and 95th percentile.
+- Bytes Sent Rate: Defaults show the average bytes sent.
+- Bytes Receive Rate: Defaults show the average bytes received.
+
+Screenshot of the Performance tab in VM insights, displaying performance data for disk, CPU, memory, and disk IOPS.
+
+# View dependencies
+
+In VM insights, you can view discovered application components on Windows and Linux virtual machines (VMs) that run in Azure or your environment. You can view a map directly from a VM. You can also view a map from Azure Monitor to see the components across groups of VMs. This unit helps you to understand these two viewing methods and how to use the Map feature.
+
+The Map feature visualizes the VM dependencies by discovering running processes that have:
+
+- Active network connections between servers.
+- Inbound and outbound connection latency.
+- Ports across any TCP-connected architecture over a specified time range.
+
+To access VM insights map directly from a VM:
+
+1) In the Azure portal, select Virtual Machines.
+2) From the list, select a VM. In the Monitoring section, select Insights.
+3) Select the Map tab.
+
+The map visualizes the VM's dependencies by discovering running process groups and processes that have active network connections over a specified time range.
+
+By default, the map shows the last 30 minutes. If you want to see how dependencies looked in the past, you can query for historical time ranges of up to one hour. To run the query, use the TimeRange selector in the upper-left corner. You might run a query, for example, during an incident or to see the status before a change.
+
+Screenshot of Map tab in VM Insights showing a visual representation of ContosoVM1's dependencies between running process groups and processes.
+
+In Azure Monitor, the Map feature provides a global view of your VMs and their dependencies. To access the Map feature in Azure Monitor:
+
+1) In the Azure portal, select Monitor.
+2) In the Insights section, select Virtual Machines.
+3) Select the Map tab.
+
+If you have more than one Log Analytics workspace, choose the workspace that's enabled with the solution and that has VMs reporting to it.
+
+The Group selector returns subscriptions, resource groups, computer groups, and virtual machine scale sets of computers that are related to the selected workspace. Your selection applies only to the Map feature and doesn't carry over to Performance or Health.
+
+
+
+## 3.4 Configure data collection rules for IaaS VM logs
+
+If you enable VM insights, the Azure Monitor agent is installed and starts sending a predefined set of performance data to Azure Monitor Logs. You can create additional data collection rules to collect events and other performance data.
+
+Data collection rules (DCRs) define the data collection process in Azure Monitor. DCRs specify what data should be collected, how to transform that data, and where to send that data. Some DCRs will be created and managed by Azure Monitor to collect a specific set of data to enable insights and visualizations. You might also create your own DCRs to define the set of data required for other scenarios.
+
+You can define a data collection rule to send data from multiple machines to multiple Log Analytics workspaces, including workspaces in a different region or tenant. Create the data collection rule in the same region as your Log Analytics workspace. You can send Windows event and Syslog data to Azure Monitor Logs only. You can send performance counters to both Azure Monitor Metrics and Azure Monitor Logs.
+
+### Collect events and performance logs
+To collect events and performance data, perform the following steps:
+
+1) In the Azure portal, navigate to Azure Monitor.
+2) On the Monitor menu, select Data Collection Rules.
+3) Select Create to create a new data collection rule and associations.
+4) Enter a Rule name and specify a Subscription, Resource Group, Region, and Platform Type:
+- Region specifies where the DCR will be created. The virtual machines and their associations can be in any subscription or resource group in the tenant.
+- Platform Type specifies the type of resources this rule can apply to. The Custom option allows for both Windows and Linux types.
+5) On the Resources tab:
+- Select + Add resources and associate resources to the data collection rule. Resources can be virtual machines, Virtual Machine Scale Sets, and Azure Arc for servers.
+- Select Enable Data Collection Endpoints.
+- Select a data collection endpoint for each of the resources and associate to the data collection rule.
+6) On the Collect and deliver tab, select Add data source to add a data source and set a destination.
+7) Select a Data source type.
+8) Select which data you want to collect. For performance counters, you can select from a predefined set of objects and their sampling rate. For events, you can select from a set of logs and severity levels.
+9) Select Custom to collect logs and performance counters that aren't currently supported data sources, or to filter events by using XPath queries. You can then specify an XPath to collect any specific values.
+10) On the Destination tab, add one or more destinations for the data source. You can select multiple destinations of the same or different types. For instance, you can select multiple Log Analytics workspaces, which is also known as multihoming. You can send Windows event and Syslog data sources to Azure Monitor Logs only. You can send performance counters to both Azure Monitor Metrics and Azure Monitor Logs.
+Select Add data source and then select Review + create to review the details of the data collection rule and association with the set of virtual machines.
+Collect IIS logs
+11) To create the data collection rule to collect IIS logs from a Windows Server VM in the Azure portal perform the steps outlined in the collect events and performance section, except when choosing your data source, specify IIS Logs.
+
+Screenshot of the Add data source dialog in Create Data Collection Rule, showing IIS Logs selected and highlighted.
+
+### Collect Syslog data
+Syslog is an event logging protocol that's common to Linux. You can use the Syslog daemon that's built into Linux devices and appliances to collect local events of the types you specify. You can then have it send those events to a Log Analytics workspace. Applications send messages that might be stored on the local machine or delivered to a Syslog collector.
+
+When the Azure Monitor agent for Linux is installed, it configures the local Syslog daemon to forward messages to the agent when Syslog collection is enabled in data collection rules (DCRs). Azure Monitor Agent then sends the messages to an Azure Monitor or Log Analytics workspace where a corresponding Syslog record is created in a Syslog table.
+
+The following facilities are supported with the Syslog collector:
+
+- auth
+- authpriv
+- cron
+- daemon
+- mark
+- kern
+- lpr
+- mail
+- news
+- syslog
+- user
+- uucp
+- local0-local7
+
+The Azure Monitor Agent for Linux only collects events with the facilities and severities that are specified in its configuration. You can configure Syslog through the Azure portal or by managing configuration files on your Linux agents.
+
+Configure Syslog collection from the Data Collection Rules menu of Azure Monitor. This configuration is delivered to the configuration file on each Linux agent. Follow the procedure outlined earlier in the unit for events and performance logs, but when selecting Add data source, ensure that for the data source type you select Linux syslog.
+
+You can collect Syslog events with a different log level for each facility. By default, all Syslog facility types are collected. If you don't want to collect, for example, events of auth type, select NONE in the Minimum log level list box for auth facility and save the changes. If you need to change the default log level for Syslog events and collect only events with a log level starting at NOTICE or a higher priority, select LOG_NOTICE in the Minimum log level list box.
+
+
+
+## 3.5 Module assessment
+
+Answer the following questions
+Choose the best response for each of the following questions.
+
+1. Which of the following role assignments includes the necessary permissions to install the Azure Monitor Agent?
+- Virtual Machine Reader
+- Virtual Machine Contributor
+- Log Analytics Reader
+
+2. What is the maximum amount of time performance data can be viewed over in a VM Insights performance chart on IaaS VM CPU utilization?
+- 7 days
+- 30 days
+- 21 days
+
+3. When configuring a data collection rule, which of the following items can be sent to both Azure Monitor Metrics and Azure Monitor Logs?
+- Windows Event log data
+- Syslog
+- Performance counter data
+
+
