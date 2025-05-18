@@ -1502,23 +1502,23 @@ Choose the best response for each of the following questions.
 - Two
 - Three
 
-## Module Assessment Answers
+### Module Assessment Answers
 
-## Question 1
+#### Question 1
 **How many action groups can be added to an alert rule?**
 
 The correct answer is: **Five**
 
 An alert rule in Azure can have a maximum of five action groups associated with it. This limitation is designed to maintain manageability and performance when alerts are triggered. Each action group can contain multiple notification methods (email, SMS, webhook, etc.), but the total number of action groups per alert rule is capped at five.
 
-## Question 2
+#### Question 2
 **A set of action groups need to be suppressed from sending notifications during maintenance at scale on resources in Azure. Which of the following items should be configured?**
 
 The correct answer is: **Alert processing rule**
 
 Alert processing rules are specifically designed to manage alerts at scale, including the ability to temporarily suppress notifications from action groups during planned maintenance periods. Alert processing rules can be configured to apply across multiple resources, resource groups, or subscriptions, making them ideal for coordinating maintenance activities. Neither Alert state nor Action group provides the capability to suppress notifications at scale during maintenance windows.
 
-## Question 3
+#### Question 3
 **An alert processing rule is configured with three filters. How many of the filters apply at any time to the rule?**
 
 The correct answer is: **Three**
@@ -1539,3 +1539,31 @@ You can learn more by reviewing the following documents:
 - Alert processing rules, https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-processing-rules?tabs=portal
 - Use Change Analysis in Azure Monitor, https://learn.microsoft.com/en-us/azure/azure-monitor/change/change-analysis
 
+
+## 6 Guided Project – Deploy and configure Azure Monitor
+
+Understand how to configure monitoring of various workloads and infrastructure services using Azure Monitor.
+
+# 6.1 Introduction
+
+Welcome to this interactive skills validation experience. Completing this module helps you prepare for the **Deploy and configure Azure Monitor assessment**.
+
+In this module, you practice configuring monitoring of various workloads and infrastructure services using Azure Monitor. The lab combines both learning and hands-on practice. The skills validated include:
+
+* Deploying and configuring Log Analytics
+* Configuring monitoring for Web apps
+* Monitoring compute and networking services
+* Configuring alerts
+
+By the end of this guided exercise, you gain hands-on experience in creating and configuring these services in Azure.
+
+> **Note**: This is a guided project module where you complete an end-to-end project by following step-by-step instructions.
+
+## Skills Breakdown
+
+| Skilling area | Skilling task |
+|---------------|---------------|
+| **Deploy Log Analytics** | • Create a Log Analytics workspace<br>• Configure Log Analytics data retention and archive policies<br>• Enable access to a Log Analytics workspace |
+| **Monitor web apps** | • Enable Application Insights<br>• Disable logging for .NET core snapshot debugger<br>• Configure Web apps to be written to a Log Analytics workspace<br>• Enable file and configuration tracking for web apps |
+| **Configure monitoring for compute services** | • Create a data collection endpoint<br>• Create a data collection rule<br>• Add an IIS log collection to an existing data collection rule<br>• Configure Network Connection Monitor for a Linux IaaS virtual machine |
+| **Configure alerts** | • Create an action group to send an email<br>• Create an alert for VM CPU utilization |
