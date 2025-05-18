@@ -1159,3 +1159,7 @@ In this module, you learned how to monitor connectivity across your Azure IaaS n
 - NSG diagnostics overview, https://learn.microsoft.com/en-us/azure/network-watcher/nsg-diagnostics-overview
 
 
+
+# 5 Configure alerts and responses
+
+Understand how to configure and manage alerts and responses in order to proactively manage notifications about potential issues before those issues become problems for your users.
