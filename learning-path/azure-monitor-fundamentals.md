@@ -1,12 +1,5 @@
 
 
-
-
-
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/7_respond-box.svg)
-
-
-
 # Azure Monitor fundamentals
 
 https://learn.microsoft.com/en-us/training/paths/monitor-usage-performance-availability-resources-azure-monitor/
