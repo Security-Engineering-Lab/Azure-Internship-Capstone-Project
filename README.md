@@ -69,6 +69,17 @@ Successfully deployed a Python Django web application with PostgreSQL in Azure:
 
 **Live Demo:** [msdocs-python-postgres-235](https://msdocs-python-postgres-235-cmb4dccwfbf7emhx.westeurope-01.azurewebsites.net/)
 
+## !!!
+## Capture Web Application Logs with App Service Diagnostics Logging
+
+Use application logs in Azure Web Apps for debugging web app code.
+
+https://learn.microsoft.com/en-us/training/modules/capture-application-logs-app-service/2-enable-and-configure-app-service-application-logging
+
+
+
+
+
 ### 📊 Application Monitoring Implementation
 - Integrated Application Insights SDK with Django application
 - Configured comprehensive telemetry collection
