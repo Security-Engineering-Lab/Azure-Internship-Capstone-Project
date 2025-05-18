@@ -1,4 +1,4 @@
-
+https://learn.microsoft.com/api/achievements/share/en-us/01805841/4GC3MAHK?sharingId=5027B918C24092AC
 
 # Deploy and configure Azure Monitor
 https://learn.microsoft.com/en-us/training/paths/deploy-configure-azure-monitor/
