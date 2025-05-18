@@ -805,4 +805,25 @@ Choose the best response for each of the following questions.
 - Syslog
 - Performance counter data
 
+#№ Module Assessment Answers
 
+## Question 1
+**Which of the following role assignments includes the necessary permissions to install the Azure Monitor Agent?**
+
+The correct answer is: **Virtual Machine Contributor**
+
+The Virtual Machine Contributor role provides comprehensive management permissions for virtual machines, including the ability to install and configure agents such as the Azure Monitor Agent. This role grants the necessary access to modify VM configurations while Virtual Machine Reader is read-only, and Log Analytics Reader only provides access to view log data but not to modify VM configurations.
+
+## Question 2
+**What is the maximum amount of time performance data can be viewed over in a VM Insights performance chart on IaaS VM CPU utilization?**
+
+The correct answer is: **30 days**
+
+VM Insights performance charts allow you to view performance data for up to 30 days. This provides a comprehensive historical view of CPU utilization trends while balancing performance and storage considerations. The other options (7 days and 21 days) represent shorter time frames than what is actually available.
+
+## Question 3
+**When configuring a data collection rule, which of the following items can be sent to both Azure Monitor Metrics and Azure Monitor Logs?**
+
+The correct answer is: **Performance counter data**
+
+Performance counter data is the only option that can be sent to both Azure Monitor Metrics and Azure Monitor Logs. This flexibility allows performance data to be used both for real-time dashboards and alerting (Metrics) as well as for detailed analysis and querying (Logs). Windows Event log data and Syslog are text-based logs that can only be sent to Azure Monitor Logs, not to Metrics which requires numerical data.
