@@ -1650,7 +1650,7 @@ In Exercise 4, you configure two specific alerts: an action group to send an ema
 
 > **Note**: To complete this lab you will need an **Azure subscription**.
 
-# 7 Module assessment
+## 7 Module assessment
 
 ## Answer the following questions
 
