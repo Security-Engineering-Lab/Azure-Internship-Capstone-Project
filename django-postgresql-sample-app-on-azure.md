@@ -195,5 +195,25 @@ The application is designed to seamlessly integrate with Azure services includin
 11) Deploying Django & React App on Microsoft Azure #6: Costs of Deployment and Troubleshooting, https://www.youtube.com/watch?v=k8zNgbkXFew
 12) Project code, https://github.com/NickMol/Django-React-Deploy-Tutorial
    
-   
+
+- Python's Role in Accelerating Web Application Development with Django, June 2024International Research Journal on Advanced Engineering and Management (IRJAEM) 2(06):1902-1915, https://www.researchgate.net/publication/381969758_Python's_Role_in_Accelerating_Web_Application_Development_with_Django
+- Management of Django Web Development in Python July 2021Journal of Management and Service Science (JMSS) 1(2):1-17, https://www.researchgate.net/publication/356292312_Management_of_Django_Web_Development_in_Python
+- A Web-Based Application for Data Collection and Report Generation Using Django, https://www.researchgate.net/publication/357567540_A_Web-Based_Application_for_Data_Collection_and_Report_Generation_Using_Django
+- DJANGO AS SECURE WEB-FRAMEWORK IN PRACTICE, https://www.researchgate.net/publication/354932133_DJANGO_AS_SECURE_WEB-FRAMEWORK_IN_PRACTICE
+- Simulation data exchange - web interface for CostGlue application, https://www.researchgate.net/figure/The-architecture-of-a-Django-web-application_fig1_297264757
+- An INTRANET-Based Web Application for College Management System Using Python with Django Web Framework, https://www.researchgate.net/publication/368719592_An_INTRANET-Based_Web_Application_for_College_Management_System_Using_Python_with_Django_Web_Framework
+- Porting a Python Application to the Web Using Django: A Case Study of an Archaeological Image Processing System, https://www.researchgate.net/publication/384380230_Po, rting_a_Python_Application_to_the_Web_Using_Django_A_Case_Study_of_an_Archaeological_Image_Processing_System
+- Django, a web framework using Python: tutorial presentation, https://www.researchgate.net/publication/262295717_Django_a_web_framework_using_Python_tutorial_presentation
+- Python & Django the Fastest Growing Web Development Technology, https://www.researchgate.net/publication/379518425_Python_Django_the_Fastest_Growing_Web_Development_Technology
+- Analysis of Python web development applications based on the Django framework, https://www.researchgate.net/publication/382400128_Analysis_of_Python_web_development_applications_based_on_the_Django_framework
+- Social Media Website with Python using Django, https://www.researchgate.net/publication/382167867_Social_Media_Website_with_Python_using_Django
+- Django: Developing web using Python, https://www.researchgate.net/publication/372609819_Django_Developing_web_using_Python
+- Role of Python in Rapid Web Application Development Using Django, https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4751833
+- Introduction to Django, https://www.researchgate.net/publication/313937797_Introduction_to_Django
+- A Generic Review of Web Technology: DJango and Flask, https://www.researchgate.net/publication/367619078_A_Generic_Review_of_Web_Technology_DJango_and_Flask
+- Enhancing data protection in a web application using Django, https://www.researchgate.net/publication/384475477_Enhancing_data_protection_in_a_web_application_using_Django
+- LlaMA2 and Django Web Application Approach for Simplifying Table Parsing: Review, https://www.researchgate.net/publication/387425253_LlaMA2_and_Django_Web_Application_Approach_for_Simplifying_Table_Parsing_Review
+- Starting with Django, https://www.researchgate.net/publication/347626814_Starting_with_Django
+  
+
 
