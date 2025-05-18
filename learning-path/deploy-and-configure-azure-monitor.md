@@ -1569,13 +1569,9 @@ By the end of this guided exercise, you gain hands-on experience in creating and
 | **Configure alerts** | • Create an action group to send an email<br>• Create an alert for VM CPU utilization |
 
 
-# Exercise - Prepare your Azure environment
-
-**Completed | 100 XP | 30 minutes**
+## 6.2 Exercise - Prepare your Azure environment
 
 You must first complete the following exercise to prepare your Azure environment before you begin the lab exercises.
-
-## 6.2 Exercise: Prepare your Azure Environment
 
 ### Tasks:
 * Create a Log Analytics workspace.
@@ -1640,3 +1636,19 @@ In Exercise 3, you configure monitoring for compute services and perform tasks r
 * Task 4: Configure Network Connection Monitor for a Linux IaaS virtual machine.
 
 > **Note**: To complete this lab you will need an **Azure subscription**.
+
+# 6.6 Exercise - Configure alerts
+
+This guided project consists of the four exercises:
+* Exercise 1: Deploy Log Analytics
+* Exercise 2: Monitor web apps
+* Exercise 3: Configure monitoring for compute services
+* **Exercise 4: Configure alerts**
+
+In Exercise 4, you configure two specific alerts: an action group to send an email, and an alert for virtual machine CPU utilization.
+* Task 1: Create an action group to send an email.
+* Task 2: Create an alert for virtual machine CPU utilization.
+
+> **Note**: To complete this lab you will need an **Azure subscription**.
+
+
