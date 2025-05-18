@@ -1163,3 +1163,212 @@ In this module, you learned how to monitor connectivity across your Azure IaaS n
 # 5 Configure alerts and responses
 
 Understand how to configure and manage alerts and responses in order to proactively manage notifications about potential issues before those issues become problems for your users.
+
+# 5.1 Introduction
+
+The purpose of Azure Monitoring alerts is to notify you proactively when Azure Monitor data indicates there might be a problem. Alerts can notify you of problems with your infrastructure or applications before a problem becomes one for your users.
+
+You are in IT Operations at Tailwind Traders. As part of your job, you want to ensure you’re using the best tools to stay informed about issues that may affect your applications and infrastructure before those issues occur. You decide that Azure Monitor alerts and responses would give you the means to successfully accomplish this.
+
+#### Learning objectives
+
+In this module, you learn how to:
+
+- Describe the purpose of and identify the different types of alerts.
+- Explain how action groups are used to notify users about alerts.
+- Configure and manage alert rules.
+- Configure alert processing rules to modify triggered alerts.
+- Describe how Change Analysis provides insight into changes made to Azure resources.
+- 
+#### Prerequisites:
+- Understand the basic functionality of Azure Monitor and Log Analytics workspaces.
+
+
+## 5.2 Azure Monitor alerts
+
+Azure Monitor Alerts help you detect and address issues before users notice them by proactively notifying you when Azure Monitor data indicates there might be a problem with your infrastructure or application. You can alert on any metric or log data source in the Azure Monitor data platform.
+
+Azure Monitor supports the following types of alert:
+
+- Metric alerts. Metric alerts evaluate resource metrics at regular intervals. Metrics can be platform metrics, custom metrics, logs from Azure Monitor converted to metrics, or Application Insights metrics. Metric alerts can also apply multiple conditions and dynamic thresholds.
+Log alerts. Log alerts allow users to use a Log Analytics query to evaluate resource logs at a predefined frequency.
+- Activity log alerts. Activity log alerts are triggered when a new activity log event occurs that matches defined conditions. Resource Health alerts and Service Health alerts are activity log alerts that report on your service and resource health.
+- Smart detection alerts. Smart detection on an Application Insights resource automatically warns you of potential performance problems and failure anomalies in your web application. You can migrate smart detection on your Application Insights resource to create alert rules for the different smart detection modules.
+- Prometheus alerts. Prometheus alerts are used for alerting on Prometheus metrics stored in Azure Monitor managed services for Prometheus. The alert rules are based on the PromQL open-source query language.
+If you don't have alert rules defined for the selected resource, you can enable recommended out-of-the-box alert rules in the Azure portal.
+
+The system compiles a list of recommended alert rules based on:
+
+- The resource provider’s knowledge of important signals and thresholds for monitoring the resource.
+- Data that tells us what customers commonly alert on for this resource.
+
+Recommended alert rules are available for:
+
+- Virtual machines
+- AKS resources
+- Log Analytics workspaces
+
+### Alert RBAC permissions
+
+You can only access, create, or manage alerts for resources for which you have permissions. To create an alert rule, you must have:
+
+- Read permission on the target resource of the alert rule.
+- Write permission on the resource group in which the alert rule is created. If you're creating the alert rule from the Azure portal, the alert rule is created by default in the same resource group in which the target resource resides.
+- Read permission on any action group associated with the alert rule, if applicable.
+
+These built-in Azure roles, supported at all Azure Resource Manager scopes, have permissions to and can access alerts information and create alert rules:
+
+- Monitoring contributor: A contributor can create alerts and use resources within their scope.
+- Monitoring reader: A reader can view alerts and read resources within their scope.
+
+### Alert state
+You can configure whether log or metric alerts are stateful or stateless. Activity log alerts are stateless.
+
+- Stateless alerts fire each time the condition is met, even if fired previously.
+- Stateful alerts fire when the condition is met. They don't fire again or trigger any more actions until the conditions are resolved.
+
+
+## 5.3 Action groups
+
+When Azure Monitor data indicates that there might be a problem with your infrastructure or application, an alert is triggered. Alerts can contain action groups, which are a collection of notification preferences. Azure Monitor, Azure Service Health, and Azure Advisor use action groups to notify users about the alert and take an action.
+
+Each action is made up of:
+
+- Type: The notification that's sent or action that's performed. Examples include sending a voice call, SMS, or email. You can also trigger various types of automated actions.
+- Name: A unique identifier within the action group.
+- Details: The corresponding details that vary by type.
+In general, an action group is a global service. Global requests from clients can be processed by action group services in any region. If one region of the action group service is down, the traffic is automatically routed and processed in other regions. As a global service, an action group helps provide a disaster recovery solution.
+
+### Action group properties
+Action groups have the following properties:
+
+- You can add up to five action groups to an alert rule.
+- Action groups are executed concurrently, in no specific order.
+- Multiple alert rules can use the same action group.
+
+When creating an Action group, you must choose a region option. The two options are as follows:
+
+- Global. The action groups service decides where to store the action group. The action group is persisted in at least two regions to ensure regional resiliency. Processing of actions may be done in any geographic region. Voice, SMS, and email actions performed as the result of service health alerts are resilient to Azure live-site incidents.
+- Regional. The action group is stored within the selected region. The action group is zone-redundant. Use this option if you want to ensure that the processing of your action group is performed within a specific geographic boundary.
+
+### Action group notification
+Action groups support the following notification options:
+
+- Email Azure Resource Manager role. Send an email to the subscription members, based on their role. A notification email is sent only to the primary email address configured for the Azure AD user. The email is only sent to Azure Active Directory user members of the selected role, not to Azure AD groups or service principals.
+- Email. Send an email to a specific address. Ensure that your email filtering and any malware/spam prevention services are configured appropriately. Emails are sent from the following email addresses:
+azure-noreply@microsoft.com
+azureemail-noreply@microsoft.com
+alerts-noreply@mail.windowsazure.com
+SMS. SMS notifications support bi-directional communication. The recipient of an SMS is able to unsubscribe to SMS alerts, resubscribe, or request help. You must enter the country code and phone number of the recipient. The SMS contains the following information:
+Shortname of the action group this alert was sent to
+The title of the alert.
+- Azure app Push notifications. Send notifications to the Azure mobile app. In the Azure account email field, enter the email address that you use as your account ID when you configure the Azure mobile app.
+- Voice. Voice notification. Enter the Country code and the Phone number for the recipient of the notification.
+
+### Action types
+Action groups allow the following actions to be triggered:
+
+- Automation Runbook. Allows an automation runbook to be run.
+- Event hubs. An Event Hubs action publishes notifications to Event Hubs. You can subscribe to the alert notification stream from your event receiver.
+- Functions. Calls an existing HTTP trigger endpoint in functions. When you define the function action, the function's HTTP trigger endpoint and access key are saved in the action definition. If you change the access key for the function, you must remove and re-create the function action in the action group. In addition to this your endpoint must support the HTTP POST method and the function must have access to the storage account.
+- ITSM. Allows you to create work items in your ITSM (IT Service Management) tool based on your Azure metric alerts, activity log alerts, and Log Analytics alerts.
+- Logic apps. You can use Azure Logic Apps to build and customize workflows for integration and to customize your alert notifications.
+- Secure webhook. When you use a secure webhook action, you must use Azure AD to secure the connection between your action group and your endpoint, which is a protected web API. Secure webhook doesn't support basic authentication.
+- Webhook. If you use the webhook action, your target webhook endpoint must be able to process the various JSON payloads that different alert sources emit. You can't pass security certificates through a webhook action. To use basic authentication, you must pass your credentials through the URI. If the webhook endpoint expects a specific schema, for example, the Microsoft Teams schema, use the Logic Apps action type to manipulate the alert schema to meet the target webhook's expectations.
+
+### Common alert schema
+The common alert schema standardizes the consumption of Azure Monitor alert notifications. Historically, activity log, metric, and log alerts each had their own email templates and webhook schemas. The common alert schema provides one standardized schema for all alert notifications.
+
+The common alert schema provides a consistent structure for:
+
+- Email templates: Use the detailed email template to diagnose issues at a glance. Embedded links to the alert instance on the portal and to the affected resource ensure that you can quickly jump into the remediation process.
+- JSON structure: Use the consistent JSON structure to build integrations for all alert types using:
+Azure Logic Apps
+Azure Functions
+Azure Automation runbook
+
+Alerts generated by VM insights do not support the common schema. Smart detection alerts use the common schema by default. However, you don't have to enable the common schema for smart detection alerts.
+
+### Create an action group
+To create an action group, perform the following steps:
+
+1) In the Azure portal search for and select Monitor.
+2) In the Monitor page, select Alerts, and then select Action groups and select Create.
+3) Configure the basic action group settings. In the Project details section:
+Select values for Subscription and Resource group.
+Select the region. Choose between Global and Regional.
+4) In the Instance details section, enter values for Action group name and Display name. The display name is used in place of a full action group name when the group is used to send notifications.
+5) Configure notifications. Select Next: Notifications or select the Notifications tab at the top of the page.
+6) Define a list of notifications to send when an alert is triggered. You can choose between the following options described earlier:
+Email Azure Resource Manager role
+Email
+SMS
+Azure app Push notifications
+Voice
+7) Select if you want to enable the Common alert schema and choose Next.
+8) Configure actions. Select Next: Actions. or select the Actions tab at the top of the page. Define a list of actions to trigger when an alert is triggered. Select an action type and enter a name for each action. You can choose from the following actions:
+- Automation Runbook.
+- Event hubs.
+- Functions.
+- ITSM.
+- Logic apps.
+- Secure webhook.
+- Webhook.
+
+9) If you'd like to assign a key-value pair to the action group to categorize your Azure resources, select Next: Tags or the Tags tab. Otherwise, skip this step.
+10) Select Review + create to review your settings. This step quickly checks your inputs to make sure you've entered all required information. If there are issues, they're reported here. After you've reviewed the settings, select Create to create the action group.
+
+
+
+## 5.4 Alert rules
+
+An alert rule monitors your data and captures a signal that indicates something is happening on the specified resource. The alert rule captures the signal and checks to see if the signal meets the criteria of the condition. If the conditions are met, an alert is triggered, which initiates the associated action group and updates the state of the alert.
+
+You create an alert rule by combining:
+- The resources to be monitored.
+- The signal or data from the resource.
+- Conditions.
+
+You then define these elements for the alert actions:
+- Action groups
+- Alert processing rules
+
+Alerts triggered by these alert rules contain a payload that uses the common alert schema.
+
+### Create an alert rule
+To create a new alert rule from the portal home page:
+
+1) In the portal, select Monitor > Alerts.
+2) Open the + Create menu and select Alert rule.
+3) On the Select a resource pane, set the scope for your alert rule. You can filter by subscription, resource type, or resource location. Select Apply. Select Next: Condition at the bottom of the page.
+4) On the Condition tab, when you select the Signal name field, the most commonly used signals are displayed in the drop-down list. Select one of these popular signals or select See all signals if you want to choose a different signal for the condition. If you chose to See all signals in the previous step, use the Select a signal pane to search for the signal name or filter the list of signals. Filter by:
+Signal type. The type of alert rule you're creating.
+Signal source. The service sending the signal. The list is prepopulated based on the type of alert rule you selected.
+5) The next step depends on the type of alert that you are creating:
+Metric alert. Provide time range and time series, a threshold, operator, aggregation, and when to evaluate.
+Log alert. Write a query that returns the log events for which you want to create an alert. The condition tab will be populated based on your log query. Select threshold values to trigger the alert.
+Activity log alert. Select the chart period and values for the event level, status, and event initiated by related to the activity.
+Resource health alert. Provide details for the Event status, Current resource status, Previous resource status and reason type fields.
+Service health alert. Provide details for the following fields: Azure services, Azure regions, event types.
+6) On the Actions tab, select or create the required action groups.
+7) On the Alert Rule Details page, specify the subscription and resource group that will host the alert. Also provide an alert name, description and severity.
+
+### Manage alert rules
+You manage alert rules from the Alerts page in the Azure portal.
+
+Screenshot of Azure Monitor alerts.
+
+You can filter the list of Alert rules using the available filters:
+- Subscription
+- Alert condition
+- Severity
+- User response
+- Monitor service
+- Signal type
+- Resource group
+- Target resource type
+- Resource name
+- Suppression status
+
+If you select a single alert rule, you can edit, disable, duplicate, or delete the rule in the alert rule pane. If you select multiple alert rules, you can enable or disable the selected rules. Selecting multiple rules can be useful when you want to perform maintenance on specific resources.
+
