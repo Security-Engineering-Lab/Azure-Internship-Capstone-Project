@@ -1121,3 +1121,30 @@ Choose the best response for each of the following questions.
 - Ten percent of results over 500 milliseconds
 - Five percent of results over 750 milliseconds
 - Ten percent of results over 750 milliseconds
+
+
+# Module Assessment Answers
+
+## Question 1
+**Which functionality in Topology should be used to determine the path that is being taken from the VM to the external data source?**
+
+The correct answer is: **Next Hop**
+
+The Next Hop functionality in Network Watcher's Topology view allows you to trace the routing path from a virtual machine to a destination. It shows each network hop along the route, helping identify the exact path that network traffic takes when traveling from the VM to an external data source. This is essential for diagnosing routing issues, unexpected network paths, or connectivity problems.
+
+## Question 2
+**What must be installed on on-premises computers in order to use Connection Monitor to diagnose latency between those computers and an Azure storage endpoint?**
+
+The correct answer is: **Log Analytics Agent**
+
+The Log Analytics Agent (also known as Microsoft Monitoring Agent) must be installed on on-premises computers to enable Connection Monitor functionality for diagnosing latency to Azure resources. This agent allows the on-premises system to report monitoring data to Azure and participate in Connection Monitor tests. Neither the Azure Network Adapter (which doesn't exist as a product) nor the SNMP Agent provides the necessary capabilities for Connection Monitor integration.
+
+## Question 3
+**A Connection Monitor is created between an Azure Arc enabled server in an on-premises location and an Azure storage endpoint. No warning threshold is specified so Connection Monitor uses default values for its tests. Which of the following results triggers a warning result?**
+
+The correct answer is: **Ten percent of results over 750 milliseconds**
+
+By default, Connection Monitor will trigger a warning when 10% of test results exceed 750 milliseconds of latency. This threshold represents a balance between sensitivity to potential issues and tolerance for normal network variations. The other options either specify an incorrect percentage threshold or an incorrect latency value compared to the default Connection Monitor configuration.
+
+
+
