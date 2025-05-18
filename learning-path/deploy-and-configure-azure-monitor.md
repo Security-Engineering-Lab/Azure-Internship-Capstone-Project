@@ -836,13 +836,13 @@ In this module, you learned how to deploy and configure Azure Monitor Agent on I
 #### Learn more
 You can learn more by reviewing the following documents:
 
-- Azure Monitor Agent overview
-- Manage Azure Monitor Agent
-- Use the Map feature of VM insights to understand application component
-- Chart performance with VM insights
-- Collect events and performance counters from virtual machines with Azure Monitor Agent
-- Collect IIS logs with Azure Monitor Agent
-- Collect text logs with Azure Monitor Agent
-- Collect Syslog events with Azure Monitor Agent
+- Azure Monitor Agent overview, https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-overview
+- Manage Azure Monitor Agent, https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-manage?tabs=azure-portal
+- Use the Map feature of VM insights to understand application component, https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-maps
+- Chart performance with VM insights, https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-performance
+- Collect events and performance counters from virtual machines with Azure Monitor Agent, https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection
+- Collect IIS logs with Azure Monitor Agent, https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection-iis
+- Collect text logs with Azure Monitor Agent, https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection-log-text
+- Collect Syslog events with Azure Monitor Agent, https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection-syslog
 
 
