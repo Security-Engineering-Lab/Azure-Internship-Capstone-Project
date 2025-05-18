@@ -1586,7 +1586,7 @@ Launch the exercise and follow the instructions. When you're done, be sure to re
 
 > **Note**: To complete this lab you will need an **Azure subscription**.
 
-# 6.3 Exercise - Deploy Log Analytics
+## 6.3 Exercise - Deploy Log Analytics
 
 This guided project consists of the four exercises:
 * **Exercise 1: Deploy Log Analytics**
@@ -1604,7 +1604,7 @@ Launch the exercise and follow the instructions. When you're done, be sure to re
 > **Note**: To complete this lab you will need an **Azure subscription**.
 >
 
-# 6.4 Exercise - Monitor web apps
+## 6.4 Exercise - Monitor web apps
 
 This guided project consists of the four exercises:
 * Exercise 1: Deploy Log Analytics
@@ -1624,7 +1624,7 @@ Launch the exercise and follow the instructions. When you're done, be sure to re
 > **Note**: To complete this lab you will need an **Azure subscription**.
 
 
-# 6.5 Exercise - Configure monitoring for compute services
+## 6.5 Exercise - Configure monitoring for compute services
 
 This guided project consists of the four exercises:
 * Exercise 1: Deploy Log Analytics
