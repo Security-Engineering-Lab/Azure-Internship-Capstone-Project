@@ -16,6 +16,14 @@
 
 This capstone project transforms standard application monitoring into a robust security monitoring system for Django applications deployed in Azure. By leveraging Azure Monitor capabilities and security engineering principles, we've created an early warning system for potential security threats and application vulnerabilities.
 
+### !!!!
+#### Full-stack monitoring in Azure
+#### Monitor web (Django) applications
+#### Monitor your infrastructure
+#### Monitor Azure platform resources
+#### Monitor security
+
+
 <p align="center">
   <img src="https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_1.png" alt="Architecture Diagram" width="700">
 </p>
