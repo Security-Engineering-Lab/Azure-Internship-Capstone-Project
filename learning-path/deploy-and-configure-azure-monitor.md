@@ -1637,7 +1637,7 @@ In Exercise 3, you configure monitoring for compute services and perform tasks r
 
 > **Note**: To complete this lab you will need an **Azure subscription**.
 
-# 6.6 Exercise - Configure alerts
+## 6.6 Exercise - Configure alerts
 
 This guided project consists of the four exercises:
 * Exercise 1: Deploy Log Analytics
@@ -1650,5 +1650,33 @@ In Exercise 4, you configure two specific alerts: an action group to send an ema
 * Task 2: Create an alert for virtual machine CPU utilization.
 
 > **Note**: To complete this lab you will need an **Azure subscription**.
+
+# 7 Module assessment
+
+## Answer the following questions
+
+Choose the best response for each of the following questions.
+
+### 1.
+**Tailwind Traders has a subscription that contains multiple Log Analytics workspaces across multiple resource groups. The administrator needs to assign the Log Analytics Reader role to a new user. Which scope should the role assignment be configured to allow the user access to all the Log Analytics workspaces in a specific resource group?**
+
+- Subscription
+- **Resource group**
+- Resource
+
+### 2.
+**Tailwind Traders needs to collect information about all HTTP requests and responses that occur on their web server. An IT staff member decides to create a data collection rule that collects this information from virtual machines that are monitored with Azure Monitor Agent. When configuring the data collection rule, which data source should the staff member specify?**
+
+- Performance counters
+- Windows event logs
+- **IIS logs**
+
+### 3.
+**Tailwind Traders needs to set up an Azure Resource Health alert that notifies them of any changes in the health status of any resources due to a restart or a shutdown. Which type of alert should be used?**
+
+- **Activity log alert**
+- Metric alert
+- Log alert
+
 
 
