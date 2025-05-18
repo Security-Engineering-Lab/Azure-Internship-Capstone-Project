@@ -24,6 +24,11 @@ This capstone project transforms standard application monitoring into a robust s
 #### Monitor security
 
 
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/2_workbooks.png)
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/3_dashboard.png)
+
+
 <p align="center">
   <img src="https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/0_AzureResources_1.png" alt="Architecture Diagram" width="700">
 </p>
