@@ -1070,7 +1070,7 @@ Destination port. Enter * to include all ports.
 
 
 
-# 4.5 Packet capture
+## 4.5 Packet capture
 
 Azure Network Watcher packet capture allows you to create packet capture sessions to track traffic to and from a virtual machine (VM) or a scale set. Packet capture helps to diagnose network anomalies both reactively and proactively. Other uses include gathering network statistics, gaining information on network intrusions, to debug client-server communications and much more.
 
