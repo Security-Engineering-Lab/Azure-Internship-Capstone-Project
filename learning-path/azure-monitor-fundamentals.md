@@ -1,11 +1,8 @@
 
 
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/1_overview-simple.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/2_workbooks.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/3_dashboard.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/4_web-app-metrics.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/5_insights-box.svg)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/6_visualize-box.svg)
+
+
+
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/7_respond-box.svg)
 
 
@@ -82,8 +79,6 @@ When you run applications built on various services and resources, a key element
 
 Azure Monitor provides features and tools for collecting, managing, and analyzing IT data from all of your Azure, other cloud, and on-premises resources. The following diagram shows a high-level architectural view of Azure Monitor.
 
-![Diagram that shows an overview of Azure Monitor with data sources and features that use the collected data.](https://learn.microsoft.com/en-us/training/wwl-azure/introduction-to-azure-monitor/media/azure-monitor-overview.png)
-
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/1_overview-simple.png)
 
 ### Data collection and storage
@@ -118,12 +113,11 @@ Azure Monitor workbooks provide a flexible canvas for analyzing data and creatin
 
 The following image shows three types of workbooks that display logged data in different chart and table formats.
 
-![Screenshots of three workbooks displaying logged data in various chart and table formats.](https://learn.microsoft.com/en-us/training/wwl-azure/introduction-to-azure-monitor/media/azure-monitor-workbooks.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/2_workbooks.png)
 
 You can add the visualizations you create in Azure Monitor to Azure dashboards, which let you combine different kinds of data into a single pane in the Azure portal.
 
-![Screenshot of an Azure dashboard that displays metrics in graph format for application performance metrics at left and security incidents at right.](https://learn.microsoft.com/en-us/training/wwl-azure/introduction-to-azure-monitor/media/azure-monitor-dashboard.png)
-
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/3_dashboard.png)
 
 # 1.3 Metrics and Logs
 
@@ -141,7 +135,7 @@ To see the metrics for any resource in the Azure portal, select **Metrics** unde
 
 For example, the following Requests metric line chart shows the sum aggregation of requests for the Contoso-web-sales application.
 
-![Screenshot of the Monitoring option selected in the Azure portal for a web app, showing chart of requests for the web app.](https://learn.microsoft.com/en-us/training/wwl-azure/introduction-to-azure-monitor/media/azure-monitor-metrics.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/4_web-app-metrics.png)
 
 Azure Monitor can collect several types of metrics, including:
 
@@ -181,7 +175,7 @@ This unit describes how Azure Monitor Insights, visualizations, and dashboards c
 
 Some Azure resource providers have created visualizations that provide a customized monitoring experience and require minimal configuration. Insights are large, scalable, curated visualizations.
 
-![Diagram that shows the Insights part of Azure Monitor.](https://learn.microsoft.com/en-us/training/wwl-azure/monitor-app-performance/media/azure-monitor-insights.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/5_insights-box.svg)
 
 Azure Monitor includes many types of Insights. In the Azure portal, select **Insights Hub** in the Azure Monitor navigation to list and access all the available types of Insights.
 
@@ -219,7 +213,7 @@ Network Insights provides a comprehensive visual representation of health and me
 
 Visualizations such as charts and tables are effective tools for summarizing monitoring data and presenting it to audiences. Azure Monitor has its own features for visualizing monitoring data, and uses other Azure services for publishing data to different audiences. Power BI and Grafana aren't officially part of Azure Monitor, but are core integrations to tell the monitoring story.
 
-![Diagram that shows the Visualize part of Azure Monitor.](https://learn.microsoft.com/en-us/training/wwl-azure/monitor-app-performance/media/azure-monitor-visualize.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/6_visualize-box.svg)
 
 The following sections describe some Azure Monitor and external tools for visualizing and presenting monitoring data.
 
@@ -247,7 +241,7 @@ Grafana also has popular plugins and dashboard templates for non-Microsoft appli
 
 An effective monitoring solution proactively responds to critical events without the need for an individual or team to notice the issue. The response could be a text or email to an administrator, or an automated process that attempts to correct an error condition.
 
-![Diagram that shows the Respond part of the Consumption section of the Azure Monitor system.](https://learn.microsoft.com/en-us/training/wwl-azure/monitor-app-performance/media/azure-monitor-respond.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/7_respond-box.svg)
 
 Azure Monitor works with the following types of automated alerting and responses.
 
