@@ -827,3 +827,22 @@ VM Insights performance charts allow you to view performance data for up to 30 d
 The correct answer is: **Performance counter data**
 
 Performance counter data is the only option that can be sent to both Azure Monitor Metrics and Azure Monitor Logs. This flexibility allows performance data to be used both for real-time dashboards and alerting (Metrics) as well as for detailed analysis and querying (Logs). Windows Event log data and Syslog are text-based logs that can only be sent to Azure Monitor Logs, not to Metrics which requires numerical data.
+
+
+## 3.6 Summary
+
+In this module, you learned how to deploy and configure Azure Monitor Agent on IaaS VMs. You also learned how to enable VM Insights and Data Collection Rules to monitor performance and application telemetry.
+
+#### Learn more
+You can learn more by reviewing the following documents:
+
+- Azure Monitor Agent overview
+- Manage Azure Monitor Agent
+- Use the Map feature of VM insights to understand application component
+- Chart performance with VM insights
+- Collect events and performance counters from virtual machines with Azure Monitor Agent
+- Collect IIS logs with Azure Monitor Agent
+- Collect text logs with Azure Monitor Agent
+- Collect Syslog events with Azure Monitor Agent
+
+
