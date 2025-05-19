@@ -326,5 +326,185 @@ Learn more about the Azure Monitor concepts and processes this overview introduc
 
 
 
+## 2 Design a full-stack monitoring strategy on Azure
+
+Use monitoring services on Azure to help bring operational excellence and security to your applications and infrastructure.
+
+# 2.1 Introduction
+
+Suppose you work for a financial organization that's moving its systems to Azure, with a mixture of infrastructure-as-a-service (IaaS) and platform-as-a-service (PaaS) services. The organization's previous on-premises environment experienced instances of degraded application performance or unavailable systems, with extended delays before the issues were identified and resolved. Customers' inability to access their accounts decreased their satisfaction.
+
+To quickly identify and minimize poor performance and system failures in the future, the organization wants to implement a full-stack monitoring strategy across all its technology solutions. This strategy should offer insights and alerting into collected data.
+
+In this learning module, you explore the monitoring solutions available in Azure. You learn how to use Azure Monitor and its features, such as Application Insights and Azure Monitor Logs, to analyze infrastructure and application performance and availability. You also explore how to use Microsoft Defender for Cloud and Microsoft Sentinel for security monitoring.
+
+After you complete this module, you can use Azure tools to design and implement a full-stack monitoring strategy for your infrastructure and applications.
+
+## Learning objectives
+
+* Select the appropriate monitoring solutions based on use cases.
+* Choose a combination of monitoring solutions to create a unified full-stack monitoring strategy.
+
+## Prerequisites
+
+* Basic knowledge of Azure application, virtualization, and container services
+* Basic knowledge of operational concepts like monitoring, logging, and alerting
 
 
+# 2.2 Full-stack monitoring in Azure
+
+Your organization is moving all its systems from an on-premises location to Azure, and wants you to design a monitoring strategy. This unit explains how a full-stack monitoring strategy can improve customer experience by providing the ability to identify and mitigate issues across all the layers of your applications and infrastructure.
+
+## Use full-stack monitoring
+
+Full-stack monitoring is a complete approach to monitoring, triaging, and diagnosing application, infrastructure, and security issues. Full-stack monitoring includes telemetry collection, tracking key performance indicators, isolating problems, and analyzing root causes.
+
+Your applications and infrastructure might face different kinds of potentially damaging issues, such as poor response times, changing usage rates, exceptions, and security risks. Your response must be appropriate to the issue type. You might respond by scaling up capacity to meet increased load, or by changing your application or infrastructure to improve performance and reduce errors.
+
+With the right tools, you can:
+
+- Monitor your infrastructure and application performance.
+- Monitor for security risks and suspicious activity.
+- Collect information on issues as soon as they arise.
+- Analyze and respond to the information you collect.
+
+By monitoring your applications and infrastructure with a full-stack approach, you respond to changes and issues quickly and appropriately. This strategy can help your organization become more productive, cost-effective, secure, and competitive.
+
+## Monitor your applications
+
+Monitor your application for issues while you develop it to prevent errors and exceptions later in production. To improve your development lifecycle, ensure that your code gets pushed to the next stage of the development cycle only if it successfully passes the necessary checks.
+
+Also monitor your application when it's live and in use. You might be faced with failing requests, high server response times, or availability issues. By monitoring for live issues, you identify these types of problems and risks promptly, and can respond effectively to keep your application healthy.
+
+![Screenshot of Application Key Performance Indicators (KPIs).](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/full-stack-monitoring-application-kpis.png)
+
+To improve your applications' health and build better applications in future, configure alerts and automated responses to help you deal with application issues.
+
+## Monitor your infrastructure
+
+Different kinds of issues can affect your infrastructure. You might have to deal with performance issues or problems that could render your services unreachable or the entire infrastructure unavailable. Any of these issues can result in decreased productivity, financial loss, or damage to your organization's reputation.
+
+To deal with any issues that arise in a timely and effective way, you can configure alerts to monitor your infrastructure for various issues. For example, you can configure alerts for:
+
+- Your infrastructure's resource utilization.
+- Your infrastructure's availability and health.
+- A specific event occurring at the operating-system level.
+
+You can configure alerts to start a process that notifies a person or team to take appropriate action. You can also trigger automated responses to alerts with playbooks and webhooks.
+
+You can also use infrastructure monitoring data for operational analysis and capacity planning. You can collect performance data from virtual machine (VM) guest operating systems into charts for comparison and trending purposes to inform decision making.
+
+![Screenshot of VM KPIs.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/full-stack-monitoring-infrastructure-kpis.png)
+
+## Monitor Azure platform resources
+
+In addition to monitoring your deployed applications and infrastructure, you can use Azure's built-in capabilities to monitor your other Azure platform resources. Azure resources such as Storage Accounts, Key Vaults, and Azure Cosmos DB databases have performance metrics and resource logs that you can view and analyze to track performance and availability.
+
+These and other Azure resource types offer dedicated insights that provide predefined monitoring experiences across subscriptions, resource groups, and other resources. The following screenshot shows the Azure Monitor storage insight displaying usage and latency for multiple storage accounts across two subscriptions.
+
+![Screenshot of Azure Storage KPIs.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/full-stack-monitoring-storage-kpis.png)
+
+You can also view and collect logs related to Active Directory for your Azure tenant, and Service Health and activity logs for Azure subscriptions. A full-stack monitoring solution includes visibility into the Azure platform resources your application and infrastructure depend on.
+
+## Monitor security
+
+It's also essential to monitor the security of your applications and infrastructure to ensure that they always remain protected and available. You should monitor and alert on data exfiltration and on any risks to your infrastructure's security, such as suspicious user accounts or malicious IP addresses. Your security monitoring solution should include strong, automated anomaly detection and event management to combine multiple related events into a single actionable alert.
+
+## Summary
+
+Taking a full-stack approach to monitoring your applications and infrastructure helps you respond appropriately and more effectively to issues. You can strengthen your protection and build improved applications and infrastructure. The full-stack approach also helps you gain situational awareness, and you learn from the issues that affect your environment.
+
+## Check your knowledge
+
+1. At what point should DevOps teams implement application monitoring for optimal application health and performance?
+
+   - During development only
+   - In production only
+   - **During development and while in production**
+
+2. What's the term for a monitoring strategy that takes a complete approach to monitoring, triaging, and diagnosing application, infrastructure, and security issues?
+
+   - **Full-stack monitoring**
+   - Insights
+   - Platform monitoring
+
+
+# 2.3 Monitoring options in Azure
+
+**200 XP | 5 minutes**
+
+Your organization's reputation depends on its systems' performance, reliability, and security. For example, if your payment system is unable to process user transactions during a high-volume holiday sales period, your customers might lose confidence in your business.
+
+It's critical to monitor your systems closely to identify any performance problems or attacks before they can affect users. This unit describes the Azure solutions that help you monitor your organization's services.
+
+## Azure Monitor
+
+Azure Monitor is a service for collecting, analyzing, and acting on telemetry from your cloud and on-premises environments. You can analyze metrics and logs from monitored resources.
+
+Azure Monitor helps you maximize the availability and performance of your applications and services by detecting and diagnosing application, infrastructure, and platform issues. Azure Monitor also supports operational workflows with alerts and automated actions, and lets you create visualizations such as dashboards and reports.
+
+![Diagram that shows an overview of Azure Monitor with data sources sending data to a central data platform, and features that use the collected data.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/azure-monitor-overview.png)
+
+Azure Monitor collects telemetry directly from Azure platform resources, and you can also ingest custom data by using APIs. Azure Monitor can also collect application-layer data and infrastructure-performance data from containers and VM guest operating systems.
+
+Azure Monitor stores the collected data in centralized and fully managed data stores: Azure Monitor Metrics for numerical time-series values and Azure Monitor Log Analytics workspaces for resource logs. Azure Monitor automatically collects and stores metrics for most Azure resources, but user configuration is required to send and store resource logs. You can choose how to consume, analyze, and respond to the collected data.
+
+In most cases, you should start with insights, which are guided monitoring and troubleshooting experiences for Azure resources. For example, you can use Azure Monitor container insights for your Kubernetes workloads.
+
+You can also visualize the data yourself with Azure dashboards in the Azure portal, create business views with Power BI, or create interactive reports by using workbooks. Use Azure Monitor for a detailed view of your applications' and infrastructure's health on a single screen.
+
+![Screenshot of a full-stack monitoring dashboard.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/full-stack-monitoring-dashboard.png)
+
+You can further analyze collected data by using Metrics Explorer for charting and visual correlation, and Log Analytics for queries, trending, and pattern recognition. Azure Monitor lets you manage and create alerts, notifications, and actions such as runbooks and autoscale based on metrics and logs. You can also integrate Azure Monitor with other tools by using Azure Event Hubs to export data or APIs for ingestion and export.
+
+## Microsoft Defender for Cloud
+
+Microsoft Defender for Cloud is a service that manages your infrastructure's security from a centralized location. You can use Defender for Cloud to monitor the security of your workloads, whether they're on-premises or in the cloud.
+
+Attacks are becoming more intelligent, and the number of people with the right security skills is low. Defender for Cloud helps you deal with these challenges by providing you with tools that improve your protection against security threats. Use Defender for Cloud to monitor your resources' health and implement recommendations.
+
+![Screenshot of Microsoft Defender for Cloud Overview screen.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-defender-for-cloud-overview.png)
+
+Defender for Cloud helps streamline your security configuration. Defender for Cloud is natively integrated with other Azure PaaS services like Azure SQL Database. For IaaS services, you can enable automatic provisioning in Defender for Cloud.
+
+![Screenshot of Microsoft Defender for Cloud automatic provisioning.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-defender-for-cloud-automatic-provisioning.png)
+
+Defender for Cloud creates an agent on each supported VM when the VM is created. Defender then automatically starts collecting data from the machine. This Defender for Cloud capability reduces the complexity of configuring security.
+
+## Microsoft Sentinel
+
+Microsoft Sentinel is a cloud-native security information and event management (SIEM) system that collects data on devices, users, infrastructure, and applications across your enterprise. You can use Microsoft Sentinel to proactively hunt for threats and anomalies, and respond by using orchestration and automation. Microsoft Sentinel has built-in threat intelligence for detection and investigation that can help reduce false positives.
+
+You can connect your data sources to Microsoft Sentinel. Data sources include Microsoft services such as Microsoft 365 and Defender for Cloud, and can also include external solutions such as AWS CloudTrail or on-premises sources. The Microsoft Sentinel dashboard shows detailed information collected from your sources.
+
+![Screenshot of the Microsoft Sentinel dashboard.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-dashboard.png)
+
+Incidents help you group and combine related alerts. You can use incidents to reduce the noise generated because of the scale of the data. Incidents also help you to further investigate anomalous activities or threats that raise alerts.
+
+![Screenshot of incident investigation.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-incident-investigation.png)
+
+You can use hunting queries to look for threats across your enterprise before alerts are raised. Microsoft security researchers maintain built-in hunting queries that act as bases for you to build your own queries.
+
+![Screenshot of hunting queries.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-hunting-queries.png)
+
+Notebooks can consist of investigation or hunting steps that you reuse or share with others. Use Microsoft Sentinel Notebooks to develop and run your notebooks. For example, you might use the Guided hunting - Anomalous Office365 Exchange Sessions notebook to hunt for anomalous activities in Microsoft 365 across your enterprise.
+
+## Log Analytics workspaces
+
+Microsoft Sentinel and Microsoft Defender for Cloud use Azure Monitor Logs as their underlying logging data platform, and store their data in Log Analytics workspaces. Log Analytics workspaces are central storage and management locations that collect and aggregate your application, infrastructure, and security logs for analysis, troubleshooting, and auditing.
+
+This centralized approach lets you use a single user interface and query language to correlate and investigate across application performance, infrastructure performance, and security logs within the same data analytics service. It's best to use as few workspaces as possible, and manage user and team access to subsets of log data by using resource or workspace permissions. For more information, see [Design a Log Analytics workspace architecture](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/workspace-design).
+
+## Check your knowledge
+
+1. Which Azure service incorporates threat intelligence for detection and investigation in enterprise environments?
+
+   - Azure Monitor
+   - **Microsoft Sentinel**
+   - Application Insights
+
+2. What's the shared underlying logging data platform for Microsoft Sentinel and Microsoft Defender for Cloud?
+
+   - Azure Monitor Metrics
+   - **Azure Monitor Logs**
+   - Azure Event Hubs
