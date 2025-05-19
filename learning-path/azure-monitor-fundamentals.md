@@ -431,8 +431,6 @@ Taking a full-stack approach to monitoring your applications and infrastructure 
 
 # 2.3 Monitoring options in Azure
 
-**200 XP | 5 minutes**
-
 Your organization's reputation depends on its systems' performance, reliability, and security. For example, if your payment system is unable to process user transactions during a high-volume holiday sales period, your customers might lose confidence in your business.
 
 It's critical to monitor your systems closely to identify any performance problems or attacks before they can affect users. This unit describes the Azure solutions that help you monitor your organization's services.
