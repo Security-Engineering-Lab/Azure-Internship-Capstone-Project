@@ -506,3 +506,427 @@ This centralized approach lets you use a single user interface and query languag
    - Azure Monitor Metrics
    - **Azure Monitor Logs**
    - Azure Event Hubs
+
+
+
+# 2.4 Monitor applications by using Application Insights
+
+When issues arise on your financial organization's application, customers can't access their accounts. If the application issues aren't resolved quickly, customer satisfaction is negatively affected. Your organization wants to avoid these issues as it moves to Azure.
+
+This unit describes how to integrate Azure Monitor Application Insights with your applications. You can use Application Insights to check the health of applications and resolve issues faster.
+
+Use Application Insights to:
+
+- Analyze and address issues and problems that affect your application's health and performance.
+- Improve your application's development lifecycle.
+- Assess your user experience and analyze users' behavior.
+
+## Integrate Application Insights with your applications
+
+To integrate Application Insights with your applications, you can enable Application Insights in the Azure portal or instrument your application with Application Insights. Instrumentation refers to enabling the collection of monitoring data from your app by using an agent or an SDK. The approach to instrumentation varies depending on your application's language and platform.
+
+In many cases, you can implement instrumentation without access to application source code by using codeless attach in the Azure portal or by using an agent. For example, for your .NET and .NET Core applications hosted on Azure App Services, you can enable the collection of monitoring data with Application Insights by using a toggle in the Azure portal.
+
+![Screenshot of onboarding to Application Insights in the Azure portal.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-onboarding.png)
+
+Application Insights automatically collects data about your application's performance and health, and displays this data in the Azure portal. You can select **Failures** in the Application Insights left navigation to get a list of all failures collected for your app and drill into each one.
+
+![Screenshot of analyzing failures.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-analyzing-failures.png)
+
+To continue your investigation into the root cause of the error or exception, you can drill into the problematic transaction for a detailed end-to-end transaction view that includes dependencies and exception details.
+
+![Screenshot of analyzing failure with end-to-end view.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-analyzing-failure-end-to-end-view.png)
+
+Application Insights also automatically detects app dependencies to support distributed tracing and create application topology views. You can see this topology by selecting **Application map** in the Application Insights left navigation.
+
+You can view more details of each component in the map by selecting it. For example, you can view the slowest requests for an instance and investigate performance further. These detailed analytics help you understand the application better and respond to its requirements.
+
+![Screenshot of application map.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-application-map.png)
+
+## Monitor your applications' performance
+
+You can further investigate slow transactions to identify slow requests and server-side dependencies. Drill down by selecting **Investigate performance** from the application map, or by selecting **Performance** from the Application Insights left navigation.
+
+![Screenshot of analyzing performance.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-analyze-performance.png)
+
+On the Performance screen, you can isolate slow transactions by selecting the time range, operation name, and durations of interest. You're also prompted with automatically identified anomalies and commonalities across transactions. From here, you can drill into an individual transaction for an end-to-end view of transaction details with a Gantt chart of dependencies.
+
+If you instrument your web pages with Application Insights, you can also gain visibility into page views and browser operations and dependencies. Collecting this browser data requires adding a script to your web pages. After you add the script, you can access page views and their associated performance metrics by selecting the **Browser** toggle.
+
+## Analyze user behavior
+
+Instrumenting your web pages with Application Insights collects usage information to augment the server-side monitoring capabilities. The same browser-side JavaScript instrumentation provides usage data including number of users, sessions, events, browser version, OS version, and locations. This usage data shows which pages of your app are the most popular, where users drop out, and the conversion and retention rates for specific pages.
+
+![Screenshot of application events split by browser.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-application-events-by-browser.png)
+
+The preceding example shows the most popular browsers and versions. You can use this type of information to inform decisions for allocating functional and performance-testing resources.
+
+## Monitor your application's availability
+
+You can use the Application Insights Availability page to continuously monitor your application health and check application health from different geographic locations.
+
+![Screenshot of viewing application availability by locations over time.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-view-application-availability.png)
+
+After you create an availability test, you can use the Availability page to see how your application is doing across different locations. Each dot on the Scatter Plot graph represents a test that was run. A red dot means that the test failed.
+
+Select a red dot to see a detailed breakdown of the test failure, including information on what might have caused it. You can use the information to respond appropriately.
+
+When you create an availability test, you can specify details like frequency, the URL of your application, and locations from which to test the app. The following example shows the configuration of a test that sends a request to an application every five minutes from five geographic locations.
+
+![Screenshot of availability test creation.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-create-availability-test.png)
+
+## Get notifications and take action
+
+You can configure Application Insights alert rules to monitor your application's performance and availability. You can specify the conditions that should trigger an alert and dictate how to handle the alert. For example, Application Insights can send an alert if a specified number of locations are unavailable, or if a certain number of exceptions occur.
+
+You can also specify who to notify about the alert. Application Insights can send notifications through email or text message, or use runbooks and webhooks to respond to alerts through automation.
+
+## Check your knowledge
+
+1. Which aspects of application performance can Application Insights monitor?
+
+   - Key Vault requests and latency
+   - **User behavior and usage patterns**
+   - Types of network delay
+
+2. How can you continuously monitor your applications from different geographic locations?
+
+   - **Create availability tests.**
+   - Use an instrumentation script.
+   - View the Performance screen in Application Insights.
+  
+
+
+
+
+# 2.5 Monitor VMs and containers by using insights
+
+Your organization migrated several applications from on-premises to Azure virtual machines (VMs) and Azure Kubernetes Service (AKS). Several hundred Azure resources are now deployed across several Azure subscriptions.
+
+You must track resource usage to ensure that cloud resources are adequately provisioned and their performance meets business requirements. You need a monitoring approach that provides broad visibility and the capability to triage and isolate problems quickly.
+
+This unit explains how to use Azure Monitor insights and other tools for an at-scale monitoring view across all your virtual machine (VM) and container resources. You also learn how to drill into specific nodes and containers for troubleshooting.
+
+## Azure Monitor insights
+
+You can use Azure Monitor insights to monitor resource utilization and performance at scale with guided troubleshooting to triage and isolate issues. This unit focuses on VM insights and container insights, but insights exist for other Azure resources, including networks, storage accounts, and Azure Cosmos DB databases. For a complete list of available insights, select **Insights Hub** in the Azure Monitor left navigation.
+
+![Screenshot of Azure Monitor Insights Hub.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/azure-monitor-insights-hub.png)
+
+## Azure Monitor VM insights
+
+The Azure Monitor feature VM insights helps you get started monitoring your VM clients by collecting a set of commonly used metrics and sending them to a Log Analytics workspace. You can use Azure Monitor VM insights to:
+
+- View your VMs' health and performance.
+- Monitor your VMs at scale across multiple subscriptions and resource groups.
+- Get a topology view that shows the processes and network connection details of your VMs and virtual machine scale sets.
+
+![Screenshot of getting started with Azure Monitor VM insights in the Azure portal.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/vm-insights-getting-started.png)
+
+To enable Azure Monitor VM insights, select **Virtual Machines** from the Azure Monitor left navigation, and then select **Configure Insights** on the **Get started** tab. In the **Not monitored** section of the **Overview** tab, select the VMs and virtual machine scale sets to monitor, and then select **Enable**.
+
+Enabling VM insights adds extensions and configuration to your VMs and virtual machine scale sets that collect, store, and display a predetermined set of usage and performance measurements.
+
+## Monitor your VMs at scale
+
+Once enabled, VM insights monitors VM and virtual machine scale set usage and performance. Select the VM insights **Performance** tab to see the Top N Charts and Top N List that show VM resource usage.
+
+These charts allow you to quickly identify outliers and hot spots where the allocated resources might be insufficient to support the existing load. From the Top N List, you can select a VM to access more details, such as its properties, links to other workbooks, collected logs, and alerts.
+
+![Screenshot of Top N List of VMs in the Azure Monitor portal.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/vm-insights-top-n-list.png)
+
+You can drill down into Azure Monitor Logs by selecting an event type from the list in **Log Events**. The relevant Log Analytics workspace opens with the appropriate table and filter applied.
+
+![Screenshot of drilling into Azure Monitor Logs from VM insights.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/vm-insights-logs.png)
+
+The Azure Monitor VM insights **Map** tab shows network connections for an entire resource group, virtual machine scale set, or individual VM. To select the resources of interest, use the filters at the top of the view.
+
+You can expand the number of processes for a complete list and to view the network connections per process. Select the arrow representing the connection for network usage and performance details.
+
+![Screenshot of VM insights Map view.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/vm-insights-map.png)
+
+## Azure Monitor container insights
+
+Container insights is a feature of Azure Monitor that monitors the performance and health of container workloads deployed to Azure, including AKS. The Container insights feature collects memory and processor metrics from controllers, nodes, and containers, and gathers container logs. You can use Azure Monitor container insights to:
+
+- View your Kubernetes workloads' health and performance at scale across multiple subscriptions and resource groups.
+- Get visibility into memory and processor performance metrics from controllers, nodes, and containers.
+- View and store container logs for real-time and historical analysis.
+
+You can enable Azure Monitor container insights when you create an AKS cluster, or by selecting **Containers** in the Azure Monitor left navigation and then selecting the **Unmonitored clusters** tab.
+
+## Monitor Kubernetes clusters at scale
+
+After you enable container insights, you can view your Kubernetes workloads' performance and resource utilization on the container insights page by Cluster, Node, Controller, or Container. For example, you can:
+
+- Investigate an overutilized node.
+- View the state of pods by controller.
+- Look at the number of restarts and CPU or memory utilization of a specific container.
+
+![Screenshot of Azure Monitor container insights list of containers by utilization.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/container-insights-container-utilization.png)
+
+The **Monitored clusters** tab shows an at-scale view of the health and status of all your clusters, nodes, system pods, and user pods. You can filter this view by namespace and use it as a starting point to drill into problem areas. You can also use container insights to access logs and enable recommended alerts.
+
+![Screenshot of the Azure Monitor container insights multicluster view.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/container-insights-multicluster-view.png)
+
+## Azure Monitor managed service for Prometheus
+
+Prometheus is an open-source monitoring system designed specifically for containers and microservices. Prometheus focuses on distributed applications, making it a popular tool for monitoring Kubernetes, distributed services, and containerized microservices.
+
+Azure Monitor managed service for Prometheus is a component of Azure Monitor Metrics that supports open-source querying and visualization tools like PromQL and Grafana. Azure Monitor managed service for Prometheus can collect data from AKS or from any Kubernetes cluster that runs self-managed Prometheus using remote-write. To enable Azure Monitor managed service for Prometheus, you create an Azure Monitor workspace to store the Prometheus metrics.
+
+## Integrate with Azure Managed Grafana
+
+Grafana is an open-source visualization and dashboarding platform that's the primary method for visualizing Prometheus metrics. You can connect your Azure Monitor workspace to a Grafana workspace to use your Prometheus metrics data as a data source in a Grafana dashboard.
+
+Azure Managed Grafana is a fully managed implementation of Grafana that offers multiple predefined Grafana dashboards for monitoring Kubernetes and doing full-stack troubleshooting. You can import prebuilt Grafana dashboards that use Prometheus metrics, or you can create custom dashboards. The following screenshot shows an Azure Managed Grafana dashboard that uses AKS monitoring data.
+
+![Screenshot of a Grafana dashboard that shows AKS monitoring data.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/grafana-aks-dashboard.png)
+
+## Azure Monitor alerts
+
+Some types of Azure Monitor insights include recommended alert templates, but you can also specify conditions to trigger an alert in your particular environment. You can configure alert rules to monitor your infrastructure's performance and availability, and use alert rules and action rules to dictate how to handle alerts.
+
+You can base Azure Monitor alerts on the same metrics or log data used to populate insights. For example, Azure Monitor can send an alert if a VM exceeds a utilization threshold, or if a specified number of container restarts occur.
+
+You can also specify who should be notified. Insights can send notifications through email or text message, or use runbooks and webhooks to automatically respond to alerts.
+
+![Screenshot of alert creation.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/alert-creation.png)
+
+## Check your knowledge
+
+1. Where can you see a topology view with network connection details of your VMs and virtual machine scale sets?
+
+   - Log Analytics
+   - Metrics Explorer
+   - **VM insights Map tab**
+
+2. What open-source monitoring system is designed specifically for containers and microservices?
+
+   - **Prometheus**
+   - VM insights
+   - Grafana
+  
+# 2.6 Manage infrastructure security by using Defender for Cloud
+
+
+Because your company is a financial organization, it needs to meet the highest standards for security. Each customer or partner transaction must be protected completely from threats, and you must also respond effectively to potential threats. For example, if a virtual machine (VM) is compromised, you must act rapidly to address the issue.
+
+This unit describes how to protect resources and respond to threats by using Microsoft Defender for Cloud. Defender for Cloud helps you ensure that the security configuration of your infrastructure is as secure as possible.
+
+You can use Defender for Cloud to:
+
+- Understand your architecture's security posture.
+- Identify and address risks and threats to your infrastructure.
+- Secure a complex infrastructure by using traditional in-house skills and capital.
+- Secure an infrastructure that consists of on-premises and cloud resources.
+
+## Understand your security posture
+
+You must understand your architecture's security posture to help you build and maintain better infrastructures. Defender for Cloud helps you understand the security of your architecture by giving you detailed analyses of different components of your environment, including:
+
+- Data security
+- Network security
+- Identity and access
+- Application security
+
+Defender for Cloud uses Azure Monitor Logs to collect data from your VMs to monitor for security vulnerabilities and threats. An agent reads various security-related configurations and event logs from the VM and copies the data to your Log Analytics workspace for analysis.
+
+Defender for Cloud recommends ways to address the issues and risks that it uncovers. You can use recommendations to improve the security and compliance of your architecture.
+
+![Screenshot of recommendation in Microsoft Defender for Cloud.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-recommendation.png)
+
+## Protect against threats
+
+You can use Defender for Cloud just-in-time (JIT) VM access and adaptive application controls to help block suspicious activity and protect your resources. To access these controls, select **Workload protections** in the Cloud Security section of the Defender for Cloud left navigation.
+
+### JIT VM access
+
+You can protect your VMs by using the just-in-time (JIT) VM access feature to block persistent VM access. Your VMs can be accessed based only on audited access that you configure.
+
+To enable JIT, select **Just-in-time VM access** on the Workload protections screen under Advanced protection. On the Just-in-time VM access page, select the checkboxes next to one or more VMs on the Not Configured list, and then select **Enable JIT on (number) VM(s)** to configure JIT for the VMs.
+
+Defender for Cloud shows you a list of default ports that JIT targets, or you can configure your own ports.
+
+![Screenshot of JIT configuration.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-jit-configuration.png)
+
+### Adaptive application controls
+
+You can use adaptive application controls to control which applications are allowed to run on your VMs. Defender for Cloud uses machine learning to look at the processes running on your VMs, create exception rules for each resource group that holds your VMs, and give recommendations.
+
+To configure adaptive controls, select **Adaptive application control** on the Workload protections screen under Advanced protection. The Adaptive application controls screen shows a list of resource groups that contain your VMs. The **Recommended** tab lists the resource groups that Defender for Cloud recommends for adaptive application controls.
+
+![Screenshot of Adaptive application controls.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-adaptive-application-controls.png)
+
+When you select a resource group, it opens **Configure application control rules**. On this screen, use the options to target VMs and applications that should have the control rules applied.
+
+## Respond to threats
+
+Defender for Cloud gives you a centralized view of all your security alerts, ranked by their severity. You can view your security alerts by selecting **Security alerts** in the Defender for Cloud left navigation.
+
+![Screenshot of security alerts.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-security-alerts.png)
+
+Defender for Cloud combines related alerts into a single security incident as much as possible. Select an incident to see the specific security alerts that the incident holds.
+
+Drill down into an alert by selecting the alert and then selecting **View full details**.
+
+![Screenshot of incident details.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-incident-details.png)
+
+Defender for Cloud can help you respond to threats faster and in an automated way by taking actions. Select **Next: Take Action** to take action on the alert.
+
+![Screenshot of alert details.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-alert-details.png)
+
+Expand any of the following sections to take action on the alert:
+
+- **Inspect resource context** to examine the resource logs around the time of the alert.
+- **Mitigate the threat** to see suggestions for minimizing or remediating the threat.
+- **Prevent future attacks** to implement security recommendations.
+- **Trigger automated response** to trigger a logic app as an automated response to this security alert.
+- **Suppress similar alerts** by creating a suppression rule with predefined conditions.
+- **Configure email notification settings** to select who to notify about the alert and under what conditions.
+
+![Screenshot of the Take action pane.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-take-action-pane.png)
+
+In the alert details, you should dismiss alerts if no action is required, for example if there are false positives. You should act to address known attacks, for example by blocking known malicious IP addresses, and you should decide which alerts require further investigation.
+
+![Screenshot of alert status.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-alert-status.png)
+
+## Check your knowledge
+
+1. How can you use Defender for Cloud to prevent persistent access to your virtual machines?
+
+   - Use Azure Logic Apps.
+   - **Use just-in-time (JIT) access.**
+   - Use adaptive application controls.
+
+2. How can you automate responses to Defender for Cloud alerts?
+
+   - Use just-in-time (JIT) access.
+   - Use adaptive application controls.
+   - **Use Azure Logic Apps.**
+  
+# 2.7 Manage enterprise security by using Microsoft Sentinel
+
+Your financial organization constantly deals with customers and partners across different regions in the world. Many transactions happen every day, and each transaction must be monitored and protected regardless of its type or the devices and users involved. Your organization's security and monitoring strategy must focus on enterprise-wide security and monitoring.
+
+This unit describes how Microsoft Sentinel helps monitor and respond to security threats across an enterprise-level organization. You can use Microsoft Sentinel to:
+
+- Get a detailed overview of your enterprise, potentially across multiple clouds and on-premises locations.
+- Avoid reliance on complex and disparate tools.
+- Identify and handle threats across your organization by using enterprise-grade AI, built by experts.
+
+## Connect your data sources to Microsoft Sentinel
+
+To implement Microsoft Sentinel, you need a Log Analytics workspace. When you create a Microsoft Sentinel resource in the Azure portal, you can create a new Log Analytics workspace or connect an existing workspace.
+
+![Screenshot of adding a Log Analytics workspace.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-add-workspace.png)
+
+After you create the Microsoft Sentinel resource and connect it to a workspace, you need to connect data sources for your enterprise. Install solutions with data connectors from the content hub. Microsoft Sentinel integrates with Microsoft solutions, including Microsoft Entra ID and Microsoft 365, through connectors.
+
+You can see all of your available data connectors by selecting **Data connectors** under Configuration in the Microsoft Sentinel left navigation.
+
+![Screenshot of data connectors.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-data-connectors.png)
+
+Select the appropriate data connector for your data source, read the information about the connector, and select **Open connector page** to look at the prerequisites for your connector. Make sure you address all the prerequisites to successfully connect your data source.
+
+When you connect the data source, your logs are synced to Microsoft Sentinel. You see a summary of collected data in the Data received graph for your connector. You can also see the different data types that are collected for the source. For example, the Azure Storage Account connector can collect Blob, Queue, File, or Table log data.
+
+![Screenshot of the Data received graph.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-data-received-graph.png)
+
+Once you connect your data sources, Microsoft Sentinel begins to monitor your enterprise.
+
+![Screenshot of an alert map.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-alert-map.png)
+
+## Use alerts to monitor your enterprise
+
+You can configure alert rules to investigate anomalies and threats more intelligently. Alert rules specify the threats and activities that should raise alerts. You can respond manually or by using playbooks for automated responses.
+
+Select **Analytics** in the Microsoft Sentinel left navigation under Configuration to view all the rules you have in place and create new rules.
+
+![Screenshot of View all alerts.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-view-all-alerts.png)
+
+When you create a rule, you specify whether it should be enabled or disabled, and the severity of the alert. In the **Rule query** field of the **Set rule logic** tab, enter a rule query.
+
+![Screenshot of Create alert rule.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-create-alert-rule.png)
+
+For example, the following query can determine if a suspicious number of Azure VMs are created or updated, or a suspicious number of resource deployments occur.
+
+```kusto
+AzureActivity
+ | where OperationName == "Create or Update Virtual Machine" or OperationName == "Create Deployment"
+ | where ActivityStatus == "Succeeded"
+ | make-series dcount(ResourceId)  default=0 on EventSubmissionTimestamp in range(ago(7d), now(), 1d) by Caller
+```
+
+In the **Query scheduling** section, you can set how often the query should run and which period of data to look up. In the **Alert threshold** section, you can specify the level at which to raise an alert.
+
+## Investigate incidents
+
+Microsoft Sentinel combines generated alerts into incidents for further investigation. Select **Incidents** in the Microsoft Sentinel left navigation under Threat management to see details about all your incidents, such as how many incidents are closed, how many remain open, when the incidents happened, and their severity.
+
+To start to investigate an incident, select the incident. You get information about the incident in the right pane. Select **View full details** to get more information.
+
+![Screenshot of the Incidents page.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-incidents-page.png)
+
+To investigate the incident, update its status from **New** to **Active**, assign it to an owner, and select **Investigate**.
+
+![Screenshot of Incident detail.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-incident-detail.png)
+
+The investigation map helps you understand what caused an incident and the affected scope. You can also use the map to correlate data surrounding an incident.
+
+![Screenshot of an investigation map.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-investigation-map.png)
+
+The investigation map lets you drill down into an incident. Multiple entities, including users, devices, and appliances, can be mapped to an incident. For example, you can get details about a user identified as part of the incident.
+
+![Screenshot of entity.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-entity.png)
+
+If you hover over an entity, you see a list of exploration queries designed by Microsoft security analysts and experts. You can use the exploration queries to investigate more effectively.
+
+![Screenshot of exploration queries.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-exploration-queries.png)
+
+The investigation map also gives you a timeline that helps you understand which event occurred at a particular time. Use the timeline feature to understand the path that a threat might take over time.
+
+![Screenshot of timeline.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-timeline.png)
+
+## Check your knowledge
+
+1. Why do you use Microsoft Sentinel?
+
+   - To improve the development lifecycle for an application.
+   - **To detect and respond to security threats across multiple clouds.**
+   - To cross-query data collected from multiple on-premises and cloud data sources.
+
+2. How can you use the Microsoft Sentinel investigation map to determine which users an incident affected?
+
+   - Use exploration queries.
+   - **Use entities.**
+   - Use the timeline.
+  
+
+
+# 2.8 Summary
+
+Your organization asked you to design a monitoring strategy to cover all of its technology solutions. The strategy needed to be able to quickly identify and minimize problems and failures, and to provide insights and alerts for collected log and metrics data.
+
+This learning module showed you how to use Azure Monitor features like Application Insights and Virtual machine (VM) insights to monitor the health and performance of your applications and infrastructure. You also saw how to use Microsoft Defender for Cloud and Microsoft Sentinel to monitor the security of your infrastructure and enterprise.
+
+* Azure Monitor lets you analyze and address environment health and performance issues, and query to analyze data in a single location.
+* Defender for Cloud helps you identify and address risks to your security posture.
+* Microsoft Sentinel gives you security incident management, investigation, and response capabilities.
+
+These Azure services give you a full-stack approach to monitoring applications and infrastructure. Because you can address issues faster and more effectively, your organization is more secure, productive, cost-effective, and competitive.
+
+## Other resources
+
+To learn more about monitoring solutions on Azure, see the following resources:
+
+* [Azure Monitor overview](https://learn.microsoft.com/en-us/azure/azure-monitor/overview)
+* [Application Insights overview](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview)
+* [Availability standard test](https://learn.microsoft.com/en-us/azure/azure-monitor/app/availability-standard-tests)
+* [Monitor virtual machines](https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-overview)
+* [Container insights overview](https://learn.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-overview)
+* [Monitor Kubernetes clusters using Azure services and cloud native tools](https://learn.microsoft.com/en-us/azure/architecture/operator-guides/aks/monitor-kubernetes)
+* [Azure Monitor managed service for Prometheus](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/prometheus-metrics-overview)
+* [Azure Managed Grafana](https://learn.microsoft.com/en-us/azure/managed-grafana/overview)
+* [What is Microsoft Sentinel?](https://learn.microsoft.com/en-us/azure/sentinel/overview)
+* [Microsoft Defender for Cloud](https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-cloud-introduction)
