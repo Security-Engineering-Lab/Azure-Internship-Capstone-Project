@@ -1,4 +1,6 @@
 
+
+
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/10_3-azure-monitoring-options-03.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/11_3-azure-monitoring-options-04.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/13_3-azure-monitoring-options-06.png)
@@ -417,7 +419,7 @@ Monitor your application for issues while you develop it to prevent errors and e
 
 Also monitor your application when it's live and in use. You might be faced with failing requests, high server response times, or availability issues. By monitoring for live issues, you identify these types of problems and risks promptly, and can respond effectively to keep your application healthy.
 
-![Screenshot of Application Key Performance Indicators (KPIs).](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/full-stack-monitoring-application-kpis.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/8_2-full-stack-monitoring-01.png)
 
 To improve your applications' health and build better applications in future, configure alerts and automated responses to help you deal with application issues.
 
@@ -435,7 +437,8 @@ You can configure alerts to start a process that notifies a person or team to ta
 
 You can also use infrastructure monitoring data for operational analysis and capacity planning. You can collect performance data from virtual machine (VM) guest operating systems into charts for comparison and trending purposes to inform decision making.
 
-![Screenshot of VM KPIs.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/full-stack-monitoring-infrastructure-kpis.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/9_2-full-stack-monitoring-02.png)
+
 
 ## Monitor Azure platform resources
 
