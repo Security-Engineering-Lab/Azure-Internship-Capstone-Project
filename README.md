@@ -375,6 +375,13 @@ Based on the search results, the following is evident:
 10) Python Metrics in Azure Application Insights, https://www.youtube.com/watch?app=desktop&v=ZEeVpRR25S4&t=0s
 11) Unlock the Power of Azure Monitor & Application Insights, https://www.youtube.com/watch?v=lBpWvqI-3PI
 12) SDE Bootcamp 10: Monitor your application with Zero code in Azure with Azure App insights, https://www.youtube.com/watch?v=yW8Zgp5Vy64
+13) 𝗘𝗡𝗗-𝗧𝗢-𝗘𝗡𝗗 𝗔𝗭𝗨𝗥𝗘 𝗗𝗘𝗩𝗢𝗣𝗦 𝗣𝗥𝗢𝗝𝗘𝗖𝗧 𝗔𝗨𝗧𝗢𝗠𝗔𝗧𝗜𝗢𝗡, https://medium.com/@capukvelu/-036f4dd73011
+14) Understanding Azure DevOps Pipeline — A CI/CD Blueprint for Modern Cloud Deployments, https://medium.com/@capukvelu/understanding-azure-devops-pipeline-a-ci-cd-blueprint-for-modern-cloud-deployments-f3ce1069dd8f
+15) How Azure DevOps Works, https://medium.com/@capukvelu/how-azure-devops-works-ba1b53579ab3
+16) Top 10 Terraform tips for Infrastructure Automation, https://medium.com/@devops4solutions/top-10-terraform-tips-for-infrastructure-automation-9f85e8c4e60d
+17) Deploying an AWS EKS Cluster Using Terraform and GitHub Actions, https://medium.com/@devops4solutions/deploying-an-aws-eks-cluster-using-terraform-and-github-actions-eaad8d80e6e1
+18) 
+    
    
    
 
