@@ -1,7 +1,4 @@
 
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/15-application-insights-01.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/16-application-insights-02.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/17-application-insights-03.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/18-application-insights-04.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/19-application-insights-05.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/20-application-insights-06.png)
@@ -567,21 +564,21 @@ To integrate Application Insights with your applications, you can enable Applica
 
 In many cases, you can implement instrumentation without access to application source code by using codeless attach in the Azure portal or by using an agent. For example, for your .NET and .NET Core applications hosted on Azure App Services, you can enable the collection of monitoring data with Application Insights by using a toggle in the Azure portal.
 
-![Screenshot of onboarding to Application Insights in the Azure portal.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-onboarding.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/15-application-insights-01.png)
 
 Application Insights automatically collects data about your application's performance and health, and displays this data in the Azure portal. You can select **Failures** in the Application Insights left navigation to get a list of all failures collected for your app and drill into each one.
 
-![Screenshot of analyzing failures.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-analyzing-failures.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/16-application-insights-02.png)
 
 To continue your investigation into the root cause of the error or exception, you can drill into the problematic transaction for a detailed end-to-end transaction view that includes dependencies and exception details.
 
-![Screenshot of analyzing failure with end-to-end view.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-analyzing-failure-end-to-end-view.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/17-application-insights-03.png)
 
 Application Insights also automatically detects app dependencies to support distributed tracing and create application topology views. You can see this topology by selecting **Application map** in the Application Insights left navigation.
 
 You can view more details of each component in the map by selecting it. For example, you can view the slowest requests for an instance and investigate performance further. These detailed analytics help you understand the application better and respond to its requirements.
 
-![Screenshot of application map.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-application-map.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/18-application-insights-04.png)
 
 ## Monitor your applications' performance
 
