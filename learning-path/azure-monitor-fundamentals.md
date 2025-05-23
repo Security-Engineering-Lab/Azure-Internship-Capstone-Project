@@ -1,5 +1,5 @@
 
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/11_3-azure-monitoring-options-04.png)
+
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/13_3-azure-monitoring-options-06.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/14_3-azure-monitoring-options-08.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/15-application-insights-01.png)
@@ -493,7 +493,8 @@ In most cases, you should start with insights, which are guided monitoring and t
 
 You can also visualize the data yourself with Azure dashboards in the Azure portal, create business views with Power BI, or create interactive reports by using workbooks. Use Azure Monitor for a detailed view of your applications' and infrastructure's health on a single screen.
 
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/10_3-azure-monitoring-options-03.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/10_3-azure-monitoring-options-02.png)
+
 
 You can further analyze collected data by using Metrics Explorer for charting and visual correlation, and Log Analytics for queries, trending, and pattern recognition. Azure Monitor lets you manage and create alerts, notifications, and actions such as runbooks and autoscale based on metrics and logs. You can also integrate Azure Monitor with other tools by using Azure Event Hubs to export data or APIs for ingestion and export.
 
@@ -503,12 +504,11 @@ Microsoft Defender for Cloud is a service that manages your infrastructure's sec
 
 Attacks are becoming more intelligent, and the number of people with the right security skills is low. Defender for Cloud helps you deal with these challenges by providing you with tools that improve your protection against security threats. Use Defender for Cloud to monitor your resources' health and implement recommendations.
 
-
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/11_3-azure-monitoring-options-04.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/10_3-azure-monitoring-options-03.png)
 
 Defender for Cloud helps streamline your security configuration. Defender for Cloud is natively integrated with other Azure PaaS services like Azure SQL Database. For IaaS services, you can enable automatic provisioning in Defender for Cloud.
 
-![Screenshot of Microsoft Defender for Cloud automatic provisioning.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-defender-for-cloud-automatic-provisioning.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/11_3-azure-monitoring-options-04.png)
 
 Defender for Cloud creates an agent on each supported VM when the VM is created. Defender then automatically starts collecting data from the machine. This Defender for Cloud capability reduces the complexity of configuring security.
 
