@@ -1,7 +1,4 @@
 
-
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/13_3-azure-monitoring-options-06.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/14_3-azure-monitoring-options-08.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/15-application-insights-01.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/16-application-insights-02.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/17-application-insights-03.png)
@@ -518,15 +515,15 @@ Microsoft Sentinel is a cloud-native security information and event management (
 
 You can connect your data sources to Microsoft Sentinel. Data sources include Microsoft services such as Microsoft 365 and Defender for Cloud, and can also include external solutions such as AWS CloudTrail or on-premises sources. The Microsoft Sentinel dashboard shows detailed information collected from your sources.
 
-![Screenshot of the Microsoft Sentinel dashboard.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-dashboard.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/12_3-azure-monitoring-options-05.png)
 
 Incidents help you group and combine related alerts. You can use incidents to reduce the noise generated because of the scale of the data. Incidents also help you to further investigate anomalous activities or threats that raise alerts.
 
-![Screenshot of incident investigation.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-incident-investigation.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/13_3-azure-monitoring-options-06.png)
 
 You can use hunting queries to look for threats across your enterprise before alerts are raised. Microsoft security researchers maintain built-in hunting queries that act as bases for you to build your own queries.
 
-![Screenshot of hunting queries.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-hunting-queries.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/14_3-azure-monitoring-options-08.png)
 
 Notebooks can consist of investigation or hunting steps that you reuse or share with others. Use Microsoft Sentinel Notebooks to develop and run your notebooks. For example, you might use the Guided hunting - Anomalous Office365 Exchange Sessions notebook to hunt for anomalous activities in Microsoft 365 across your enterprise.
 
