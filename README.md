@@ -1,5 +1,5 @@
 
-# 🛡️ Proactive Security Monitoring for Django Applications in Azure
+# 🛡️ Proactive Security Monitoring for Django Web Applications in Azure
 
 <p align="center">
   <img src="https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/project_banner.png" alt="Project Banner" width="800">
@@ -12,16 +12,39 @@
 [![Azure](https://img.shields.io/badge/Azure-Monitor-0078D4.svg)](https://azure.microsoft.com/services/monitor/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🔍 Project Overview
+## 🔍 Short Introduction
 
-This capstone project transforms standard application monitoring into a robust security monitoring system for Django applications deployed in Azure. By leveraging Azure Monitor capabilities and security engineering principles, we've created an early warning system for potential security threats and application vulnerabilities.
+This Azure Internship Capstone Project demonstrates the implementation of an advanced security monitoring system that transforms traditional application monitoring into a comprehensive threat detection platform for Django web applications deployed in Microsoft Azure.
 
-### !!!!
-#### Full-stack monitoring in Azure
-#### Monitor web (Django) applications
-#### Monitor your infrastructure
-#### Monitor Azure platform resources
-#### Monitor security
+### What This Project Does
+
+By leveraging **Azure Monitor** and **Application Insights**, we've built an intelligent early warning system that:
+- **Detects security threats in real-time** before they can compromise your application
+- **Monitors for attack patterns** including SQL injection, XSS, and brute force attempts
+- **Analyzes user behavior** to identify suspicious activities and anomalies
+- **Automates incident response** through customized alerts and security playbooks
+
+### Why It Matters
+
+Traditional monitoring focuses on performance metrics, but this project addresses the critical gap in **proactive security monitoring**. It embodies the "shift security left" principle by identifying vulnerabilities and threats at the earliest possible stage, significantly reducing the attack surface and potential impact of security incidents.
+
+### Key Innovation
+
+Unlike standard monitoring solutions, this system uses **security-focused KQL queries** and **custom threat detection algorithms** specifically tailored for Django applications, providing security teams with actionable intelligence rather than just raw data.
+
+### Target Audience
+
+- **Security Engineers** implementing DevSecOps practices
+- **Django Developers** building secure cloud applications  
+- **Azure Architects** designing resilient monitoring systems
+- **IT Security Teams** seeking proactive threat detection
+
+This project serves as both a working implementation and a blueprint for establishing robust security monitoring in Azure-hosted Django applications, demonstrating how modern cloud platforms can be leveraged to create sophisticated security operations centers.
+
+---
+
+*🚀 [View Live Demo](https://msdocs-python-postgres-235-cmb4dccwfbf7emhx.westeurope-01.azurewebsites.net/) | 📁 [Explore Repository](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project)*
+
 
 
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/2_workbooks.png)
@@ -508,6 +531,16 @@ This project implements a security-focused monitoring and alerting system for Dj
 - Implement defense-in-depth through multi-layer monitoring
 
 
+## 🔍 Project Overview
+
+This capstone project transforms standard application monitoring into a robust security monitoring system for Django applications deployed in Azure. By leveraging Azure Monitor capabilities and security engineering principles, we've created an early warning system for potential security threats and application vulnerabilities.
+
+### !!!!
+#### Full-stack monitoring in Azure
+#### Monitor web (Django) applications
+#### Monitor your infrastructure
+#### Monitor Azure platform resources
+#### Monitor security
 
 
 
