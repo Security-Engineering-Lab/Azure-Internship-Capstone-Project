@@ -16,7 +16,7 @@ This learning path guides you in securing Azure services and workloads using Mic
 In this module, we will focus on using Microsoft Defender for Cloud to streamline regulatory compliance by identifying and addressing issues that hinder meeting compliance standards and certifications.
 
 
-# Introduction
+# 1.1 Introduction
 
 This module covers regulatory compliance standards in Microsoft Defender for Cloud, teaching you to manage, implement, and report compliance controls, ensuring your cloud environment meets various regulatory requirements efficiently and securely.
 
@@ -39,9 +39,7 @@ By the end of this module, you will be able to use Microsoft Defender for Cloud 
 
 
 
-# Regulatory compliance standards in Defender for Cloud
-
-**Completed | 100 XP | 7 minutes**
+# 1.2 Regulatory compliance standards in Defender for Cloud
 
 Microsoft Defender for Cloud streamlines the regulatory compliance process by helping you to identify issues that are preventing you from meeting a particular compliance standard, or achieving compliance certification.
 
