@@ -1,29 +1,5 @@
 
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/18-application-insights-04.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/19-application-insights-05.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/20-application-insights-06.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/21-application-insights-07.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/22-application-insights-08.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/23-analyze-resource-utilization-08.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/24-analyze-resource-utilization-01.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/25_machine-log-events.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/26-analyze-resource-utilization-03.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/27-analyze-resource-utilization-04.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/28_container.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/29-analyze-resource-utilization-05.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/30_managed-grafana.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/31-analyze-resource-utilization-07.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/32-security-center-update-02.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/33-security-center-update-03.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/34-security-center-update-04.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/35-security-center-update-01.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/36-security-center-update-06.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/37-security-center-update-08.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/38-security-center-update-10.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/39-security-center-update-09.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/40_7-sentinel-01.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/41_7-sentinel-02.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/42_7-sentinel-03.png)
+
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/43_7-sentinel-04.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/44_7-sentinel-05.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/45_7-sentinel-06.png)
@@ -584,7 +560,7 @@ You can view more details of each component in the map by selecting it. For exam
 
 You can further investigate slow transactions to identify slow requests and server-side dependencies. Drill down by selecting **Investigate performance** from the application map, or by selecting **Performance** from the Application Insights left navigation.
 
-![Screenshot of analyzing performance.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-analyze-performance.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/19-application-insights-05.png)
 
 On the Performance screen, you can isolate slow transactions by selecting the time range, operation name, and durations of interest. You're also prompted with automatically identified anomalies and commonalities across transactions. From here, you can drill into an individual transaction for an end-to-end view of transaction details with a Gantt chart of dependencies.
 
@@ -594,7 +570,7 @@ If you instrument your web pages with Application Insights, you can also gain vi
 
 Instrumenting your web pages with Application Insights collects usage information to augment the server-side monitoring capabilities. The same browser-side JavaScript instrumentation provides usage data including number of users, sessions, events, browser version, OS version, and locations. This usage data shows which pages of your app are the most popular, where users drop out, and the conversion and retention rates for specific pages.
 
-![Screenshot of application events split by browser.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-application-events-by-browser.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/20-application-insights-06.png)
 
 The preceding example shows the most popular browsers and versions. You can use this type of information to inform decisions for allocating functional and performance-testing resources.
 
@@ -602,7 +578,7 @@ The preceding example shows the most popular browsers and versions. You can use 
 
 You can use the Application Insights Availability page to continuously monitor your application health and check application health from different geographic locations.
 
-![Screenshot of viewing application availability by locations over time.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-view-application-availability.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/21-application-insights-07.png)
 
 After you create an availability test, you can use the Availability page to see how your application is doing across different locations. Each dot on the Scatter Plot graph represents a test that was run. A red dot means that the test failed.
 
@@ -610,7 +586,7 @@ Select a red dot to see a detailed breakdown of the test failure, including info
 
 When you create an availability test, you can specify details like frequency, the URL of your application, and locations from which to test the app. The following example shows the configuration of a test that sends a request to an application every five minutes from five geographic locations.
 
-![Screenshot of availability test creation.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/application-insights-create-availability-test.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/22-application-insights-08.png)
 
 ## Get notifications and take action
 
@@ -648,7 +624,8 @@ This unit explains how to use Azure Monitor insights and other tools for an at-s
 
 You can use Azure Monitor insights to monitor resource utilization and performance at scale with guided troubleshooting to triage and isolate issues. This unit focuses on VM insights and container insights, but insights exist for other Azure resources, including networks, storage accounts, and Azure Cosmos DB databases. For a complete list of available insights, select **Insights Hub** in the Azure Monitor left navigation.
 
-![Screenshot of Azure Monitor Insights Hub.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/azure-monitor-insights-hub.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/23-analyze-resource-utilization-08.png)
+
 
 ## Azure Monitor VM insights
 
@@ -658,7 +635,7 @@ The Azure Monitor feature VM insights helps you get started monitoring your VM c
 - Monitor your VMs at scale across multiple subscriptions and resource groups.
 - Get a topology view that shows the processes and network connection details of your VMs and virtual machine scale sets.
 
-![Screenshot of getting started with Azure Monitor VM insights in the Azure portal.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/vm-insights-getting-started.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/24-analyze-resource-utilization-01.png)
 
 To enable Azure Monitor VM insights, select **Virtual Machines** from the Azure Monitor left navigation, and then select **Configure Insights** on the **Get started** tab. In the **Not monitored** section of the **Overview** tab, select the VMs and virtual machine scale sets to monitor, and then select **Enable**.
 
@@ -670,17 +647,17 @@ Once enabled, VM insights monitors VM and virtual machine scale set usage and pe
 
 These charts allow you to quickly identify outliers and hot spots where the allocated resources might be insufficient to support the existing load. From the Top N List, you can select a VM to access more details, such as its properties, links to other workbooks, collected logs, and alerts.
 
-![Screenshot of Top N List of VMs in the Azure Monitor portal.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/vm-insights-top-n-list.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/25_machine-log-events.png)
 
 You can drill down into Azure Monitor Logs by selecting an event type from the list in **Log Events**. The relevant Log Analytics workspace opens with the appropriate table and filter applied.
 
-![Screenshot of drilling into Azure Monitor Logs from VM insights.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/vm-insights-logs.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/26-analyze-resource-utilization-03.png)
 
 The Azure Monitor VM insights **Map** tab shows network connections for an entire resource group, virtual machine scale set, or individual VM. To select the resources of interest, use the filters at the top of the view.
 
 You can expand the number of processes for a complete list and to view the network connections per process. Select the arrow representing the connection for network usage and performance details.
 
-![Screenshot of VM insights Map view.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/vm-insights-map.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/27-analyze-resource-utilization-04.png)
 
 ## Azure Monitor container insights
 
@@ -700,11 +677,12 @@ After you enable container insights, you can view your Kubernetes workloads' per
 - View the state of pods by controller.
 - Look at the number of restarts and CPU or memory utilization of a specific container.
 
-![Screenshot of Azure Monitor container insights list of containers by utilization.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/container-insights-container-utilization.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/28_container.png)
 
 The **Monitored clusters** tab shows an at-scale view of the health and status of all your clusters, nodes, system pods, and user pods. You can filter this view by namespace and use it as a starting point to drill into problem areas. You can also use container insights to access logs and enable recommended alerts.
 
-![Screenshot of the Azure Monitor container insights multicluster view.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/container-insights-multicluster-view.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/29-analyze-resource-utilization-05.png)
+
 
 ## Azure Monitor managed service for Prometheus
 
@@ -718,7 +696,8 @@ Grafana is an open-source visualization and dashboarding platform that's the pri
 
 Azure Managed Grafana is a fully managed implementation of Grafana that offers multiple predefined Grafana dashboards for monitoring Kubernetes and doing full-stack troubleshooting. You can import prebuilt Grafana dashboards that use Prometheus metrics, or you can create custom dashboards. The following screenshot shows an Azure Managed Grafana dashboard that uses AKS monitoring data.
 
-![Screenshot of a Grafana dashboard that shows AKS monitoring data.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/grafana-aks-dashboard.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/30_managed-grafana.png)
+
 
 ## Azure Monitor alerts
 
@@ -728,7 +707,7 @@ You can base Azure Monitor alerts on the same metrics or log data used to popula
 
 You can also specify who should be notified. Insights can send notifications through email or text message, or use runbooks and webhooks to automatically respond to alerts.
 
-![Screenshot of alert creation.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/alert-creation.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/31-analyze-resource-utilization-07.png)
 
 ## Check your knowledge
 
@@ -771,7 +750,8 @@ Defender for Cloud uses Azure Monitor Logs to collect data from your VMs to moni
 
 Defender for Cloud recommends ways to address the issues and risks that it uncovers. You can use recommendations to improve the security and compliance of your architecture.
 
-![Screenshot of recommendation in Microsoft Defender for Cloud.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-recommendation.png)
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/32-security-center-update-02.png)
 
 ## Protect against threats
 
@@ -785,7 +765,7 @@ To enable JIT, select **Just-in-time VM access** on the Workload protections scr
 
 Defender for Cloud shows you a list of default ports that JIT targets, or you can configure your own ports.
 
-![Screenshot of JIT configuration.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-jit-configuration.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/33-security-center-update-03.png)
 
 ### Adaptive application controls
 
@@ -793,7 +773,8 @@ You can use adaptive application controls to control which applications are allo
 
 To configure adaptive controls, select **Adaptive application control** on the Workload protections screen under Advanced protection. The Adaptive application controls screen shows a list of resource groups that contain your VMs. The **Recommended** tab lists the resource groups that Defender for Cloud recommends for adaptive application controls.
 
-![Screenshot of Adaptive application controls.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-adaptive-application-controls.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/34-security-center-update-04.png)
+
 
 When you select a resource group, it opens **Configure application control rules**. On this screen, use the options to target VMs and applications that should have the control rules applied.
 
@@ -801,17 +782,17 @@ When you select a resource group, it opens **Configure application control rules
 
 Defender for Cloud gives you a centralized view of all your security alerts, ranked by their severity. You can view your security alerts by selecting **Security alerts** in the Defender for Cloud left navigation.
 
-![Screenshot of security alerts.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-security-alerts.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/35-security-center-update-01.png)
 
 Defender for Cloud combines related alerts into a single security incident as much as possible. Select an incident to see the specific security alerts that the incident holds.
 
 Drill down into an alert by selecting the alert and then selecting **View full details**.
 
-![Screenshot of incident details.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-incident-details.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/36-security-center-update-06.png)
 
 Defender for Cloud can help you respond to threats faster and in an automated way by taking actions. Select **Next: Take Action** to take action on the alert.
 
-![Screenshot of alert details.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-alert-details.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/37-security-center-update-08.png)
 
 Expand any of the following sections to take action on the alert:
 
@@ -822,11 +803,11 @@ Expand any of the following sections to take action on the alert:
 - **Suppress similar alerts** by creating a suppression rule with predefined conditions.
 - **Configure email notification settings** to select who to notify about the alert and under what conditions.
 
-![Screenshot of the Take action pane.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-take-action-pane.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/38-security-center-update-10.png)
 
 In the alert details, you should dismiss alerts if no action is required, for example if there are false positives. You should act to address known attacks, for example by blocking known malicious IP addresses, and you should decide which alerts require further investigation.
 
-![Screenshot of alert status.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/defender-for-cloud-alert-status.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/39-security-center-update-09.png)
 
 ## Check your knowledge
 
@@ -856,23 +837,24 @@ This unit describes how Microsoft Sentinel helps monitor and respond to security
 
 To implement Microsoft Sentinel, you need a Log Analytics workspace. When you create a Microsoft Sentinel resource in the Azure portal, you can create a new Log Analytics workspace or connect an existing workspace.
 
-![Screenshot of adding a Log Analytics workspace.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-add-workspace.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/40_7-sentinel-01.png)
 
 After you create the Microsoft Sentinel resource and connect it to a workspace, you need to connect data sources for your enterprise. Install solutions with data connectors from the content hub. Microsoft Sentinel integrates with Microsoft solutions, including Microsoft Entra ID and Microsoft 365, through connectors.
 
 You can see all of your available data connectors by selecting **Data connectors** under Configuration in the Microsoft Sentinel left navigation.
 
-![Screenshot of data connectors.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-data-connectors.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/41_7-sentinel-02.png)
 
 Select the appropriate data connector for your data source, read the information about the connector, and select **Open connector page** to look at the prerequisites for your connector. Make sure you address all the prerequisites to successfully connect your data source.
 
 When you connect the data source, your logs are synced to Microsoft Sentinel. You see a summary of collected data in the Data received graph for your connector. You can also see the different data types that are collected for the source. For example, the Azure Storage Account connector can collect Blob, Queue, File, or Table log data.
 
-![Screenshot of the Data received graph.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-data-received-graph.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/42_7-sentinel-03.png)
 
 Once you connect your data sources, Microsoft Sentinel begins to monitor your enterprise.
 
-![Screenshot of an alert map.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-alert-map.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/43_7-sentinel-04.png)
+
 
 ## Use alerts to monitor your enterprise
 
