@@ -5,6 +5,7 @@
 
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/48_7-sentinel-10.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/49_7-sentinel-11.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/50_7-sentinel-12.png)
 
 
 
