@@ -1,10 +1,8 @@
 
 
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/43_7-sentinel-04.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/44_7-sentinel-05.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/45_7-sentinel-06.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/46_7-sentinel-07.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/47_7-sentinel-08.png)
+
+
+
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/48_7-sentinel-10.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/49_7-sentinel-11.png)
 
@@ -862,11 +860,11 @@ You can configure alert rules to investigate anomalies and threats more intellig
 
 Select **Analytics** in the Microsoft Sentinel left navigation under Configuration to view all the rules you have in place and create new rules.
 
-![Screenshot of View all alerts.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-view-all-alerts.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/44_7-sentinel-05.png)
 
 When you create a rule, you specify whether it should be enabled or disabled, and the severity of the alert. In the **Rule query** field of the **Set rule logic** tab, enter a rule query.
 
-![Screenshot of Create alert rule.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-create-alert-rule.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/45_7-sentinel-06.png)
 
 For example, the following query can determine if a suspicious number of Azure VMs are created or updated, or a suspicious number of resource deployments occur.
 
@@ -885,19 +883,19 @@ Microsoft Sentinel combines generated alerts into incidents for further investig
 
 To start to investigate an incident, select the incident. You get information about the incident in the right pane. Select **View full details** to get more information.
 
-![Screenshot of the Incidents page.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-incidents-page.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/46_7-sentinel-07.png)
 
 To investigate the incident, update its status from **New** to **Active**, assign it to an owner, and select **Investigate**.
 
-![Screenshot of Incident detail.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-incident-detail.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/47_7-sentinel-08.png)
 
 The investigation map helps you understand what caused an incident and the affected scope. You can also use the map to correlate data surrounding an incident.
 
-![Screenshot of an investigation map.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-investigation-map.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/47_7-sentinel-08.png)
 
 The investigation map lets you drill down into an incident. Multiple entities, including users, devices, and appliances, can be mapped to an incident. For example, you can get details about a user identified as part of the incident.
 
-![Screenshot of entity.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-entity.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/48_7-sentinel-10.png)
 
 If you hover over an entity, you see a list of exploration queries designed by Microsoft security analysts and experts. You can use the exploration queries to investigate more effectively.
 
