@@ -276,3 +276,125 @@ Choose the best response for each of the questions below.
 In this module, you learned for using Microsoft Defender for Cloud to streamline regulatory compliance by managing compliance controls, identify standards, leveraging the compliance dashboard, and conduct assessments to generate detailed compliance reports.
 
 
+# 2 Enable Defender for Cloud on your Azure subscription
+
+In this module, we will focus on enabling Microsoft Defender for Cloud on your Azure subscription to enhance security monitoring, compliance management, and threat protection for your cloud-based applications.
+
+# 2.1 Introduction
+
+This module covers connecting your Azure subscriptions to Microsoft Defender for Cloud, enabling enhanced security monitoring, compliance management, and implementation of best practices for threat protection.
+
+## Scenario
+
+Imagine you are tasked with securing your company's cloud applications. Using Microsoft Defender for Cloud, you unify security management with DevSecOps, enhance security posture with CSPM, and protect workloads with CWPP, ensuring comprehensive end-to-end protection across your multicloud environment.
+
+## Learning objectives
+
+By the end of this training module, participants will:
+
+* Learn how to connect your Azure subscriptions to Microsoft Defender for Cloud.
+* Understand the benefits of integrating Azure subscriptions for enhanced security monitoring.
+* Explore methods to manage and ensure compliance across connected Azure subscriptions.
+* Gain skills to implement best practices for threat protection within your Azure environment.
+
+## Goals
+
+By the end of this module, you will be able to connect your Azure subscriptions to Microsoft Defender for Cloud, enhance security monitoring, manage compliance, and implement best practices for threat protection.
+
+
+# 2.2 Connect your Azure subscriptions
+
+Microsoft Defender for Cloud is a cloud-native application protection platform (CNAPP) with a set of security measures and practices designed to protect your cloud-based applications end-to-end by combining the following capabilities:
+
+- A **development security operations (DevSecOps)** solution that unifies security management at the code level across multicloud and multiple-pipeline environments.
+- A **cloud security posture management (CSPM)** solution that surfaces actions that you can take to prevent breaches.
+- A **cloud workload protection platform (CWPP)** with specific protections for servers, containers, storage, databases, and other workloads.
+
+Defender for Cloud includes Foundational CSPM capabilities and access to Microsoft Defender XDR for free. You can add additional paid plans to secure all aspects of your cloud resources. You can try Defender for Cloud for free for the first 30 days. After 30 days charges begin in accordance with the plans enabled in your environment. To learn more about these plans and their costs, see the Defender for Cloud pricing page.
+
+> **Important**
+> 
+> Malware scanning in Defender for Storage is not included for free in the first 30 day trial and will be charged from the first day in accordance with the pricing scheme available on the Defender for Cloud pricing page.
+
+Defender for Cloud helps you find and fix security vulnerabilities. Defender for Cloud also applies access and application controls to block malicious activity, detect threats using analytics and intelligence, and respond quickly when under attack.
+
+## Prerequisites
+
+To view information related to a resource in Defender for Cloud, you must be assigned the Owner, Contributor, or Reader role for the subscription or for the resource group that the resource is located in.
+
+![Screenshot showing an example of how to search for Microsoft Defender for Cloud.](https://learn.microsoft.com/en-us/training/wwl-azure/connect-azure-subscriptions/media/search-defender-for-cloud.png)
+
+The Defender for Cloud's overview page opens.
+
+![Screenshot showing an example of the Microsoft Defender for Cloud overview page.](https://learn.microsoft.com/en-us/training/wwl-azure/connect-azure-subscriptions/media/defender-for-cloud-overview.png)
+
+Defender for Cloud is now enabled on your subscription and you have access to the basic features provided by Defender for Cloud. These features include:
+
+- The Foundational Cloud Security Posture Management (CSPM) plan.
+- Recommendations.
+- Access to the Asset inventory.
+- Workbooks.
+- Secure score.
+- Regulatory compliance with the Microsoft cloud security benchmark.
+
+The Defender for Cloud overview page provides a unified view into the security posture of your hybrid cloud workloads, helping you discover and assess the security of your workloads and to identify and mitigate risks. Learn more in Microsoft Defender for Cloud's overview page.
+
+You can view and filter your list of subscriptions from the subscriptions menu to have Defender for Cloud adjust the overview page display to reflect the security posture to the selected subscriptions.
+
+Within minutes of launching Defender for Cloud for the first time, you might see:
+
+- Recommendations for ways to improve the security of your connected resources.
+- An inventory of your resources that Defender for Cloud assesses along with the security posture of each.
+
+## Enable all paid plans on your subscription
+
+To enable all of Defender for Cloud's protections, you need to enable the plans for the workloads that you want to protect.
+
+When you enable Defender plans on an entire Azure subscription, the protections are applied to all other resources in the subscription.
+
+**To enable additional paid plans on a subscription:**
+
+1. Sign in to the Azure portal.
+2. Search for and select Microsoft Defender for Cloud.
+3. In the Defender for Cloud menu, select **Environment settings**.
+
+![Screenshot showing an example of how to navigate to Defender for Cloud's Environment settings page.](https://learn.microsoft.com/en-us/training/wwl-azure/connect-azure-subscriptions/media/environment-settings.png)
+
+4. Select the subscription or workspace that you want to protect.
+5. Select **Enable all** to enable all of the plans for Defender for Cloud.
+
+![Screenshot showing an example of how to Enable all plans in Defender for Cloud's Settings page.](https://learn.microsoft.com/en-us/training/wwl-azure/connect-azure-subscriptions/media/enable-all-plans.png)
+
+6. Select **Save**.
+
+All of the plans are turned on and the monitoring components required by each plan are deployed to the protected resources.
+
+If you want to disable any of the plans, toggle the individual plan to off. The extensions used by the plan aren't uninstalled but, after a short time, the extensions stop collecting data.
+
+> **Tip**
+> 
+> To enable Defender for Cloud on all subscriptions within a management group, see Enable Defender for Cloud on multiple Azure subscriptions.
+
+
+# 2.3  Exercise - Configuring Microsoft Defender for Cloud for Enhanced Protection
+
+In this lab, learn how to configure and enable Microsoft Defender for Cloud within an Azure subscription to enable you to monitor and protect your cloud resources against security threats.
+
+> **Note**
+> 
+> To complete this lab, you will need an **Azure subscription**.
+
+Launch the exercise and follow the instructions.
+
+> **Tip**
+> 
+> To continue your learning journey, open the exercise in a new browser tab or window while staying on this page. To do this, right-click the Launch Exercise button and select Open link in new tab or Open link in new window.
+
+
+# Summary
+
+In this module, you learned to utilize Microsoft Defender for Cloud's CNAPP capabilities, manage security posture, enable comprehensive protection plans, and apply best practices for safeguarding cloud resources across multicloud environments.
+
+
+
+
