@@ -1,12 +1,6 @@
 
 
-
-
-
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/48_7-sentinel-10.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/49_7-sentinel-11.png)
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/50_7-sentinel-12.png)
-
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/51_7-sentinel-13.png)
 
 
 # Azure Monitor fundamentals
@@ -892,19 +886,20 @@ To investigate the incident, update its status from **New** to **Active**, assig
 
 The investigation map helps you understand what caused an incident and the affected scope. You can also use the map to correlate data surrounding an incident.
 
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/47_7-sentinel-08.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/48_7-sentinel-10.png)
+
 
 The investigation map lets you drill down into an incident. Multiple entities, including users, devices, and appliances, can be mapped to an incident. For example, you can get details about a user identified as part of the incident.
 
-![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/48_7-sentinel-10.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/49_7-sentinel-11.png)
 
 If you hover over an entity, you see a list of exploration queries designed by Microsoft security analysts and experts. You can use the exploration queries to investigate more effectively.
 
-![Screenshot of exploration queries.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-exploration-queries.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/50_7-sentinel-12.png)
 
 The investigation map also gives you a timeline that helps you understand which event occurred at a particular time. Use the timeline feature to understand the path that a threat might take over time.
 
-![Screenshot of timeline.](https://learn.microsoft.com/en-us/training/wwl-azure/design-monitoring-strategy-for-azure-solutions/media/microsoft-sentinel-timeline.png)
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/learning-path/images/azure-monitor-fundamentals/51_7-sentinel-13.png)
 
 ## Check your knowledge
 
