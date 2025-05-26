@@ -4,6 +4,10 @@
 
 https://learn.microsoft.com/en-us/training/paths/monitor-usage-performance-availability-resources-azure-monitor/
 
+**Note: You can easily convert this markdown file to a PDF in [VSCode](https://code.visualstudio.com/) using this handy extension [Markdown PDF](https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf).**
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 Learn how to monitor the usage, performance, and availability of resources using Azure Monitor.
 
