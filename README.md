@@ -382,6 +382,70 @@ Based on the search results, the following is evident:
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/9_AzureMonitor.png)
 
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+# KQL Query Explanation
+
+This query analyzes web application HTTP logs to detect 400 errors within the last 5 minutes. Let's break it down step by step:
+
+## Step-by-Step Explanation
+
+### 1. `AppServiceHTTPLogs`
+- **What it does:** Selects the table containing HTTP logs from Azure App Service
+- **Contains:** All HTTP requests to your web application (URLs, status codes, IP addresses, etc.)
+
+### 2. `| where TimeGenerated >= ago(5m)`
+- **What it does:** Filters records by time
+- **Result:** Shows only records from the last 5 minutes
+- **ago(5m)** = 5 minutes ago from current time
+
+### 3. `| where ScStatus == 400`
+- **What it does:** Filters by HTTP status code
+- **Result:** Keeps only requests with 400 error (Bad Request)
+- **ScStatus** = Server Status Code
+
+### 4. `| summarize Count = count() by bin(TimeGenerated, 1m)`
+- **What it does:** Groups and counts records
+- **Count = count()** = counts the number of records in each group
+- **bin(TimeGenerated, 1m)** = groups by minutes (each minute = one "bin")
+- **Result:** Number of 400 errors for each minute
+
+### 5. `| where Count > 0`
+- **What it does:** Shows only minutes where errors occurred
+- **Result:** Hides minutes with zero error count
+
+## Example Output
+
+| TimeGenerated | Count |
+|---------------|-------|
+| 2025-05-27 14:55:00 | 3 |
+| 2025-05-27 14:57:00 | 1 |
+| 2025-05-27 14:59:00 | 2 |
+
+## Practical Use Cases
+
+This query is perfect for:
+- **Real-time monitoring** - detecting issues quickly
+- **Alert rules** - automatic notifications when errors occur
+- **Trend analysis** - understanding error frequency patterns
+
+## Possible Modifications
+
+**For longer time period:**
+```kusto
+| where TimeGenerated >= ago(1h)  // Last hour
+```
+
+**For other errors:**
+```kusto
+| where ScStatus >= 400 and ScStatus < 500  // All client errors
+```
+
+
+-----------------------------------------------------------------------------------------------------------------
+
+
 
 
 # References:
