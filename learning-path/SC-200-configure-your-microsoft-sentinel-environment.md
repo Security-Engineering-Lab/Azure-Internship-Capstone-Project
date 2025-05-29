@@ -1040,7 +1040,7 @@ You can learn more by reviewing the following:
 Learn how the Microsoft Sentinel Threat Intelligence page enables you to manage threat indicators.
 
 
-# 5.1 Introduction
+## 5.1 Introduction
 
 Microsoft Sentinel provides a table to store indicator data accessible to Kusto Query Language (KQL) queries. The Threat intelligence page in Microsoft Sentinel provides the management options to maintain the indicators.
 
@@ -1062,7 +1062,7 @@ After completing this module, you'll be able to:
 Basic knowledge of operational concepts such as monitoring, logging, and alerting.
 
 
-# 5.2 Define Threat Intelligence
+## 5.2 Define Threat Intelligence
 
 Cyber threat intelligence (CTI) can come from many sources. Sources include open-source data feeds, threat intelligence-sharing communities, paid intelligence feeds, and security investigations within organizations. CTI can range from written reports on a threat actor's motivations, infrastructure, and techniques, to specific observations of IP addresses, domains, and file hashes. CTI provides essential context for unusual activity, so security personnel can act quickly to protect people and assets.
 
@@ -1080,7 +1080,7 @@ You can integrate threat intelligence (TI) into Microsoft Sentinel through the f
 - **Visualize critical information** about your threat intelligence in Microsoft Sentinel with the Threat Intelligence workbook
 - **Perform threat hunting** with your imported threat intelligence
 
-# 5.3 Manage Your Threat Indicators
+## 5.3 Manage Your Threat Indicators
 
 With the Threat Intelligence area, accessible from the Microsoft Sentinel menu, you can also view, sort, filter, and search your imported threat indicators without even writing a Logs query. This area also allows you to create threat indicators directly within the Microsoft Sentinel interface and perform everyday threat intelligence administrative tasks. These tasks include indicator tagging and creating new indicators related to security investigations. Let's look at two of the most common tasks, creating new threat indicators and tagging indicators for easy grouping and reference.
 
@@ -1110,7 +1110,7 @@ With the Threat Intelligence area, accessible from the Microsoft Sentinel menu, 
 
 Tagging threat indicators is an easy way to group them to make them easier to find. Typically, you might apply a tag to indicators related to a particular incident or indicators representing threats from a known actor or a well-known attack campaign. You can tag threat indicators individually or multi-select indicators and tag them all at once. Since tagging is free-form, a recommended practice is to create standard naming conventions for threat indicator tags. You can apply multiple tags to each indicator.
 
-# 5.4 View Your Threat Indicators with KQL
+## 5.4 View Your Threat Indicators with KQL
 
 The indicators reside in the *ThreatIntelligenceIndicator* table. This table is the basis for queries performed by other Microsoft Sentinel features such as Analytics and Workbooks. Here's how to find and view your threat indicators in the ThreatIntelligenceIndicator table.
 
@@ -1133,7 +1133,7 @@ ThreatIntelligenceIndicator
 > We're updating all out-of-the-box threat intelligence solutions in Content hub to leverage the new tables. For more information about the new table schemas, see **ThreatIntelIndicators** and **ThreatIntelObjects**.
 
 
-# 5.5 Module Assessment
+## 5.5 Module Assessment
 
 Choose the best response for each of the questions below.
 
@@ -1174,7 +1174,7 @@ Choose the best response for each of the questions below.
 **Submit answers**
 
 
-# 5.6 Summary and Resources
+## 5.6 Summary and Resources
 
 You should have learned how Microsoft Sentinel provides a table to store indicator data accessible to Kusto Query Language (KQL) queries. And how the Threat intelligence page in Microsoft Sentinel provides the management options to maintain the indicators.
 
