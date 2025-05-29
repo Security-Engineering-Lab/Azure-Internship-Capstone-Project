@@ -1176,6 +1176,7 @@ Choose the best response for each of the questions below.
 
 ## 5.6 Summary and Resources
 
+
 You should have learned how Microsoft Sentinel provides a table to store indicator data accessible to Kusto Query Language (KQL) queries. And how the Threat intelligence page in Microsoft Sentinel provides the management options to maintain the indicators.
 
 ## Learning Outcomes
@@ -1185,16 +1186,12 @@ You should now be able to:
 - Manage threat indicators in Microsoft Sentinel
 - Use KQL to access threat indicators in Microsoft Sentinel
 
-## Key Takeaways
+## Learn More
 
-Throughout this module, you have gained knowledge about:
+You can learn more by reviewing the following:
 
-- **Threat Intelligence Concepts** - Understanding cyber threat intelligence (CTI) sources and tactical threat intelligence
-- **Indicator Management** - Creating, tagging, and organizing threat indicators through the Microsoft Sentinel interface
-- **KQL Integration** - Querying threat indicators using the ThreatIntelligenceIndicator table
-- **Future Updates** - Awareness of new tables (ThreatIntelIndicators and ThreatIntelObjects) replacing legacy systems
-
-This knowledge enables you to effectively integrate and manage threat intelligence data within your security operations center, enhancing your organization's ability to detect and respond to cyber threats.
+- Become a Microsoft Sentinel Ninja
+- Microsoft Tech Community Security Webinars
 
 
 
