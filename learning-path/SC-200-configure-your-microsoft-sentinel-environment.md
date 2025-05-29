@@ -841,3 +841,196 @@ You can learn more by reviewing the following:
 - Microsoft Tech Community Security Webinars
 
 
+
+# 4 Use watchlists in Microsoft Sentinel
+
+Learn how to create Microsoft Sentinel watchlists that are a named list of imported data. Once created, you can easily use the named watchlist in KQL queries.
+
+
+# 4.1 Introduction
+
+Microsoft Sentinel provides a table to store list data accessible to Kusto Query Language (KQL) queries. The Watchlists page in Microsoft Sentinel provides the management options to maintain the lists.
+
+## Scenario
+
+You're a Security Operations Analyst working at a company that deployed Microsoft Sentinel. The Security Operations team members need to prioritize alerts that are impacting high-value target servers.
+
+You must import a list of server names into Microsoft Sentinel, which is used by detection queries to set a priority field. You import a list of servers into the Watchlist page of Microsoft Sentinel. Once created, you instruct the Security Operations team to use the watch list in their KQL queries.
+
+## Learning Objectives
+
+After completing this module, you'll be able to:
+
+- Create a watchlist with Microsoft Sentinel
+- Use KQL to access the watchlist with Microsoft Sentinel
+
+## Prerequisites
+
+ - None
+
+
+# 4.2 Plan for Watchlists
+
+Microsoft Sentinel watchlists enable collecting data from external data sources for correlation with the events in your Microsoft Sentinel environment. Once created, you can use watchlists in your search, detection rules, threat hunting, and response playbooks. Watchlists are stored in your Microsoft Sentinel workspace as name-value pairs and are cached for optimal query performance and low latency.
+
+## Common Scenarios for Using Watchlists
+
+### Investigating Threats and Incident Response
+- **Rapid threat investigation** with quick import of IP addresses, file hashes, and other data from CSV files
+- **Enhanced detection capabilities** using watchlist name-value pairs for joins and filters in alert rules, threat hunting, workbooks, notebooks, and general queries
+
+### Business Data Integration
+- **Privileged user monitoring** by importing user lists with privileged system access
+- **Terminated employee tracking** to create allowlists and blocklists for detecting or preventing unauthorized access attempts
+- **Access control enforcement** using watchlists to monitor and control user network access
+
+### Alert Optimization
+- **Reducing alert fatigue** by creating allowlists to suppress alerts from authorized users
+- **Filtering legitimate activities** from users at authorized IP addresses that perform tasks that would normally trigger alerts
+- **Preventing false positives** by ensuring benign events don't become unnecessary alerts
+
+### Data Enrichment
+- **Enhanced event analysis** by enriching event data with name-value combinations derived from external data sources
+- **Contextual information** adding business context to security events for better analysis and decision-making
+
+
+
+
+# 4.3 Create a Watchlist
+
+To create a watchlist from the Azure portal perform these steps:
+
+## Step-by-Step Process
+
+### 1. Navigate to Watchlist Section
+Go to **Microsoft Sentinel > Configuration > Watchlist** and select **Add new**.
+
+### 2. Configure General Settings
+On the General page, provide the name, description, and alias for the watchlist, then select **Next**.
+
+### 3. Upload Data Source
+On the Source page, select the dataset type, upload a file, then select **Next**.
+
+> **Note**
+> 
+> File uploads are currently limited to files of up to 3.8 MB in size.
+
+### 4. Review and Create
+Review the information, and verify that it's correct. Then select **Create**. A notification appears once the watchlist is ready.
+
+## Using Watchlist in KQL
+
+To use the watchlist data in KQL, use the KQL function `_GetWatchlist('watchlist name')`.
+
+```kusto
+_GetWatchlist('HighValueMachines')
+```
+
+# 4.4 Manage Watchlists
+
+We recommend you edit an existing watchlist instead of deleting and recreating a watchlist. Log analytics has a five-minute SLA (Service Level Agreement) for data ingestion. If you delete and recreate a watchlist, you might see both the deleted and recreated entries in Log Analytics during this five-minute window. If you see these duplicate entries in Log Analytics for a longer period of time, submit a support ticket.
+
+## Edit a Watchlist Item
+
+Edit a watchlist to edit or add an item to the watchlist.
+
+### Steps to Edit Items
+
+1. In the Azure portal, go to Microsoft Sentinel and select the appropriate workspace.
+2. Under Configuration, select **Watchlist**.
+3. Select the watchlist you want to edit.
+4. On the details pane, select **Update watchlist > Edit watchlist items**.
+
+### To Edit an Existing Watchlist Item
+
+1. Select the checkbox of that watchlist item.
+2. Edit the item.
+3. Select Save.
+4. Select Yes at the confirmation prompt.
+
+### To Add a New Item to Your Watchlist
+
+1. Select Add new.
+2. Fill in the fields in the Add watchlist item panel.
+3. At the bottom of that panel, select Add.
+
+## Bulk Update a Watchlist
+
+When you have many items to add to a watchlist, use bulk update. A bulk update of a watchlist appends items to the existing watchlist. Then, it deduplicates the items in the watchlist where all the value in each column match.
+
+> **Important Notes:**
+> - If you deleted an item from your watchlist file and upload it, bulk update won't delete the item in the existing watchlist. Delete the watchlist item individually. Or, when you have many deletions, delete and recreate the watchlist.
+> - The updated watchlist file you upload must contain the search key field used by the watchlist with no blank values.
+
+### Steps for Bulk Update
+
+1. In the Azure portal, go to Microsoft Sentinel and select the appropriate workspace.
+2. Under Configuration, select **Watchlist**.
+3. Select the watchlist you want to edit.
+4. On the details pane, select **Update watchlist > Bulk update**.
+5. Under Upload file, drag and drop or browse to the file to upload.
+6. If you get an error, fix the issue in the file. Then select Reset and try the file upload again.
+7. Select **Next: Review and update > Update**.
+
+
+
+# 4.5 Module Assessment
+
+Choose the best response for each of the questions below.
+
+## Check Your Knowledge
+
+### 1. Which of the following operations is a typical scenario for using a Microsoft Sentinel watchlist?
+
+- [ ] Creating more alerts to help identify issues.
+- [ ] Export business data as a watchlist.
+- [x] **Responding to incidents quickly with the rapid import of IP addresses.**
+
+**Answer: Responding to incidents quickly with the rapid import of IP addresses.**
+
+*Explanation: Watchlists are commonly used for rapid threat investigation by importing IP addresses, file hashes, and other data from CSV files to correlate with security events.*
+
+### 2. How do you access a new watchlist named MyList in KQL?
+
+- [ ] _Watchlist('MyList ')
+- [x] **_GetWatchlist('MyList')**
+- [ ] _Getlist('MyList ')
+
+**Answer: _GetWatchlist('MyList')**
+
+*Explanation: The correct KQL function to access watchlist data is `_GetWatchlist('watchlist name')` where you specify the name of your watchlist.*
+
+---
+
+## Summary
+
+You have learned how to:
+
+- **Create watchlists** in Microsoft Sentinel for storing external data sources
+- **Plan watchlist implementation** for common security scenarios including threat investigation, business data integration, alert optimization, and data enrichment
+- **Manage watchlists** through editing individual items and bulk updates
+- **Access watchlist data** in KQL queries using the `_GetWatchlist()` function
+
+Watchlists provide a powerful way to enrich security analysis by incorporating external data sources and reducing false positives through allowlists and blocklists.
+
+
+
+# 4.6 Summary and Resources
+
+You learned how Microsoft Sentinel provides a table to store list data accessible to Kusto Query Language (KQL) queries. And that the Watchlists page in Microsoft Sentinel provides the management options to maintain the lists.
+
+## Learning Outcomes
+
+You should now be able to:
+
+- Create a watchlist with Microsoft Sentinel
+- Use KQL to access the watchlist with Microsoft Sentinel
+
+## Learn More
+
+You can learn more by reviewing the following:
+
+- Become a Microsoft Sentinel Ninja
+- Microsoft Tech Community Security Webinars
+
+
