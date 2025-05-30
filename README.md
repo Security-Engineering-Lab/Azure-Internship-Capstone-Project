@@ -446,6 +446,92 @@ This query is perfect for:
 -----------------------------------------------------------------------------------------------------------------
 
 
+# Weekly Standup Report
+**Reporting Period:** [Week of Date]  
+**Team Member:** [Your Name]
+
+## What I Accomplished This Week
+
+### **Completed Learning Modules**
+- ✅ **Finished SC-200: Create Queries for Microsoft Sentinel using KQL** 
+  - Successfully completed 5.5-hour learning path with 100% achievement
+  - Mastered advanced KQL syntax for security data analysis
+  - Developed proficiency in threat hunting and incident investigation queries
+
+- ✅ **Finished SC-200: Configure Microsoft Sentinel Environment**
+  - Completed 5.5-hour comprehensive configuration training
+  - Gained expertise in workspace setup, data connectors, and analytics rules
+  - Learned automation and SOC optimization best practices
+
+### **Project Development Progress**
+- 🔄 **Azure Internship Capstone Project: Advanced 20 hours of development**
+  - Continued work on "Proactive Security Monitoring for Django Web Applications in Azure"
+  - Implemented custom threat detection algorithms using learned KQL skills
+  - Integrated Application Insights with Django application for comprehensive monitoring
+  - Developed automated alerting system and incident response workflows
+
+### **Professional Development Activities**
+- 🔄 **Onboarding Activities: Progressed 4 hours**
+  - Completed team integration sessions and process familiarization
+  - Established stakeholder communication protocols
+  - Aligned project deliverables with organizational objectives
+
+- 🔄 **Updated Professional Profile: 80% completion (4 hours invested)**
+  - Enhanced work experience documentation in Telescope platform
+  - Updated skills matrix and achievement tracking
+  - Refined career progression planning
+
+## What I'm Working on Next Week
+
+### **Primary Focus Areas**
+1. **Azure Monitor Practical Implementation**
+   - Create new alert rules based on learned KQL techniques
+   - Implement advanced monitoring scenarios for production environments
+   - Practice hands-on configuration and optimization
+
+2. **Capstone Project Completion**
+   - Finalize security monitoring framework documentation
+   - Complete testing and validation of threat detection algorithms
+   - Prepare project presentation and deliverables
+
+3. **Continue Security Compliance Learning**
+   - Advance through "Secure Azure Services with Microsoft Defenders" learning path
+   - Focus on regulatory compliance controls and governance frameworks
+
+## Blockers & Support Needed
+
+### **Current Challenges**
+- No significant blockers at this time
+- Azure subscription credits expired - resolved through account upgrade
+- Need additional time allocation for hands-on Azure Monitor practice
+
+### **Support Requests**
+- **Resource Access:** Confirmation of continued Azure environment access for practical exercises
+- **Project Review:** Schedule review session for capstone project milestone assessment
+- **Learning Path Priority:** Guidance on prioritizing between AZ-500 preparation and current compliance learning track
+
+## Key Metrics & Progress Indicators
+
+- **Learning Completion Rate:** 100% on structured modules (11 total hours completed)
+- **Project Investment:** 20+ hours dedicated to hands-on implementation
+- **Overall Status:** 🟢 **ON TRACK** - Meeting all scheduled milestones
+- **Skill Development:** Successfully applying learned KQL skills in practical project scenarios
+
+## Next Week's Commitments
+
+1. **Complete Azure Monitor alert rule implementation** (Target: 6 hours)
+2. **Advance capstone project to 75% completion** (Target: 15 hours)  
+3. **Finish regulatory compliance learning module** (Target: 2 hours)
+4. **Prepare mid-week project status update** for stakeholder review
+
+---
+
+**Overall Assessment:** Strong momentum maintained across all development tracks. Successfully bridging theoretical learning with practical implementation. Ready to accelerate project completion in upcoming week.
+
+
+
+
+
 
 
 # References:
