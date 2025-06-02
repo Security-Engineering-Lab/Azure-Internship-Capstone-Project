@@ -1413,3 +1413,20 @@ With the completion of this module, you now have the knowledge to:
 
 Submit content feedback or suggested changes for this Microsoft Learn module. GitHub maintains the content and a team member will triage the request. Thank you for taking the time to improve our content!
 
+
+# 6 Management and customization considerations with GitHub Copilot
+
+In this module, we explore management and customization considerations with GitHub Copilot.
+
+# 6.1 Introduction
+
+At GitHub, we're committed to advancing safe, secure, and trustworthy AI. We believe in the power of AI to enhance efficiency and innovation across the software development life cycle to increase developer happiness. GitHub continues to ensure that AI advancements are accessible and beneficial to all.
+
+## In this module, you'll learn about:
+
+- GitHub Copilot plans and their associated management and customization features
+- The contractual protections in GitHub Copilot and disabling matching public code
+- Managing content exclusions
+- Common problems with GitHub Copilot and their solutions
+
+Let's start by exploring GitHub Copilot plans and their privacy controls.
