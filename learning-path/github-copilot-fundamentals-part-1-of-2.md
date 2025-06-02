@@ -249,3 +249,180 @@ We are excited for you to embark on your own AI journey and urge you to approach
 
 - Microsoft Responsible AI Transparency Report
 - Explore the Microsoft approach to AI
+
+# 3 Introduction to prompt engineering with GitHub Copilot
+
+Discover the essentials of creating effective prompts with GitHub Copilot. Uncover techniques to transform your coding comments into precise, actionable code, enhancing your development workflow.
+
+
+# 3.1 Introduction
+
+GitHub Copilot, powered by OpenAI, is changing the game in software development. GitHub Copilot can grasp the intricate details of your project through its training of data containing both natural language and billions of lines of source code from publicly available sources, including code in public GitHub repositories. This allows GitHub Copilot to provide you with more context-aware suggestions.
+
+But to get the most out of GitHub Copilot, you need to know about prompt engineering. Prompt engineering is how you tell GitHub Copilot what you need. The quality of the code it gives back depends on how clear and accurate your prompts are.
+
+## In This Module, You'll Learn About:
+
+- Prompt engineering principles, best practices, and how GitHub Copilot learns from your prompts to provide context-aware responses
+- The underlying flow of how GitHub Copilot processes user prompts to generate responses or code suggestions
+- The data flow for code suggestions and chat in GitHub Copilot
+- LLMs (Large Language Models) and their role in GitHub Copilot and prompting
+- How to craft effective prompts that optimize GitHub Copilot's performance, ensuring precision and relevance in every code suggestion
+- The intricate relationship between prompts and Copilot's responses
+- How Copilot handles data from prompts in different situations, including secure transmission and content filtering
+
+
+# 3.2 Prompt Engineering Foundations and Best Practices
+
+In this unit, we'll cover:
+
+- What is prompt engineering?
+- Foundations of prompt engineering
+- Best practices in prompt engineering
+- How Copilot learns from your prompts
+
+## What is prompt engineering?
+
+Prompt engineering is the process of crafting clear instructions to guide AI systems, like GitHub Copilot, to generate context-appropriate code tailored to your project's specific needs. This ensures the code is syntactically, functionally, and contextually correct.
+
+Now that you know what prompt engineering is, let's learn about some of its principles.
+
+## Principles of prompt engineering
+
+Before we explore specific strategies, let's first understand the basic principles of prompt engineering, summed up in the 4 Ss below. These core rules are the basis for creating effective prompts.
+
+### The 4 Ss
+
+**Single:** Always focus your prompt on a single, well-defined task or question. This clarity is crucial for eliciting accurate and useful responses from Copilot.
+
+**Specific:** Ensure that your instructions are explicit and detailed. Specificity leads to more applicable and precise code suggestions.
+
+**Short:** While being specific, keep prompts concise and to the point. This balance ensures clarity without overloading Copilot or complicating the interaction.
+
+**Surround:** Utilize descriptive filenames and keep related files open. This provides Copilot with rich context, leading to more tailored code suggestions.
+
+These core principles lay the foundation for crafting efficient and effective prompts. Keeping the 4 Ss in mind, let's dive deeper into advanced best practices that ensure each interaction with GitHub Copilot is optimized.
+
+## Best practices in prompt engineering
+
+The following advanced practices, based on the 4 Ss, refine and enhance your engagement with Copilot, ensuring that the generated code isn't only accurate but perfectly aligned with your project's specific needs and contexts.
+
+### Provide enough clarity
+
+Building on the 'Single' and 'Specific' principles, always aim for explicitness in your prompts. For instance, a prompt like "Write a Python function to filter and return even numbers from a given list" is both single-focused and specific.
+
+*Screenshot of a Copilot chat with a Python prompt.*
+
+### Provide enough context with details
+
+Enrich Copilot's understanding with context, following the 'Surround' principle. The more contextual information provided, the more fitting the generated code suggestions are. For example, by adding some comments at the top of your code to give more details to what you want, you can give more context to Copilot to understand your prompt, and provide better code suggestions.
+
+*Screenshot of comments added to code for better Copilot suggestions.*
+
+In the example above, we used steps to give more detail while keeping it short. This practice follows the 'Short' principle, balancing detail with conciseness to ensure clarity and precision in communication.
+
+> **Note**
+> 
+> Copilot also uses parallel open tabs in your code editor to get more context on the requirements of your code.
+
+### Provide examples for learning
+
+Using examples can clarify your requirements and expectations, illustrating abstract concepts and making the prompts more tangible for Copilot.
+
+*Screenshot of an example used to clarify prompts for Copilot.*
+
+### Assert and iterate
+
+One of the keys to unlocking GitHub Copilot's full potential is the practice of iteration. Your first prompt might not always yield the perfect code, and that's perfectly okay. If the first output isn't quite what you're looking for, treat it as a step in a dialogue. Erase the suggested code, enrich your initial comment with added details and examples, and prompt Copilot again.
+
+Now that you learned best practices to improve your prompting skills, let's take a closer look at how you can provide examples Copilot can learn from.
+
+## How Copilot learns from your prompts
+
+GitHub Copilot operates based on AI models trained on vast amounts of data. To enhance its understanding of specific code contexts, engineers often provide it with examples. This practice, commonly found in machine learning, led to different training approaches such as:
+
+### Zero-shot learning
+
+Here, GitHub Copilot generates code without any specific examples, relying solely on its foundational training. For instance, suppose you want to create a function to convert temperatures between Celsius and Fahrenheit. You can start by only writing a comment describing what you want, and Copilot might be able to generate the code for you, based on its previous training, without any other examples.
+
+*Screenshot of Copilot creating a temperature conversion code from a comment.*
+
+### One-shot learning
+
+With this approach, a single example is given, aiding the model in generating a more context-aware response. Building upon the previous zero-shot example, you might provide an example of a temperature conversion function and then ask Copilot to create another similar function. Here's how it could look:
+
+*Screenshot of Copilot using an example to create similar temperature conversion code.*
+
+### Few-shot learning
+
+In this method, Copilot is presented with several examples, which strike a balance between zero-shot unpredictability and the precision of fine-tuning. Let's say you want to generate code that sends you a greeting depending on the time of the day. Here's a few-shot version of that prompt:
+
+*Screenshot of Copilot generating greeting code based on multiple examples.*
+
+Now that you know how Copilot uses your prompts to learn, let's take an in-depth look at how it actually uses your prompt to suggest code for you.
+
+
+
+# 3.3 GitHub Copilot User Prompt Process Flow
+
+In this unit, we'll break down how GitHub Copilot turns your prompts into smart, usable code. Generally, GitHub Copilot receives prompts and returns code suggestions or responses in its data flow. This process suggests an inbound and outbound flow.
+
+## Inbound Flow:
+
+*Illustration of GitHub Copilot inbound flow.*
+
+Let's walk through all the steps Copilot takes to process a user's prompt into a code suggestion.
+
+### 1. Secure prompt transmission and context gathering
+
+The process begins with the secure transmission of the user prompt over HTTPS. This ensures that your natural language comment is sent to GitHub Copilot's servers securely and confidentially, protecting sensitive information.
+
+GitHub Copilot securely receives the user prompt, which could be a Copilot chat or a natural language comment provided by you within your code.
+
+Simultaneously, Copilot collects context details:
+
+- Code before and after the cursor position, which helps it understand the immediate context of the prompt
+- Filename and type of the file being edited, allowing it to tailor code suggestions to the specific file type
+- Information about adjacent open tabs, ensuring that the generated code aligns with other code segments in the same project
+- Information on project structure and file paths
+- Information on programming languages and frameworks
+- Pre-processing using Fill-in-the-Middle (FIM) technique to consider both the preceding and following code context, effectively expanding the model's understanding allowing Copilot to generate more accurate and relevant code suggestions by leveraging a broader context
+
+These steps translate the user's high-level request into a concrete coding task.
+
+### 2. Proxy filter
+
+Once the context is gathered and the prompt is built, it passes securely to a proxy server hosted in a GitHub-owned Microsoft Azure tenant. The proxy filters traffic, blocking attempts to hack the prompt or manipulate the system into revealing details about how the model generates code suggestions.
+
+### 3. Toxicity filtering
+
+Copilot incorporates content filtering mechanisms before proceeding with intent extraction and code generation, to ensure that the generated code and responses don't include or promote:
+
+- **Hate speech and inappropriate content:** Copilot employs algorithms to detect and prevent the intake of hate speech, offensive language, or inappropriate content that could be harmful or offensive.
+- **Personal data:** Copilot actively filters out any personal data, such as names, addresses, or identification numbers, to protect user privacy and data security.
+
+### 4. Code generation with LLM
+
+Finally, the filtered and analyzed prompt is passed to LLM Models, which generate appropriate code suggestions. These suggestions are based on Copilot's understanding of the prompt and the surrounding context, ensuring that the generated code is relevant, functional, and aligned with project-specific requirements.
+
+## Outbound Flow:
+
+*Illustration of GitHub Copilot outbound flow.*
+
+### 5. Post-processing and response validation
+
+Once the model produces its responses, the toxicity filter removes any harmful or offensive generated content. The proxy server then applies a final layer of checks to ensure code quality, security, and ethical standards. These checks include:
+
+- **Code quality:** Responses are checked for common bugs or vulnerabilities, such as cross-site scripting (XSS) or SQL injection, ensuring that the generated code is robust and secure.
+- **Matching public code (optional):** Optionally, administrators can enable a filter that prevents Copilot from returning suggestions over ~150 characters if they closely resemble existing public code on GitHub. This prevents coincidental matches from being suggested as original content. If any part of the response fails these checks, it is either truncated or discarded.
+
+### 6. Suggestion delivery and feedback loop initiation
+
+Only responses that pass all filters are delivered to the user. Copilot then initiates a feedback loop based on your actions to achieve the following:
+
+- Grow its knowledge from accepted suggestions
+- Learn and improve through modifications and rejections of its suggestions
+
+### 7. Repeat for subsequent prompts
+
+The process is repeated as you provide more prompts, with Copilot continuously handling user requests, understanding their intent, and generating code in response. Over time, Copilot applies the cumulative feedback and interaction data, including context details, to improve its understanding of user intent and refine its code generation capabilities.
