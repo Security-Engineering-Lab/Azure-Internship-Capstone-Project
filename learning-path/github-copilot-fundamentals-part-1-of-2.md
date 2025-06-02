@@ -1430,3 +1430,226 @@ At GitHub, we're committed to advancing safe, secure, and trustworthy AI. We bel
 - Common problems with GitHub Copilot and their solutions
 
 Let's start by exploring GitHub Copilot plans and their privacy controls.
+
+# 6.2 Explore GitHub Copilot plans and their associated management and customization features
+
+GitHub enables developers and organizations to maximize their potential by prioritizing security, privacy, compliance, and transparency as we develop, iterate, and innovate GitHub Copilot.
+
+Every developer and organization has specific needs. That's why GitHub Copilot has several pricing plans.
+
+## In this unit, you learn about:
+
+- The management policies and customization features for GitHub Copilot Free, Pro, Business, and Enterprise
+- Key security and privacy factors to consider when you're selecting a plan
+
+## Management policy features
+
+| Feature | Free* & Pro | Business | Enterprise |
+|---------|-------------|----------|------------|
+| Public code filter | ✅ | ✅ | ✅ |
+| User management | ❌ | ✅ | ✅ |
+| Data excluded from training by default | ❌ | ✅ | ✅ |
+| Enterprise-grade security | ❌ | ✅ | ✅ |
+| IP indemnity | ❌ | ✅ | ✅ |
+| Content exclusions | ❌ | ✅ | ✅ |
+| SAML SSO authentication | ❌ | ✅ | ✅ |
+| Require GitHub Enterprise Cloud | ❌ | ❌ | ✅ |
+| Usage metrics | ❌ | ✅ | ✅ |
+
+*GitHub Copilot Free has usage limitations
+
+## Customization features
+
+| Feature | Free* & Pro | Business | Enterprise |
+|---------|-------------|----------|------------|
+| Tailor chat conversations to your private codebase | ❌ | ❌ | ✅ |
+| Unlimited integrations with Copilot Extensions (public beta) | ✅ | ✅ | ✅ |
+| Build a private extension for internal tooling (public beta) | ✅ | ✅ | ✅ |
+| Attach knowledge bases to chat for organizational context | ❌ | ❌ | ✅ |
+
+*GitHub Copilot Free has usage limitations
+
+## Key factors to consider when selecting a plan
+
+When you're selecting a GitHub Copilot pricing plan, you and your organization should consider these key factors:
+
+### Data privacy and security
+The plans offer varying levels of data privacy and security measures. For instance, GitHub Copilot Business and Enterprise are the only plans that provide more robust privacy controls. These controls include the ability to exclude specific files from GitHub Copilot analysis, access detailed audit logs, and provide IP indemnity.
+
+### Policy management
+The ability to manage Copilot policies at an organizational level is crucial. Business and Enterprise plans allow for comprehensive policy management, to help ensure that sensitive data is handled according to the organization's privacy policies.
+
+### Data collection and retention
+Understanding how data is collected and retained is essential for compliance with data privacy regulations. Individual subscribers can choose whether GitHub collects and retains their prompts and Copilot suggestions.
+
+### IP indemnity and data privacy
+For businesses and enterprises, IP indemnity and data privacy are critical to avoiding legal, security, and customer issues. Evaluating the need for these features can help determine the most suitable pricing plan for your business.
+
+> **💡 Tip**
+> 
+> GitHub Copilot offers a free tier with **2,000 code autocompletes and 50 chat messages per month**. To get started, open Visual Studio Code, click on the GitHub Copilot icon, and then click "Sign in to Use GitHub Copilot for Free". Log in to your GitHub account in the window that will open in the browser. **Learn more**. Educators, Students and select open-source maintainers can receive Copilot Pro for free, learn how at: **https://aka.ms/Copilot4Students**.
+
+In the next unit, we'll go over the contractual protections in GitHub Copilot and disabling matching public code.
+
+
+
+# 6.3 Explore contractual protections in GitHub Copilot and disabling matching public code
+
+*Screenshot of a futuristic, neon-colored depiction of GitHub Copilot represented as a stylized robotic helmet. Copilot is portrayed alongside abstract graphics of orbs and atomic-like structures. The text of GitHub Copilot's contractual protections is in bold white at the bottom.*
+
+To help ensure that your organization remains compliant with legal requirements, you should understand how contractual protections and GitHub Copilot features can help safeguard your code and data.
+
+## Contractual protections
+
+To help ensure that your organization remains compliant with legal requirements, GitHub Copilot offers:
+
+### IP indemnity
+The GitHub Copilot Business and Enterprise plans include IP indemnity, which provides legal protection against intellectual property claims related to the use of Copilot suggestions. With IP indemnity, if any suggestion from GitHub Copilot is challenged as infringing on third-party IP rights, GitHub assumes legal responsibility. For GitHub to assume legal responsibility, the **Matching public code** setting must be blocked.
+
+### Data Protection Agreement (DPA)
+GitHub offers a DPA that outlines the measures taken to protect your data and ensure compliance with data privacy regulations. These agreements provide transparency and assurance that your data is handled securely and responsibly.
+
+### GitHub Copilot Trust Center
+The GitHub Copilot Trust Center provides detailed information about how GitHub Copilot works, including security, privacy, compliance, and intellectual property safeguards. This resource helps organizations feel confident using GitHub Copilot while adhering to best practices and legal requirements.
+
+## Filtering out matching public code
+
+GitHub Copilot can help minimize potential code overlap by identifying and filtering out code suggestions that match publicly available code. This feature is essential for maintaining the originality and security of your codebase. It can reduce the risk of incorporating nonsecure or noncompliant code into your projects.
+
+### To block suggestions that match public code:
+
+1. On the upper-right corner of any page on GitHub, select your profile photo, and then select **Your enterprises** or **Your organizations**.
+2. Next to the enterprise or organization, select **Settings**.
+3. On the left sidebar, select **Copilot**.
+4. Under **Suggestions**, select **Matching public code** on the dropdown menu, and then select **Block**.
+5. To confirm your new settings, select **Save**.
+
+Now let's explore managing content exclusion from an internal lens.
+
+# 6.4 Manage content exclusions
+
+The content exclusion feature in GitHub Copilot helps protect sensitive information by preventing the use of specific files, directories, or repositories to inform code-completion suggestions.
+
+## In this unit, you learn about:
+
+- Enabling content exclusions from repositories and organizations
+- Analyzing the impact of content exclusions on generated code suggestions
+- Identifying scenarios where content exclusions might not be fully effective
+
+## Configurations for content exclusion
+
+To implement content exclusion strategies, repository administrators and organization owners can use the following configurations.
+
+### Configure content exclusions for repositories
+
+1. On GitHub, go to the main page of the repository.
+2. Under the repository name, select **Settings**.
+3. In the sidebar, in the **Code & automation** section, select **Copilot**.
+4. In the **Repositories and paths to exclude** section, specify the files or directories to exclude from Copilot suggestions.
+
+### Configure content exclusions for organizations
+
+1. In the upper-right corner of GitHub, select your profile photo, and then select **Your organizations**.
+2. Next to the organization, select **Settings**.
+3. On the left sidebar, select **Copilot > Content exclusion**.
+4. Enter the details of files or repositories to exclude from Copilot suggestions.
+
+## Impact of content exclusion on code suggestions
+
+You can use content exclusions to configure GitHub Copilot to ignore certain files. When you exclude content from GitHub Copilot:
+
+- **Code completion is no longer available** in the affected files
+- **The content in affected files won't inform code completion suggestions** in other files
+- **The content in affected files won't inform GitHub Copilot Chat responses**
+
+Content exclusions can significantly affect the quality and relevance of code suggestions that GitHub Copilot generates. When you exclude certain files or directories, GitHub Copilot won't use the content in those files to inform its suggestions. This action can lead to more secure and compliant code suggestions, but it might also reduce the overall context available to GitHub Copilot. This reduction could potentially affect the accuracy and usefulness of the suggestions.
+
+For example, excluding a critical configuration file might prevent Copilot from suggesting relevant code snippets that depend on the configurations defined in that file. It's essential to carefully analyze which files should be excluded to balance security and functionality.
+
+You can specify content exclusions only in the settings for an organization or repository. Content exclusion settings that are defined in an organization or repository within an enterprise apply to all members who are licensed as part of a GitHub Copilot Business or GitHub Copilot Enterprise subscription.
+
+## Limitations of content exclusions
+
+Although content exclusions are a valuable tool for managing privacy and security, they might not be fully effective in some scenarios. For instance:
+
+### IDE limitations
+In some integrated development environments (IDEs), content exclusions might not apply when you're using certain features, such as Copilot Chat. For example, in Visual Studio Code and Visual Studio, content exclusions are not applied when you use the `@github` chat participant in your question.
+
+### Semantic information
+Copilot might still use semantic information from an excluded file if the IDE provides the information in a nonexcluded file. This includes type information and hover-over definitions for symbols or function calls used in code.
+
+### Policy scope
+Content exclusion settings apply only to members of the organization in which you configure the content exclusion. Anyone else who can access the specified files can still see code completion suggestions and Copilot Chat responses referencing the specified files.
+
+Understanding these limitations is crucial for effectively managing content exclusions and ensuring that sensitive information is adequately protected.
+
+
+# 6.5 Troubleshoot common problems with GitHub Copilot
+
+Let's explore common problems with GitHub Copilot and how to troubleshoot them.
+
+## Code suggestions are missing
+
+One of the most common problems that users encounter with GitHub Copilot is the absence of code suggestions. If Copilot isn't providing code suggestions in your editor, try these troubleshooting actions:
+
+### Troubleshooting steps:
+
+- **Check your internet connection**: Ensure that you have a stable internet connection, because GitHub Copilot requires an active connection to function properly.
+- **Update the Copilot extension**: Make sure you're using the latest version of the GitHub Copilot extension. Older versions might not communicate effectively with the Copilot servers.
+- **Verify IDE compatibility**: Confirm that your IDE is compatible with GitHub Copilot. Some IDEs might require specific configurations or updates to work with Copilot.
+- **Review content exclusions**: If certain files are excluded from a Copilot analysis, suggestions might not appear for those files. Check the content exclusion settings to ensure they're configured correctly.
+
+By taking these actions, you can often resolve problems related to missing code suggestions and ensure that Copilot functions as expected.
+
+## Content exclusions aren't working as expected
+
+Content exclusions are designed to prevent GitHub Copilot from using specific files or directories. However, content exclusions might not work as expected in some scenarios. Here are some common problems and their resolutions:
+
+### Common issues and solutions:
+
+#### Delayed application of exclusions
+After you add or change content exclusions, the changes can take up to 30 minutes to take effect in IDEs where the settings are already loaded. To apply changes immediately, reload the content exclusion settings in your IDE.
+
+#### Inadequate scope of exclusions
+- Content exclusion settings apply only to members of the organization in which you configured the exclusion. Ensure that all relevant team members have the appropriate settings applied.
+- Check the GitHub Copilot icon on the status bar. If a GitHub Copilot content exclusion applies to the file, the GitHub Copilot icon has a diagonal line through it. Hover over the icon to see whether an organization or the parent repository disabled GitHub Copilot for the file.
+
+#### IDE-specific limitations
+In some IDEs, content exclusions might not apply when you're using certain features, such as GitHub Copilot Chat. Be aware of these limitations and adjust your workflow accordingly.
+
+By understanding and addressing these problems, you can ensure that content exclusions are applied effectively and help protect sensitive information.
+
+## Code suggestions are unsatisfactory
+
+If the suggestions that GitHub Copilot is generating are unsatisfactory, you can use these techniques to prompt Copilot to provide better results:
+
+### Improvement techniques:
+
+- **Provide clear context**: Ensure that your code provides clear context for GitHub Copilot to generate relevant suggestions. This task includes writing descriptive comments and using meaningful variable names.
+- **Use Copilot commands**: In some IDEs, you can use specific commands to prompt Copilot to generate suggestions. For example, in Visual Studio Code, you can use the `Ctrl+Enter` shortcut to trigger GitHub Copilot.
+- **Adjust prompt length**: Sometimes, providing a longer or more detailed prompt can help Copilot generate better suggestions. Experiment with different prompt lengths to see what works best.
+
+By using these techniques, you can improve the quality of GitHub Copilot suggestions and enhance your coding experience.
+
+Now, let's test the knowledge that you gained from this module.
+
+
+# 6.7 Summary
+
+Management and customization control are a vital part of using an AI pair programming tool like GitHub Copilot. In this module, we explored these topics:
+
+## What you've learned
+
+- **GitHub Copilot plans** and their associated management and customization features
+- **Contractual protections** in GitHub Copilot and disabling matching public code
+- **Managing content exclusions** in GitHub Copilot
+- **Reviewing common problems** with GitHub Copilot and their solutions
+
+With this knowledge, you can select the right fit for your organization's needs.
+
+## Resources
+
+- [GitHub Trust Center](https://github.com/trust)
+- [Establishing trust in using GitHub Copilot](https://docs.github.com/en/copilot/overview-of-github-copilot/github-copilot-trust-center)
+- [How to responsibly adopt GitHub Copilot with the GitHub Copilot Trust Center](https://github.blog/2023-11-08-how-to-responsibly-adopt-github-copilot-with-the-github-copilot-trust-center/)
+- [Excluding content from GitHub Copilot](https://docs.github.com/en/copilot/managing-copilot/managing-github-copilot-in-your-organization/setting-policies-for-copilot-in-your-organization/excluding-content-from-github-copilot)
