@@ -973,3 +973,443 @@ To avoid consuming all your monthly GitHub Codespaces time, it's important to de
 - Introduction to GitHub Copilot
 - Code with GitHub Codespaces
 
+# 5 GitHub Copilot Across Environments: IDE, Chat, and Command Line Techniques
+
+Explore the multifaceted capabilities of GitHub Copilot across various development environments. Learn to harness AI-assisted coding in your IDE, engage in natural language conversations for complex tasks, and enhance your command-line productivity.
+
+# 5.1 Introduction
+
+GitHub Copilot is an advanced AI-powered coding assistant that can dramatically enhance developer efficiency. GitHub Copilot saves time for developers, enabling them to concentrate on higher-level problem-solving and innovation by removing menial tasks off their plate and providing relevant code completion and generating entire blocks of code.
+
+GitHub Copilot offers flexible interaction options tailored to your workflow. Whether through code completion, chat, or commands, Copilot meets you where you are, enhancing your development experience and productivity. Understanding these interaction modes is key to unlocking the full potential of GitHub Copilot and optimizing your coding workflow.
+
+This module covers the different methods for interacting with GitHub Copilot, guiding you on when, where, and how to use these methods to effectively communicate your goals to Copilot and provide it with the necessary information to complete your tasks.
+
+## In this module you'll learn about:
+
+- How to utilize GitHub Copilot's auto-suggestions, multiple suggestions pane, and its ability to adapt to different coding styles
+- How to provide context to GitHub Copilot through inline comments, block comments, docstrings, and other types of comments to enhance code generation accuracy
+- Interacting with GitHub Copilot through natural language conversations to generate complex code, debug issues, and obtain code explanations in real-time
+- How to improve the relevance of GitHub Copilot Chat's suggestions by using scope referencing, slash commands, and agents
+- How to interact with GitHub Copilot in CLI to get command explanations, suggestions, and even execute commands based on specific needs
+- How to set up GitHub Copilot CLI configurations, aliases, and manage privacy settings, including opting out of usage data collection
+
+
+
+# 5.2 Code completion with GitHub Copilot
+
+GitHub Copilot code completion features live directly within your IDE, where you write and review your code. GitHub Copilot integrates seamlessly with editors like Visual Studio Code or JetBrains, offering features such as autosuggestions, a multiple suggestions pane, and support for various coding styles. You primarily interact with GitHub Copilot through these IDE tools, and understanding how and where to use them helps you optimize its powerful code generation abilities.
+
+## In this unit, we cover:
+
+- GitHub Copilot supported languages
+- Auto suggestions
+- Multiple suggestions pane
+- Support for different coding styles in suggestions
+- How GitHub Copilot incorporates coding comments for suggestions
+
+## GitHub Copilot supported languages
+
+GitHub Copilot provides robust support for a wide range of programming languages and frameworks, with strong capabilities in:
+
+- **Python**
+- **JavaScript**
+- **Java**
+- **TypeScript**
+- **Ruby**
+- **Go**
+- **C#**
+- **C++**
+
+While these languages receive exceptional support, GitHub Copilot can assist with many other languages and frameworks as well.
+
+> **💡 Tip**
+> 
+> GitHub Copilot offers a free tier with 2,000 code autocompletes and 50 chat messages per month. To get started, open Visual Studio Code, click on the GitHub Copilot icon, and then click "Sign in to Use GitHub Copilot for Free". Log in to your GitHub account in the window that will open in the browser. Learn more. Educators, Students and select open-source maintainers can receive Copilot Pro for free, learn how at: https://aka.ms/Copilot4Students.
+
+## Auto suggestions
+
+Copilot offers code suggestions as you type: sometimes completing the current line, sometimes suggesting a whole new block of code. You can accept all, part, or ignore the suggestion. This ability to provide real-time, context-aware suggestions saves valuable development time by reducing the need to search for syntax, troubleshoot logic, or repeatedly write common patterns.
+
+*Screenshot of auto completion ghost text.*
+
+## Multiple suggestions pane
+
+When you're working on a code block and GitHub Copilot offers a suggestion, you see a grayed-out code snippet. To explore more options, hover over the suggestion to reveal the GitHub Copilot control panel.
+
+*Screenshot of multiple suggestion auto completion ghost text.*
+
+Click the forward or backward arrow buttons in the control panel to see the next or previous suggestions. You can also use keyboard shortcuts:
+
+- **macOS**: Option (⌥) or Alt+] (next), Option (⌥) or Alt+[ (previous)
+- **Windows or Linux**: Alt+] (next), Alt+[ (previous)
+
+*Screenrecord of suggestions pane.*
+
+While GitHub Copilot is superb at suggesting code for you, it also demonstrates its ability to adapt through the following ways:
+
+- **Method Implementation**: When you start typing a method name, Copilot can suggest the entire implementation, following your established coding style.
+- **Naming Conventions**: It picks up on your preferred naming conventions for variables, functions, and classes.
+- **Formatting**: Copilot adapts to your indentation style, bracket placement, and other formatting preferences.
+- **Comment Style**: It can mimic your comment style, whether you prefer inline comments, block comments, or doc strings.
+- **Design Patterns**: When your project consistently uses certain design patterns, Copilot suggests code that aligns with these patterns.
+
+## Using coding comments for suggestions
+
+A key aspect of this capability is how it incorporates coding comments to enhance its suggestions. This section explores the various ways GitHub Copilot utilizes comments to improve its code completion and generation capabilities.
+
+### Understanding comment context
+
+When integrated into your existing codebase, GitHub Copilot uses various aspects of your code to provide more relevant suggestions, including code comments. Developers often use comments to clarify code intent and enhance collaboration, and Copilot, as your AI coding assistant, makes use of these comments in much the same way. By understanding the intent behind the comments, Copilot can provide more accurate and context-aware code suggestions through two key processes:
+
+- **Natural Language Processing**: Copilot uses advanced natural language processing (NLP) techniques to interpret the meaning and intent behind comments in the code.
+- **Contextual Analysis**: It analyzes comments in relation to the surrounding code, understanding their relevance and purpose within the broader context of the file or project.
+
+### Types of comments utilized
+
+Copilot can work with various types of comments to inform its suggestions:
+
+- **Inline comments**: Short explanations next to specific lines of code.
+- **Block comments**: Longer explanations that might describe a function or class.
+- **Docstrings**: Formal documentation strings in languages like Python.
+- **TODO comments**: Notes about future implementations or improvements.
+- **API Documentation**: Comments that describe the usage and parameters of functions or methods.
+
+### Comment-driven code generation
+
+Copilot uses comments in several ways to generate and suggest code:
+
+#### Function implementation
+When a function is described in comments, Copilot can suggest an entire implementation based on that description.
+
+*Screenshot of multiple line code completion ghost text.*
+
+#### Code completion
+Copilot uses comments to provide more accurate code completions, understanding the developer's intent.
+
+*Screenshot of whole function auto completion ghost text.*
+
+In this example, we have a comment describing a function to reverse a string. Based on this comment, Copilot is likely to suggest an implementation using Python's slice notation with a step of -1, which efficiently reverses the string.
+
+#### Variable naming
+Comments can influence Copilot's suggestions for variable names, making them more descriptive and context-appropriate.
+
+*Screenshot of variable name auto completion ghost text.*
+
+Here, we have a comment describing a list of the user's favorite books. Copilot would likely suggest descriptive variable names that match the context. In this case, it suggested "favorite_books" as the variable name, which clearly describes the content of the list.
+
+#### Algorithm selection
+When comments describe a specific algorithm or approach, Copilot can suggest code that aligns with that method.
+
+*Screenshot of algorithm auto completion ghost text.*
+
+In the example above, we provide comments that outline the steps of the bubble sort algorithm. Based on these comments, Copilot would likely suggest an implementation that closely follows the steps described.
+
+
+# 5.3 GitHub Copilot Chat
+
+GitHub Copilot Chat is an advanced feature of the GitHub Copilot ecosystem, designed to provide developers with an interactive, conversational AI assistant directly within their development environment. It allows developers to have natural language conversations about their code, ask questions, and receive intelligent responses and suggestions in real-time.
+
+## In this unit, we'll cover:
+
+- How to generate code using GitHub Copilot Chat
+- Debugging using GitHub Copilot Chat
+- How to get code explanations using GitHub Copilot Chat
+- Using slash commands to perform actions with GitHub Copilot
+- Using custom GitHub Copilot agents to improve prompts
+
+To access Copilot in your IDE, click the chat icon on the left navbar.
+
+*Screenshot of Chat.*
+
+## Key scenarios for GitHub Copilot Chat
+
+GitHub Copilot Chat is particularly beneficial in certain scenarios:
+
+### Complex code generation
+When you need to implement complex algorithms, data structures, or generate boilerplate code for specific design patterns, Copilot Chat can help streamline the process. It can assist in creating intricate regular expressions, constructing detailed SQL queries, or developing advanced data structures like a Bubble sort in Python.
+
+*Screenshot of chat code generation.*
+
+### Debugging assistance
+If you encounter errors in your code, Copilot Chat can be valuable in analyzing error messages and suggesting potential fixes. It can help identify logical errors and provide step-by-step explanations of problematic sections of code. One way to achieve this is by using Copilot inline-chat by highlighting the piece of code containing the error, right clicking and selecting Copilot, then inline-chat.
+
+*Screenshot of selection code chat debugging.*
+
+For example, you might ask, "I'm getting a NullReferenceException in this method. Can you help me debug it?"
+
+*Screenshot of generating code chat debugging.*
+
+### Code explanations
+Copilot Chat can also be used to better understand complex code snippets. It can break down code into simpler terms, explain the purpose and functionality of unfamiliar code, and offer insights into best practices and potential optimizations. For example, you could ask:
+- "Can you explain how this async/await code works in Python?"
+
+*Screenshot of chat code explanations.*
+
+## How to improve GitHub Copilot Chat responses
+
+You can significantly improve the quality and relevance of GitHub Copilot Chat's responses with certain key features. Let's dive into them.
+
+### Scope referencing
+
+To enhance the accuracy and relevance of the responses provided by GitHub Copilot Chat, it's important to properly scope your questions using references. Here's how you can do that:
+
+#### File references
+You can specify a particular file in your question by adding a `#file:` before the file name.
+
+*Screenshot of chat scope file referencing pick.*
+
+For example, if you're working with a file named `controller.js`, you can use the `#file` command to select it and reference it directly in your question as `#file:controller.js`. This tells Copilot Chat to focus on the contents of that file when generating a response.
+
+*Screenshot of chat scope file referencing.*
+
+#### Environment References
+You can reference the entire solution or workspace by using `@workspace`. This allows Copilot Chat to consider the broader context of the projects and configurations that are currently open in your Visual Studio IDE. For instance, asking "@workspace where is the calculate function?" will prompt Copilot to consider the entire solution to find the most relevant information.
+
+*Screenshot of chat scope workspace referencing.*
+
+### Slash commands
+
+Slash commands in GitHub Copilot Chat allow you to quickly specify the intent of your query. This can significantly improve the quality of the responses you receive by making your requests more focused. Here are some commonly used slash commands:
+
+#### `/doc`
+Adds comments to the specified or selected code. For example, you can type `/doc` followed by the code you want to document, and Copilot will generate appropriate comments.
+
+*Screenshot of /doc slash commands.*
+
+#### `/explain`
+Provides explanations for selected code. This is particularly useful when you need to understand what a particular piece of code does. For example, `/explain the #file:controller.js` will give you a detailed explanation of that file.
+
+*Screenshot of /explain slash commands.*
+
+#### `/fix`
+Proposes fixes for problems in the selected code. If you're facing issues, you can highlight the problematic section and use `/fix` to receive suggestions for resolving the issue.
+
+*Screenshot of /fix slash commands.*
+
+#### `/generate`
+Helps in generating new code based on your requirements. For example, `/generate code to find the root of a number in client.js` will create a function to perform the task.
+
+*Screenshot of /generate slash commands.*
+
+#### `/optimize`
+Analyzes and suggests improvements to the running time or efficiency of the selected code. For instance, `/optimize the calculate method in controller.js` will focus on enhancing the performance of that specific method.
+
+*Screenshot of /optimize slash commands.*
+
+#### `/tests`
+Automatically creates unit tests for the selected code. You can simply highlight the code and use `/tests using Mocha` to generate tests.
+
+*Screenshot of /tests slash commands.*
+
+## Copilot agents
+
+GitHub Copilot agents are custom tools that you can build and integrate with GitHub Copilot Chat to provide additional functionalities tailored to your specific needs. In addition to slash commands, you can use specific agents within Copilot Chat in your IDE to handle different tasks:
+
+### `@workspace`
+This agent allows you to extend the context of whatever questions you ask Copilot to the whole project. It is very useful for getting code generated that would fit in your project right away, using information from your whole project. It can also be utilized for getting answers about your whole codebase.
+
+*Screenshot of `@workspace` agent command.*
+
+You can also use the `@workspace /new` smart action which allows you to generate a completely new project from scratch based on your requirements. For example, `@workspace /new generate new html file pages and javascript for advanced calculations`
+
+*Screenshot of `@workspace \new` agent command.*
+
+Click on "Create Workspace" to proceed with code generation and just like that you have your new project with the code you requested.
+
+*Screenshot of new generated workspace project.*
+
+### `@terminal`
+This agent is useful for command-line related questions. For example, you could ask it to find the largest file in a directory or explain the last command you ran.
+
+*Screenshot of `@terminal` agent command.*
+
+### `@vscode`
+Use this agent to ask questions related to Visual Studio Code, such as how to debug or change settings within the IDE.
+
+*Screenshot of `@vscode` agent command.*
+
+By effectively utilizing these tools and techniques, you can significantly improve the quality of responses you receive from GitHub Copilot Chat, making your coding experience more efficient and productive.
+
+## Sharing feedback on GitHub Copilot Chat
+
+Most IDEs with Copilot Chat integration have built-in feedback mechanisms. For example, in VS Code, you can find feedback options at the beginning of GitHub Copilot Chat's suggestions. Hover over a suggestion, and you should see thumbs up and thumbs down buttons.
+
+*Screenshot of thumbs up helpful buttons.*
+
+Click on the thumbs up to rate a suggestion as helpful.
+
+*Screenshot of thumbs down unhelpful.*
+
+Click on thumbs down to rate an unhelpful one.
+
+
+
+# 5.4 GitHub Copilot for the Command Line
+
+GitHub Copilot isn't just a tool for writing code in your favorite IDE; it's also a powerful assistant that can help streamline your command-line workflows. By integrating with the GitHub CLI, Copilot can provide explanations for unfamiliar commands, suggest commands based on your needs, and even execute them on your behalf. Whether you're new to the command line or a seasoned user, Copilot can enhance your productivity by offering intelligent suggestions and simplifying complex tasks.
+
+## This unit covers:
+
+- Guiding you through the common GitHub Copilot CLI commands
+- Exploring configuration options enabling you to make the most of GitHub Copilot directly from your terminal
+
+## Common commands
+
+Once you have Copilot set up in the CLI, here are some frequently used commands for interacting with it:
+
+### Getting command explanations
+
+If you're unsure about what a specific command does, you can ask Copilot to explain it. For instance:
+
+```shell
+gh copilot explain "sudo apt-get"
+```
+
+*Screenshot of copilot explain in cli.*
+
+This command provides you with a detailed explanation of the provided command.
+
+### Getting command suggestions
+
+Need help with constructing a command? You can ask Copilot to suggest a command based on what you want to accomplish:
+
+```shell
+gh copilot suggest "Undo the last commit"
+```
+
+*Screenshot of copilot suggest in cli.*
+
+Copilot starts an interactive session to clarify your request and suggest the best command.
+
+### Executing suggested commands
+
+After receiving a suggestion, you can choose the Execute command option. This copies the command to your clipboard. You can also allow Copilot to execute commands on your behalf only if you configure the `ghcs` alias.
+
+#### Using the alias:
+
+```bash
+ghcs suggest "What command to see running docker containers"
+```
+
+*Screenshot of executing suggested command copilot suggest in cli.*
+
+### Revise suggested command
+
+To give GitHub Copilot CLI to rework or revise a command to make it better or more suited to your expectations, use the "Revise command" option along with your feedback.
+
+*Screenshot of revising suggested command copilot suggest in cli.*
+
+## Configuration options
+
+To make the most out of Copilot in the CLI, you may want to configure certain settings:
+
+### Alias Configuration
+
+If you want Copilot to execute commands on your behalf directly, you need to set up the `ghcs` alias. Using an alias allows you to bypass copying and pasting commands manually, and instead Copilot does it for you.
+
+To configure the `ghcs` alias, run the following commands:
+
+#### For bash:
+```bash
+echo 'eval "$(gh copilot alias -- bash)"' >> ~/.bashrc
+```
+
+#### For PowerShell:
+```powershell
+$GH_COPILOT_PROFILE = Join-Path -Path $(Split-Path -Path $PROFILE -Parent) -ChildPath "gh-copilot.ps1"
+gh copilot alias -- pwsh | Out-File ( New-Item -Path $GH_COPILOT_PROFILE -Force )
+echo ". `"$GH_COPILOT_PROFILE`"" >> $PROFILE
+```
+
+#### For Mac terminal or Zsh:
+```bash
+echo 'eval "$(gh copilot alias -- zsh)"' >> ~/.zshrc
+```
+
+### Feedback mechanism
+
+Copilot encourages user feedback to improve its suggestions. You can rate the quality of a suggestion by selecting the Rate response option after Copilot provides you with a command.
+
+*Screenshot of rating suggested command copilot suggest in cli.*
+
+### Organizational settings
+
+If you're using Copilot within an organization your access to certain features may be governed by your organization's policies. Administrators can enable or disable Copilot's capabilities within the CLI.
+
+For further customization and detailed configuration so you can optimize Copilot's functionality for your specific needs, refer to the GitHub documentation.
+
+### Data handling
+
+GitHub Copilot CLI doesn't retain your prompts, but it keeps your usage analytics. You can configure whether you want GitHub Copilot to keep and use your usage data to improve the product. Enter the command `gh copilot config`, select "Optional Usage Analytics", then select "No" if you want to opt out.
+
+*Screenshot of configure usage data setting in cli.*
+
+---
+
+
+
+# 5.5 odule assessment
+
+
+### 1. Which of the following choices isn't mentioned as one of the programming languages receiving strong support from GitHub Copilot?
+
+- [ ] Python
+- [ ] JavaScript
+- [x] **Rust** ✅
+- [ ] Ruby
+
+**Explanation:** According to the documentation, GitHub Copilot provides strong support for Python, JavaScript, Java, TypeScript, Ruby, Go, C#, and C++. Rust is not mentioned in this list.
+
+### 2. Which slash command in GitHub Copilot Chat is used to generate unit tests for selected code?
+
+- [ ] /generate
+- [ ] /test
+- [x] **/tests** ✅
+- [ ] /unittest
+
+**Explanation:** The `/tests` command automatically creates unit tests for the selected code. For example, you can highlight code and use `/tests using Mocha` to generate tests.
+
+### 3. What is the purpose of the @workspace agent in GitHub Copilot Chat?
+
+- [ ] To focus only on the current file
+- [x] **To extend the context of questions to the whole project** ✅
+- [ ] To run terminal commands
+- [ ] To change Visual Studio Code settings
+
+**Explanation:** The `@workspace` agent allows you to extend the context of whatever questions you ask Copilot to the whole project. It's very useful for getting code generated that would fit in your project right away, using information from your whole project.
+
+### 4. What command would you use to get an explanation of a specific command using GitHub Copilot CLI?
+
+- [ ] gh copilot suggest
+- [x] **gh copilot explain** ✅
+- [ ] gh copilot clarify
+- [ ] gh copilot describe
+
+**Explanation:** The `gh copilot explain` command provides detailed explanations of commands. For example: `gh copilot explain "sudo apt-get"` will explain what the sudo apt-get command does.
+
+# 5.6 Summary
+
+Congratulations on completing this module! You've gained valuable insights into the various ways of interacting with GitHub Copilot, enhancing your ability to leverage this powerful AI-assisted coding tool effectively.
+
+## What you've learned
+
+With the completion of this module, you now have the knowledge to:
+
+- **Learn how to utilize GitHub Copilot's auto-suggestions and multiple suggestions pane** for efficient code completion
+- **Understand how GitHub Copilot adapts to different coding styles** and incorporates coding comments for improved suggestions
+- **Effectively use GitHub Copilot Chat** for complex code generation, debugging assistance, and code explanations
+- **Improve Copilot Chat responses** using scope referencing, slash commands, and Copilot agents
+- **Interact with GitHub Copilot through the command line interface**, including getting command explanations and suggestions
+- **Configure GitHub Copilot CLI settings**, including alias setup and data handling preferences
+
+## References
+
+- [GitHub Copilot documentation](https://docs.github.com/en/copilot)
+- [GitHub Copilot Chat documentation](https://docs.github.com/en/copilot/github-copilot-chat)
+- [GitHub CLI documentation](https://cli.github.com/manual/)
+
+## Provide feedback
+
+Submit content feedback or suggested changes for this Microsoft Learn module. GitHub maintains the content and a team member will triage the request. Thank you for taking the time to improve our content!
+
