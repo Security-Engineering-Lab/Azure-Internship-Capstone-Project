@@ -1969,3 +1969,165 @@ jobs:
           sarif_file: results.sarif
 ```
 
+
+# 4.4 Configure code scanning
+
+You can configure how GitHub scans the code in your project for vulnerabilities and errors. When you choose your own configuration, you save time and decide the best frequency of code scanning for your project. In this unit, you'll learn the basics of code scanning configuration. You'll also learn how to configure the frequency of scans and schedule them to best fit your repository and development needs.
+
+As we discussed in the previous units, you can run code scanning on GitHub, using GitHub Actions, or from your continuous integration (CI) system. Selecting the Advanced setup option on GitHub generates a customizable workflow file that you can then commit directly to your repository. You usually don't need to edit this workflow. However, if necessary, you can customize some of the settings.
+
+For example, you can edit GitHub's CodeQL analysis workflow to specify the frequency of scans, the languages or directories to scan, and what CodeQL code scanning looks for in your code. You might also need to edit the CodeQL analysis workflow if you use a specific set of commands to compile your code. CodeQL analysis is just one type of code scanning you can perform in GitHub. The GitHub Marketplace contains several other code scanning workflows.
+
+## Switching from Default to Advanced Code Scanning Setup
+
+If you already have a repository set up to use code scanning using the default setup method, you can switch to using the Advanced setup in the settings. Navigate to the Code scanning section under Settings > Code security and analysis, and then select the three dots overflow icon (...). In the drop-down, select Switch to advanced. Then, follow the prompts to disable CodeQL, and re-enable it with the advanced setup's generated workflow file.
+
+## Edit code-scanning workflow
+
+GitHub saves workflow files in the .github/workflows directory of your repository. You can find a workflow you have added by searching for its file name. For example, by default, the workflow file for CodeQL code scanning is called codeql-analysis.yml.
+
+Follow these steps to edit a workflow file:
+
+1. To open the workflow editor, select the Edit icon in the upper-right corner of the file view.
+
+*Screenshot of the Edit button*
+
+2. Make your edits.
+
+3. After you have edited the file, select Commit changes and complete the Commit changes form. You can choose to commit directly to the current branch, or create a new branch and start a pull request.
+
+*Screenshot of the Commit changes form.*
+
+Review the following sections for some common code scanning configuration options.
+
+## Configure frequency
+
+A common edit to the workflow file is to adjust the frequency with which code scanning occurs. You can configure the CodeQL analysis workflow to scan code on a schedule or when specific events occur in a repository. You can also edit the workflow file to scan code when someone pushes a change and whenever a pull request is created. Adjusting this frequency prevents developers from introducing new vulnerabilities and errors into the code. Scanning code on a schedule informs you about the latest vulnerabilities and errors that GitHub, security researchers, and the community discover. Even when developers aren't actively maintaining the repository.
+
+### Scan on Push
+
+By default, the CodeQL analysis workflow uses the on:push event to trigger a code scan on every push to the default branch of the repository and any protected branches. For code scanning to be triggered on a specified branch, the workflow must exist in that branch. If you scan on push, the results appear in the Security tab for your repository.
+
+Additionally, when an on:push scan returns a result that can be mapped to an open pull request, these alerts automatically appear on a pull request in the same place as other pull request alerts. The alerts are identified by comparing the existing analysis of the head of the branch to the analysis for the target branch.
+
+### Scan on PR
+
+The default CodeQL analysis workflow uses the pull_request event to trigger a code scan on pull requests targeted against the default branch. If a pull request is from a private fork, the pull_request event is only triggered if you've selected the "Run workflows from fork pull requests" option in the repository settings. If you scan pull requests, the results appear as alerts in a pull-request check.
+
+If you use the pull_request trigger, configured to scan the pull request's merge commit rather than the head commit, it produces more efficient and accurate results than scanning the branch head on each push. However, if you use a CI/CD system that can't be configured to trigger on pull requests, you can still use the on:push trigger so that code scanning maps the results to open pull requests on the branch and adds the alerts as annotations on a pull request.
+
+### Define the severities causing pull request check failure
+
+By default, only alerts with the severity level of Error or security severity level of Critical or High cause a pull-request check failure. Pull-request failures don't stop a code scan but represent a blocker when trying to merge code. You can find the list of pull-request failures in the Code scanning alerts tab under your repository's Security. In your repository settings, you can change the levels of alert severities and of security severities that cause a pull request check failure.
+
+1. On GitHub.com, navigate to the repository main page. Under your repository name, select Settings.
+
+*screenshot of the Settings button*
+
+2. In the left sidebar, select Code security and analysis.
+
+*screenshot of the Code security and analysis button.*
+
+3. In the Code scanning section under Protection rules, use the drop-down menu to select the severity level you would like to trigger a pull request check failure.
+
+*screenshot of the code scanning alert severity drop-down menu.*
+
+### Avoid unnecessary scans of pull requests
+
+You might want to avoid a code scan being triggered on specific pull requests targeted against the default branch, irrespective of which files have been changed. You can configure this setting by specifying on:pull_request:paths-ignore or on:pull_request:paths in the code-scanning workflow. For example, if the only changes in a pull request are to files with the file extensions .md or .txt you can use the following paths-ignore array.
+
+```yaml
+on:
+   push:
+      branches: [main, protected]
+   pull_request:
+      branches: [main]
+      paths-ignore:
+         - '**/*.md'
+         - '**/*.txt'
+```
+
+### Adjust scanning schedule
+
+If you use the default CodeQL analysis workflow, the workflow scans the code in your repository once a week at a randomly generated day and time, in addition to the scans triggered by events. To adjust this schedule, edit the cron value in the workflow.
+
+The following example shows a CodeQL analysis workflow for a repository with a default branch called main and one protected branch called protected:
+
+```yaml
+on:
+   push:
+      branches: [main, protected]
+   pull_request:
+      branches: [main]
+   schedule:
+      - cron: '20 14 * * 1'
+```
+
+This workflow scans:
+- Every push to the default branch and the protected branch
+- Every pull request to the default branch
+- The default branch every Monday at 14:20 UTC
+
+
+# 4.5 Configure code scanning exercise
+
+This exercise checks your knowledge on configuring code scanning for your repository.This GitHub exercise is graded automatically once you have attempted a solution to the challenge. The results of your actions, as well as helpful feedback, are provided in real-time within the `grade-learner` workflow logs.Here are some helpful tips before you begin the exercise:
+* Read the **About this exercise** section in the exercise's repository README to understand how the exercise works.
+* Follow the steps provided in the **Instructions** section to successfully complete the exercise.
+* To see the results of your exercise, navigate to the **Actions** tab of your cloned repository and click on the most recent run on the **Grading** workflow.
+* Stuck on what to do? Revisit the content in the last unit or check out the **Useful resources** section in the exercise's repository README for some additional resources.
+
+**Note**
+A grading script exists under `.github/workflows/grading.yml`. You do not need to modify this workflow to complete this exercise. **Altering the contents in this workflow can break the exercise's ability to validate your actions, provide feedback, or grade the results**.
+
+This exercise is a challenge based on content covered in this module. It might take several attempts to complete the exercise. You can revisit previous content in this module, or navigate to some of the additional resources provided as many times as you want to find the solution.When you've finished the exercise in GitHub, return here for:
+* A quick knowledge check
+* A summary of what you've learned
+* A badge for completing this module​
+
+https://github.com/skills/introduction-to-codeql
+
+
+
+# 4.6 Module assessment
+
+## Check your knowledge
+
+### 1. When code scanning is enabled, what is one default event that triggers a scan?
+
+- [ ] Creating a new branch.
+- [x] **Pushing a change.** ✅
+- [ ] Deleting a branch.
+
+**Explanation:** By default, the CodeQL analysis workflow uses the `on:push` event to trigger a code scan on every push to the default branch of the repository and any protected branches. This is one of the primary triggering events for code scanning.
+
+### 2. Which of the following are the tools used to upload a SARIF file?
+
+- [x] **The tools used are GitHub Actions, the code scanning API, and the CodeQL CLI.** ✅
+- [ ] The tools used are GitHub Actions, the ESLint analysis tool, the code scanning API, and the CodeQL CLI.
+- [ ] The tools used are the partialFingerprints property, GitHub Actions, the code scanning API, and the CodeQL CLI.
+
+**Explanation:** According to the documentation, you can upload SARIF files using three main methods: the code-scanning API, the CodeQL CLI, or GitHub Actions. ESLint is a static analysis tool that generates SARIF files, and partialFingerprints is a property within SARIF files, but they are not upload tools.
+
+### 3. What is the difference between scheduled versus triggered events in code scanning?
+
+- [ ] Scheduled events are more difficult to configure than triggered events.
+- [x] **Scheduled events run based on a specified schedule and triggered events run on code events such as a push.** ✅
+- [ ] Triggered events run less frequently than scheduled events.
+
+**Explanation:** Scheduled events run at predefined times (using cron syntax) regardless of repository activity, while triggered events respond to specific repository events like pushes, pull requests, or other code-related activities. The frequency depends on the specific configuration, not the type of event.
+
+
+# 4.7 Summary
+
+In this module, you learned how to enable and configure code scanning for your repository. Code scanning works with the integrated GitHub CodeQL action or with third party tools. You can schedule or trigger it based on specific events, saving time and ensuring your code stays free of errors and security vulnerabilities. Without code scanning, you'd need to manually verify the code base, which can take a lot of time and has a higher potential for mistakes. Code scanning alerts you of any problems and lets you review these issues in a single location.
+
+**Learn More**
+Here are some links to more information about code scanning:
+* Learn more about GitHub Advanced Security
+* Learn more about GitHub Actions
+* Learn more about using SARIF files with Code Scanning
+* Troubleshooting code scanning
+* REST API endpoints for code scanning
+
+
