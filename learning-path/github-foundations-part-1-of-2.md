@@ -870,3 +870,830 @@ Here are some links to more information on the topics we discussed in this modul
 - Configuring notifications
 - GitHub Pages documentation
 
+
+# 3 Introduction to GitHub's products
+
+This module provides an overview of GitHub products, including the account types, plan options, associated features, and billing. It also covers how to access GitHub on-the-go using GitHub Desktop and GitHub Mobile.
+
+# 3.1 Introduction
+
+Whether you're just learning to code, working as a developer at a start-up, or a C-level executive at a Fortune 500 company, the GitHub platform can help you build, scale, and deliver secure software.
+
+Depending on your specific situation, it's important to know what GitHub plans fit your needs.
+
+In this module, you learn about the many different types of GitHub accounts, plans, and their associated features. You also discover how other features are licensed.
+
+## Learning objectives
+
+After completing this module, you're able to:
+
+- **Define the difference** between the different types of GitHub accounts: Personal, Organization, and Enterprise
+- **Explain each GitHub plan**: GitHub Free for personal accounts and organizations, GitHub Pro for personal accounts, GitHub Team, and GitHub Enterprise
+- **Distinguish the features** associated with accessing GitHub on GitHub Mobile and GitHub Desktop
+- **Describe a brief overview** of GitHub billing and payments
+
+
+# 3.2 GitHub accounts and plans
+
+In this unit, you learn about GitHub account types and plans.
+
+## GitHub account types
+
+It's important to understand that there's a difference between the types of GitHub accounts and the GitHub plans. Here are the three types of GitHub accounts:
+
+- **Personal**
+- **Organization** 
+- **Enterprise**
+
+Let's review each of these account types in detail.
+
+### Personal accounts
+
+Every person who uses GitHub.com signs into a personal account (sometimes referred to as a user account). Your personal/user account is your identity on GitHub.com and has a username and profile.
+
+Your personal/user account can own resources such as repositories, packages, and projects and has a straightforward way to manage your permission. Actions that you take on GitHub.com, such as creating an issue or reviewing a pull request, are attributed to your personal account.
+
+Each personal account uses either GitHub Free or GitHub Pro. All personal accounts can own an unlimited number of public and private repositories, with an unlimited number of collaborators on those repositories. If you use GitHub Free, private repositories owned by your personal account have a limited feature set.
+
+### Organization accounts
+
+Organization accounts are shared accounts where an unlimited number of people can collaborate across many projects at once. Unlike personal/user accounts, permissions with organization accounts are done with a tiered approach.
+
+Similar to personal accounts, organizations can own resources such as repositories, packages, and projects. However, you can't sign into an organization. Instead, each person signs into their own personal account, and any actions the person takes on organization resources are attributed to their personal account. Each personal account can be a member of multiple organizations.
+
+The personal accounts within an organization can be given different roles in the organization to grant different levels of access to the organization and its data. All members can collaborate with each other in repositories and projects. But only organization owners and security managers can manage the settings for the organization and control access to the organization's data with sophisticated security and administrative features.
+
+### Enterprise accounts
+
+Enterprise accounts on GitHub.com allow administrators to centrally manage policies and billing for multiple organizations and enable inner sourcing between their organizations. An enterprise account must have a handle, like an organization or user account on GitHub.
+
+Organizations are shared accounts for enterprise members to collaborate across many projects at once. In the enterprise settings, enterprise owners can invite existing organizations to join your enterprise account, transfer organizations between enterprise accounts, or create new organizations.
+
+Your enterprise account allows you to manage and enforce policies for all the organizations owned by the enterprise. Each enterprise policy controls the options available for a policy at the organization level.
+
+## GitHub plans
+
+Now that you have a better understanding of the different types of accounts you can have with GitHub, let's look at the different plans available to improve your software management process and team collaboration.
+
+There are several free GitHub products, in addition to the paid ones:
+
+- **GitHub Free** for personal accounts and organizations
+- **GitHub Pro** for personal accounts
+- **GitHub Team**
+- **GitHub Enterprise**
+
+### GitHub Free
+
+GitHub Free provides the basics for individuals and organizations. Anyone can sign up for the free version of GitHub.
+
+#### GitHub Free for personal accounts
+
+Signing up for GitHub Free gives a new user a personal user account. A personal user account includes unlimited public and private repositories and unlimited collaborators.
+
+With GitHub Free, a personal account includes:
+
+- GitHub Community Support
+- Dependabot alerts
+- Two-factor authentication enforcement
+- 500-MB GitHub Packages storage
+- 120 GitHub Codespaces core hours per month
+- 15-GB GitHub Codespaces storage per month
+- **GitHub Actions:**
+  - 2,000 minutes per month
+  - Deployment protection rules for public repositories
+
+#### GitHub Free for organizations
+
+With GitHub Free for organizations, you can work with unlimited collaborators on unlimited public repositories, with a full feature set. Or, unlimited private repositories with a limited feature set.
+
+In addition to the features available with GitHub Free for personal accounts, GitHub Free for organizations includes:
+
+- Team access controls for managing groups
+
+### GitHub Pro
+
+GitHub Pro is similar to GitHub Free but comes with upgraded features. The plan is designed for individual developers (using their personal account) who want advanced tools and insight within their repositories but don't belong to a team.
+
+GitHub Pro accounts include all of the features of a GitHub Free account, plus the following advanced features:
+
+- GitHub Support via email
+- 3,000 GitHub Actions minutes per month
+- 2-GB GitHub Packages storage
+- 180 GitHub Codespaces core hours per month
+- 20-GB GitHub Codespaces storage per month
+- **Advanced tools and insights in private repositories:**
+  - Required pull request reviewers
+  - Multiple pull request reviewers
+  - Protected branches
+  - Code owners
+  - Autolinked references
+  - GitHub Pages
+  - Wikis
+  - Repository insight graphs for pulse, contributors, traffic, commits, code frequency, network, and forks
+
+### GitHub Team
+
+GitHub Team is the version of GitHub Pro for organizations. GitHub Team is better than GitHub Free for organizations because it provides increased GitHub Actions minutes and extra GitHub Packages storage.
+
+Let's go over the extra features in GitHub Team that help with team collaboration:
+
+- GitHub Support via email
+- 3,000 GitHub Actions minutes per month
+- 2-GB GitHub Packages storage
+- **Advanced tools and insights in private repositories:**
+  - Required pull request reviewers
+  - Multiple pull request reviewers
+  - Draft pull requests
+  - Team pull request reviewers
+  - Protected branches
+  - Code owners
+  - Scheduled reminders
+  - GitHub Pages
+  - Wikis
+  - Repository insight graphs for pulse, contributors, traffic, commits, code frequency, network, and forks
+- The option to enable or disable GitHub Codespaces
+
+### GitHub Enterprise
+
+GitHub Enterprise accounts enjoy a greater level of support and extra security, compliance, and deployment controls.
+
+You can create one or more enterprise accounts by signing up for the paid GitHub Enterprise product. When you create an enterprise account, you're assigned the role of enterprise owner. As an enterprise owner, you can add and remove organizations to and from the enterprise account. You can manage other administrators, enforce security policies across organizations, and so on.
+
+In addition to the features available with GitHub Team, GitHub Enterprise includes:
+
+- GitHub Enterprise Support
+- More security, compliance, and deployment controls
+- Authentication with security assertion markup language (SAML) single sign-on
+- Access provisioning with SAML or System for Cross-domain Identity Management (SCIM)
+- Deployment protection rules with GitHub Actions for private or internal repositories
+- GitHub Connect
+- The option to purchase GitHub Advanced Security
+
+#### GitHub Enterprise options
+
+There are two different GitHub Enterprise options:
+
+- **GitHub Enterprise Server**
+- **GitHub Enterprise Cloud**
+
+The significant difference between GitHub Enterprise Server (GHES) and GitHub Enterprise Cloud is that GHES is a self-hosted solution that allows organizations to have full control over their infrastructure.
+
+The other difference between GHES and GitHub Enterprise Cloud is that GitHub Enterprise Cloud includes a dramatic increase in both GitHub Actions minutes and GitHub Packages storage.
+
+Here are the extra features of GitHub Enterprise Cloud:
+
+- 50,000 GitHub Actions minutes per month
+- 50-GB GitHub Packages storage
+- A service level agreement for 99.9% monthly uptime
+- Option to centrally manage policy and billing for multiple GitHub.com organizations with an enterprise account
+- Option to provision and manage the user accounts for your developers, by using Enterprise Managed Users
+
+
+
+# 3.3 GitHub Mobile and GitHub Desktop
+
+There are multiple ways to access your GitHub account aside from github.com. GitHub Mobile and GitHub Desktop allow you to have a seamless experience while accessing your account on the go.
+
+Let's briefly review GitHub Desktop and GitHub Mobile and their features.
+
+## GitHub Mobile
+
+GitHub Mobile gives you a way to do high-impact work on GitHub quickly and from anywhere. GitHub Mobile is a safe and secure way to access your GitHub data through a trusted, first-party client application.
+
+### With GitHub Mobile you can:
+
+- **Manage, triage, and clear notifications** from github.com
+- **Read, review, and collaborate** on issues and pull requests
+- **Edit files** in pull requests
+- **Search for, browse, and interact** with users, repositories, and organizations
+- **Receive a push notification** when someone mentions your username
+- **Schedule your push notifications** for specific custom hours
+- **Secure your GitHub.com account** with two-factor authentication
+- **Verify your sign in attempts** on unrecognized devices
+
+## GitHub Desktop
+
+GitHub Desktop is an open-source, stand-alone software application that enables you to be more productive. It facilitates collaboration between you and your team and the sharing of Git and GitHub best practices within your team.
+
+### Here are a few of the many things you can do with GitHub Desktop:
+
+- **Add and clone repositories**
+- **Add changes to your commit interactively**
+- **Quickly add coauthors** to your commit
+- **Check out branches** with pull requests and view CI statuses
+- **Compare changed images**
+
+
+
+# 3.4 GitHub billing
+
+Now let's review billing and payments for your GitHub account.
+
+## Overview
+
+GitHub bills separately for each account. You receive a separate bill for your personal account and for each organization or enterprise account you own.
+
+The bill for each account is a combination of charges for your **subscriptions** and **usage-based billing**.
+
+### Subscriptions
+Include your account's plan, such as GitHub Pro or GitHub Team, and paid products that have a consistent monthly cost, such as GitHub Copilot and apps from GitHub Marketplace.
+
+### Usage-based billing
+Applies when the cost of a paid product depends on how much you use the product. For example, the cost of GitHub Actions depends on how many minutes your jobs spend running and how much storage your artifacts use.
+
+> **📝 Note**
+> 
+> Your plan might come with included amounts of usage-based products. For example, with GitHub Pro, your personal account gets 3,000 minutes of GitHub Actions usage for free each month. You can control usage beyond the included amounts by setting spending limits.
+
+Understanding GitHub's billing structures is crucial for effective administration and cost management. This document focuses on differentiating how GitHub products are billed, including seat licenses, GitHub Actions, GitHub Packages, and the new billing platform's capabilities.
+
+## Pricing for GitHub Actions
+
+GitHub Actions enables automation of workflows directly within repositories. Its pricing model varies based on repository visibility and account type:
+
+### Public Repositories
+Usage of GitHub Actions is **free** for public repositories, providing unlimited minutes on GitHub-hosted runners.
+
+### Private Repositories
+Each account receives a certain amount of free minutes and storage for GitHub-hosted runners, depending on the account's plan. For example, GitHub Free for personal accounts includes 2,000 CI/CD minutes per month. Usage beyond the included amounts is controlled by spending limits.
+
+It's important to monitor usage to avoid unexpected costs, especially for private repositories with high activity.
+
+## Pricing and Support Options for Organizations
+
+GitHub offers various plans tailored to organizational needs, each with distinct features and support options:
+
+### GitHub Free for Organizations
+**Features:**
+- Unlimited public/private repositories
+- Community support
+- 2,000 CI/CD minutes per month
+
+### GitHub Team
+**Features:**
+- Everything in Free, plus:
+- Additional collaboration tools
+- Code owners
+- Required reviews
+- Enforced branch protections
+- Email support
+
+### GitHub Enterprise
+**Features:**
+- Everything in Team, plus:
+- SAML single sign-on
+- Advanced auditing
+- GitHub Connect
+- 24/7 support
+- Enterprise-level security features
+
+For more information about available features and pricing tiers, see [GitHub's pricing page](https://github.com/pricing).
+
+Organizations should evaluate their collaboration needs and security priorities to choose the plan that best fits their goals.
+
+## Usage-Based Billing for Licenses (Metered Billing)
+
+With the enhanced billing platform, GitHub has introduced a usage-based billing model for licenses:
+
+### Monthly Billing
+Organizations are billed monthly for the exact number of GitHub Enterprise and GitHub Advanced Security licenses used.
+
+### Pro Rata Charges
+If a user starts consuming a license partway through the month, the organization is charged a pro rata amount for that user's usage.
+
+### Dynamic Adjustments
+If a user stops consuming a license during the month, the billing for the following month reflects this change, ensuring organizations only pay for active users.
+
+This model eliminates the need to purchase a predefined number of licenses in advance, offering flexibility and cost efficiency.
+
+## Billing Platform's New Capabilities
+
+GitHub's enhanced billing platform provides improved tools for financial management:
+
+### Granular Spending Controls
+Administrators can set specific spending limits for services like GitHub Actions and GitHub Packages, preventing unexpected overages.
+
+### Detailed Usage Insights
+The platform offers in-depth visibility into product usage, allowing organizations to monitor consumption patterns and optimize resource allocation.
+
+### Automated Reporting
+Features for automating usage reporting streamline financial oversight and facilitate internal chargebacks.
+
+These capabilities enhance an organization's ability to manage expenses effectively and align GitHub usage with budgetary constraints.
+
+
+# 3.5 License Usage Stats
+
+In this unit, you'll learn how to track and manage GitHub Enterprise license usage across organizations, enterprise accounts, and server instances using the admin console, APIs, and best practices for optimizing license allocation and cost.
+
+As a **GitHub Enterprise administrator**, tracking **license usage** is crucial for managing costs, optimizing resources, and ensuring compliance. GitHub provides various methods for obtaining license statistics at **organization, enterprise, and instance levels**.
+
+## Finding License Usage for a Specific Organization
+
+To find **license usage statistics** for a single **GitHub organization**:
+
+### Method 1: Using GitHub Enterprise Cloud (GHEC) Admin Console
+
+1. Navigate to **GitHub Enterprise Cloud Admin Panel**
+2. Go to **Settings > Billing & plans**
+3. Locate the **License usage** section
+4. View details such as:
+   - **Total seats assigned**
+   - **Active seats in use**
+   - **Available licenses**
+   - **Pending invitations**
+
+### Command-Line Alternative (GraphQL API)
+
+For more granular data, admins can use **GraphQL API**:
+
+```json
+{
+  organization(login: "org-name") {
+    billingInfo {
+      totalSeats
+      seatsUsed
+      seatsAvailable
+    }
+  }
+}
+```
+
+## Method 2: Finding License Usage Across Multiple Organizations
+
+For organizations under the same **enterprise account**, admins can analyze usage across all organizations.
+
+### Using the Enterprise Account Billing Page
+
+1. Navigate to **GitHub Enterprise Cloud > Enterprise settings**
+2. Go to **Billing** > **License Usage**
+3. Review license usage for **each organization under the enterprise account**
+
+### GraphQL API Query for All Organizations
+
+To fetch usage data for all organizations in an enterprise:
+
+```json
+{
+  enterprise(slug: "enterprise-name") {
+    organizations(first: 50) {
+      nodes {
+        name
+        billingInfo {
+          totalSeats
+          seatsUsed
+          seatsAvailable
+        }
+      }
+    }
+  }
+}
+```
+
+## Method 3: Finding License Usage for Enterprise Accounts
+
+For enterprises using **GitHub Enterprise Cloud or GitHub Enterprise Server**, admins can track licenses at the **enterprise level**.
+
+### GitHub Enterprise Server (GHES) Dashboard
+
+Next, you'll dive into how to gain access to view track these licenses.
+
+1. Log in to the **GitHub Enterprise Server Admin Console**
+2. Go to **Settings > License Usage**
+3. View:
+   - **Total allocated licenses**
+   - **Active users**
+   - **Available seats**
+   - **Historical license usage trends**
+
+### REST API Alternative
+
+For **programmatic access**, use the REST API:
+
+```bash
+curl -H "Authorization: token YOUR-TOKEN" \
+"https://api.github.com/enterprises/YOUR-ENTERPRISE/license"
+```
+
+## Method 4: Finding License Usage Across Multiple GitHub Instances
+
+For **large enterprises** with multiple GitHub Enterprise **Server instances**, admins must track **license consumption** across deployments.
+
+### GitHub Enterprise Metrics API
+
+1. Access **GitHub Enterprise Server** admin settings
+2. Use the **Metrics API**:
+
+```bash
+curl -H "Authorization: token YOUR-TOKEN" \
+"https://api.github.com/enterprise/settings/licenses"
+```
+
+3. Extract:
+   - **Total enterprise-wide licenses**
+   - **Usage per GitHub instance**
+   - **Available capacity per region**
+
+## Best Practices for License Usage Management
+
+The following strategies can help you manage licenses more efficiently across your organization:
+
+- **Automate Monitoring**: Use **GraphQL/REST API queries** to **track usage trends**
+- **Optimize Unused Seats**: Identify **inactive users** and **reclaim unused licenses**
+- **Enable Usage-Based Billing**: Ensure **billing reflects actual consumption**
+- **Regular Audits**: Conduct **monthly/quarterly** **license reviews** to optimize cost
+
+
+
+# 3.6 License Usage Stats in Machine and Peripheral Devices
+
+
+In this unit, you'll learn how machine accounts and peripheral services impact GitHub Enterprise license usage. You'll explore methods to track their consumption, identify inefficiencies, and apply best practices to improve cost control and security.
+
+Tracking license usage is essential for cost optimization and security compliance. Machine accounts (used for automation) and peripheral services (such as CI/CD, integrations, and API consumers) can consume licenses, impacting enterprise costs and resource management.
+
+## Understanding Machine Accounts and Peripheral Services
+
+### Machine Accounts
+
+Machine accounts are GitHub accounts used for automation, running scripts, or integrating with third-party tools.
+
+Characteristics: - They act independently of human users. - Often used by CI/CD tools (e.g., GitHub Actions, Jenkins, CircleCI). - Each machine account consumes a GitHub license, like a standard user.
+
+### Peripheral Services
+
+Peripheral Services are external integrations that interact with GitHub via API requests.
+
+Examples: - CI/CD Pipelines (e.g., GitHub Actions, GitHub Runners, Jenkins). - Security Scanning Tools (e.g., Dependabot, Snyk, CodeQL). - Third-party Integrations (e.g., Slack, Jira, Datadog). - Self-hosted GitHub Runners.
+
+### Why Track These?
+
+To identify unused or excessive licenses.
+To optimize costs and prevent unnecessary spending.
+To monitor security risks from inactive or misconfigured automation accounts.
+
+## Finding License Usage Statistics for Machine Accounts
+
+### Method 1: GitHub Enterprise Admin Console
+
+Navigate to Enterprise Settings.
+Select Billing & License Management.
+Look for a Machine Accounts section (if available).
+Identify:
+Number of active machine accounts.
+License consumption per machine account.
+Last active date.
+
+### Method 2: GraphQL API Query for Machine Accounts
+
+To retrieve machine account usage statistics, use the GraphQL API:
+
+JSON
+
+Copy
+```
+{
+  enterprise(slug: "enterprise-name") {
+    organizations(first: 50) {
+      nodes {
+        name
+        machineAccounts {
+          totalCount
+          nodes {
+            login
+            createdAt
+            lastActiveAt
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Why Track These?
+
+To identify inactive machine accounts.
+To track when each machine account was last active.
+To help reduce unnecessary license allocation.
+
+## Finding License Usage for Peripheral Services
+
+### Method 1: GitHub Actions & Runners Usage Metrics
+
+Go to Enterprise Settings** → Actions.
+View:
+Total GitHub-hosted runner minutes used.
+Self-hosted runner usage.
+Billing for extra runner minutes.
+
+### Method 2: REST API for Self-Hosted Runners
+
+To track self-hosted runners and their license usage:
+
+Bash
+
+Copy
+```
+curl -H "Authorization: token YOUR-TOKEN" \
+"https://api.github.com/enterprises/YOUR-ENTERPRISE/actions/runners"
+```
+
+Key Insights:
+
+Identifies how many runners are consuming licenses.
+Tracks idle runners that may be wasting resources.
+Helps optimize billing for GitHub-hosted runner minutes.
+
+### Method 3: Peripheral Services API Usage Tracking
+
+Monitor API-based integrations using:
+
+Bash
+
+Copy
+```
+curl -H "Authorization: token YOUR-TOKEN" \
+"https://api.github.com/enterprises/YOUR-ENTERPRISE/audit-log"
+```
+
+This helps you:
+
+Detect Inactive Services: Find services no longer in use.
+Audit Third-Party Tools: Ensure external tools are necessary and properly configured.
+Reduce Costs: Disable services that are not providing value."
+
+## 4. Best Practices for Managing Machine Accounts & Peripheral Services Licenses
+
+The following best practices will help you audit usage, enforce policies, and streamline your automation footprint:
+
+Audit Machine Accounts Regularly: Identify and deactivate unused machine accounts.
+Over time, organizations accumulate unused or stale machine accounts that may still have access to repositories and systems.
+Unused accounts increase security risks, as they can be exploited if compromised.
+Regular audits ensure that only active and necessary machine accounts exist, reducing exposure to unauthorized access.
+
+Monitor API Usage: Track third-party tools consuming enterprise licenses.
+Many third-party applications, CI/CD pipelines, and integrations consume GitHub API resources and enterprise licenses.
+Excessive API calls can lead to rate limits, affecting developers' workflows.
+Unauthorized or unknown API usage can expose sensitive data and security vulnerabilities.
+
+Optimize Runner Usage: Identify idle self-hosted runners and reduce GitHub-hosted runner costs.
+Self-hosted and GitHub-hosted runners execute CI/CD workflows. Inefficient use leads to unnecessary costs.
+Idle self-hosted runners waste computing resources and may expose organizations to security risks if left unmonitored.
+GitHub-hosted runners operate on a pay-as-you-go basis, and optimizing usage can significantly reduce costs.
+
+Restrict Machine Accounts: Limit their permissions and enforce security policies.
+Machine accounts should not have unnecessary access to repositories, reducing the risk of privilege escalation.
+If compromised, machine accounts can be exploited to manipulate source code, deploy malicious changes, or expose secrets.
+Enforcing security policies helps ensure compliance and minimizes potential breaches.
+
+Tracking license usage for machine accounts and peripheral services is crucial for cost optimization, security, and compliance in GitHub Enterprise. Admins should leverage GitHub UI, GraphQL, and REST APIs to identify inactive accounts, optimize usage, and prevent unnecessary spending.
+
+
+
+# 3.7 Metered Usage Reports
+
+In this unit, you'll learn how to monitor and manage billing for GitHub's metered products, including Actions minutes, storage, licenses, and advanced features like Copilot and GHAS.
+
+GitHub provides detailed billing and consumption reports to track the usage of metered products. These reports help administrators monitor costs, allocate resources efficiently, and ensure compliance with organizational policies.
+
+## GitHub Actions Minutes
+
+GitHub Actions is a CI/CD automation tool where workflows run on virtual machines. The minutes consumed in these workflows are metered based on repository type, runner type, and usage.
+
+### Tracking Consumption
+
+Navigate to Settings → Billing in your GitHub organization or account.
+Under the GitHub Actions section, you can see the number of minutes used.
+Usage is broken down by repository, runner type (Linux, macOS, Windows), and remaining quota.
+
+### Billing Details
+
+Free Allocation:
+Public repositories get unlimited free minutes.
+Private repositories receive free minutes based on the plan:
+GitHub Free: 2,000 minutes/month
+GitHub Pro: 3,000 minutes/month
+GitHub Team: 3,000 minutes/month
+GitHub Enterprise: 50,000 minutes/month
+
+Pricing per Runner Type (as of 2024):
+Linux: $0.008 per minute
+Windows: $0.016 per minute
+macOS: $0.08 per minute
+
+### Optimization Strategies
+
+Use self-hosted runners for high-volume workflows to reduce costs.
+Optimize workflow scripts by caching dependencies and reducing redundant jobs.
+Limit workflows to only trigger when necessary (e.g., push to main branch only).
+
+## Storage for GitHub Packages
+
+GitHub Packages allows storing artifacts, container images, and dependencies. Storage is metered based on the volume of stored data and data transfer usage.
+
+### Tracking Consumption
+
+Navigate to Settings → Billing → GitHub Packages to view storage usage.
+Breakdown includes storage (GB) and data transfer (GB) used per repository.
+
+### Billing Details
+
+Free Allocation:
+Public repositories: Free storage and bandwidth.
+Private repositories:
+Storage up to 2GB
+Data transfer up to 1GB per month
+
+For details on storage limits and usage beyond the free allocation, see GitHub's pricing page.
+
+### Optimization Strategies
+
+Regularly delete unused packages or enable retention policies.
+Store frequently accessed images in a centralized registry to reduce duplication.
+Use compressed formats to reduce storage consumption.
+
+## GitHub Enterprise (GHE) Licenses
+
+GitHub Enterprise provides advanced features for organizations, and the number of active users determines license consumption.
+
+### Tracking Consumption
+
+Go to Enterprise Settings → Billing to view license usage reports.
+Monitor active users vs. allocated licenses.
+
+### Billing Details
+
+Pricing Model:
+Each user with access to private repositories consumes one license.
+Organizations pay per user annually or monthly.
+
+Inactive Users:
+If an admin removes a user, the license remains assigned for the billing period but can be reallocated.
+
+### Optimization Strategies
+
+Audit inactive users and revoke access to free up licenses.
+Use SSO and SCIM provisioning to automate user management.
+
+## GitHub Advanced Security (GHAS) Licenses
+
+GitHub Advanced Security (GHAS) offers code scanning, secret scanning, and dependency review for enhanced security.
+
+### Tracking Consumption
+
+View reports in Settings → Billing → GHAS Usage to see active committers.
+The report shows unique committers per billing period.
+
+### Billing Details
+
+Pricing Model:
+Charged per unique committer per month.
+If a committer contributes to multiple repositories, they only count once.
+Free Tier: Not available (only for public repositories).
+
+### Optimization Strategies
+
+Restrict GHAS to repositories that truly need advanced security.
+Use branch protections to limit unnecessary scans on feature branches.
+
+## GitHub Copilot
+
+GitHub Copilot provides AI-driven code completion and suggestions, billed per user.
+
+### Tracking Consumption
+
+Admins can track Copilot usage under Billing → Copilot in organization settings.
+The report shows active users and monthly billing estimates.
+
+### Billing Details
+
+Access Model:
+Available for individuals and businesses with different subscription options.
+
+Free Access:
+Free for students and verified open-source maintainers.
+Free for select enterprise customers (trial-based).
+
+For current Copilot plans and subscription details, see GitHub Copilot pricing.
+
+### Optimization Strategies
+
+Regularly review and deactivate Copilot for users who don't need it.
+Encourage developers to disable Copilot in projects where AI-generated code is unnecessary.
+
+## Large File Storage (LFS)
+
+GitHub LFS is used for storing large binary files separately from Git repositories.
+
+### Tracking Consumption
+
+View LFS usage in Billing → LFS Usage.
+Report includes storage (GB) and bandwidth usage (GB).
+
+### Billing Details
+
+Free Tier:
+1GB of storage per repository
+1GB of bandwidth per month
+
+For more information on Git Large File Storage (LFS) usage and limits, see GitHub's LFS documentation.
+
+### Optimization Strategies
+
+Use external storage services (e.g., AWS S3, Azure Blob Storage) for large files.
+Delete unused large files to optimize storage.
+Enable Git LFS file pruning to remove unreferenced objects
+
+
+# 3.8 Module assessment
+
+## Check your knowledge
+
+### 1. What's the difference between GitHub organization accounts and GitHub personal/user accounts?
+
+- [x] **Organizational accounts are shared accounts, while personal/user accounts are for individuals.** ✅
+- [ ] You pay more for organization accounts versus personal/user accounts.
+- [ ] They're exactly the same.
+- [ ] Personal/user accounts have more access than organization accounts.
+
+**Explanation:** Organization accounts are shared accounts where an unlimited number of people can collaborate across many projects at once, while personal/user accounts are individual accounts that serve as your identity on GitHub.
+
+### 2. What's the best reason to decide to upgrade to the GitHub Enterprise product?
+
+- [ ] Because you want to use GitHub Actions and Codespaces.
+- [ ] Because your VP needs to use GitHub Insights.
+- [x] **Because you want to centrally manage users and repositories across multiple organizations.** ✅
+- [ ] Because you want to use the team pull request reviewers feature.
+
+**Explanation:** GitHub Enterprise accounts allow administrators to centrally manage policies and billing for multiple organizations and enable inner sourcing between their organizations. This is the primary advantage of Enterprise over other plans.
+
+### 3. What's the purpose of a team?
+
+- [ ] A team allows you to manage an organization account.
+- [ ] A team allows you to control permission levels for an enterprise.
+- [ ] A team allows a single user to sign in using different accounts credentials.
+- [x] **A team is intended to reflect a company or group's structure. It's used to provide cascading access permissions and make it easy to notify all team members via mentions.** ✅
+
+**Explanation:** Teams are designed to reflect organizational structure and provide a way to manage permissions and communicate with groups of people efficiently.
+
+### 4. What's a function you can execute on GitHub Mobile?
+
+- [ ] Check out branches with pull requests and view CI statuses.
+- [ ] Compare changed images.
+- [ ] Add and clone repositories.
+- [x] **Manage, triage, and clear notifications from github.com.** ✅
+
+**Explanation:** GitHub Mobile allows you to manage, triage, and clear notifications from github.com. The other options (checking out branches, comparing images, and adding/cloning repositories) are GitHub Desktop features.
+
+### 5. Which of these features is unique to GitHub Enterprise Cloud (GHEC)?
+
+- [ ] Requires on-premises deployment and infrastructure management
+- [x] **Provides centralized user management with identity provider integration** ✅
+- [ ] Must be installed and maintained by the organization's IT team
+- [ ] Operates entirely within a private cloud environment
+
+**Explanation:** GitHub Enterprise Cloud provides centralized user management with identity provider integration through features like SAML SSO and SCIM provisioning. The other options describe GitHub Enterprise Server (GHES), not GHEC.
+
+### 6. What actions can you take at enterprise level to manage the use of GitHub Actions in your enterprise instance?
+
+- [ ] Create workflow templates
+- [x] **Configure a GitHub Actions use policy** ✅
+- [ ] Manually sync public actions in Enterprise Cloud
+
+**Explanation:** At the enterprise level, administrators can configure GitHub Actions use policies to control how Actions are used across the enterprise.
+
+### 7. What actions can you take to configure self-hosted runners for your enterprise use?
+
+- [x] **Create and add custom labels to your runners** ✅
+- [ ] Add proxy configurations to your runners after they start.
+- [ ] Add the IP address or IP address range of your runners at repository level.
+
+**Explanation:** You can create and add custom labels to self-hosted runners to help organize and target specific runners for workflows.
+
+### 8. What are encrypted secrets?
+
+- [ ] Encrypted secrets are authentication tokens you can generate in your account settings.
+- [ ] Encrypted secrets are the equivalent of SSH keys in GitHub.
+- [x] **Encrypted secrets are encrypted environment variables you can create to store sensitive information.** ✅
+
+**Explanation:** Encrypted secrets are encrypted environment variables that allow you to store sensitive information (like API keys, passwords, etc.) securely in your repository or organization settings for use in GitHub Actions workflows.
+
+
+
+# 3.9 Summary
+
+In this module, you learned:
+* The different types of GitHub accounts: Personal, Organization, and Enterprise.
+* The GitHub plans: GitHub Free for personal accounts and organizations, GitHub Pro for personal accounts, GitHub Team, and GitHub Enterprise.
+* The features associated with accessing GitHub on GitHub Mobile and GitHub Desktop.
+* A brief overview of GitHub billing and payments.
+
+Your understanding of GitHub's product platform, accounts, plans, how to access GitHub, and the different billing options helps you to optimize its usage within your organization.
+
+**Further reading**
+* GitHub's plans
+* GitHub's billing and payments
+* Managing your license for GitHub Enterprise
+
+
