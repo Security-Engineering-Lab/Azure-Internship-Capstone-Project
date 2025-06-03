@@ -2320,3 +2320,90 @@ The following table lists the main differences between Codespaces and GitHub.dev
 You can start your workflow in GitHub.dev and continue working on a Codespace. If you try to access the Run and Debug View or the Terminal, you see a notification that they're not available in GitHub.dev.
 
 To continue your work in a Codespace, select **Continue Working on…**. Select **Create New Codespace** to create a Codespace on your current branch. Before you choose this option, you must commit any changes.
+
+
+# 6.5 Exercise - Code with Codespaces and Visual Studio Code
+
+Now that you understand the Codespaces lifecycle and processes, it's time to practice coding in Codespaces and Visual Studio Code (VS Code). Use the following instructions to complete this exercise.
+
+## Instructions
+
+1. **Right-click the GitHub exercise link** to open it in a new tab.
+
+2. **On the GitHub Exercise Welcome page**, right-click the **Start course** button to open it in a new tab.
+   - In the new tab, most of the prompts automatically fill-in for you.
+   - For owner, choose your personal account or an organization to host the repository.
+   - We recommend creating a public repository, as private repositories use Actions minutes.
+
+3. **Scroll down and select the "Create repository" button** at the bottom of the form.
+
+4. **After your new repository is created**, wait about 20 seconds, then refresh the page. Follow the step-by-step instructions in the new repository's README.
+
+## When you finish the exercise in GitHub, return here to:
+
+- Complete a knowledge check
+- Review a summary of what you learned in this module
+- Earn a badge for completing this module
+
+
+# 6.6 Module assessment
+
+### 1. Which directory is the clone placed in after creating a Codespace?
+
+- [x] **/workspaces directory** ✅
+- [ ] /temp directory
+- [ ] ~/.bashrc directory
+- [ ] Linux directory
+
+**Explanation:** According to the documentation, when you rebuild the container in a Codespace, changes you made inside the /workspaces directory, including the clone of the repository or template you created the Codespace from, are preserved over a rebuild. This indicates that the clone is placed in the /workspaces directory.
+
+### 2. What's the maximum number of Codespaces that you can create per repository or branch?
+
+- [ ] You can only create two Codespaces.
+- [ ] You can create a total of 10 Codespaces.
+- [ ] You can create a total of 30 Codespaces.
+- [x] **You can create an unlimited number of Codespaces per repository or branch, depending upon available space. When you reach an upper amount of resources, a message displays that an existing Codespace needs to removed/deleted before a new Codespace can be created.** ✅
+
+**Explanation:** The documentation states that "You can create more than one Codespace per repository or even per branch. However, there are limits to the number of Codespaces you can create and run at the same time. When you reach the maximum number of Codespaces and try to create another, a message is displayed."
+
+### 3. What happens when Codespace loses internet connectivity?
+
+- [x] **If the connection to the internet is lost while working in a Codespace, you aren't able to access your Codespace.** ✅
+- [ ] Codespace doesn't require an internet connection. I can access my Codespace regardless if I lose connectivity.
+- [ ] If you lose internet connection while working on your Codespace, your changes aren't saved.
+
+**Explanation:** The documentation clearly states that "A Codespace requires an internet connection. If the connection to the internet is lost while working in a Codespace, you aren't able to access your Codespace. However, any uncommitted changes are saved."
+
+### 4. What defines the beginning of a Codespace's lifecycle?
+
+- [x] **A Codespace's lifecycle begins when you create a Codespace and ends when you delete it.** ✅
+- [ ] A Codespace's lifecycle begins immediately when GitHub is opened and ends when the software is closed.
+- [ ] A Codespace's lifecycle begins when a repository is created and ends when you delete it.
+
+**Explanation:** The documentation explicitly states at the beginning of the lifecycle section: "A Codespace's lifecycle begins when you create a Codespace and ends when you delete it."
+
+
+# 6.7 Summary
+
+In this module, you learned about GitHub Codespaces, a fully configured development environment hosted in the cloud.
+
+## What you've learned
+
+You should now be able to:
+
+- **Describe GitHub Codespaces**
+- **Explain the GitHub Codespace lifecycle** and how to perform each step
+- **Define the different customizations** you can personalize with GitHub Codespaces
+- **Discern the differences** between GitHub.dev and GitHub Codespaces
+
+## Resources
+
+Here are links to more information on the subjects we discussed in this module:
+
+- [A beginner's guide to learning to code with GitHub Codespaces](https://docs.github.com/en/codespaces/getting-started/quickstart)
+- [Developing in a Codespace](https://docs.github.com/en/codespaces/developing-in-codespaces)
+- [Customizing your Codespace](https://docs.github.com/en/codespaces/customizing-your-codespace)
+
+## Provide feedback
+
+Use this issue form to provide content feedback or suggested changes for this Microsoft Learn module. GitHub maintains this content and a team member will triage the request. Thank you for taking the time to improve our content!
