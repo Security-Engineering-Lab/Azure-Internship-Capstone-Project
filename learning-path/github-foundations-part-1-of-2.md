@@ -2966,3 +2966,12 @@ Here are some links to more information on the topics we discussed in this modul
 - [Using the API to Manage Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects)
 - [Automating Projects using Actions](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/automating-projects-using-actions)
 - [Archiving Items Automatically](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/archiving-items-automatically)
+
+
+# 8 Communicate effectively on GitHub using Markdown
+
+Learn to use Markdown to communicate with brevity, clarity, and expression.
+
+
+
+
