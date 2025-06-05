@@ -802,7 +802,7 @@ Choose the best response for each question.
 
 > **✅ Correct Answer**: A rise in pull requests that fix bugs indicates external contributors are actively participating in improving the codebase, which is a key goal of InnerSource programs - enabling collaboration and contributions from across the organization.
 
-## 10.5 Summary
+## Summary
 
 These questions test understanding of:
 1. **InnerSource Definition**: The fundamental concept that InnerSource applies open-source practices within organizational boundaries
@@ -810,7 +810,7 @@ These questions test understanding of:
 3. **Success Metrics**: Recognizing that increased external contributions (pull requests) indicate program success rather than decreased activity
 
 
-# Summary
+# 10.5 Summary
 
 In this module, you learned how to manage a successful InnerSource program on GitHub through effective discoverability, guidance, and maintenance.
 
@@ -851,6 +851,427 @@ Here are some links to more information on the subjects we discussed in this mod
 - [Awesome CONTRIBUTING.md examples](https://github.com/mntnr/awesome-contributing)
 - [Awesome GitHub issue & pull request templates](https://github.com/stevemao/github-issue-templates)
 
+
+
+# 11 Maintain a secure repository by using GitHub best practices
+
+In this module, you'll learn best practices for building, hosting, and maintaining a secure repository on GitHub.
+
+
+# 11.1 Introduction
+
+Software security is always important, and it spans the entire software-development lifecycle. Focus is often dedicated towards writing secure code and locking down infrastructure. It's also important to protect the processes that occur during every stage of the software-development lifecycle.
+
+Suppose you're managing an important GitHub repository. You want to enforce the highest level of security, but also want to offer a welcoming experience for contributors. Unfortunately, being secure often introduces friction that obstructs everyone's productivity. To mitigate this overhead, GitHub offers various automated features that allow you to efficiently administer a secure repository without slowing everyone down throughout the entire development process.
+
+## Learning Objectives
+
+In this module, you'll:
+
+- [ ] Recognize the importance of securing your repository and shifting left in the development lifecycle
+- [ ] Identify the tools, GitHub features, and best practices to establish a secure development strategy
+- [ ] Keep sensitive files out of your repository by applying the use of a `.gitignore` file
+- [ ] Identify how to detect and fix outdated dependencies with security vulnerabilities
+- [ ] Recognize advanced security features such as code scanning and secret scanning
+
+## Prerequisites
+
+- A GitHub account
+- The ability to navigate and edit files in GitHub
+
+
+# 11.2 How to Maintain a Secure GitHub Repository
+
+Here, we discuss some of the essential security tools and techniques available to GitHub repository administrators.
+
+> **📝 Note**
+> 
+> The following content doesn't cover the fundamentals of writing secure code, but rather important security considerations, tools, and features to use within a GitHub repository.
+
+## The Importance of a Secure Development Strategy
+
+Application security is important. News services frequently carry stories about some breach of a company's systems and private company and customer data that was stolen.
+
+So, what are the issues to think about when planning a secure development strategy? Clearly, we need to protect information from being disclosed to people that shouldn't have access to it, but more importantly, we need to ensure that information is only altered or destroyed when it's appropriate.
+
+We need to make sure we properly authenticate who's accessing the data and that they have the correct permissions to do so. Through historical or archival data or logs, we need to be able to find evidence when something is wrong.
+
+### Three Key Considerations
+
+There are many aspects to building and deploying secure applications. Here are three things to consider:
+
+1. **General Knowledge Problem**: Many developers and other staff members assume they understand security, but they don't. Cybersecurity is a constantly evolving discipline. A program of ongoing education and training is essential.
+
+2. **Code Must Be Created Correctly and Securely**: We need to be sure that the code is created correctly and securely implements the required features. We also need to make sure that the features were designed with security in mind.
+
+3. **Applications Must Comply with Rules and Regulations**: We need to make sure that the code complies with required rules and regulations. We have to test for compliance while building the code and then retest periodically, even after deployment.
+
+## Security at Every Step
+
+![GitHub shield with security written underneath](security-shield.png)
+
+Security isn't something you can just add later to an application or a system. **Secure development must be part of every stage of the software-development life cycle**. This concept is even more important for critical applications and those applications that process sensitive or highly confidential information.
+
+### Shifting Left
+
+In practice, to hold teams accountable for what they develop, processes need to **shift left**, or be completed earlier in the development lifecycle. By moving steps from a final gate at deployment time to an earlier step, fewer mistakes are made, and developers can move more quickly.
+
+Application-security concepts weren't a focus for developers in the past. Apart from the education and training issues, it's because their organizations emphasized fast development of features.
+
+However, with the introduction of **DevOps practices**, security testing is easier to integrate into the pipeline. Rather than being a task performed by security specialists, security testing should just be part of the day-to-day delivery processes.
+
+> **💡 Key Insight**
+> 
+> When the time for rework is taken into account, adding security to your DevOps practices earlier in the development lifecycle allows development teams to catch issues earlier. Catching issues earlier can actually reduce the overall time it takes to develop quality software.
+
+**Shifting left** is a process change, but it isn't a single control or specific tool. It's about making all of your security more developer-centric and giving developers security feedback where they are.
+
+## Security Tab Features
+
+GitHub offers security features that help keep data secure in repositories and across organizations. 
+
+### How to Access the Security Tab
+
+1. On GitHub.com, go to the repository's main page
+2. Under the repository name, select **Security**
+
+![Screenshot showing where to locate the Security tab in GitHub](security-tab-location.png)
+
+### Available Security Features
+
+From the Security tab, you can add features to your GitHub workflow to help avoid vulnerabilities in your repository and codebase:
+
+- **🛡️ Security policies** that allow you to specify how to report a security vulnerability in your project by adding a `SECURITY.md` file to your repository
+- **🚨 Dependabot alerts** that notify you when GitHub detects that your repository is using a vulnerable dependency or malware
+- **📋 Security advisories** that you can use to privately discuss, fix, and publish information about security vulnerabilities in your repository
+- **🔍 Code scanning** that helps you find, triage, and fix vulnerabilities and errors in your code
+
+For more information, see [GitHub security features](https://docs.github.com/en/code-security).
+
+## Communicate a Security Policy with SECURITY.md
+
+GitHub's community benefits are substantial, but they also carry potential risks. The fact that anyone can propose bug fixes publicly comes with certain responsibilities. The most important is the **responsible disclosure** of information that could lead to security exploits before their underlying bugs can be fixed. 
+
+Developers looking to report or address security issues look for a `SECURITY.md` file in the root of a repository in order to responsibly disclose their concerns. Providing guidance in this file ultimately speeds up the resolution of these critical issues.
+
+To learn more about SECURITY.md, see [Adding a security policy to your repository](https://docs.github.com/en/code-security/getting-started/adding-a-security-policy-to-your-repository).
+
+## GitHub Security Advisories
+
+GitHub Security Advisories allow repository maintainers to privately discuss and fix a security vulnerability in a project. After repository maintainers collaborate on a fix, they can publish the security advisory to publicly disclose the security vulnerability to the project's community. 
+
+### Benefits of Security Advisories
+
+By publishing security advisories, repository maintainers make it easier for their community to:
+- Update package dependencies
+- Research the consequences of the security vulnerabilities
+
+GitHub stores the published advisories in the **Common Vulnerabilities and Exposures (CVE)** list. This list is used for automatically notifying affected repositories that use software that has a listed vulnerability. 
+
+For more information, see [About repository security advisories](https://docs.github.com/en/code-security/security-advisories/repository-security-advisories/about-repository-security-advisories).
+
+## Keep Sensitive Files Out of Your Repository with .gitignore
+
+It's easy for developers to overlook files included in a commit. Sometimes these overlooked files are benign, such as intermediate build files. However, there's always the risk that someone might inadvertently commit sensitive data. For example, someone could commit an API key or private configuration data that a malicious actor could use. 
+
+One technique to help avoid this risk is to build and maintain **`.gitignore`** files. These files instruct client tools, such as the git command line utility, to ignore paths and patterns when aggregating files for a commit.
+
+### Sample .gitignore File
+
+```gitignore
+# User-specific files - Ignore all files ending in ".suo"
+*.suo
+
+# Mono auto generated files - Ignore all files starting with "mono_crash."
+mono_crash.*
+
+# Build results - Ignore all files in these folders found at any folder depth
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# Root config folder - Ignore this directory at the root due to leading slash
+# Removing the slash would ignore "config" directories at all depths 
+/config
+
+# Ignore intermediate JS build files produced during TypeScript build at any 
+# folder depth under /Web/TypeScript. This won't ignore JS files elsewhere. 
+/Web/TypeScript/**/*.js
+```
+
+### .gitignore File Management
+
+Your repository might include multiple `.gitignore` files. Settings are inherited from parent directories, with overriding fields in new `.gitignore` files taking precedence over parent settings for their folders and subfolders. 
+
+It's significant effort to maintain the root `.gitignore` file, although adding a `.gitignore` file into a project directory can be helpful when that project has specific requirements that are easier to maintain separately from the parent.
+
+To learn more about `.gitignore`, see [Ignoring files](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files). Also check out the collection of starter `.gitignore` files offered for various platforms in the [gitignore repository](https://github.com/github/gitignore).
+
+## Remove Sensitive Data from a Repository
+
+While `.gitignore` files can be useful in helping contributors avoid committing sensitive data, they're just a strong suggestion. Developers can still work around a `.gitignore` file to add files if they're motivated enough, and sometimes files might slip through because they don't meet the `.gitignore` file configuration. 
+
+Project participants should always be on the lookout for commits that contain data that shouldn't be included in the repository or its history.
+
+> **⚠️ Important**
+> 
+> You should assume that any data committed to GitHub at any point has been compromised. Simply overwriting a commit isn't enough to ensure the data won't be accessible in the future. For the complete guide to removing sensitive data from GitHub, see [Removing sensitive data from a repository](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository).
+
+## Branch Protection Rules
+
+You can create a branch protection rule to enforce certain workflows for one or more branches. For example, you can require an approving review or passing status checks for all pull requests merged into the protected branch.
+
+### Workflow Protection Examples
+
+You can use the workflows that protect the branch to:
+
+- ✅ **Run a build** to verify the code changes can be built
+- ✅ **Run a linter** to check for typos and conformation to the internal coding conventions
+- ✅ **Run automated tests** to check for any behavior changes of the code
+- ✅ **And so on**
+
+## Add a CODEOWNERS File
+
+By adding a `CODEOWNERS` file to your repository, you can assign individual team members or entire teams as code owners to paths in your repository. These code owners are then required for pull-request reviews on any changes to files in a path for which they're configured.
+
+### Sample CODEOWNERS File
+
+```
+# Changes to files with the js extensions need to be reviewed by the js-owner user/group:
+*.js    @js-owner
+
+# Changes to files in the builds folder need to be reviewed by the octocat user/group:
+/build/ @octocat
+```
+
+### CODEOWNERS File Location
+
+You can create the `CODEOWNERS` file in either:
+- The **root** of the repository
+- The **docs** folder
+- The **.github** folder
+
+
+
+
+# 11.3 Automated Security
+
+Here, we discuss some ways you can automate security checks in a repository that are available to GitHub repository administrators.
+
+## Detect and Fix Outdated Dependencies with Security Vulnerabilities
+
+Virtually every project these days takes dependencies on external packages. While these components can offer substantial benefits in productivity, they can introduce other security risks. Staying on top of these packages and their vulnerability status can be time consuming, especially given how each dependency might have its own dependencies that can become difficult to track and maintain. Fortunately, GitHub provides features that reduce this workload.
+
+### Repository Dependency Graphs
+
+One default feature every repository includes is **dependency graphs**. GitHub scans common package manifests, such as `package.json`, `requirements.txt`, and others. These graphs allow project owners to recursively track all of the dependencies their project relies on.
+
+![Screenshot of a GitHub dependency graph](dependency-graph.png)
+
+For the list of supported dependency manifests, see [About the dependency graph](https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph).
+
+### Dependabot Alerts
+
+Even with a visual dependency graph, it can still be overwhelming to stay on top of the latest security considerations for every dependency a project has. To reduce this overhead, GitHub provides **Dependabot alerts** that watch your dependency graphs for you. 
+
+#### How Dependabot Alerts Work
+
+- 🔍 **Cross-references** target versions with versions on known vulnerability lists
+- 🚨 **Alerts the project** when a risk is discovered
+- 📊 **Uses input** from GitHub Security Advisories for analysis
+
+![Screenshot of Dependabot alerts for vulnerable dependencies](dependabot-alerts.png)
+
+### Automated Dependency Updates with Dependabot
+
+A dependency alert can lead to a project contributor bumping the offending package reference to the recommended version and creating a pull request for validation. Wouldn't it be great if there was a way to automate this effort? Well, good news! **Dependabot does just that**.
+
+#### Dependabot Process
+
+1. 🔍 **Scans** for dependency alerts
+2. 📝 **Creates pull requests** with recommended updates
+3. ✅ **Allows contributors** to validate the update and merge the request
+
+To learn more about Dependabot's flexibility, see [Configuring Dependabot security updates](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates).
+
+## Automated Code Scanning
+
+Similar to how Dependabot scans your repository for dependency alerts, you can use **code scanning** to analyze and find security vulnerabilities and errors in the code in a GitHub repository.
+
+### Benefits of Code Scanning
+
+Code scanning has several benefits:
+
+- 🔍 **Find, triage, and prioritize** fixes for existing problems or potential security vulnerabilities
+- 🛡️ **Help prevent developers** from introducing new security problems into the code
+- 🔧 **Customize scanning** processes to match your repository's needs
+
+### CodeQL Integration
+
+Another advantage to code scanning is its ability to use **CodeQL**. 
+
+#### What CodeQL Offers
+
+- 📊 **Query code as data** - lets you treat your codebase like a database
+- 🔧 **Create custom queries** or use queries maintained by the open-source community
+- 🎯 **Freedom to customize** and maintain how the code within your repository is being scanned
+
+### Enabling Code Scanning
+
+You can enable code-scanning alerts and workflows in the **security tab** of a GitHub repository:
+
+![Screenshot of a list of policies, advisories, and alerts with links to more information](security-policies-list.png)
+
+Learn more about [Code scanning](https://docs.github.com/en/code-security/code-scanning) and [CodeQL](https://codeql.github.com/).
+
+## Secret Scanning
+
+Another automated scanning feature within a GitHub repository is **secret scanning**. Similar to the previous security scanning features, secret scanning looks for known secrets or credentials committed within the repository.
+
+### Purpose of Secret Scanning
+
+Secret scanning is designed to:
+- 🚫 **Prevent fraudulent behavior**
+- 🔒 **Secure the integrity** of any sensitive data
+
+### How Secret Scanning Works
+
+#### Availability
+- ✅ **Public repositories**: Secret scanning occurs **by default**
+- 🔒 **Private repositories**: Can be enabled by repository administrators or organization owners
+
+#### Process Flow
+1. 🔍 **Detection**: Secret scanning detects a set of credentials
+2. 📧 **Notification**: GitHub notifies the service provider who issued the secret
+3. ✅ **Validation**: The service provider validates the credential
+4. 🎯 **Action**: Service provider decides whether to:
+   - Revoke the secret
+   - Issue a new secret
+   - Reach out to you directly
+   
+> **📝 Note**: The action depends on the associated risks to you or the service provider.
+
+Learn more about [Secret scanning for public and private repositories](https://docs.github.com/en/code-security/secret-scanning).
+
+---
+
+## Summary of Automated Security Features
+
+| Feature | Purpose | Availability |
+|---------|---------|--------------|
+| **Dependency Graphs** | Track all project dependencies recursively | Default for all repositories |
+| **Dependabot Alerts** | Alert when vulnerable dependencies detected | Available for all repositories |
+| **Dependabot Updates** | Automatically create PRs for dependency updates | Configurable |
+| **Code Scanning** | Find security vulnerabilities and errors in code | Configurable via Security tab |
+| **Secret Scanning** | Detect committed secrets and credentials | Public repos (default), Private repos (configurable) |
+
+
+
+# 11.4 Exercise - Secure Your Repository's Supply Chain
+
+In this exercise, we secure your repository's supply chain through Dependency graph, Dependency alerts, Dependency security updates, and Dependency version updates.
+
+This GitHub exercise is graded automatically once you attempt a solution to the challenge. The results of your actions and your helpful feedback are provided in real time within the `grade-learner` workflow logs.
+
+## Helpful Tips Before You Begin
+
+Here are some helpful tips before you begin the exercise:
+
+* Read the **Welcome** section of the README file in the exercise's repository to understand more about the exercise.
+* Follow the steps provided in the **How to start this course** section to successfully complete the exercise.
+* To see the results of your exercise, navigate to your cloned repository's **Actions** tab and select the most recent run on the **Grading** workflow.
+* Stuck on what to do? Revisit the content in the last unit or check out the README file in the exercise's repository.
+
+## Important Note
+
+> **Note**
+> 
+> There's a grading script under `.github/workflows/grading.yml`. You don't need to modify this workflow to complete this exercise. **Altering the contents in this workflow can break the exercise's ability to validate your actions, provide feedback, or grade the results.**
+
+This exercise is a challenge based on content covered in this module, and there could be more than one way to successfully complete the exercise. If you get stuck, revisit previous content in this module or navigate to some of the other resources provided.
+
+When you finish the exercise in GitHub, return here for your next unit.
+
+
+# 11.5 Module Assessment
+
+Choose the best response for each question.
+
+## Check your knowledge
+
+### **Question 1**
+**What's the best way to make sure you're integrating the most secure versions of your project dependencies?**
+
+- [ ] Configure your package files to always use the latest versions of dependencies.
+- [ ] Check each project's security details closely before adding it to your dependencies by confirming its version status across multiple advisory sites.
+- [x] **Enable Dependabot for your repository.**
+
+> **✅ Correct Answer**: Dependabot automatically monitors your dependencies for security vulnerabilities and creates pull requests to update to secure versions. This provides automated, continuous monitoring rather than manual checking.
+
+---
+
+### **Question 2**
+**Suppose one of your source projects relies on secrets kept in a folder called `.secrets`. You would like to make sure that the files kept in this folder on development machines aren't inadvertently committed to the repository. Which of these files best helps enforce this policy?**
+
+- [ ] `SECURITY.md`
+- [x] **`.gitignore`**
+- [ ] `CONTRIBUTING.md`
+
+> **✅ Correct Answer**: The `.gitignore` file instructs Git to ignore specified files and folders when committing. Adding `.secrets/` to `.gitignore` would prevent files in that folder from being accidentally committed to the repository.
+
+---
+
+### **Question 3**
+**What does secret scanning do?**
+
+- [x] **Looks for known secrets or credentials committed within the repository.**
+- [ ] Analyzes and finds security vulnerabilities and errors in the code in a GitHub repository.
+- [ ] Secret scanning uses CodeQL to query your code as data.
+
+> **✅ Correct Answer**: Secret scanning specifically looks for known secrets, API keys, passwords, and other credentials that may have been accidentally committed to the repository. The other options describe code scanning (option 2) and CodeQL functionality (option 3).
+
+## Summary
+
+These questions test understanding of:
+1. **Automated Dependency Management**: Dependabot provides the most effective automated solution for keeping dependencies secure
+2. **File Exclusion**: `.gitignore` is the standard mechanism for preventing sensitive files from being committed
+3. **Security Scanning Types**: Understanding the difference between secret scanning (credentials) and code scanning (vulnerabilities)
+
+
+# 11.6 Summary
+
+In this module, we talked about the importance of securing and maintaining a GitHub repository.
+
+## You learned about:
+
+- [x] The importance of securing your repository and shifting left in the development lifecycle
+- [x] Security features and best practices within a GitHub repository
+- [x] Detection of outdated dependencies with security vulnerabilities
+- [x] How to add a `.gitignore` file to a repository
+- [x] Advanced security features such as code scanning and secret scanning
+
+## Next Steps
+
+Now that you're familiar with security best practices, learn to **Automate DevOps processes by using GitHub Apps**.
+
+---
+
+## Learn More
+
+Here are some links to more information on the topics we discussed in this module:
+
+### 🔧 Dependency Management
+- [Viewing and updating Dependabot alerts](https://docs.github.com/en/code-security/dependabot/dependabot-alerts/viewing-and-updating-dependabot-alerts)
+- [Dependabot official site](https://dependabot.com/)
+
+### 🛡️ Security Tools & Policies
+- [Security apps on GitHub Marketplace](https://github.com/marketplace?category=security)
+- [Adding a security policy to your repository](https://docs.github.com/en/code-security/getting-started/adding-a-security-policy-to-your-repository)
+
+### 📁 File Management & Data Protection
+- [Ignoring files](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files)
+- [Removing sensitive data from a repository](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository)
 
 
 
