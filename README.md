@@ -446,14 +446,37 @@ This query is perfect for:
 
 ## Email Nofification
 
+## Azure Monitor Alert - HTTP 400 Errors Description
 
+**Alert Overview:**
+This is a Severity 3 (Sev3) Azure Monitor alert that fired on May 27, 2025 at 8:06:30 AM UTC, indicating HTTP 400 errors detected in a Django web application.
+
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/11_Azure%20Monitor%20Alert%20HTTP400-Alerts%20on%20djangowebapp_01.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/11_Azure%20Monitor%20Alert%20HTTP400-Alerts%20on%20djangowebapp%20_02.png)
 
+**Technical Details:**
+- **Alert Name:** HTTP400-Alerts
+- **Affected Resource:** djangowebapp
+- **Resource Type:** microsoft.operationalinsights/workspaces
+- **Resource Group:** msdocs-django-postgres-tutorial-1
+- **Monitoring Service:** Log Alerts V2
+- **Signal Type:** Log-based alert
 
+**Alert Configuration:**
+- **Monitor Condition:** Fired (alert threshold exceeded)
+- **Description:** HTTP 400 Errors Detected in DjangoWebApp
+- **Alert ID:** 0eefbe32-0b2a-283e-ed86-cc234bc3000e
+- **Alert Rule Location:** Azure portal with specific subscription and resource group path
 
+**Incident Summary:**
+This alert indicates that the Django web application is experiencing HTTP 400 (Bad Request) errors, which typically occur when the server cannot process a request due to client-side issues such as malformed syntax, invalid request message framing, or deceptive request routing. The alert is configured to monitor application logs and trigger when the threshold for 400-level errors is exceeded.
 
-
-
+**Recommended Actions:**
+1. Click "View the alert in Azure Monitor" to access detailed logs
+2. Use "Investigate" button for deeper analysis
+3. Review application logs for specific error patterns
+4. Check recent deployments or configuration changes
+5. Verify client request formats and API endpoints
 
 -------------------------------------------------------------------------------------------------------------------------------------------
 
