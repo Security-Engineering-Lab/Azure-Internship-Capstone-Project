@@ -1822,3 +1822,602 @@ Here are some links to more information on the topics we discussed in this modul
 * [Setting base permissions for an organization](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/setting-base-permissions-for-an-organization)
 * [Roles in an enterprise](https://docs.github.com/en/enterprise-cloud@latest/admin/user-management/managing-users-in-your-enterprise/roles-in-an-enterprise)
 * [Enforcing repository management policies in your enterprise](https://docs.github.com/en/enterprise-cloud@latest/admin/policies/enforcing-policies-for-your-enterprise/enforcing-repository-management-policies-in-your-enterprise)
+
+
+
+## 13 Authenticate and authorize user identities on GitHub
+
+This module provides an overview of the authentication and authorization options available to you in your GitHub organization or GitHub Enterprise.
+
+# 13.1 Introduction
+
+User authentication has traditionally been achieved using a User ID and password. A password is a single-factor form of authentication. The fundamental issue with single-factor authentication is that it's easier for any bad actor with knowledge of the sign-on information to impersonate the valid user. To prevent a breach of security for a user account, GitHub has authentication tools available to promote security best practices. You can even enforce a security policy for all GitHub users within the organization.
+
+Controlling access to your company's data is foundational for a secure GitHub Enterprise. GitHub is committed to helping enterprises on their security journey with authentication methods to allow for more secure account access and a better user experience. In a GitHub Enterprise, most organizations want to require extra levels of authentication for better security. Enterprise System Administrators can enforce authentication and authorization security policies across an organization. These security features allow you to ensure that users are required to sign on securely to access the correct permissions in repositories. These features also include access and tools for auditing user access and activity, identity maintenance, and authentication compliance. As an administrator, you should work with your internal resources to identify what type of authentication and authorization is appropriate. This module provides an overview of the authentication and authorization options available to you in your GitHub organization or GitHub Enterprise.
+
+## Learning goals
+
+By the end of this module, you'll be able to:
+
+* Describe the GitHub authentication and authorization Model.
+* Understand how to manage user access to your GitHub organization through Authorization and Authentication tools.
+* Identify the identity providers and technologies that support secure repository access.
+* Understand the implications of enabling SAML SSO.
+* Identify the authorization and authentication options available, and understand the administrator's role in enforcing a secure access strategy for a GitHub enterprise.
+* Describe how users access private information in a GitHub organization.
+* Evaluate the benefits of enabling Team Synchronization to manage team membership.
+
+## Prerequisites
+
+* Administrative access to your GitHub organization or GitHub Enterprise
+
+
+# 13.2 User identity and access management
+
+Authentication is the gateway to your enterprise's software development ecosystem. Every user's interaction with GitHub begins with identity verification. While individual accounts can rely on usernames and passwords, strong enterprise security mandates two-factor authentication (2FA) or more advanced methods like passkeys and biometric login. Balancing usability with security is key—especially in a fast-paced development environment.
+
+## Modern Authentication in GitHub Enterprise
+
+To ensure a secure and streamlined authentication experience, GitHub supports multiple modern methods that integrate with your identity management systems:
+
+### Passkeys and WebAuthn
+* Passkeys are a passwordless login method, tied to a physical device, and resistant to phishing.
+* WebAuthn supports biometric factors and hardware tokens like YubiKey.
+* These methods significantly reduce credential-based attacks and improve login UX.
+
+### GitHub Mobile for 2FA
+Users can authenticate with GitHub Mobile, which supports push notifications for quick, secure approval—enhancing 2FA without disrupting workflows.
+
+### OAuth and GitHub Apps
+* OAuth Apps use GitHub's OAuth 2.0 flow to authenticate users and grant scoped access to external applications.
+* GitHub Apps authenticate as individual installations with fine-grained permissions and are ideal for CI/CD and automation pipelines.
+
+### Enterprise Managed Users (EMU)
+In GitHub Enterprise Cloud, EMUs ensure that authentication happens strictly through your Identity Provider (IdP). This model:
+
+* Restricts access to enterprise-managed accounts only.
+* Enforces centralized control over identity, credentials, and session policies.
+
+## Organization Management with SAML SSO
+
+One foundational capability for enterprise-grade authentication is SAML Single Sign-On (SSO). SAML links your IdP with GitHub, enabling users to sign in across services using one set of credentials. GitHub uses the IdP to verify user identity before granting access to organization or enterprise resources.
+
+When users log into GitHub, they can see the enterprises they belong to—but access to repository data requires SAML reauthentication via the IdP.
+
+As an Enterprise Admin, your responsibilities include:
+
+* Authorizing access based on role and need-to-know.
+* Monitoring and auditing user activity.
+* Scoping permissions and minimizing surface area for attacks.
+
+Screenshot of an example of admin repository permission list review.
+
+To configure SAML SSO for your organization, integrate your IdP with GitHub. Supported providers include:
+
+* Active Directory Federation Services (AD FS)
+* Microsoft Entra ID
+* Okta
+* OneLogin
+* PingOne
+* Shibboleth
+
+> **Note**
+> 
+> GitHub provides limited support for identity providers that implement the SAML 2.0 standard.
+
+## Enterprise Access and Authorization Controls
+
+Access in GitHub is governed by a robust, multi-layered authorization model:
+
+### Fine-Grained Personal Access Tokens (PATs)
+Unlike classic PATs, fine-grained PATs:
+
+* Restrict access to specific repositories and scopes.
+* Support automatic expiration for reduced risk exposure.
+* Offer enhanced traceability and compliance controls.
+
+### Custom Repository Roles
+Admins can define custom roles that extend beyond the default permission sets. This supports:
+
+* Delegated access tailored to unique workflows.
+* Least-privilege enforcement for sensitive repositories.
+
+### Security Policy Enforcement
+You can enforce global security controls such as:
+
+* Mandatory 2FA for all users.
+* IP allowlists to restrict access to approved networks.
+* Blocking unverified OAuth apps unless explicitly approved.
+
+### Organizational and Enterprise-Level Controls
+* Organization-level controls include default roles, team-based access, and the management of external collaborators.
+* Enterprise-level governance includes:
+  * Centralized SAML enforcement.
+  * IdP-based login restrictions.
+  * Global policy enforcement via GitHub Enterprise Cloud.
+
+## Repository Visibility and Internal Access
+
+When organization members create repositories, they can choose among public, private, or internal visibility options:
+
+* **Public**: Available to anyone on the internet.
+* **Private**: Restricted to selected users.
+* **Internal**: Visible to all members within the enterprise but hidden from external users.
+
+This granularity ensures that source code, documentation, and other assets are only shared with appropriate stakeholders.
+
+
+# 13.3 User authentication
+
+When it comes to user authentication, security should be the number one consideration that comes to mind. Strong security is essential. It seems like every month or so, a company reports a data breach. Credentials are stolen because of inefficient security processes, or simply because of a lack of up-to-date security features within the company. Establishing secure user authentication can be a difficult task if user adoption requires long and frustrating steps to authenticate.
+
+GitHub Enterprise supports two recommended methods for secure user authentication:
+
+* SAML Single Sign-On(SSO)
+* Two-Factor Authentication(2FA)
+
+## SAML SSO Authentication
+
+SAML(Security Assertion Markup Language) SSO integrates GitHub with your organization's identity provider (IdP), allowing centralized access control, and improved compliance. When enabled, GitHub redirects users to the IdP for authentication before granting access to organization resources.
+
+### Enabling and Enforcing SAML SSO
+
+You can configure SAML SSO at either the organization or enterprise level, depending on the scope of enforcement you require.
+
+#### Organization-Level SAML SSO
+* **Setup**: In your org settings under Security, input your IdP's SAML SSO URL and public certificate. Test and save the configuration.
+* **Enforcement**: Select Require SAML SSO authentication to remove noncompliant members automatically.
+* **Use Case**: Ideal for phased rollouts or testing with limited impact.
+
+> **Note**
+> 
+> GitHub removes only organization members who fail to authenticate. Enterprise members remain until they next access the resource.
+
+#### Enterprise-Level SAML SSO
+* **Setup**: In your enterprise account settings, enable SAML SSO similarly to org-level.
+* **Enforcement**: Apply SSO across all organizations in your enterprise.
+* **Benefits**: Ensures unified policies and reduces risk from fragmented configurations.
+
+**Note**: GitHub does not immediately remove noncompliant enterprise members. They are prompted to authenticate upon access.
+
+### Choosing the Right SSO Scope
+
+| Criteria | Org-Level | Enterprise-Level |
+|----------|-----------|------------------|
+| **Scope** | Individual organization | Entire enterprise |
+| **User Removal** | Immediate upon enforcement | Deferred until next access |
+| **Policy Consistency** | Varies by org | Unified across enterprise |
+| **Setup Complexity** | Lower | Higher |
+| **Use Case** | Pilot/test | Broad compliance |
+
+### Step-by-Step: Enabling and Enforcing SAML SSO
+
+| Scope | Steps |
+|-------|-------|
+| **Organization** | 1. Navigate to Your organizations → Settings → Security.<br>2. Enable SAML with your IdP's details.<br>3. Test configuration and save.<br>4. Select Require SAML SSO, then remove noncompliant users. |
+| **Enterprise** | 1. Navigate to Your enterprises → Settings → Security.<br>2. Enable SAML with your IdP's details.<br>3. Test configuration and save.<br>4. Enforce SSO across all orgs and review noncompliant users. |
+
+Screenshot of the setting to require SSO authentication for all members of an organization.
+
+## Two-Factor Authentication (2FA)
+
+2FA adds a second verification step beyond username and password. You can require 2FA for organization members, outside collaborators, and billing managers.
+
+> **Warning**
+> 
+> When you require the use of two-factor authentication for your organization, all accounts that don't use 2FA is removed from the organization and lose access to its repositories. Accounts that are affected include bot accounts.
+
+For more detailed information about 2FA, see Securing your account with two-factor authentication (2FA).
+
+### Enforcing 2FA
+1. Navigate to your org's Security settings.
+2. Enable the checkbox labeled Require two-factor authentication.
+3. Communicate the requirement in advance to prevent loss of access.
+
+Screenshot of the checkbox requiring two-factor authentication for members in the organization.
+
+### 2FA Methods in GitHub
+
+| Method | Description |
+|--------|-------------|
+| **Security Keys** | Most secure method. Physical USB or NFC devices that prevent phishing. Requires prior setup with TOTP(Time-based one-time passwords) or SMS(Short Message Service). |
+| **TOTP Apps** | Recommended. Generates time-based one-time passwords, supports backup, and works offline. |
+| **SMS** | Least secure. Should only be used where TOTP isn't viable. GitHub SMS support varies by region. |
+
+#### Time-based one-time passwords
+Screenshot of the time-based one-time password code.
+
+#### GitHub SMS support
+Screenshot of the SMS code.
+
+> **Note**
+> 
+> Security keys store credentials locally and never expose secrets. GitHub recommends FIDO2/U2F keys.
+
+### Auditing 2FA Compliance
+
+To review who has enabled 2FA:
+
+1. Go to Your organizations → select org → People tab.
+2. Select the 2FA filter.
+3. From here, you can identify noncompliant users and follow up outside of GitHub, typically via email.
+
+Screenshot of the account-security setting.
+
+
+# 13.4 User authorization
+
+After a user successfully authenticates through your identity provider (IdP) using SAML single sign-on (SSO), the next critical step is authorization—granting tools like personal access tokens (PATs), SSH keys, or OAuth apps the ability to access organization resources.
+
+## Automating User Authorization with SAML SSO and SCIM
+
+SAML SSO enables enterprise and organization owners to control access to GitHub resources like repositories, issues, and pull requests. Integrating SCIM (System for Cross-domain Identity Management) enhances this by automating user provisioning and deprovisioning.
+
+Screenshot of the SCIM setting.
+
+With SCIM, new employees added to your IdP are granted access to GitHub automatically, while departing users are removed, reducing manual steps and improving security.
+
+> **Note**
+> 
+> Without SCIM, SAML SSO alone does not support automatic deprovisioning of organization members.
+
+SCIM also revokes stale tokens after a session ends, reducing security risks. Without SCIM, this must be done manually.
+
+## Managing SSH Keys and PATs with SAML SSO
+
+SAML SSO and SCIM work together to reflect identity changes in GitHub. To support this:
+
+* NameID and userName must match between the SAML IdP and SCIM client.
+* Group changes in your IdP trigger SCIM updates in GitHub.
+* Users accessing APIs or Git must use an authorized PAT or SSH key. These are auditable and securely tied to SAML SSO.
+
+Screenshot of the SSH key.
+
+To simplify onboarding, provision users using: https://github.com/orgs/ORGANIZATION/sso/sign_up. Display this link in your IdP dashboard.
+
+When users first authenticate, GitHub links their account and SCIM data to your organization. Admins can later audit or revoke sessions and credentials to automate offboarding.
+
+## SCIM Integration with GitHub
+
+SCIM streamlines identity management in GitHub Enterprise Cloud by supporting both native integrations and custom configurations.
+
+### Supported SCIM Providers
+
+GitHub natively supports:
+
+* Okta
+* Azure AD
+* OneLogin
+* Ping Identity
+* Google Workspace
+
+These integrations ensure reliable configuration and compatibility.
+
+### Custom SCIM Integrations
+
+If your IdP isn't natively supported, use GitHub's SCIM API to build custom integrations.
+
+#### SCIM API Overview
+
+The SCIM 2.0 API allows you to:
+
+* Create, update, and delete users
+* Manage groups
+
+#### Example Request to Provision a User:
+
+```http
+POST /scim/v2/Users
+Content-Type: application/json
+
+{
+  "userName": "jdoe",
+  "name": {
+    "givenName": "John",
+    "familyName": "Doe"
+  },
+  "emails": [
+    {
+      "value": "jdoe@example.com",
+      "primary": true
+    }
+  ]
+}
+```
+
+GitHub processes this request and adds the user to your organization.
+
+#### Getting Started
+
+**For Supported Providers:**
+1. Log into your IdP admin console.
+2. Enable SCIM provisioning.
+3. Provide GitHub's SCIM base URL and bearer token.
+
+Screenshot of SCIM configuration steps in IdP's administrative console.
+
+**For Custom IdPs:**
+1. Use GitHub's SCIM REST API.
+2. Authenticate with a PAT.
+3. Test the integration with sample requests.
+
+#### Key Benefits of SCIM Integration
+
+* **Provisioning**: Automatically create accounts.
+* **Updates**: Synchronize roles and departments.
+* **Deprovisioning**: Remove access promptly upon user exit.
+
+### SCIM vs. Manual User Management
+
+| Aspect | SCIM-Based Management | Manual Management |
+|--------|----------------------|-------------------|
+| **Automation** | Automates provisioning and deprovisioning | Manual intervention required |
+| **Consistency** | Standardized user data across systems | Risk of inconsistencies |
+| **Security** | Timely deactivation of access | Delayed or missed revocations |
+| **Scalability** | Scales with large user bases | Cumbersome at scale |
+| **Compliance** | Helps meet policy and audit requirements | Harder to track and report |
+
+## Connecting Your IdP to GitHub
+
+You can use a supported identity provider or bring your own SAML 2.0 IdP.
+
+### Supported (Paved Path) IdPs:
+* Okta
+* Azure Active Directory
+* Google Workspace
+
+Some advantages of using the supported IdPs are:
+
+* Seamless integration
+* GitHub-supported
+* Lower setup effort
+
+### Bring Your Own IdP:
+
+Bringing your own IdP requires it isSAML 2.0 support. The advantage of this is that it allows for full flexibility.
+
+#### Integration Steps
+
+| Type | Steps |
+|------|-------|
+| **Paved Path:** | 1. Navigate to enterprise security settings.<br>2. Select your IdP.<br>3. Follow setup instructions. |
+| **Custom IdP:** | 1. Go to security settings.<br>2. Choose custom IdP.<br>3. Enter SAML metadata.<br>4. Validate the connection. |
+
+### Comparing IdP Integration Paths
+
+| Feature | Paved Path | Bring Your Own IdP |
+|---------|------------|-------------------|
+| **Setup Process** | ✅ Guided setup | ⚠️ Manual configuration |
+| **Flexibility** | ⚠️ Limited to listed IdPs | ✅ Any SAML 2.0 IdP |
+| **Maintenance** | ✅ GitHub-managed | ⚠️ Organization-managed |
+| **Customization** | ⚠️ Minimal | ✅ Fully customizable |
+| **Support & Updates** | ✅ GitHub-supported | ⚠️ Self-managed |
+
+## Managing Identities and Access
+
+### SAML SSO Configuration
+* Configure your SAML SSO URL.
+* Provide your public certificate.
+* Add IdP metadata.
+
+### Credential Management
+PATs and SSH keys must be explicitly authorized and linked to IdP identities to access organization resources securely.
+
+### Auditing SAML Sessions
+* View active sessions in settings.
+* Revoke individual sessions as needed.
+
+## GitHub Membership Considerations
+
+| Type | Consideration |
+|------|---------------|
+| **GitHub Instance Membership** | - Access to public repositories<br>- Create personal projects<br>- Public profile visibility |
+| **Organization Membership** | - Role-based internal access<br>- Profile visible to org admins<br>- May affect billing |
+| **Multiple Organization Memberships** |  |
+
+
+# 13.5 Team synchronization
+
+If your company uses Microsoft Entra ID or Okta as your identity provider (IdP), you can manage GitHub team membership through team synchronization. When enabled, team sync automatically reflects changes in IdP groups on GitHub—reducing the need for manual updates or custom scripts. This centralized approach simplifies onboarding, permissions management, and access revocation.
+
+| Feature | Description |
+|---------|-------------|
+| **Sync Users** | Keep GitHub Teams aligned with IdP (for example, Active Directory) group membership |
+| **Sync on New Team** | Automatically populate teams at creation |
+| **Custom Team Mapping** | Use syncmap.yml to define custom mappings between team slugs and group names |
+| **Dynamic Config** | Use a settings file to derive sync settings from your directory structure |
+
+## Team Synchronization Use Cases
+
+Team sync is ideal for enterprises looking to streamline membership management within GitHub organizations. Admins can map GitHub teams to IdP groups and manage memberships automatically. This is useful for:
+
+* Onboarding new employees
+* Adjusting access as users move between teams
+* Removing users who leave the organization
+
+⚠️ To use team sync, your IdP admin must enable SAML SSO and SCIM.
+
+## Enterprise Managed Users
+
+If you're using Enterprise Managed Users in GitHub Enterprise Cloud, all members are provisioned through your IdP. Users don't self-manage GitHub accounts and can't access resources outside the enterprise.
+
+With this model, you can:
+
+* Manage organization/team membership directly through your IdP
+* Ensure GitHub users are enterprise-scoped and isolated
+
+For more, see Getting started with GitHub Enterprise Cloud.
+
+## Team Synchronization vs. SCIM for GHES
+
+In GitHub Enterprise Server (GHES), managing user access and team memberships can be achieved through various methods, including team synchronization and System for Cross-domain Identity Management (SCIM). Understanding these methods is essential for effective administration.
+
+### Team Sync in GHES
+
+Team synchronization allows you to link GitHub teams with groups in your Identity Provider (IdP). This integration ensures that any changes in the IdP group—such as adding or removing members—are automatically reflected in the corresponding GitHub team. This approach streamlines team management by centralizing user access control within the IdP.
+
+However, it's important to note that team synchronization isn't a user provisioning service and doesn't invite non-members to join organizations in most cases. Therefore, a user will only be successfully added to a team if they're already an organization member.
+
+Consider the following scenario to understand how team synchronization works in practice:
+
+* When Azure AD group "DevOps Engineers" maps to GitHub team "DevOps"
+* When Alice is added to the IdP group → automatically added to the GitHub team
+* When she leaves the group → automatically removed from the team
+
+> **Note**
+> 
+> Team Sync in GHES doesn't provision accounts. Users must already be GitHub organization members.
+
+#### Team Sync Configuration
+
+1. Enable Security Assertion Markup Language(SAML) Single Sign-On(SSO) and SCIM in your IdP.
+2. Map GitHub teams to IdP groups via GitHub UI or API.
+3. Changes in group membership sync automatically to GitHub.
+
+**Supported IdPs:**
+
+* **Microsoft Entra ID**: Requires permissions for profile reading and directory access.
+* **Okta**: Requires SAML SSO, SCIM, tenant URL, and Single Sign-on for Web Systems(SSWS) token with read-only admin access.
+
+#### Disable Team Sync
+
+To disable:
+
+1. Navigate to Settings > Organization security
+2. Click Disable team synchronization
+
+Screenshot of the organization setting to disable team synchronization.
+
+> **Note**
+> 
+> Disabling sync removes users from teams if they were added via IdP mapping.
+
+### SCIM in GHES
+
+SCIM is an open standard protocol designed to automate the exchange of user identity information between identity domains and IT systems. In the context of GHES, SCIM enables administrators to provision, update, and deprovision user accounts directly through the GitHub API. This means you can create, update, and delete user accounts, and sync group information to map GitHub team memberships.
+
+SCIM is useful for managing user lifecycles at scale, ensuring that user data remains consistent across systems.
+
+Consider the following scenario to understand how SCIM works in practice:
+
+* Okta SCIM integration provisions GitHub users automatically
+* Bob is added to Okta → GitHub account is provisioned
+* Bob changes roles → access and teams update
+* Bob leaves → account is deprovisioned
+
+**Key Benefit**: Full automation for account lifecycle management.
+
+## Team Sync vs. Group SCIM
+
+GitHub supports two primary identity integration approaches:
+
+* **Team Sync**: Focused on syncing group membership to GitHub teams
+* **Group SCIM**: Focused on full lifecycle management of users and groups
+
+### Differences Between Team Sync and Group SCIM
+
+| Feature | Team Sync | Group SCIM |
+|---------|-----------|------------|
+| **Focus** | Team-level mapping | User and group provisioning |
+| **Setup** | Manual group-to-team mapping | Automated via IdP SCIM config |
+| **Automation Level** | Syncs group membership only | Full lifecycle automation |
+| **Ideal Use Case** | GitHub Teams management | Large orgs with high user turnover |
+| **Deprovisioning** | Manual or IdP-group dependent | Fully automated |
+| **Identity Model** | Classic | Managed Users |
+
+### Choosing the Right Approach
+
+The choice between Team Sync and Group SCIM depends on your organization's needs, size, and existing identity management infrastructure:
+
+| Use Case | Recommended Solution |
+|----------|---------------------|
+| Manage repository access by teams | Team Sync |
+| Automate user lifecycle | Group SCIM |
+| Need full IdP-based governance | Group SCIM |
+| GitHub Teams is core to workflow | Team Sync |
+
+## Usage Limits
+
+When using team synchronization, observe these limits:
+
+* Max members per team: 5,000
+* Max members per organization: 10,000
+* Max teams per organization: 1,500
+
+Exceeding these may result in performance issues or sync failures.
+
+# 13.6 Module assessment
+
+## **1.**
+**What type of user authentication is used to verify a user identity against a known identity provider?**
+
+- [ ] Two-factor authentication (2FA)
+- [ ] Time-based One-time Password (TOTP)
+- [x] **SAML Single Sign-on (SAML SSO)**
+- [ ] Short Message Service (SMS)
+
+> **✅ Correct Answer**: SAML SSO integrates GitHub with your organization's identity provider (IdP), allowing centralized access control by verifying user identity against the IdP.
+
+---
+
+## **2.**
+**You're an admin and want to enable team synchronization for your organization. What installation permissions do you need to configure team synchronization for Microsoft Entra ID?**
+
+- [ ] Provide the tenant URL
+- [x] **Read all users' full profiles**
+- [ ] Generate a valid Single Sign-on for Web Systems (SSWS) token
+- [ ] Enable SAML Single Sign-on (SSO)
+
+> **✅ Correct Answer**: For Microsoft Entra ID team synchronization, you need permissions for profile reading and directory access, which includes reading all users' full profiles.
+
+---
+
+## **3.**
+**Where does a user authenticate after enabling SAML Single sign-on?**
+
+- [ ] With a GitHub login
+- [ ] With the organization credentials
+- [x] **With the Identity Provider (IdP)**
+
+> **✅ Correct Answer**: When SAML SSO is enabled, GitHub redirects users to the Identity Provider (IdP) for authentication before granting access to organization resources.
+
+---
+
+## **4.**
+**What two-factor authentication method supports the secure backup of your authentication codes in the cloud?**
+
+- [x] **Time-based One-time Password (TOTP)**
+- [ ] Short Message Service (SMS)
+- [ ] Security Key
+
+> **✅ Correct Answer**: TOTP Apps generate time-based one-time passwords, support backup, and work offline. They can securely backup authentication codes in the cloud, unlike SMS or Security Keys.
+
+
+
+# 13.7 Summary
+
+In this module, you learned about allowing access to your users, and how the authentication systems available for your GitHub organization help keep your sensitive data secure. You also learned about auditing which users and teams have access to the repositories in your organization. Your goal as a GitHub administrator should be to give your users access to your enterprise data with robust security restrictions that are painless to use. Securing who has access to your organization ensures that only the users who legitimately *need* access to your organization's data have it.
+
+You learned:
+
+* How SAML SSO and 2FA are more secure than username/password authentication.
+* Which identity providers are supported by GitHub.
+* How user authorization with SCIM is supported by GitHub.
+* What options users have to identify with two-factor authentication.
+* How team synchronization through your IdP can automate team membership and help keep access to your data secure.
+
+The goal of managing access to your enterprise is to create a strong and secure GitHub development environment for your users. Without these authorization and authentication tools in place, your enterprise could be compromised by bad actors who take advantage of the susceptibility of username and password vulnerabilities to access your data. Use the security features you learned about in this module to build a secure way to authenticate and authorize your users within your organization. These systems of authentication and authorization, along with team synchronization, allow you to ensure organizational security, control user lifecycle management, and automate the user onboarding and off-boarding process with efficiency and security.
+
+## Learn more
+
+Here are some links to more detailed information on the topics we discussed in this module:
+
+* [Managing SAML single sign-on for your organization - GitHub Docs](https://docs.github.com/en/organizations/managing-saml-single-sign-on-for-your-organization)
+* [Viewing and managing a member's SAML access to your organization - GitHub Docs](https://docs.github.com/en/organizations/managing-saml-single-sign-on-for-your-organization/viewing-and-managing-a-members-saml-access-to-your-organization)
+* [Preparing to require two-factor authentication in your organization - GitHub Docs](https://docs.github.com/en/organizations/keeping-your-organization-secure/managing-two-factor-authentication-for-your-organization/preparing-to-require-two-factor-authentication-in-your-organization)
+* [Authorizing a personal access token for use with SAML single sign-on - GitHub Docs](https://docs.github.com/en/enterprise-cloud@latest/authentication/authenticating-with-saml-single-sign-on/authorizing-a-personal-access-token-for-use-with-saml-single-sign-on)
+* [Authorizing an SSH key for use with SAML single sign-on - GitHub Docs](https://docs.github.com/en/enterprise-cloud@latest/authentication/authenticating-with-saml-single-sign-on/authorizing-an-ssh-key-for-use-with-saml-single-sign-on)
+* [Synchronizing a team with an identity provider - GitHub Docs](https://docs.github.com/en/organizations/organizing-members-into-teams/synchronizing-a-team-with-an-identity-provider-group)
+
+
+
