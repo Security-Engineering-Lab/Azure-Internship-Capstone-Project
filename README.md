@@ -381,7 +381,6 @@ Based on the search results, the following is evident:
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/8_AzureMonitor.png)
 ![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/9_AzureMonitor.png)
 
-
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -447,7 +446,8 @@ This query is perfect for:
 
 ## Email Nofification
 
-https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/11_Azure%20Monitor%20Alert%20HTTP400-Alerts%20on%20djangowebapp%20_02.png
+![](https://github.com/Security-Engineering-Lab/Azure-Internship-Capstone-Project/blob/main/images/11_Azure%20Monitor%20Alert%20HTTP400-Alerts%20on%20djangowebapp%20_02.png)
+
 
 
 
