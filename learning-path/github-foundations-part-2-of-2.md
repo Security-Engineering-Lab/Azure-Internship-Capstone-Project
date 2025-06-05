@@ -516,3 +516,341 @@ Finally, you learned how to **communicate effectively with project maintainers**
 - **Alternative contributions:** Supporting projects through GitHub Sponsors
 
 You're now equipped with the knowledge and skills to make meaningful contributions to the open-source ecosystem and become an active member of the GitHub community.
+
+
+# 10 Manage an InnerSource program by using GitHub
+
+Learn to manage a successful InnerSource program on GitHub through effective discoverability, guidance, and maintenance.
+
+
+# 10.1 Introduction
+
+Not long ago, the software-development world offered two sharply distinct models: **open source** and **proprietary**. Open-source software benefited from its trademark openness: anyone is allowed to offer contributions, so many people do. Proprietary software, on the other hand, limits access via a closed system that prizes the privacy of its intellectual property (IP).
+
+Suppose you're a leader at a company that made significant investments in its proprietary software. It doesn't need to be a technology company; businesses of all shapes and sizes build and maintain their own software and other IP to enjoy a competitive edge in their industry. However, you developed a great respect for the patterns used in open source, such as:
+
+- Source-code visibility
+- Project bug awareness  
+- Feature request transparency
+
+You also like the **pull-request model** that simplifies the integration of external contributions. You'd really like to bring those benefits to your development teams, but don't want to open source the company's valuable software. 
+
+What you really need is a hybrid that delivers the advantages of both approaches. **What you need is InnerSource.**
+
+In this module, learn how to manage a successful InnerSource program on GitHub through effective discoverability, guidance, and maintenance.
+
+## Learning Objectives
+
+In this module, you learn how to:
+
+- [ ] Contrast user- versus organization-owned projects
+- [ ] Make recommendations about the number of GitHub organizations you should have
+- [ ] Create discoverable repositories
+- [ ] Create robust repository READMEs
+- [ ] Use issue and pull-request templates
+- [ ] Build transparency into repositories
+- [ ] Measure the success of InnerSource within your organization
+- [ ] Distribute your InnerSource toolkit
+
+## Prerequisites
+
+- A GitHub account
+- The ability to navigate and edit files in GitHub
+- Familiarity with pull requests
+
+
+# 10.2 How to Manage a Successful InnerSource Program
+
+Here, we discuss how you can design an InnerSource program to enjoy the best of open-source patterns within any software development organization.
+
+## What is InnerSource?
+
+Anyone can freely use, modify, and share **open-source software**. Using open-source software, anyone can view, modify, and distribute a project for any purpose with the idea that sharing code leads to better, more reliable software.
+
+**InnerSource** is the practice of applying open-source patterns to projects with a limited audience. For example, a company might establish an InnerSource program that mirrors the structure of a typical open-source project, except that it's only accessible to the employees of that company. In effect, it's an open-source program behind your company's firewall.
+
+## InnerSource Benefits
+
+An InnerSource program can offer numerous benefits beyond what traditional closed-source models provide.
+
+### 1. Encourage Transparency
+Access to the source code of other company projects can help developers be more productive when working on their own projects. They can:
+- See how different teams solve problems similar to the ones they're facing
+- Find code and other assets that they can reuse
+- Access team issues, pull requests, and project plans for better understanding of velocity and direction
+
+### 2. Reduce Friction
+Let's say that a consumer team is dependent on a bug fix or new feature for a project owned by a different team. In an InnerSource program:
+- They have a channel through which they can propose the changes they need
+- If changes can't be merged, the consumer team has the option of forking the project to meet their needs
+
+### 3. Standardize Practices
+Building an InnerSource program is a great opportunity to adopt standard conventions that can be used across every development team. For example:
+- Two teams might prefer different processes for accepting contributions
+- Having them standardize on the way they communicate their different processes makes it much easier for anyone to contribute to either
+
+> 💡 These examples are just a few of the benefits enjoyed by InnerSource programs. To learn more, see [An introduction to InnerSource](https://innersourcecommons.org/learn/introduction/).
+
+## Set up an InnerSource Program on GitHub
+
+### Set Repository Visibility and Permissions
+
+You can configure GitHub repositories with **three levels of visibility**:
+
+| Visibility Level | Description | Use Case |
+|------------------|-------------|----------|
+| **Public** | Visible to everyone | Truly open source projects with access to people inside and outside organization |
+| **Internal** | Only visible to organization members | **InnerSource projects** |
+| **Private** | Only visible to owner and specific teams/individuals | Projects for specific users and groups only |
+
+> ⚠️ Users who don't meet the visibility requirement see "not found" pages when they try to access your repository.
+
+### Permission Levels
+
+Once you establish repository visibility, you can configure permissions on an individual or team basis:
+
+| Permission Level | Recommended For | Access |
+|------------------|-----------------|---------|
+| **Read** | Non-code contributors | View or discuss the project |
+| **Triage** | Contributors | Manage issues and pull requests without write access |
+| **Write** | Active contributors | Push to the project |
+| **Maintain** | Project managers | Manage repository without sensitive/destructive actions |
+| **Admin** | Full access users | Complete access including sensitive and destructive actions |
+
+[Learn more about repository access permissions by level](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/managing-teams-and-people-with-access-to-your-repository).
+
+## Create Discoverable Repositories
+
+As an InnerSource program grows, the number of repositories likely scales up significantly. To make it easier for others to find and work with repositories, follow these best practices:
+
+### Best Practices for Discoverability
+
+- ✅ **Use descriptive repository names** (e.g., `warehouse-api` or `supply-chain-web`)
+- ✅ **Include concise descriptions** (one or two sentences for potential users to understand if the project fits their needs)
+- ✅ **License your repository** so customers know how they can use, change, and distribute the software
+- ✅ **Include a README.md file** (GitHub uses this as the landing page)
+
+### Add a README File
+
+A README file communicates expectations for your project and helps manage contributions. README files can:
+
+- **Articulate the purpose and vision** of the project so potential consumers understand whether it fits their needs
+- **Offer visual aids** such as screenshots or code samples to illustrate the project in action
+- **Include links** to production or demo versions of the app for review
+- **Set expectations** for prerequisites and deployment procedures
+- **Include references** to projects on which you depend (good way to promote others' work)
+- **Use Markdown** to guide readers through properly formatted content
+
+> 📍 **File Location Priority**: GitHub recognizes README files in this order:
+> 1. `.github` directory
+> 2. Repository's root directory  
+> 3. `docs` directory
+
+Check out some [Awesome README examples](https://github.com/matiassingers/awesome-readme).
+
+## Manage Projects on GitHub
+
+As projects gain traction, managing user influx and contributions requires structured approaches.
+
+### Contributing Guidelines
+
+GitHub looks for a `CONTRIBUTING.md` file in the root (or `/docs` or `/.github`) of a repository. Use this file to:
+
+- Explain the contribution policy for the project
+- Let potential contributors know what conventions the project follows
+- Specify where the team is looking for pull requests
+- Detail what information is requested for bug reports
+
+> 💡 If a `CONTRIBUTING.md` exists, GitHub presents a link to it when users create issues or pull requests.
+
+Check out some [Awesome CONTRIBUTING.md examples](https://github.com/mntnr/awesome-contributing).
+
+### Additional Files to Consider
+
+- **`CODEOWNERS` file** - Define individuals or teams responsible for reviewing code modifications
+
+## Create Issue and Pull Request Templates
+
+GitHub supports starter templates for new issues and pull requests:
+
+### Issue Templates
+- **Path**: `.github/ISSUE_TEMPLATE.md`
+- **Benefit**: Users see template content when creating issues, making it easier to provide required details
+
+### Pull Request Templates  
+- **Path**: `.github/PULL_REQUEST_TEMPLATE.md`
+- **Benefit**: Provides consistent structure for pull request descriptions
+
+Check out some [Awesome GitHub issue & pull request templates](https://github.com/stevemao/github-issue-templates).
+
+## Define Workflows
+
+For projects encouraging external contributions, specify workflow details:
+
+### Workflow Components
+- **Branching strategy** - Where and how branches should be used for bugs and features
+- **Pull request process** - How pull requests should be opened
+- **Team guidelines** - Details people outside the repository team should know before pushing code
+
+> 🔄 **Consider GitHub Flow**: If you don't yet have a workflow in mind, consider adopting [GitHub flow](https://guides.github.com/introduction/flow/).
+
+### Release and Deployment Strategy
+Communicate strategies for:
+- Managing releases
+- Deployment procedures
+- How these affect day-to-day branching and merging
+
+## Measuring Program Success
+
+### Traditional vs. InnerSource Metrics
+
+While traditional metrics like "time to market" and "bugs reported" are still applicable, they don't necessarily illustrate InnerSource benefits.
+
+### Recommended Metrics
+
+#### Process Metrics (Not Output)
+- ⏱️ Code review turnaround time
+- 📏 Pull request size  
+- 🔄 Work in progress
+- 📅 Time to open
+
+#### Team-Based Metrics (Not Individual)
+- 👥 Number of unique contributors to a project
+- 🔄 Number of projects reusing code
+- 💬 Number of cross-team @mentions
+
+### Measurement Guidelines
+
+When thinking about measuring InnerSource adoption, consider:
+
+- ✅ **Measure process, not output**
+- ✅ **Measure against targets, not absolutes**  
+- ✅ **Measure teams, not individuals**
+
+> ⚠️ **Important**: Metrics can harm culture and processes if misused. Use them wisely to support, not undermine, your InnerSource goals.
+
+### Success Indicators
+
+Consider these questions to gauge success:
+- Is the repository receiving pull requests from external sources that fix bugs and add features?
+- Are there active participants in discussions around the project and its future?
+- Is the program inspiring InnerSource expansion that drives benefits elsewhere in the organization?
+
+Learn about the successes others enjoyed in these [InnerSource case studies](https://innersourcecommons.org/stories/).
+
+https://githubtraining.github.io/innersource-theory/#/measuring_success
+
+
+
+
+# 10.3  Exercise - InnerSource fundamentals
+
+An integral part of adopting InnerSource within your team is establishing goals, milestones, and then creating a checklist of items that need to be accomplished within your team to meet those goals.
+
+The following guide provides you with a getting started and expanded checklist of items to include in your GitHub repositories for the following categories:
+
+* Team
+* Repository
+* Project
+* Developers
+
+Using the provided checklists, pick one of these categories and compare the list of items to one of your existing repositories. If you're focusing on the repository itself, what files do you need to add or remove to add clarity around its purpose? How do you contribute to the repository or open up issues?
+
+After reading through the guide and identifying ways to improve your own GitHub repositories, return here for:
+
+* A quick knowledge check
+* A summary of what you've learned
+* To earn a badge for completing this module
+
+- https://githubtraining.github.io/innersource-theory/#/measuring_success
+
+
+# 10.4 Module Assessment
+
+Choose the best response for each question.
+
+## Check your knowledge
+
+### **Question 1**
+**Which of the following choices best describes the relationship between *open source* and *InnerSource* programs?**
+
+- [ ] Anyone can offer a contribution to an open source program, whereas InnerSource programs only accept contributions from members of the team that owns the repository.
+- [ ] InnerSource programs are forked from open source programs by organizations that only use and maintain them privately moving forward.
+- [x] **InnerSource programs are fundamentally the same as open source programs, except that their access is limited to people within their organization.**
+
+> **✅ Correct Answer**: InnerSource programs apply open-source patterns and practices within an organization's firewall, maintaining the same collaborative structure but limiting access to organization members only.
+
+---
+
+### **Question 2**
+**Suppose your team has been receiving some low-quality bug reports without enough information to properly diagnose. Which of the following choices is the best way to address the issue?**
+
+- [ ] Use GitHub Script to add a workflow action that automatically rejects any issues with a description fewer than 200 characters long.
+- [x] **Add an `ISSUE_TEMPLATE.md` file that includes fields for reproduction steps, system properties, and instructions for generating and including important logs.**
+- [ ] Add a `CONTRIBUTING.md` file that clearly explains what to include in a bug report. For example, reproduction steps, system properties, and instructions for generating and including important logs.
+
+> **✅ Correct Answer**: Issue templates provide structured forms that guide users to include necessary information when creating bug reports, making it easier for them to provide quality reports from the start.
+
+---
+
+### **Question 3**
+**Suppose your team has been tracking data of all kinds since your InnerSource program went live three months ago. Which of the following metrics indicates your program is a great success?**
+
+- [x] **A dramatic rise in pull requests that address bugs in your software.**
+- [ ] A growing rate of bug reports that are quickly closed because they can't be reproduced.
+- [ ] A steady decline in new issues.
+
+> **✅ Correct Answer**: A rise in pull requests that fix bugs indicates external contributors are actively participating in improving the codebase, which is a key goal of InnerSource programs - enabling collaboration and contributions from across the organization.
+
+## 10.5 Summary
+
+These questions test understanding of:
+1. **InnerSource Definition**: The fundamental concept that InnerSource applies open-source practices within organizational boundaries
+2. **Best Practices**: Using GitHub features like issue templates to improve contribution quality
+3. **Success Metrics**: Recognizing that increased external contributions (pull requests) indicate program success rather than decreased activity
+
+
+# Summary
+
+In this module, you learned how to manage a successful InnerSource program on GitHub through effective discoverability, guidance, and maintenance.
+
+## You learned about:
+
+- [x] Contrasting user owned projects versus organization owned projects
+- [x] Making recommendations about the number of GitHub organizations you should have
+- [x] Creating discoverable repositories
+- [x] Creating robust repository READMEs
+- [x] Using templates for issue requests and pull requests
+- [x] Building transparency into repositories
+- [x] Measuring the success of InnerSource within your organization
+- [x] Distributing your InnerSource toolkit
+
+## Next Steps
+
+Now that you have an InnerSource program together, learn to **Create an open-source program by using GitHub best practices**.
+
+---
+
+## Learn More
+
+Here are some links to more information on the subjects we discussed in this module:
+
+### 📚 Core Resources
+- [An introduction to InnerSource](https://innersourcecommons.org/learn/introduction/)
+- [Types of GitHub accounts](https://docs.github.com/en/get-started/learning-about-github/types-of-github-accounts)
+- [Setting base permissions for an organization](https://docs.github.com/en/organizations/managing-access-to-your-organizations-repositories/setting-base-permissions-for-an-organization)
+- [Managing access to your organization's repositories](https://docs.github.com/en/organizations/managing-access-to-your-organizations-repositories)
+
+### 🔧 Technical Best Practices
+- [Git branching strategy](https://docs.github.com/en/get-started/quickstart/github-flow)
+- [Best practices for protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/defining-the-mergeability-of-pull-requests/about-protected-branches)
+- [GitHub Collaboration Best Practices](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests)
+
+### 📖 Templates and Examples
+- [Awesome README examples](https://github.com/matiassingers/awesome-readme)
+- [Awesome CONTRIBUTING.md examples](https://github.com/mntnr/awesome-contributing)
+- [Awesome GitHub issue & pull request templates](https://github.com/stevemao/github-issue-templates)
+
+
+
+
