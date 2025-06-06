@@ -2539,3 +2539,126 @@ Screenshot of a commit change with a description box and the drop-down menu of t
 Next, you complete an exercise that takes what you reviewed and applies it to a real-life example.
 
 
+# 14.3 Exercise - Reviewing pull requests
+
+This exercise checks your knowledge on using pull requests to request, review, and incorporate changes to your source repository.
+
+## Getting started
+
+Select the *Start the exercise on GitHub* button to navigate to a public GitHub template repository that prompts you to complete a series of small challenges. Before you can begin the exercise, complete the following tasks:
+
+* Select the *Start course* button or the *Use this template* feature within the template repository. This prompts you to create a new repository. We recommend creating a public repository since private repositories use Actions minutes. After you make your own repository from the template, wait about 20 seconds and refresh.
+* Follow the instructions in the repository's *README* file to understand how the exercise works, its learning objectives, and how to successfully complete the exercise.
+
+After you finish the exercise in GitHub, return here for:
+* A quick knowledge check
+* A summary of what you've learned
+* To earn a badge for completing this module
+
+**Note**
+
+You don't need to modify any of the workflow files to complete this exercise. **Altering the contents in this workflow can break the exercise's ability to validate your actions, provide feedback, or grade the results**.
+
+https://github.com/skills/review-pull-requests
+
+
+# 14.4 Module assessment
+
+Choose the best response for each question.
+
+AI-generated content The question and answer choices in this module assessment were created with AI.
+
+**Provide feedback**
+
+## 1. Why is it important to have separate branches for different features in a project?
+
+- [ ] To ensure each branch is automatically merged upon completion.
+- [x] **To allow simultaneous development without interfering with the main codebase.** ✅
+- [ ] To limit the number of contributors on the main branch.
+
+**Explanation:** Separate branches allow multiple developers to work on different features simultaneously without interfering with each other's work or the stable main codebase. This enables parallel development and reduces conflicts.
+
+## 2. In GitHub, what is the role of a pull request in the development workflow?
+
+- [x] **To facilitate code review and discussion before merging changes into the base branch.** ✅
+- [ ] To permanently lock the feature branch to prevent further changes.
+- [ ] To automatically merge changes from the feature branch to the base branch without review.
+
+**Explanation:** Pull requests are designed to facilitate code review, discussion, and collaboration before changes are merged into the base branch. They provide a structured way to review code quality, discuss changes, and ensure standards are met.
+
+## 3. When initiating a pull request, what is the 'compare branch' typically used for?
+
+- [ ] It is a backup branch for the main branch.
+- [ ] It is the branch where changes are merged automatically.
+- [x] **It contains the specific changes made by the developer.** ✅
+
+**Explanation:** The compare branch (or source branch) contains the specific changes that the developer wants to merge into the base branch. It's the branch with the new features or fixes that are being proposed for integration.
+
+## 4. If a pull request is marked as 'Closed' in GitHub, what does this status signify?
+
+- [ ] The pull request is open and pending review.
+- [x] **The pull request was not merged into the base branch.** ✅
+- [ ] The pull request has been successfully merged into the base branch.
+
+**Explanation:** A "Closed" status means the pull request was closed without merging the changes into the base branch. If a pull request is successfully merged, it shows as "Merged" status, not "Closed."
+
+## 5. Your organization uses GitHub for managing code changes. A developer has submitted a pull request but realizes the changes are no longer needed. What is the most appropriate action to handle this situation?
+
+- [ ] Merge the pull request and revert the changes later.
+- [x] **Close the pull request without merging it.** ✅
+- [ ] Convert the pull request into a draft status.
+
+**Explanation:** If changes are no longer needed, the most appropriate action is to close the pull request without merging it. This avoids introducing unnecessary code into the codebase and keeps the project history clean.
+
+## 6. In a collaborative coding environment, why is it important to review pull request statuses before merging?
+
+- [x] **To ensure code quality and compatibility before integration.** ✅
+- [ ] To automatically reject any changes from external contributors.
+- [ ] To lock the repository for maintenance updates.
+
+**Explanation:** Reviewing pull request statuses helps ensure code quality, compatibility, and that all required checks (tests, reviews, etc.) have passed before integrating changes into the main codebase.
+
+## 7. Which pull request status indicates that the proposed changes cannot be merged until further actions are taken?
+
+- [ ] Open pull request
+- [ ] Merged pull request
+- [x] **Draft pull request** ✅
+
+**Explanation:** A draft pull request indicates that the changes are still work-in-progress and cannot be merged until the author marks it as "Ready for review." This status prevents accidental merging of incomplete work.
+
+## 8. You've completed work on a feature branch and want to propose these changes to be merged into the main branch. What steps should you take in GitHub?
+
+- [ ] Directly merge the feature branch into the main branch without creating a pull request.
+- [x] **Create a pull request from the feature branch to the main branch and ensure it is reviewed before merging.** ✅
+- [ ] Delete the feature branch after pushing changes to the main branch.
+
+**Explanation:** The proper workflow is to create a pull request from the feature branch to the main branch, allowing for code review, discussion, and quality checks before merging. This follows best practices for collaborative development.
+
+## 9. When merging a pull request, which option helps maintain a linear project history without creating a merge commit?
+
+- [ ] Merge pull request
+- [x] **Squash and merge** ✅
+- [ ] Rebase and merge
+
+**Explanation:** "Squash and merge" combines all commits from the feature branch into a single commit and adds it to the base branch, maintaining a linear history without creating a merge commit. This creates a cleaner, more readable project history.
+
+
+# 14.5 Summary
+
+In this module, you learned how to manage changes to your repository source by using pull requests.
+
+You learned about:
+* Reviewing branches and their importance to pull requests.
+* Defining what a pull request is.
+* Learning how to create a pull request.
+* Understanding the different pull request statuses.
+* Merging a pull request to a base branch.
+
+Now that you're familiar with merging commits using pull requests, learn to Settle competing commits by using merge conflict resolution on GitHub.
+
+**Learn more**
+* Proposing changes to your work with pull requests
+* Reviewing changes in pull requests
+* Incorporating changes from a pull request
+* About code owners
+
