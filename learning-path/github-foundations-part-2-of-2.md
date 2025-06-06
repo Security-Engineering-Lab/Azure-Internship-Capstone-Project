@@ -2859,3 +2859,315 @@ Here are some links to more information on the topics we discussed in this modul
 * Viewing and understanding files
 * Autolinked references and URLs
 
+# 16  Using GitHub Copilot with Python
+
+GitHub Copilot is an AI pair programmer that offers autocomplete-style suggestions as you code in Python.
+
+# 16.1 Introduction
+
+GitHub Copilot is an AI coding partner that provides autocomplete suggestions while you code. You get suggestions from Copilot by typing code or describing it in natural language.
+
+Copilot analyses your file and related files, offering suggestions in your text editor. It uses OpenAI Codex, a new AI system developed by OpenAI, to help derive context from written code and comments, and then suggests new lines or entire functions.
+
+GitHub Codespaces is a hosted developer environment operating in the cloud that can be run with Visual Studio Code. You can customize the development experience for any development project on GitHub, preinstalling dependencies, libraries, and even Visual Studio Code extensions and settings.
+
+**Scenario: Improving a project**
+
+As a developer, you want to be more productive when you're typing code for new projects and existing ones. For this task, you want to find out if an AI assistant is what you need to improve your developer workflows in code writing, documentation, testing, and more.
+
+In this module, you learn how you can use GitHub Copilot to modify a project by using a prompt to customize a Python API. You also learn how to use live suggestions after typing initial code.
+
+By the conclusion of this module, you have:
+* Configured a GitHub repository in Codespaces and installed the GitHub Copilot extension.
+* Crafted prompts to generate suggestions from GitHub Copilot.
+* Learned how to apply GitHub Copilot to improve your Python projects.
+
+**What is the main objective?**
+
+After successfully finishing this module, you're capable of using a prompt to customize a Python project with GitHub Copilot in GitHub Codespaces.
+
+**Prerequisites**
+
+* Basic understanding of Python and text editors.
+* Basic comprehension of Git and GitHub Fundamentals. Particularly, running basic `git` commands like `git add` and `git push`.
+* A GitHub account with an active subscription for GitHub Copilot is required for either your personal GitHub account or a GitHub account managed by an organization or enterprise. For learning, the Copilot Free option with usage limits should be sufficient.
+
+# 16.2 What is GitHub Copilot?
+
+Often, when you write code, you need to consult official documentation or other web pages to remember syntax or how to solve a problem. You can also spend hours trying to resolve a problem when the code isn't working. Additionally, you also spend time writing tests and documentation. All these tasks are time consuming. To be more efficient, you could use code snippets or rely on tooling in your integrated development environment (IDE). But is there a better way?
+
+## How does it work?
+
+GitHub Copilot is an AI assistant that you use from within your IDE that's capable of generating code and much more. GitHub Copilot uses *prompts*. A prompt is natural language text that you type. Copilot uses the text to provide suggestions based on what you type.
+
+A prompt can look like the following example:
+
+```python
+# Create a web API using FastAPI with a route to products.
+```
+
+Copilot then uses the prompt to generate a response that you can choose to accept or reject. A response to the prompt might look like the following code:
+
+```python
+from fastapi import FastAPI
+app = FastAPI()
+
+@app.get("/products")
+def read_products():
+    return []
+```
+
+## How it recognizes prompts
+
+Copilot can tell that something is a prompt or an instruction if you:
+
+- Type it as a comment in a code file with a file ending like `.py` or `.js`.
+- Type text in a markdown file and wait a few seconds for Copilot to return a response.
+
+## Accepting suggestions
+
+What you get back from Copilot is a *suggestion*, or text that shows itself as gray code, if you use black as your text color. To accept the suggestion, you need to press the **Tab** key.
+
+Copilot might suggest more than one thing. In this case, you can cycle between suggestions by using **Ctrl + Enter**, and select the most appropriate one.
+
+
+# 16.3 Exercise - Set up GitHub Copilot to work with Visual Studio Code
+
+In this exercise, we create a new repository using the GitHub template for the Python personal portfolio frontend web application.
+
+## How to set up GitHub Copilot
+
+To use GitHub Copilot, you need to complete the following steps:
+
+### 1. GitHub Account
+- Create a GitHub account. Since Copilot is a GitHub service, you need a GitHub account to use it. If you don't have an account, visit the GitHub webpage to create one for free.
+
+### 2. Sign up and enable GitHub Copilot
+- You can set up a GitHub Copilot Free account or sign up for a subscription to GitHub Copilot Pro trial with a one-time 30-day trial. For learning purposes, the Copilot Free option with usage limits should be sufficient.
+- It's important to be aware of the GitHub Copilot free trial conditions: if you choose the free trial offer for GitHub Copilot, a form of payment is requested at sign-up. Charges aren't applied until the trial is over, unless you cancel before the conclusion of the 30-day period.
+
+> **💡 Tip**
+> 
+> GitHub Copilot offers a free tier with **2,000 code autocompletes and 50 chat messages per month**. To get started, open Visual Studio Code, click on the GitHub Copilot icon, and then click "Sign in to Use GitHub Copilot for Free". Log in to your GitHub account in the window that will open in the browser. **Learn more**. Educators, Students and select open-source maintainers can receive Copilot Pro for free, learn how at: **https://aka.ms/Copilot4Students**.
+
+### 3. Install the Extension
+- GitHub Copilot is available as an extension for major IDEs, including Visual Studio, Visual Studio Code, JetBrains IDEs, VIM, and XCode.
+- To install, search for "GitHub Copilot" in your IDE's extension marketplace and follow the installation instructions. For example, in the VS Code marketplace, you will find GitHub Copilot, GitHub Copilot Chat, and GitHub Copilot for Azure as options to install.
+
+## Environment setup
+
+First you need to launch the Codespaces environment, which comes preconfigured with the GitHub Copilot extension.
+
+1. Open the Codespace with the preconfigured environment in your browser.
+2. On the **Create codespace** page, review the codespace configuration settings, then select **Create new codespace**.
+3. Wait for the codespace to start. This startup process can take a few minutes.
+4. The remaining exercises in this project take place in the context of this development container.
+
+> **⚠️ Important**
+> 
+> All GitHub accounts can use Codespaces for up to 60 hours free each month with 2 core instances. For more information, see **GitHub Codespaces monthly included storage and core hours**.
+
+## Python Web API
+
+When complete, Codespaces loads with a terminal section at the bottom. Codespaces installs all the required extensions in your container. Once the package installs are completed, Codespaces executes the `uvicorn` command to start your web application running within your Codespace.
+
+When the web application successfully starts, a message in the terminal shows that the server is running on port 8000 within your Codespace.
+
+## Testing the API
+
+In the **Simple Browser** tab of your Codespace, on the **Containerized Python API** page, select the **Try it out** button. A **FastAPI** page opens in the **Simple Browser** tab that allows you to interact with the API by sending a request using the self-documented page.
+
+To test the API, select the **POST** button and then the **Try it Out** button. Scroll down the tab and select **Execute**. If you scroll down the tab further, you can see the response to your sample request.
+
+
+# 16.4 Use GitHub Copilot with Python
+
+In previous units, we showed you how to set up Copilot and mentioned how it can make you faster as a developer starting to write code.
+
+In this unit, we discuss how Copilot can help you with existing projects and with more complicated tasks.
+
+## Developing with GitHub Copilot
+
+Often when we build out projects, we need to continuously ensure our code is fresh and updated. Additionally, we might need to fix any bugs that come up or add new features to improve functionality and usability. Let's explore some ways to make updates with GitHub Copilot and GitHub Copilot Chat, an interactive chat interface that lets you ask and receive answers to code-related questions.
+
+## Prompt engineering
+
+GitHub Copilot can suggest code as you enter it, but you can also create useful suggestions by building prompts. A prompt, which is our input, is a collection of instructions or guidelines that help generate code. A prompt is useful to generate specific responses from Copilot. The prompt might be a comment or input when using GitHub Copilot Chat that steers Copilot to generate code on your behalf or writing code that Copilot autocompletes.
+
+The quality of output from Copilot depends on how well you craft your prompt. Designing an effective prompt is crucial to ensuring you achieve your desired outcome.
+
+For example, consider the following prompt:
+
+```python
+# Create an API endpoint
+```
+
+The prompt is ambiguous and vague, so the result from GitHub Copilot might not be what you need. It could, for example, suggest code that uses a framework that you don't know, or an endpoint that requires data that you don't recognize.
+
+Now consider this prompt:
+
+```python
+# Create an API endpoint using the FastAPI framework that accepts a JSON payload in a POST request
+```
+
+The prompt is specific, clear, and allows GitHub Copilot to understand the goal and scope of the task. You can provide context and examples to Copilot using comments or code, but you can also use the chat option of GitHub Copilot Chat to enhance your prompt. Having a good prompt ensures that the model generates a high-quality output.
+
+## Best practices using GitHub Copilot
+
+Copilot supercharges your productivity but requires some good practices to ensure quality. Some best practices when using Copilot are:
+
+Keep your prompts simple then add more elaborate components as you keep going. For example:
+
+```text
+create an HTML form with a text field and button
+```
+
+Next, elaborate more on the prompt to get more specific suggestions:
+
+```text
+Add an event listen to the button to send a POST request to /generate endpoint and display response in a div with id "result"
+```
+
+Cycle between suggestions. You can do this using `Ctrl+Enter` (or `Cmd+Enter` on a Mac). You get various suggestions from Copilot, and you can pick the best output. Optionally, when using GitHub Copilot Chat, you can use the chat input to add your prompt and interact with the output.
+
+If you're not getting the results you want, then you can reword the prompt or start writing code for Copilot to autocomplete.
+
+**Note**
+
+GitHub Copilot uses open files in your text editor as additional context. This is helpful because it provides useful information in addition to the prompt or code you may be writing. If you need GitHub Copilot to provide suggestions based on other files you can open those or use `@workspace` with your prompt when using GitHub Copilot Chat.
+
+
+# 16.5 Exercise - Update a Python web API with GitHub Copilot
+
+**Completed** • **100 XP** • **5 minutes**
+
+Let's explore how you can modify a Python repository using code suggestions from GitHub Copilot to create an interactive HTML form and an Application Programming Interface (API) endpoint. By working with this repository, you quickly get hands-on with a Python web app that serves an HTTP API that generates a pseudo-random token, commonly used in identification routines.
+
+## What is an API?
+
+An API acts as the intermediary that allows different applications to communicate with each other. For example, a weather website can either share historical data or provide forecast functionality through its API. Using the API, you can embed the data into your website or create an application sharing weather data with other features.
+
+## Extend the Web API
+
+The API already has a single endpoint to generate a token. Let's update the API by adding a new endpoint that accepts text and returns a list of tokens.
+
+> **📝 Note**
+> 
+> For this exercise, use the **Codespace with the preconfigured environment** in your browser.
+
+### Step 1: Add a Pydantic model
+
+Go to the `main.py` file, and add a comment so that GitHub Copilot can generate a `Pydantic` model for you. The generated model should look like this example:
+
+```python
+class Text(BaseModel):
+    text: str
+```
+
+### Step 2: Generate a new endpoint
+
+Next, generate a new endpoint with GitHub Copilot by adding the comment:
+
+```python
+# Create a FastAPI endpoint that accepts a POST request with a JSON body containing a single field called "text" and returns a checksum of the text
+```
+
+### Step 3: Add necessary imports
+
+The generated code can cause the application to crash if the `base64` and `os` modules aren't imported. Use GitHub Copilot Chat to ask Copilot to help you add the missing imports.
+
+Alternatively, add the following lines to the top of the file:
+
+```python
+import base64
+import os
+```
+
+Finally, verify the new endpoint is working. Try it out by going to the `/docs` endpoint and confirming that the endpoint shows up.
+
+## Conclusion
+
+Congratulations, through the exercise, you not only used Copilot to generate code, but you also did it in an interactive and fun way! You can use GitHub Copilot to generate code, write documentation, test your applications, and more.
+
+When you finish the exercise in GitHub, return here for:
+* A quick knowledge check
+* A summary of what you've learned
+* A badge for completing this module
+
+
+# 16.6 Module assessment
+
+## Check your knowledge
+
+### 1. How does GitHub Copilot work?
+
+- [x] **GitHub Copilot uses prompts and natural language text that you type to provide coding suggestions.** ✅
+- [ ] GitHub Copilot uses lights, that you type, and it provides suggestions based on what you type.
+- [ ] GitHub Copilot uses radio language, that you type, and it provides suggestions based on what you type.
+
+**Explanation:** GitHub Copilot works by analyzing prompts and natural language text that you type (usually as comments in code files) to generate relevant coding suggestions based on the context and your input.
+
+### 2. What are some GitHub Copilot Free features?
+
+- [ ] It's a free unrestrticted AI tool that works independent of code editors.
+- [x] **It provides several suggestions and chats per month directly in your IDE and on github.com.** ✅
+- [ ] An option to enable slower responses, preservering your Copilot Pro quota.
+
+**Explanation:** GitHub Copilot Free provides a limited number of code autocompletes (2,000) and chat messages (50) per month, working directly within your IDE and on GitHub.com. It's not unlimited and requires integration with supported code editors.
+
+### 3. How can you accept GitHub Copilot's suggestions?
+
+- [x] **Press the Tab key.** ✅
+- [ ] Press the F1 key.
+- [ ] Press the F4 key.
+
+**Explanation:** To accept GitHub Copilot's suggestions, you press the Tab key. The suggestions appear as gray text (ghost text) in your editor, and pressing Tab accepts and inserts the suggested code.
+
+### 4. Identify which statement is valid and select the correct answer:
+
+- [ ] A prompt, which is our output, is a collection of songs that tells our copilot what to generate.
+- [x] **A prompt, which is our input, is a collection of instructions or guidelines that tell our copilot what to generate.** ✅
+- [ ] A prompt, which is our document, is a collection of laptops that tells our Copilot what to generate.
+
+**Explanation:** A prompt is the input you provide to GitHub Copilot - it's a collection of instructions or guidelines (usually written as natural language comments) that tell Copilot what kind of code to generate.
+
+### 5. What does the quality of the output from GitHub Copilot depend on?
+
+- [ ] Your code editor.
+- [ ] How well your extensions were installed.
+- [x] **How well you crafted your prompt.** ✅
+
+**Explanation:** The quality of GitHub Copilot's output directly depends on how well you craft your prompt. Clear, specific, and detailed prompts lead to better, more relevant code suggestions, while vague or ambiguous prompts may result in less useful output.
+
+
+# 16.7 Summary
+
+In this module, we looked at how GitHub Codespaces can significantly improve the software development lifecycle, offering features that range from creating a repository from a GitHub template to adding animations with live suggestions. GitHub Codespaces allows you to customize your coding experience and GitHub Copilot guides you in each step of the way.
+
+## What you've learned
+
+After finishing this module, you should be able to:
+
+- Configure a GitHub repository in Codespaces and install the GitHub Copilot extension
+- Engineer prompts for your project that follow best practices to generate suggestions from GitHub Copilot
+- Use GitHub Copilot Chat to ask and receive coding-related questions
+
+## Delete your Codespaces resources
+
+To avoid consuming all of your monthly GitHub Codespaces time, it's important to delete your resources after you upload your changes to your repository.
+
+Use the following steps to delete your Codespace instance:
+
+1. Go to [GitHub Codespaces](https://github.com/codespaces).
+2. Find your Codespace instance in the list, and select the **...** menu to display your options.
+3. Select **Delete** to remove your Codespace instance.
+
+> **⚠️ Note**
+> 
+> If you don't commit your changes to your repository, you will lose all your work. Therefore, it's important to commit and push your changes before deleting your Codespace instance.
+
+## References
+
+- [What is GitHub Copilot?](https://docs.github.com/en/copilot/overview-of-github-copilot/about-github-copilot-for-individuals)
+- [Introduction to GitHub Copilot](https://docs.github.com/en/copilot/quickstart)
+- [Code with GitHub Codespaces](https://docs.github.com/en/codespaces)
