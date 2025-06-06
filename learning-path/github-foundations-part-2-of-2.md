@@ -2662,3 +2662,200 @@ Now that you're familiar with merging commits using pull requests, learn to Sett
 * Incorporating changes from a pull request
 * About code owners
 
+
+
+# 15 Search and organize repository history by using GitHub
+
+Learn to search and organize repository history by using filters, blame, and cross-linking on GitHub.
+
+# 15.1 Introduction
+
+GitHub projects support virtually unlimited scale. The upside of this scale is that your projects can grow to include countless files, commits, issues, pull requests, and more. The downside is, well, the same.
+
+Suppose you're a developer working on a rapidly growing project. As more contributors come on board, they're able to add features and fix bugs at an incredible rate. However, every one of those changes likely includes a lot of contextual information buried in issues, discussions, commits, and pull requests. While that information seems fresh in everyone's mind at the time, the risk of losing that context as time passes could cost you some significant productivity down the road. What happens when a bug is reported that traces back to work that hasn't been touched for more than a year? Fortunately, GitHub offers a few ways to help you quickly ramp up for any task.
+
+In this module, you'll learn how to search and organize repository history by using filters, blame, and cross-linking on GitHub.
+
+**Learning objectives**
+
+In this module, you'll:
+* Find relevant issues and pull requests.
+* Search history to find context.
+* Make connections within GitHub to help others find things.
+
+**Prerequisites**
+
+* A GitHub account
+* The ability to navigate and edit files in GitHub
+
+
+# 15.2 How to search and organize repository history by using GitHub
+
+Here, we'll discuss how you can use filters, blame, and cross-linking to search and organize repository history.
+
+Put yourself in the position of a developer who has just joined a large project. Someone just posted a new issue reporting a bug related to the web app's sidebar, and you've been assigned to fix it. You've already read through the report a few times and understand the problem being described, so now you need to figure out how to get started with the fix.
+
+As a new team member, you're not yet familiar with the codebase. You also haven't been part of the planning discussions, code reviews, or anything else that would provide you with the context you need to start implementation. You'll first need to acquire that background knowledge to best determine the right fix.
+
+## Searching GitHub
+
+Although you weren't around for the events that led to the sidebar's implementation, many of those events live on in the project's history. Searching the project's repository for "sidebar" will give you a starting point.
+
+There are two search methods available on GitHub: the global search at the top of the page and the scoped search available on certain repository tabs. They support the same syntax and function in the same way, but with some key differences.
+
+### Global search
+
+The global search lets you use the complete search syntax to search across all of GitHub.
+
+A screenshot of a search across GitHub.
+
+The search results are comprehensive and include everything from code to issues to the Marketplace (and even users). This is the best way to find mentions of key terms across multiple result types and repositories.
+
+A screenshot of global search results.
+
+> **📝 Note**
+> 
+> The filter clause is:pr filters out issues returned from the issues/pull requests store. Some filter clauses, such as is:pr, are only supported by certain search providers and ignored by others. For example, the code-search provider doesn't support that clause, so it will ignore it and return the same code results either way.
+
+In our scenario, using the global search scoped to the current repository is a good way to find code and commits that mention the term "sidebar". You'll also likely get hits for issues and pull requests, although they're not as easy to filter further in the global search results view.
+
+To craft a complex global search, try the advanced search.
+
+### Context search
+
+Context searches are available on certain tabs, such as Issues and Pull requests. These searches are scoped into the current repository and only return results of that type. The benefit to this scoping is that it allows the user interface to expose known type-specific filters such as authors, labels, projects, and more.
+
+Screenshot of a context search within a repository.
+
+Using the context search is the preferred option when you're looking for something in the current repository. In our scenario, this is a good way to find search results mentioning "sidebar," which you could then easily refine using the filter dropdowns.
+
+## Using search filters
+
+There are an infinite number of ways to search using the complete search syntax. However, most searches only make use of a few common filters. While these are often available from context search dropdowns, it's sometimes more convenient to type them in directly.
+
+Here are some example filter queries:
+
+| Query | Explanation |
+|-------|-------------|
+| `is:open is:issue assignee:@me` | Open issues assigned to the current user (@me) |
+| `is:closed is:pr author:contoso` | Closed pull requests created by @contoso |
+| `is:pr sidebar in:comments` | Pull requests where "sidebar" is mentioned in the comments |
+| `is:open is:issue label:bug -linked:pr` | Open issues labeled as bugs that do not have a linked pull request |
+
+Learn more about Understanding the search syntax
+
+## What is git blame?
+
+Despite its ominous name, git blame is a command that displays the commit history for a file. It makes it easy for you to see who made what changes and when. This makes it much easier to track down other people who have worked on a file in order to seek out their input or participation.
+
+> **📝 Note**
+> 
+> Some Git systems alias git praise onto git blame to avoid the implication of judgment.
+
+### Blame in GitHub
+
+GitHub extends the basic git blame functionality with a more robust user interface.
+
+A screenshot of GitHub blame.
+
+In our scenario, there are a few ways you might get to this view. You might've found some sidebar code from the global search and selected the Blame option to see who worked on it last, or maybe you found a pull request and tracked that back to the last commit that seems related to the bug description. However you got here, the blame view is an effective way to locate a subject matter expert for the task at hand.
+
+## Cross-linking issues, commits, and more
+
+Part of what makes GitHub great for collaborative software projects is its support for linking disparate pieces of information together. Some of this happens automatically, such as when you create a pull request from a series of commits on a branch. Other times, you can use the interface to manually link pull requests or projects to issues using the dropdown options.
+
+### Autolinked references
+
+To make it even easier to cross-link different items throughout your project, GitHub offers a shorthand syntax. For example, if you leave a comment like Duplicate of #8, GitHub will recognize that #8 is an issue and create the appropriate link for you.
+
+Screenshot of an autolinked issue.
+
+GitHub also links commits for you if you paste in the first seven or more characters of its ID.
+
+Screenshot of an autolinked commit.
+
+In our scenario, these links could prove very valuable for ramping up if someone thought ahead to leave the context. For example, the sidebar's current state might have had some known issues related to a JavaScript dependency. If the issue with that dependency was discussed in another issue that didn't explicitly mention "sidebar," then it would be difficult to find. However, if someone had thought ahead to link the issue in the discussion, then it could save you a lot of time now. Keep that in mind the next time you're documenting issues and pull requests.
+
+Learn more about Autolinked references and URLs.
+
+### Looping in users with @mention
+
+Besides linking issues and commits, it's often helpful to associate other people with discussions. The easiest way to do this is by using an @mention. This kind of mention notifies the mentioned user so that they can participate in the discussion. It's also a good way to identify people associated with issues long after they have been closed.
+
+Screenshot of an @ mention.
+
+
+
+# 15.3 Exercise - Connect the dots in a GitHub repository
+
+This exercise checks your knowledge on the ability to search and organize your repository using GitHub. In this exercise, you'll build a repository with existing commits, duplicated issues, and fix a content defect.
+
+## Getting started
+
+When you select the following **Start the exercise on GitHub** button, you'll be directed to a public GitHub template repository that will prompt you to complete a series of small challenges. Before you can begin the exercise, complete these tasks:
+
+* Select the **Start course** button or the **Use this template** feature within the template repository. This prompts you to create a new repository. We recommend creating a public repository, as private repositories will use Actions minutes. After you make your own repository from the template, wait about 20 seconds and refresh.
+* Follow the instructions in the repository's README to understand how the exercise works, its learning objectives, and how to successfully complete the exercise.
+
+When you've finished the exercise in GitHub, return here for:
+* A quick knowledge check
+* A summary of what you've learned
+* To earn a badge for completing this module
+
+**Note**
+
+You don't need to modify any of the workflow files to complete this exercise. **Altering the contents in this workflow can break the exercise's ability to validate your actions, provide feedback, or grade the results**.
+
+https://github.com/skills/connect-the-dots
+
+# 15.4 Module assessment
+
+Choose the best response for each question.
+
+## Check your knowledge
+
+### 1. How does GitHub's top-level search bar differ from the search options available on repository tabs?
+
+- [ ] Other than being located in different parts of the user interface, they're otherwise the same.
+- [ ] They support different filter syntax options.
+- [x] **The top-level search bar supports searching everything across all of GitHub, whereas the repository tab searches are scoped to cover specific types in the current repository.** ✅
+
+**Explanation:** The top-level (global) search allows you to search across all of GitHub including code, issues, marketplace, and users, while repository tab searches (context searches) are scoped to the current repository and return only specific result types like issues or pull requests for that repository.
+
+### 2. What does `git blame` do?
+
+- [ ] It creates a bug assigned to the last person who committed changes to the specified file.
+- [x] **It displays the commit history of the file.** ✅
+- [ ] It reverts the effects of a `git praise` command.
+
+**Explanation:** Despite its name, `git blame` is a command that displays the commit history for a file, showing who made what changes and when. This makes it easier to track down people who have worked on a file to seek their input or participation.
+
+### 3. Suppose a bug issue is reported on your project, and you know which pull request introduced the problem. Which of the following options is not a cross-linking best practice?
+
+- [x] **Don't create cross-links when the root cause of the issue is already known.** ✅
+- [ ] Add a comment to the bug report that includes the pull request's author by using an @mention.
+- [ ] Add a comment to the bug report that links the pull request to it using the #ID syntax.
+
+**Explanation:** This is NOT a best practice. Even when the root cause is known, cross-linking is still valuable for providing context, documentation, and helping future developers understand the relationship between issues and pull requests. Creating these connections helps maintain project history and makes information discoverable later.
+
+
+# 15.5 Summary
+
+In this module, you learned to search and organize repository history by using filters, blame, and cross-linking on GitHub.
+
+You learned about:
+* Finding relevant issues and pull requests.
+* Searching history to find context.
+* Making connections within GitHub to help others find things.
+
+Now that you're familiar with finding and organizing information on GitHub, learn to Maintain a secure repository by using GitHub best practices.
+
+**Learn more**
+
+Here are some links to more information on the topics we discussed in this module:
+* About searching on GitHub
+* Understanding the search syntax
+* git blame documentation
+* Viewing and understanding files
+* Autolinked references and URLs
+
