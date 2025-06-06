@@ -481,16 +481,6 @@ This alert indicates that the Django web application is experiencing HTTP 400 (B
 -------------------------------------------------------------------------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
 # Weekly Standup Report
 **Reporting Period:** [Week of Date]  
 **Team Member:** [Your Name]
@@ -574,9 +564,71 @@ This alert indicates that the Django web application is experiencing HTTP 400 (B
 **Overall Assessment:** Strong momentum maintained across all development tracks. Successfully bridging theoretical learning with practical implementation. Ready to accelerate project completion in upcoming week.
 
 
+---------------------------------------------------------------------------------------------
 
+# Weekly Standup Report
+**Reporting Period:** 02.06.2025 - 06.06.2025   
+**Team Member:** [Your Name]
 
+## What I Accomplished This Week
 
+## What I Accomplished This Week
+
+This week I focused on expanding my GitHub expertise by completing two comprehensive Learning Paths that covered both foundational and advanced GitHub concepts.
+
+### Completed Learning Paths:
+
+**1. GitHub Foundations Part 1 of 2**
+- URL: https://learn.microsoft.com/en-us/training/paths/github-foundations/
+- **Key Areas Covered:**
+  - InnerSource fundamentals and program management
+  - Repository security and supply chain protection
+  - GitHub administration and organizational structure
+  - Authentication and authorization strategies
+
+**2. GitHub Foundations Part 2 of 2** 
+- URL: https://learn.microsoft.com/en-us/training/paths/github-foundations-2/
+- **Key Areas Covered:**
+  - Advanced authentication methods (SAML SSO, 2FA)
+  - Team synchronization with identity providers
+  - Pull request workflows and collaboration
+  - Enterprise-level access management
+
+### Specific Technical Focus Areas:
+
+**GitHub Security Integration:**
+- Studied how to secure GitHub repositories as part of Azure internship capstone project
+- Learned repository security best practices including dependency scanning, secret scanning, and code scanning
+- Explored automated security features and vulnerability management
+
+**Azure Entra ID Integration:**
+- Deep dive into synchronizing GitHub with Azure Entra ID (formerly Active Directory)
+- Learned SAML SSO configuration and enforcement strategies
+- Studied team synchronization capabilities between Azure AD groups and GitHub teams
+- Explored SCIM provisioning for automated user lifecycle management
+
+### Practical Applications:
+
+- **Enterprise Security:** Understanding how to implement organization-wide security policies
+- **Identity Management:** Learned to centralize authentication through Azure Entra ID
+- **Access Control:** Studied fine-grained permission models and repository access management
+- **Automation:** Explored automated user provisioning/deprovisioning workflows
+
+## Key Takeaways for Reporting:
+
+This learning directly supports enterprise-level GitHub implementations and provides crucial knowledge for:
+- Securing organizational repositories and sensitive code
+- Implementing proper authentication and authorization controls
+- Managing large-scale user access through identity provider integration
+- Establishing governance frameworks for development teams
+
+These skills are particularly relevant for organizations looking to adopt GitHub Enterprise while maintaining security compliance and operational efficiency.
+
+## Next Steps:
+
+I plan to apply this knowledge to the Azure capstone project and explore practical implementation scenarios for GitHub-Azure Entra ID integration in enterprise environments.
+
+--------------------------------------------------------------------------------------------
 
 
 # References:
