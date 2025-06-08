@@ -562,3 +562,61 @@ We recommend hg-fast-export for converting Mercurial repositories to Git.
 We recommend git-tfs for moving changes between TFVC and Git.
 
 For more information about moving from TFVC (a centralized version control system) to Git, see Migrate to Git from centralized version control.
+
+
+# 4.4 Module assessment
+
+Choose the best response for each question.
+
+## Check your knowledge
+
+### 1.
+**What kind of files are best stored in GitHub?**
+
+- Large binary files, like videos.
+- Binary project files, like spreadsheets and presentations.
+- **✅ Text files, like source code.**
+
+**Explanation:** GitHub is designed for text-based files, particularly source code. Text files work well with Git's version control system, allowing for meaningful diffs, merging, and collaboration. Large binary files and presentations are not ideal for GitHub repositories as they don't benefit from version control features and can make repositories large and slow.
+
+### 2.
+**Why is a `.gitignore` file important to your repository?**
+
+- It defines which users aren't allowed to participate in your repository discussions and pull requests.
+- **✅ It helps you enforce policy around which files should be excluded from version control.**
+- It's just a token file required by GitHub to make sure you're following the migration instructions closely. If you ignore it, your repository migration fails.
+
+**Explanation:** The `.gitignore` file specifies which files and directories Git should ignore and not track. This is crucial for excluding temporary files, build artifacts, sensitive data, and other files that shouldn't be in version control. It has nothing to do with user permissions or migration requirements.
+
+### 3.
+**Which of the following methods is not a valid way to upload new project files to GitHub?**
+
+- **✅ Email a password protected zip of your project to GitHub support along with instructions for the repository's creation. Be sure to include the zip password in the same email.**
+- Use the `git` client or other Git-friendly tool.
+- Use the browser interface at github.com.
+
+**Explanation:** GitHub doesn't accept project uploads via email to support. This would be insecure and not part of their workflow. Valid methods include using Git commands from the command line, GitHub CLI, GitHub Desktop, or the web interface at github.com for smaller uploads.
+
+**Submit answers**
+
+
+# 4.5 Summary
+
+In this module, you learned how to upload your existing project to GitHub.
+
+You learned about:
+
+* Identifying where your code is stored.
+* Introducing code to a repository.
+* Creating important Git files like `.gitignore`.
+* Identifying important next steps for managing your repository and adding community involvement.
+
+Now that you have your project on GitHub, learn to Manage an InnerSource program by using GitHub and Create an open-source program by using GitHub best practices.
+
+## Learn more
+
+Here are some links to more information on the subjects we discussed in this module:
+
+* Ignoring files with .gitignore
+* .gitignore repository for popular platforms
+* Setting repository visibility
