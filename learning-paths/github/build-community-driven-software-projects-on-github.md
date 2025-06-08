@@ -726,3 +726,86 @@ The GitHub Migrator tool takes care of the rest.
 
 *Screenshot of the GitHub Migrator tool.*
 
+
+
+# 5.3 Exercise - Migrating your repository to GitHub
+
+In this exercise, you use GitHub Learning Lab to plan and execute the successful migration of a project to GitHub from a legacy version-control provider.
+
+GitHub Learning Lab is an integrated experience that's easy to use. You get feedback and instructions throughout the lab as you work in your GitHub repository.
+
+Here are a few suggestions to make the Learning Lab exercise more enjoyable:
+
+* GitHub Learning Lab is installed on your account in this lab's first step. If you're asked, be sure to *install it on all repositories*. This installation doesn't affect the organizations of which you're a member, just the personal repositories the lab creates for you.
+* After the install, you might be returned to the main page. To get back to your lab, just use the button on the bottom of this page.
+* GitHub creates a repository for you to use. Give permissions to GitHub Learning Lab.
+* GitHub Learning Lab will set itself as a reviewer on your pull requests so it can give you the next steps just in time. Sometimes, reviewing your pull request takes a few minutes.
+* When you're given a link for creating or editing a file or told to open a tab, **be sure to open it in another tab in your browser**. This way, you can come back to the instructions without leaving the file.
+* Comments and instructions continue on your pull request or in an issue on your repository.
+
+When you finish the exercise in GitHub, return here for:
+
+* A quick knowledge check
+* A summary of what you've learned
+* To earn a badge for completing this module
+
+
+https://github.com/githubtraining/migrating-your-repository
+
+
+# 5.4 Module assessment
+
+Choose the best response for each question.
+
+## Check your knowledge
+
+### 1.
+**Which of the following questions is not an important consideration for migrating a source repository to GitHub?**
+
+- Do you want to keep all of the version control history?
+- Is there project data that lives outside of the history you need to preserve, such as issues, discussions, or pull requests?
+- **✅ Does GitHub support the programming language your project uses?**
+
+**Explanation:** GitHub supports virtually all programming languages as it's a Git-based platform that works with text files. The programming language is not a limiting factor for migration. However, preserving version control history and external project data (issues, discussions) are important considerations that affect your migration strategy and tool choice.
+
+### 2.
+**Why is a `.gitignore` file important to your repository?**
+
+- It defines which users aren't allowed to participate in your repository discussions and pull requests.
+- **✅ It helps you enforce policy around which files shouldn't be tracked in version control.**
+- It's just a token file required by GitHub to make sure you're following the migration instructions closely. If you ignore it, your repository migration fails.
+
+**Explanation:** The `.gitignore` file specifies which files and directories Git should ignore and not track in version control. This is essential for excluding temporary files, build artifacts, sensitive data, and other files that don't belong in your repository. It has nothing to do with user permissions or migration requirements.
+
+### 3.
+**Which of the following methods is not a valid way to migrate a project to GitHub?**
+
+- **✅ Email a password protected zip of your project to GitHub support along with instructions for the repository's creation. Be sure to include the zip password in the same email.**
+- Use the `git` client or other git-friendly tool to upload your project.
+- Use the **GitHub Importer** to import your project.
+
+**Explanation:** GitHub doesn't accept project migrations via email to support. This would be insecure and inefficient. Valid migration methods include using Git commands, GitHub CLI, GitHub Desktop, or the GitHub Importer tool for importing from other version control systems like SVN, Mercurial, or TFVC.
+
+
+# 5.5 Summary
+
+In this module, you learned how to move your existing project to GitHub from a legacy version-control system.
+
+You learned about:
+
+* Preparing your project for a successful migration.
+* Handling any binary files currently stored in your project.
+* Creating important Git files like a `.gitignore`.
+* Importing your project to GitHub.
+
+Now that you have your project on GitHub, learn to Manage an InnerSource program by using GitHub and Create an open-source program by using GitHub best practices.
+
+## Learn more
+
+Here are some links to more information on the subjects we discussed in this module.
+
+* Ignoring files with .gitignore
+* Accessing the .gitignore repository for popular platforms
+* Setting repository visibility
+* Learning about GitHub Importer
+* Importing data from third-party version control systems
