@@ -214,3 +214,351 @@ Here are some links to more information on the topics we discussed in this modul
 * Make a README site
 * Awesome README examples
 * Guide to open-source codes of conduct
+
+
+# 4 Upload your project by using GitHub best practices
+
+Learn to upload your existing project to GitHub.
+
+# 4.1 Introduction
+
+GitHub is home to millions of software projects, with more joining every day. There are so many great reasons to host your project on GitHub, but getting your project up and running might seem daunting.
+
+Suppose you're working on a software project that is starting to really take shape. Other people want to contribute, and it would be great to get their help. However, you still want to maintain control over the direction of the project, but in a way that doesn't slow down other people from improving it. GitHub offers you all of these features and more.
+
+In this module, you learn how to prepare and upload a project to GitHub.
+
+**Note**  
+If you're uploading a project that is already hosted in a version-control system, consider completing **Migrate your repository by using GitHub best practices** instead.
+
+## Learning objectives
+
+In this module, you'll:
+
+* Identify where your code is stored.
+* Introduce code to a repository.
+* Create important Git files like a `.gitignore`.
+* Identify important next steps to manage your repository and add community involvement.
+
+## Prerequisites
+
+* A GitHub account
+
+# 4.2 How do I prepare and upload an existing project to GitHub?
+
+In this unit, we discuss the important considerations for uploading a project to GitHub.
+
+## Why upload to GitHub?
+
+There are volumes of literature extolling the virtues of GitHub, and it's beyond the scope of this module to convince you to join. However, in this module we recap some of the key benefits within the context of subjects you need to consider when planning your upload.
+
+### Version control
+
+GitHub exclusively uses Git, arguably the best version-control system around. However, Git is incredibly sophisticated and can create some complex scenarios for working with code that your team might not be experienced with. Branches and pull requests are a fundamental part of day-to-day life for developers using Git, so understanding when and how to use them effectively is necessary to be successful on GitHub. It's worthwhile for your team to first be familiar with the GitHub flow so you can hit the ground running.
+
+### Keep your code in the cloud
+
+A large amount of project code is still stored exclusively on developer machines. When you upload to GitHub, you're moving your code to GitHub's cloud platform, where team members can easily access it from anywhere. This change offers a good opportunity to review your team's policy for the kinds of files and data you keep in version control. As a best practice, you should assume that anything you commit to GitHub is potentially compromised. So, be sure not to include sensitive data, such as API keys, passwords, or other files containing comparable information.
+
+**Note**
+
+GitHub offers both public and private repositories, as well as granular access controls for different parts of a repository. This lets you control to whom your projects are visible, as well as what actions a given user can perform.
+
+### Collaboration
+
+GitHub offers excellent support for team collaboration through features like issues, pull requests, and code reviews. However, the GitHub flow might differ from the practices to which your team is currently accustomed. It's a good idea to consider how your team might adapt to GitHub, and whether or not you should retain any existing processes.
+
+If your project is an open-source project that allows outside contributors, there's no better option than GitHub for maximizing those benefits.
+
+## Upload to GitHub
+
+### Plan considerations
+
+The most important thing to consider before executing your upload to GitHub is whether you need to retain anything beyond the current state of your source. For example, you might use a spreadsheet or project-management software to track bugs you plan to fix. Support for migrating these items varies by platform, and is generally available from community projects. This module doesn't cover migrating that type of data.
+
+### Handle binary files currently stored in your project
+
+As a best practice, GitHub repositories should be limited to the files necessary for building projects. Avoid committing large binary files, such as build artifacts. Binary files like spreadsheets and presentations are better suited to be tracked on portals that understand how to serve and version them properly. If you have a need to version large binary files, consider using the Git extension Git LFS (Large File Storage).
+
+### Create important Git files like .gitignore
+
+Git supports `.gitignore` files to help enforce version-control file policies. These files define the search patterns used to exclude files and folders from source-control tracking. The following example recursively excludes any folders called Bin or bin, and their contents, from source-control tracking.
+
+**.gitignore**
+
+```
+[Bb]in/
+```
+
+Learn more about [Ignoring files](). Also check out the collection of starter `.gitignore` files offered for various platforms in the [gitignore repository]().
+
+There are several other files commonly used in GitHub projects to explain different policies to repository consumers and contributors. Even if your project is private and restricted to a limited audience, it can still be useful to explicitly articulate these policies. While none of these files are required, a few of the common ones are listed here.
+
+| File | Purpose |
+|------|---------|
+| `README.md` | The landing page for the directory. This page is rendered when its directory is viewed on GitHub. |
+| `LICENSE.md` | This file contains the license under which the code is provided. |
+| `CONTRIBUTING.md` | Explains how users should contribute to the project, such as pull request expectations. |
+| `SECURITY.md` | Explains the security policy for the project. This file provides guidance to users that want to submit sensitive security-related code or feedback that shouldn't be publicly disclosed before being addressed. |
+
+Learn more about [Setting up your project for healthy contributions]().
+
+### Upload your project to GitHub
+
+Once your repository is prepared for upload, create a repository on GitHub. Once created, navigate to the **Code** tab of your GitHub repository. This view provides you with several ways to get your project code uploaded.
+
+*Screenshot of importing code to a GitHub repository.*
+
+We recommend that you use the git client or a Git-friendly tool to upload your source. Alternatively, you can manually upload your files using the creating a new file link. Over the long run, you're likely to find that using a git client is the best way to manage changes, branches, and more.
+
+
+
+# 4.3 Exercise - Upload your project to GitHub
+
+You can import repositories to GitHub using GitHub Importer, the command line, or external migration tools.
+
+## About GitHub Importer
+If you have source code in Subversion, Mercurial, Team Foundation Version Control (TFVC), or another Git repository, you can move it to GitHub using GitHub Importer. GitHub Importer is a tool that quickly imports source code repositories, including commits and revision history, to GitHub for you.
+
+During an import, depending on the version-control system you're importing from, you can perform some of the following tasks. Authenticate with your remote repository, update commit author attribution, import repositories with large files, or remove large files if you don't want to use Git Large File Storage.
+
+| Import Action | Subversion | Mercurial | TFVC | Git |
+|---------------|------------|-----------|------|-----|
+| Authenticate with remote repository | X | X | X | X |
+| Update commit author attribution | X | X | X |  |
+| Move large files to Git Large File Storage | X | X | X |  |
+| Remove large files from your repository | X | X | X |  |
+
+### Importing a repository with GitHub Importer
+If you have a project hosted on another version control system, you can automatically import it to GitHub using the GitHub Importer tool. GitHub Importer isn't suitable for all imports. For example, if your existing code is hosted on a private network, our tool isn't able to access it. In these cases, we recommend importing using the command line for Git repositories or an external source-code migration tool for projects imported from other version-control systems.
+
+If you'd like to match the commits in your repository to the authors' GitHub user accounts during the import. First, make sure that every contributor to your repository has a GitHub account before you begin the import.
+
+Repositories and individual files are subject to size limits. For more information, check out About large files on GitHub.
+
+Follow these steps to import a repository:
+
+1. In the upper-right corner of any page, select +, and then select Import repository.
+
+   Screenshot of the import repository button.
+
+2. Under "Your old repository's clone URL," type the URL of the project you want to import.
+
+   Screenshot of the old repository URL textbox.
+
+3. Choose your user account or an organization to own the repository, then type a name for the repository on GitHub.
+
+   Screenshot of the new import repository owner name.
+
+4. Specify whether the new repository should be public or private. For more information, check out Setting repository visibility.
+
+   Screenshot of the new repository public or private options.
+
+5. Review the information you entered, then select Begin import.
+
+   Screenshot of the begin import button for a new repository import.
+
+6. If your old project was protected by a password, type your sign-in information for that project, then select Submit.
+
+   Screenshot of the location to input your old repository credentials importer.
+
+7. If there are multiple projects hosted at your old project's clone URL, choose the project you'd like to import, then select Submit.
+
+   Screenshot of a selection of projects found at the same URL. project importer.
+
+8. If your project contains files larger than 100 MB, choose whether to import the large files using Git Large File Storage, then select Continue.
+
+   Screenshot of files suitable for Git LFS importer.
+
+When the repository is fully imported, you receive an email.
+
+### Updating commit author attribution with GitHub Importer
+During an import, you can match commits in your repository with the GitHub account of the commit author. GitHub Importer looks for GitHub users whose email addresses match the authors of the commits in the repository you're importing. You can then connect a commit to its author using their email address or the author's GitHub username.
+
+#### Updating commit authors
+Follow these steps to update a commit author:
+
+1. After importing your repository, on the import status page, select Match authors.
+
+   Screenshot of the match authors button.
+
+2. Next to the author whose information you'd like to update, select Connect.
+
+   Screenshot of the connect commit author process.
+
+3. Type the email address or GitHub username of the author, then press Enter.
+
+#### Attributing commits to a GitHub user with a public email address
+If an author of a commit in your imported repository has a GitHub account associated with the email address they used to author the commits, and they don't set their commit email address as private. Then, GitHub Importer matches the email address associated with the commit to the public email address associated with their GitHub account, and attributes the commit to their GitHub account.
+
+#### Attributing commits to a GitHub user without a public email address
+If the author of a commit in your imported repository doesn't set a public email address on their GitHub profile, or set their commit email address as private. Then, GitHub Importer might not be able to match the email address associated with the commit with their GitHub account.
+
+The commit author can resolve this issue by setting their email address as private. Their commits are then attributed to `<username>@users.noreply.github.com`, and the imported commits are associated with their GitHub account.
+
+#### Attributing commits using an email address
+If the author's email address isn't associated with their GitHub account, they can add the address to their account after the import, and the commits will be correctly attributed.
+
+If the author doesn't have a GitHub account, GitHub Importer attributes their commits to the email address associated with the commits.
+
+## Importing a GitHub repository using the command line
+If GitHub Importer isn't suitable for your purposes, such as if your existing code is hosted on a private network, then we recommend importing using the command line.
+
+Before you start, make sure you know:
+
+* Your GitHub username
+* The clone URL for the external repository, such as https://external-host.com/user/repo.git or git://external-host.com/user/repo.git (perhaps with a user@ in front of the external-host.com domain name)
+
+For purposes of demonstration, we use:
+
+* An external account named ext-user
+* An external Git host named https://external-host.com
+* A GitHub personal user account named ghuser
+* A repository on GitHub.com named repo.git
+
+Follow these steps to import your external repository:
+
+1. Create a new repository on GitHub. You import your external Git repository to this new repository.
+
+2. On the command line, make a "bare" clone of the repository using the external clone URL. This command creates a full copy of the data, but without a working directory for editing files, and ensures a clean, fresh export of all the old data.
+
+   **Bash**
+
+   ```
+   $ git clone --bare https://external-host.com/ext-user/repo.git
+   #Makes a bare clone of the external repository in a local directory 
+   ```
+
+3. Push the locally cloned repository to GitHub using the "mirror" option, which ensures that all references, such as branches and tags, are copied to the imported repository.
+
+   **Bash**
+
+   ```
+   $ cd repo.git
+   $ git push --mirror https://github.com/ghuser/repo.git
+   #Pushes the mirror to the new repository on GitHub.com 
+   ```
+
+4. Remove the temporary local repository.
+
+   **Bash**
+
+   ```
+   $ cd ..
+   $ rm -rf repo.git 
+   ```
+
+## Adding locally hosted code to GitHub
+If you have existing source code or repositories stored locally on your computer or private network, you can add them to GitHub by typing commands in a terminal. Either by typing Git commands directly, or by using GitHub CLI.
+
+GitHub CLI is an open source tool for using GitHub from your computer's command line. GitHub CLI can simplify the process of adding an existing project to GitHub using the command line. To learn more about GitHub CLI, check out About GitHub CLI.
+
+### Adding a local repository to GitHub with GitHub CLI
+Follow these steps to add a local repository with GitHub CLI:
+
+1. In the command line, navigate to the root directory of your project.
+
+2. Initialize the local directory as a Git repository.
+
+   **Bash**
+
+   ```
+   git init -b main
+   ```
+
+3. Stage and commit all the files in your project.
+
+   **Bash**
+
+   ```
+   git add . && git commit -m "initial commit"
+   ```
+
+4. To create a repository for your project on GitHub, use the gh repo create subcommand. When prompted, select Push an existing local repository to GitHub and enter the desired name for your repository. If you want your project to belong to an organization instead of your user account, specify the organization name and project name with organization-name/project-name.
+
+5. Follow the interactive prompts. To add the remote and push the repository, confirm yes when asked to add the remote and push the commits to the current branch.
+
+   Alternatively, to skip all the prompts, supply the path to the repository with the --source flag and pass a visibility flag (--public, --private, or --internal). For example, gh repo create --source=. --public. Specify a remote with the --remote flag. To push your commits, pass the --push flag. For more information about possible arguments, reference the GitHub CLI manual.
+
+### Adding a local repository to GitHub using Git
+Follow these steps to add a local repository using Git:
+
+1. Create a new repository on GitHub.com. To avoid errors, don't initialize the new repository with README, license, or gitignore files. You can add these files after your project is pushed to GitHub.
+
+   Screenshot of new repository creation.
+
+2. Open Git Bash.
+
+3. Change the current working directory to your local project.
+
+4. Initialize the local directory as a Git repository.
+
+   **Bash**
+
+   ```
+   $ git init -b main
+   ```
+
+5. Add the files in your new local repository. This command also stages them for the first commit.
+
+   **Bash**
+
+   ```
+   $ git add .
+   # Adds the files in the local repository and stages them for commit. To unstage a file, use 'git reset HEAD YOUR-FILE'.
+   ```
+
+6. Commit the files that are staged in your local repository.
+
+   **Bash**
+
+   ```
+   $ git commit -m "First commit"
+   # Commits the tracked changes and prepares them to be pushed to a remote repository. To remove this commit and modify the file, use 'git reset --soft HEAD~1' and commit and add the file again.
+   ```
+
+7. At the top of your repository on GitHub.com's Quick Setup page, select the Copy button to copy the remote repository URL.
+
+   screenshot copy remote repository url quick setup
+
+8. In the Command prompt, add the URL for the remote repository. Your local repository is pushed to this location.
+
+   **Bash**
+
+   ```
+   $ git remote add origin <REMOTE_URL> 
+   # Sets the new remote
+   $ git remote -v
+   # Verifies the new remote URL
+   ```
+
+9. Push the changes in your local repository to GitHub.com.
+
+   **Bash**
+
+   ```
+   $ git push origin main
+   # Pushes the changes in your local repository up to the remote repository you specified as the origin
+   ```
+
+## Source code migration tools
+You can use external tools to move your projects to GitHub. We recommend using GitHub Importer to import projects from Subversion, Mercurial, Team Foundation Version Control (TFVC), or another Git repository. You can also use these external tools to convert your project to Git.
+
+### Importing from Subversion
+In a typical Subversion environment, multiple projects are stored in a single root repository. On GitHub, each of these projects typically map to a separate Git repository for a user account or organization. We suggest importing each part of your Subversion repository to a separate GitHub repository if:
+
+* Collaborators need to check out or commit to that part of the project separately from the other parts
+* You want different parts to have their own access permissions
+
+We recommend these tools for converting Subversion repositories to Git:
+
+* git-svn
+* svn2git
+
+### Importing from Mercurial
+We recommend hg-fast-export for converting Mercurial repositories to Git.
+
+### Importing from TFVC
+We recommend git-tfs for moving changes between TFVC and Git.
+
+For more information about moving from TFVC (a centralized version control system) to Git, see Migrate to Git from centralized version control.
