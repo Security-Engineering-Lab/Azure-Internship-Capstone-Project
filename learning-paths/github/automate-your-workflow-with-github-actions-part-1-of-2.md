@@ -283,6 +283,8 @@ Here, you'll learn about the basic components of a GitHub Actions workflow file.
 
 ## The components of GitHub Actions
 
+![](https://learn.microsoft.com/en-us/training/github/github-actions-automate-tasks/media/github-actions-workflow-components.png)
+
 There are several components that work together to run tasks or jobs within a GitHub Actions workflow. In short, an event triggers the *workflow*, which contains a *job*. This job then uses *steps* to dictate which *actions* will run within the workflow. To better see how these components work together, let's take a quick look at each one.
 
 ## Workflows
@@ -307,6 +309,8 @@ Here, you'll learn some common configurations within a workflow file. You'll als
 As mentioned previously, you can configure your workflows to run when specific activity occurs on GitHub, when an event outside of GitHub happens, or at a scheduled time. The schedule event allows you to trigger a workflow to run at specific UTC times using POSIX cron syntax. This cron syntax has five * fields, and each field represents a unit of time.
 
 Diagram of the five unit-of-time fields for scheduling an event in a workflow file.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-automate-tasks/media/scheduled-events.png)
 
 For example, if you wanted to run a workflow every 15 minutes, the schedule event would look like the following:
 
@@ -537,6 +541,8 @@ For more information about workflow syntax and expressions, check out Workflow s
 ## Disable and delete workflows
 After adding a workflow to your repository, you might find a situation where you want to temporarily disable the workflow. You can stop a workflow from being triggered without having to delete the file from the repo, either on GitHub or through the GitHub REST API. When you wish to enable the workflow again, you can easily do it using the same methods.
 
+![](https://learn.microsoft.com/en-us/training/github/github-actions-automate-tasks/media/disable-workflow.png)
+
 Screenshot of disabling a workflow on GitHub.
 
 Disabling a workflow can be useful in some of the following situations:
@@ -552,6 +558,8 @@ You can also cancel a workflow run that's in progress in the GitHub UI from the 
 If you have a workflow that multiple teams use within an organization, you don't need to re-create the same workflow for each repository. Instead, you can promote consistency across your organization by using a workflow template that's defined in the organization's .github repository. Any member within the organization can use an organization template workflow, and any repository within that organization has access to those template workflows.
 
 You can find these workflows by navigating to the Actions tab of a repository within the organization, selecting New workflow, and then finding the organization's workflow template section titled "Workflows created by organization name". For example, the organization called Mona has a template workflow as shown here.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-automate-tasks/media/mona-workflow.png)
 
 Screenshot of a template organization workflow called greet and triage by Mona.
 
@@ -725,3 +733,984 @@ Here are some links to more information on the topics we discussed in this modul
 * Disabling and enabling a workflow
 * Sharing workflows, secrets, and runners with your organization
 * Scheduled events
+
+
+# 2 Build continuous integration (CI) workflows by using GitHub Actions
+
+Learn how to create workflows that enable you to use Continuous Integration (CI) for your projects.
+
+
+# 2.1 Introduction
+
+GitHub Actions can be used to implement *continuous integration* (CI) for code that is maintained in GitHub repositories. CI is the practice of using automation to build and test software every time a developer commits changes to version control. CI helps teams discover issues early in the development process and fix them quickly.
+
+Suppose you want to set up a CI pipeline for your team. The team is developing a website to improve the experience customers have when they contact product support. A number of features are under development and you want to make sure the team can build and test them easily so that each one can be quickly added to the website. Because the code for the project is stored in a GitHub repository, you decide to use GitHub Actions for your CI project.
+
+In this module, you learn how to implement continuous integration using GitHub Actions and workflows in your GitHub repositories.
+
+## Learning objectives
+
+In this module, you:
+
+* Build and test a Node.js project by using GitHub Actions and a templated workflow.
+* Debug a failed test using the GitHub Actions Log.
+* Customize your workflow with GitHub Actions.
+
+## Prerequisites
+
+* A GitHub account
+* The ability to navigate and edit files in GitHub
+  * For more information about GitHub, see Introduction to GitHub.
+* Basic familiarity with GitHub Actions and workflows
+  * If you're unfamiliar with GitHub Actions or workflows, check out Automate development tasks by using GitHub Actions
+ 
+
+
+# 2.2 How do I use GitHub Actions to create workflows for CI?
+
+Here, you'll learn about GitHub Actions and workflows for CI.
+
+You learn how to:
+
+* Create a workflow from a template.
+* Understand the GitHub Actions logs.
+* Test against multiple targets.
+* Separate build and test jobs.
+* Save and access build artifacts.
+* Automate labeling a PR on review.
+
+## Create a workflow from a template
+To create a workflow, you start by using a template. A template has common jobs and steps preconfigured for the particular type of automation you're implementing. If you're not familiar with workflows, jobs, and steps, check out the Automate development tasks by using GitHub Actions module.
+
+On the main page of your repository, select the Actions tab and then select New workflow.
+
+On the Choose a workflow page, you can choose from many different templates. One example is the Node.js template, which does a clean install of node dependencies, builds the source code, and runs tests for different versions of Node. Another example is the Python package template, which installs Python dependencies, and runs tests, including lint, across different versions of Python.
+
+In the search box, enter Node.js.
+
+
+Screenshot showing GitHub Actions tab with the search box highlighted and containing the text 'Node.js'.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-ci/media/2-workflow-template-node-js.png)
+
+In the search results, in the Node.js pane, select Configure.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-ci/media/2-workflow-template-node-js.png)
+
+Screenshot showing GitHub Actions tab with the Node.js pane highlighted and the Node.js template selected.
+
+You see this default Node.js template workflow, in the newly created file node.js.yml.
+
+**yml**
+
+```
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
+```
+
+Notice the on: attribute. This workflow is triggered on a push to the repository, and when a pull request is made against the main branch.
+
+There's one job in this workflow. Let's review what it does.
+
+The runs-on: attribute specifies that, for the operating system, the workflow runs on ubuntu-latest. The node-version: attribute specifies that there are three builds, one each for Node version 14.x, 16.x, and 18.x. We describe the matrix portion in depth later, when we customize the workflow.
+
+The steps in the job use the GitHub Actions actions/checkout@v3 action to get the code from your repository into the VM, and the actions/setup-node@v3 action to set up the right version of Node.js. We specify that we're going to test three versions of Node.js with the ${{ matrix.node-version }} attribute. This attribute references the matrix we previously defined. The cache attribute specifies a package manager for caching in the default directory.
+
+The last part of this step executes commands used by Node.js projects. The npm ci command installs dependencies from the package-lock.json file, npm run build --if-present runs a build script if it exists, and npm test runs the testing framework. Notice that this template includes both the build and test steps in the same job.
+
+To learn more about npm, check out the npm documentation:
+
+* npm install
+* npm run
+* npm test
+
+Beyond individual npm commands, teams can benefit from reusable workflows to streamline and standardize repeated automation steps. By leveraging reusable workflows, you can reduce redundancy, improve maintainability, and ensure consistency across your CI/CD pipelines.
+
+### How to utilize reusable workflows to avoid duplication
+As teams scale and projects grow, it's common to see the same steps, such as code checkout, dependency installation, testing, and deployment—repeated across multiple workflow files. This kind of duplication not only clutters your codebase but also increases maintenance time when changes are needed. Reusable workflows solve this problem by allowing you to define automation logic once and call it from other workflows. Reusable workflows are special GitHub Actions workflows that can be called by other workflows, much like functions in programming. You create them to share repeated logic like build steps, testing procedures, or deployment strategies. Once created, you can reference them from any other workflow in the same repository or even across different repositories.
+
+Diagram illustrating the concept of reusable workflows in GitHub Actions, showing how a central workflow can be referenced by multiple repositories or workflows.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-ci/media/reusable-workflow.png)
+
+**Why use them?**
+* **Consistency**: Teams can follow the same automation standards across all projects.
+* **Efficiency**: Instead of copying and pasting steps, you just point to a reusable workflow.
+* **Ease of Updates**: When a process changes (e.g., a new test step), you update it in one place, and all workflows using it benefit automatically.
+* **Scalability**: Ideal for platform or DevOps teams managing multiple services.
+
+Let's explore how to use reusable workflows to improve your projects.
+
+### How to implement reusable workflows
+To utilize reusable workflows:
+
+1. Create a reusable workflow in your repo's folder. This file will include the automation steps you want to share—like testing, building, or deploying.
+2. You must explicitly enable a workflow to be reusable by configuring it with the workflow_call event.
+3. In your main workflows (caller workflows), you then reference this reusable file and provide any required inputs or secrets.
+
+To illustrate the advantages of reusable workflows, consider the following real-world scenario.
+
+### Real-world example
+Imagine your organization has 10 microservices and all of them need the same steps to:
+
+* Run tests
+* Lint code
+* Deploy to a specific environment
+
+Without reusable workflows, every repo contains duplicated logic. With reusable workflows, you:
+
+1. Define the process once in a central file (e.g., ci-standard.yml)
+2. Call this file from every service's own workflow, passing in variables like environment or app name
+
+Now, if a new security step or tool is added (like scanning for vulnerabilities), you only need to add it once in the reusable workflow. All 10 services will immediately use the updated process without modifying each one.
+
+By understanding how reusable workflows function and their benefits, you can adopt best practices to maximize their effectiveness and ensure seamless integration into your CI/CD pipelines.
+
+### Best practices
+* Centralize your reusable workflows in one repository if you plan to share them across teams.
+* Use branches or tags to version your workflows (e.g., use @v1), so changes won't break everything unexpectedly.
+* Document inputs and secrets clearly—reusable workflows often rely on inputs and secrets, and teams need to know what to supply.
+* Combine with composite actions if you only need to reuse a few steps, not a full workflow.
+
+### Summary
+Reusable workflows are a powerful way to enforce consistency, reduce duplication, and scale DevOps practices in any engineering team. Whether you're managing a monorepo, microservices, or open-source libraries, reusable workflows can simplify automation, making CI/CD faster, cleaner, and easier to manage.
+
+## Identify the event that triggered a workflow from its effects
+Understanding what triggered a GitHub Actions workflow—whether it was a push to a branch, a pull request, a scheduled job, or a manual dispatch—is crucial for debugging, auditing, and improving CI/CD pipelines. You can identify the triggering event by examining the workflow run, the repository changes, or the issue/pull request involved.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-ci/media/workflow-triggers.png)
+
+Diagram illustrating various workflow triggers in GitHub Actions, such as push, pull request, schedule, and manual dispatch.
+
+
+
+### What is a workflow trigger?
+A workflow trigger is an event that causes a workflow to start. GitHub supports various types of triggers, including:
+
+* push or pull_request (based on code changes)
+* workflow_dispatch (manual trigger)
+* schedule (cron jobs)
+* repository_dispatch (external systems)
+* Issue, discussion, and PR events (e.g., issues.opened, pull_request.closed)
+
+### Where to identify the trigger event?
+You can identify the trigger event in several ways:
+
+**From the GitHub Actions UI**
+1. Navigate to the Actions tab in your repository.
+2. Click on a workflow run.
+3. The event type (e.g., push, pull_request, workflow_dispatch) is displayed at the top of the workflow run summary.
+
+**Using github.event_name in Logs or workflow**
+* GitHub exposes context data during a workflow run. The github.event_name variable tells you which event triggered the workflow.
+* You can print it in a step for debugging:
+
+**yml**
+
+```
+-name: Show event trigger
+  run: echo "Triggered by ${{ github.event_name }}"
+```
+
+**Using workflow Run details**
+* If you're inspecting workflow runs programmatically (e.g., via the API), the run object includes an event property that specifies the trigger.
+* You can also find the commit SHA, actor, and timestamp to trace what caused the trigger.
+
+### Infer the trigger from repository effects
+Sometimes you may not have direct access to the workflow run but want to infer what triggered it based on repository activity. Here's how:
+
+| Observed Behavior | Trigger Event |
+|-------------------|---------------|
+| A new commit pushed to main and workflow ran | push event |
+| A new pull request opened or updated | pull_request event |
+| A contributor manually ran a workflow | workflow_dispatch |
+| Workflow runs every night at a specific time | schedule (cron) |
+| Workflow ran after an external service call | repository_dispatch |
+| Workflow ran when an issue was labeled or commented on | issues.* event |
+
+By reviewing timestamps, pull request activity, or commit history, you can often pinpoint what action caused the workflow to run.
+
+### Summary
+To identify what triggered a workflow:
+
+* Check the workflow run summary in the Actions tab.
+* Print or log github.event_name inside the workflow for visibility.
+* Compare timestamps and repo activity (commits, PRs, issues) to infer the trigger.
+* Use the full event context for deeper investigation.
+
+These practices help with debugging, auditing, and improving workflow reliability across your development and deployment pipelines.
+
+## Describe a workflow's effects from reading its configuration file
+To describe a workflow's effects from reading its configuration file, you need to analyze the structure and contents of the ".yml" file stored in .github/workflows/. This file outlines when the workflow runs, what it does, and how it behaves under different conditions.
+
+### Interpret a workflow's effects:
+
+**1. Identify the trigger (on:)** This section tells you when the workflow is initiated. For example:
+
+**yml**
+
+```
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+```
+
+**Effect:**
+
+* Runs automatically when code is pushed to the main branch.
+* Runs when a pull request is created or updated.
+* Can also be triggered manually by a user
+
+**2. Understand the jobs and steps (jobs:)** Jobs describe what the workflow will do. For instance:
+
+**yml**
+
+```
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
+```
+
+**Effect:**
+
+* Uses a Linux virtual environment (ubuntu-latest).
+* Checks out the repository's code.
+* Installs project dependencies.
+* Runs automated tests.
+
+**3. Evaluate the purpose and outcome**
+By reading the configuration, you can describe the intended outcome of the workflow: "This workflow is a Continuous Integration (CI) pipeline. It ensures that any new code pushed to the repository or submitted via pull request is automatically tested. If tests fail, the workflow will indicate this in the GitHub UI, helping maintain code quality."
+
+### Optional features affecting behavior
+* **env:** sets environment variables.
+* **if:** adds conditional logic to run certain steps only when criteria are met.
+* **timeout-minutes:** or **continue-on-error:** influence execution behavior and error handling.
+
+### Summary
+From reading a workflow's configuration file, you can describe its effects by identifying:
+
+* **When** it runs (on: section),
+* **What** it does (jobs and steps),
+* **Where** it runs (runs-on),
+* **Why** it runs (its purpose: testing, deploying, linting, etc.),
+* **How** it behaves under certain conditions (environment, filters, logic).
+
+## Diagnose a failed workflow run
+
+### 1. Go to the Actions Tab
+Navigate to the Actions tab of your repository, then:
+
+* Find the failed run (usually marked with a red ❌)
+* Click the failed workflow to open the run summary.
+
+### 2. Review the error in Logs
+In the run summary:
+
+* Expand each job and step until you find the one marked as failed.
+* Click to view its logs.
+* Look for:
+  * Error messages
+  * Stack traces
+  * Exit codes
+
+For example, a failed test might show npm ERR! Test failed. or exit code 1.
+
+### 3. Check the workflow configuration file
+Use the .yml file to determine:
+
+* What was each step trying to do?
+* If there are environment variables (env:) or conditionals (if:) affecting execution.
+* If the failure is due to a missing dependency, syntax error, or misconfigured step.
+
+If this step failed, check:
+
+* Were dependencies installed successfully in the previous step?
+* Do test files exist and pass locally?
+
+### 4. Common failure scenarios
+
+| Symptom | Likely Cause |
+|---------|--------------|
+| Step fails with "command not found" | Missing dependency or wrong setup |
+| npm install fails | Corrupt package-lock.json, network issue |
+| Test step fails | Unit test issues, missing config or invalid test syntax |
+| Permission denied | Incorrect file permissions or missing secrets |
+
+## Identify ways to access the workflow logs from the user interface
+
+### 1. Go to the repository
+Navigate to the repository that contains the workflow.
+
+### 2. Click on the Actions tab
+Navigate to Actions tab located in the top navigation bar of the repo. This tab shows a history of all workflow runs for that repository.
+
+### 3. Select the workflow name
+Choose the relevant workflow from the list. For example, if your .yml file has:
+
+**yml**
+
+```
+name: CI Workflow
+```
+
+You'll see a link named CI Workflow in the list.
+
+### 4. Choose a specific run
+* You'll see a list of runs with status indicators
+* Click on the timestamp or commit message of the specific run you want to inspect.
+
+### 5. Expand each job and step
+* The run summary page displays jobs as defined in the workflow file (e.g., build, test).
+* Click on a job to expand it.
+* Inside the job, expand individual steps (e.g., "Install dependencies", "Run tests").
+
+### 6. View log output
+* Clicking a step shows the full log output (e.g., console logs, error messages, debug info).
+* You can copy, search, or download these logs.
+
+### Summary
+
+| Action | Purpose |
+|--------|---------|
+| Actions tab | View all workflow runs |
+| Select workflow name | Filter runs by workflow |
+| Click on a run | See specific job/step results |
+| Expand steps | View detailed logs |
+| Download logs | For offline or team troubleshooting |
+
+## Action logs for the build
+When a workflow runs, it produces a log that includes the details of what happened and any errors or test failures.
+
+If there's an error or if a test fails, you see a red ❌ rather than a green check mark in the logs. You can examine the details of the error or failure to investigate what happened.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-ci/media/2-log-details.png)
+
+Screenshot of GitHub Actions log with details on a failed test.
+
+## Customize workflow templates
+At the beginning of this module, we described a scenario where you need to set up CI for your team. The Node.js template is a great start, but you want to customize it to better suit your own team's requirements. You want to target different versions of Node and different operating systems. You also want the build and test steps to be separate jobs.
+
+Let's take a look at how you customize a workflow.
+
+**yml**
+
+```
+strategy:
+  matrix:
+    os: [ubuntu-latest, windows-latest]
+    node-version: [16.x, 18.x]
+```
+
+Here, we configured a build matrix for testing across multiple operating systems and language versions. This matrix produces four builds, one for each operating system paired with each version of Node.
+
+Four builds, along with all their tests, produce quite a bit of log information. It might be difficult to sort through it all. In the following sample, we show you how to move the test step to a dedicated test job. This job tests against multiple targets. Separating the build and test steps makes it easier to understand the log.
+
+**yml**
+
+```
+test:
+  runs-on: ${{ matrix.os }}
+  strategy:
+    matrix:
+      os: [ubuntu-latest, windows-latest]
+      node-version: [16.x, 18.x]
+  steps:
+  - uses: actions/checkout@v3
+  - name: Use Node.js ${{ matrix.node-version }}
+    uses: actions/setup-node@v3
+    with:
+      node-version: ${{ matrix.node-version }}
+  - name: npm install, and test
+    run: |
+      npm install
+      npm test
+    env:
+      CI: true
+```
+
+## Locate a workflow in a repository
+
+### What are artifacts?
+When a workflow produces something other than a log entry, the product is called an artifact. For example, the Node.js build produces a Docker container that can be deployed. This artifact, the container, can be uploaded to storage by using the action actions/upload-artifact and later downloaded from storage by using the action actions/download-artifact.
+
+Storing an artifact preserves it between jobs. Each job uses a fresh instance of a virtual machine (VM), so you can't reuse the artifact by saving it on the VM. If you need your artifact in a different job, you can upload the artifact to storage in one job, and download it for the other job.
+
+### Artifact storage
+Artifacts are stored in storage space on GitHub. The space is free for public repositories and some amount is free for private repositories, depending on the account. GitHub stores your artifacts for 90 days.
+
+In the following workflow snippet, notice that in the actions/upload-artifact@main action there's a path: attribute. The value of this attribute is the path to store the artifact. Here, we specify public/ to upload everything to a directory. If we just wanted to upload a single file, we use something like public/mytext.txt.
+
+**yml**
+
+```
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: npm install and build webpack
+        run: |
+          npm install
+          npm run build
+      - uses: actions/upload-artifact@main
+        with:
+          name: webpack artifacts
+          path: public/
+```
+
+To download the artifact for testing, the build must complete successfully and upload the artifact. In the following code, we specify that the test job depends on the build job.
+
+**yml**
+
+```
+test:
+    needs: build
+    runs-on: ubuntu-latest
+```
+
+In the following workflow snippet, we download the artifact. Now the test job can use the artifact for testing.
+
+**yml**
+
+```
+steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@main
+      with:
+        name: webpack artifacts
+        path: public
+```
+
+For more information about using artifacts in workflows, see Storing workflow data as artifacts in the GitHub documentation.
+
+## Automate reviews in GitHub using workflows
+So far, we described starting the workflow with GitHub events such as push or pull-request. We could also run a workflow on a schedule, or on some event outside of GitHub.
+
+Sometimes, we want to run the workflow only after a person performs an action. For example, we might only want to run a workflow after a reviewer approves the pull request. For this scenario, we can trigger on pull-request-review.
+
+Another action we could take is to add a label to the pull request. In this case, we use the pullreminders/label-when-approved-action action.
+
+**yml**
+
+```
+    steps:
+     - name: Label when approved
+       uses: pullreminders/label-when-approved-action@main
+       env:
+         APPROVALS: "1"
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         ADD_LABEL: "approved"
+```
+
+Notice the block called env:. This block is where you set the environment variables for this action. For example, you can set the number of approvers needed. Here, it's one. The secrets.GITHUB_TOKEN authentication variable is required because the action must make changes to your repository by adding a label. Finally, you supply the name of the label to add.
+
+Adding a label could be an event that starts another workflow, such as a merge. We cover this event in the next module on continuous delivery with GitHub Actions.
+
+
+
+# 2.3 Customize your workflow with environment variables and artifact data
+
+Here, you learn how to use default and custom environment variables, custom scripts, cache dependencies, and pass artifact data between jobs. You'll also learn how to access the workflow logs from both the GitHub website and REST API endpoints.
+
+## Default environment variables and contexts
+Within the GitHub Actions workflow, there are several default environment variables that are available for you to use, but only within the runner that's executing a job. These default variables are case-sensitive, and they refer to configuration values for the system and for the current user. We recommend that you use these default environment variables to reference the filesystem rather than using hard-coded file paths. To use a default environment variable, specify $ followed by the environment variable's name.
+
+**yml**
+
+```
+jobs:
+  prod-check:
+    steps:
+      - run: echo "Deploying to production server on branch $GITHUB_REF"
+```
+
+In addition to default environment variables, you can use defined variables as contexts. Contexts and default variables are similar in that they both provide access to environment information, but they have some important differences. While default environment variables can only be used within the runner, context variables can be used at any point within the workflow. For example, context variables allow you to run an if statement to evaluate an expression before the runner is executed.
+
+**yml**
+
+```
+name: CI
+on: push
+jobs:
+  prod-check:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying to production server on branch $GITHUB_REF"
+```
+
+This example is using the github.ref context to check the branch that triggered the workflow. If the branch is main, the runner is executed and prints "Deploying to production server on branch $GITHUB_REF". The default environment variable $GITHUB_REF is used in the runner to refer to the branch. Notice that default environment variables are all uppercase where context variables are all lowercase.
+
+### The contextual information available in a workflow
+Contexts allow you to access information about workflow runs, variables, runner environments, jobs, and steps. Each context is an object that contains properties which can be other objects or strings. The contexts available include: github, env, vars, job, jobs, steps, runner, secrets, strategy, matrix, needs and inputs. Here's a table presents these contexts with their descriptions.
+
+| Context | Description |
+|---------|-------------|
+| github | Information about the workflow run. For more information, see github context. |
+| env | Contains variables set in a workflow, job, or step. For more information, see env context. |
+| vars | Contains variables set at the repository, organization, or environment levels. For more information, see vars context. |
+| job | Information about the currently running job. For more information, see job context. |
+| jobs | For reusable workflows only, contains outputs of jobs from the reusable workflow. For more information, see jobs context. |
+| steps | Information about the steps that ran in the current job. For more information, see steps context. |
+| runner | Information about the runner that is running the current job. For more information, see runner context. |
+| secrets | Contains the names and values of secrets that are available to a workflow run. For more information, see secrets context. |
+| strategy | Information about the matrix execution strategy for the current job. For more information, see strategy context. |
+| matrix | Contains the matrix properties defined in the workflow that apply to the current job. For more information, see matrix context. |
+| needs | Contains the outputs of all jobs that are defined as a dependency of the current job. For more information, see needs context. |
+| inputs | Contains the inputs of a reusable or manually triggered workflow. For more information, see inputs context. |
+
+The different contexts are available throughout a workflow run. For example, the secrets context may only be used at certain places within a job. In addition, you may only use some functions in certain places. For example, the hashFiles function isn't available everywhere.
+
+The following table lists the restrictions on where each context and special function can be used within a workflow. The listed contexts are only available for the given workflow key, and you may not use them anywhere else. Unless listed in the table here, you may use a function anywhere.
+
+| Workflow Key | Context | Special Functions |
+|--------------|---------|-------------------|
+| run-name | github, inputs, vars | None |
+| concurrency | github, inputs, vars | None |
+| env | github, secrets, inputs, vars | None |
+| jobs.<job_id>.concurrency | github, needs, strategy, matrix, inputs, vars | None |
+| jobs.<job_id>.container | github, needs, strategy, matrix, vars, inputs | None |
+| jobs.<job_id>.container.credentials | github, needs, strategy, matrix, env, vars, secrets, inputs | None |
+| jobs.<job_id>.container.env.<env_id> | github, needs, strategy, matrix, job, runner, env, vars, secrets, inputs | None |
+| jobs.<job_id>.container.image | github, needs, strategy, matrix, vars, inputs | None |
+| jobs.<job_id>.continue-on-error | github, needs, strategy, vars, matrix, inputs | None |
+| jobs.<job_id>.defaults.run | github, needs, strategy, matrix, env, vars, inputs | None |
+| jobs.<job_id>.env | github, needs, strategy, matrix, vars, secrets, inputs | None |
+| jobs.<job_id>.environment | github, needs, strategy, matrix, vars, inputs | None |
+| jobs.<job_id>.environment.url | github, needs, strategy, matrix, job, runner, env, vars, steps, inputs | None |
+| jobs.<job_id>.if | github, needs, vars, inputs | always, canceled, success, failure |
+| jobs.<job_id>.name | github, needs, strategy, matrix, vars, inputs | None |
+| jobs.<job_id>.outputs.<output_id> | github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs | None |
+| jobs.<job_id>.runs-on | github, needs, strategy, matrix, vars, inputs | None |
+| jobs.<job_id>.secrets.<secrets_id> | github, needs, strategy, matrix, secrets, inputs, vars | None |
+| jobs.<job_id>.services | github, needs, strategy, matrix, vars, inputs | None |
+| jobs.<job_id>.services.<service_id>.credentials | github, needs, strategy, matrix, env, vars, secrets, inputs | None |
+| jobs.<job_id>.services.<service_id>.env.<env_id> | github, needs, strategy, matrix, job, runner, env, vars, secrets, inputs | None |
+| jobs.<job_id>.steps.continue-on-error | github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs | hashFiles |
+| jobs.<job_id>.steps.env | github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs | hashFiles |
+| jobs.<job_id>.steps.if | github, needs, strategy, matrix, job, runner, env, vars, steps, inputs | always, canceled, success, failure, hashFiles |
+| jobs.<job_id>.steps.name | github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs | hashFiles |
+| jobs.<job_id>.steps.run | github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs | hashFiles |
+| jobs.<job_id>.steps.timeout-minutes | github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs | hashFiles |
+| jobs.<job_id>.steps.with | github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs | hashFiles |
+| jobs.<job_id>.steps.working-directory | github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs | hashFiles |
+| jobs.<job_id>.strategy | github, needs, vars, inputs | None |
+| jobs.<job_id>.timeout-minutes | github, needs, strategy, matrix, vars, inputs | None |
+| jobs.<job_id>.with.<with_id> | github, needs, strategy, matrix, inputs, vars | None |
+| on.workflow_call.inputs.<inputs_id>.default | github, inputs, vars | None |
+| on.workflow_call.outputs.<output_id>.value | github, jobs, vars, inputs | None |
+
+## Setting custom environment variables in a workflow
+You can define environment variables that are scoped to the entire workflow utilizing env at the top level of the workflow file. Scoping the contents of a job within a workflow using jobs.<job_id>.env. As well you can scope an environment variable within at a specific step within a job utilizing jobs.<job_id>.steps[*].env.
+
+Next is an example displaying all three scenarios in a workflow file:
+
+**yml**
+
+```
+name: Greeting on variable day
+
+on:
+  workflow_dispatch
+
+env:
+  DAY_OF_WEEK: Monday
+
+jobs:
+  greeting_job:
+    runs-on: ubuntu-latest
+    env:
+      Greeting: Hello
+    steps:
+      - name: "Say Hello Mona it's Monday"
+        run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
+        env:
+          First_Name: Mona
+```
+
+## Use default context in a workflow
+Default environment variables are set by GitHub and not defined in a workflow. They're available to use in a workflow in the appropriate context. Most of these variables, other than CI, begin with GITHUB_* or RUNNER_*. The latter two types can't be overwritten. As well, these default variables have a corresponding, and similarly named, context property. For instance, the RUNNER_* series of default variables have a matching context property of runner.*. An example of accessing default variables in a workflow applying these methods can be viewed here:
+
+**yml**
+
+```
+on: workflow_dispatch
+
+jobs:
+  if-Windows-else:
+    runs-on: macos-latest
+    steps:
+      - name: condition 1
+        if: runner.os == 'Windows'
+        run: echo "The operating system on the runner is $env:RUNNER_OS."
+      - name: condition 2
+        if: runner.os != 'Windows'
+        run: echo "The operating system on the runner is not Windows, it's $RUNNER_OS."
+```
+
+For more information, see Default environment variables in the GitHub user documentation.
+
+## Pass custom environment variables to a workflow
+You can pass customer environment variables from one step of a workflow job to subsequent steps within the job. Generate a value in one step of a job, and assign the value to an existing or new environment variable. Next, you write the variable/value pair to the GITHUB_ENV environment file. The environment file can be used by an action, or from a shell command in the workflow job by using the run keyword.
+
+The step that creates or updates the environment variable doesn't have access to the new value, but all subsequent steps in a job have access.
+
+You can view an example here:
+
+**yml**
+
+```
+steps:
+  - name: Set the value
+    id: step_one
+    run: |
+      echo "action_state=yellow" >> "$GITHUB_ENV"
+  - name: Use the value
+    id: step_two
+    run: |
+      printf '%s\n' "$action_state" # This will output 'yellow'
+```
+
+## Add environment protections
+You can add protection rules for environments defined for your GitHub repository. To add an environment, in your repository:
+
+1. Click on **Settings** Navigation bar of a web interface with tabs like Code, Issues, and Wiki; 'Settings' is highlighted."
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-ci/media/2b-environments.png)
+
+
+2. Click on **Environment** on the left panel.
+
+   Screenshot of a settings menu under 'General' with sections for Access, Code and automation, Security, and Integrations. The 'Environments' option is highlighted in red.
+
+3. Use the **New environment** button to add and configure an environment and add protections. GitHub repository settings page showing the 'Environments' section with a message indicating no environments exist and a 'New environment' button highlighted.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-ci/media/2b-new-environment.png)
+
+### About environments
+Environments are used to describe a general deployment target like production, staging, or development. When a GitHub Actions workflow deploys to an environment, the environment is displayed on the main page of the repository. You can use environments to require approval for a job to proceed, restrict which branches can trigger a workflow, gate deployments with custom deployment protection rules, or limit access to secrets.
+
+Each job in a workflow can reference a single environment. Any protection rules configured for the environment must pass before a job referencing the environment is sent to a runner. The job can access the environment's secrets only after the job is sent to a runner.
+
+When a workflow references an environment, the environment appears in the repository's deployments.
+
+### Environment protection rules
+Environment deployment protection rules require specific conditions to pass before a job referencing the environment can proceed. You can use deployment protection rules to require a manual approval, delay a job, or restrict the environment to certain branches. You can also create and implement custom protection rules powered by GitHub Apps to use third-party systems to control deployments referencing environments configured on GitHub. Here's an explanation of these protection rules:
+
+**Required reviewers protection rules**: Use required reviewers to require a specific person or team to approve workflow jobs that reference the environment. You can list up to six users or teams as reviewers. The reviewers must have at least read access to the repository. Only one of the required reviewers needs to approve the job for it to proceed.
+
+You also have the option to prevent self-reviews for deployments to protected environments. If you enable this setting, users who initiate a deployment can't approve the deployment job, even if they're a required reviewer. By enabling self-reviews, it ensures that deployments to protected environments are always reviewed by more than one person.
+
+For more information on reviewing jobs that reference an environment with required reviewers, see Reviewing deployments.
+
+**Wait timer projection rules**: You can use a wait timer protection rule to delay a job for a specific amount of time after the job is initially triggered before the environment deployment is allowed to proceed. The time (in minutes) must be an integer between 1 and 43,200 (30 days).The wait time won't count towards your billable time.
+
+**Branch and tag protection rules**: You can use deployment branch and tag protection rules to restrict which branches and tags are utilized to deploy to the environment. You have several options for deployment branch and tag protection rules for an environment.
+
+* **No restriction** sets no restriction on which branch or tag can deploy to the environment. 
+* **Protected branches only** allows only branches with branch protection rules enabled to deploy to the environment. If no branch protection rules are defined for any branch in the repository, then all branches can deploy. 
+* The **Selected branches and tags** setting ensures Only branches and tags that match your specified name patterns can deploy to the environment.
+
+If you specify releases/* as a deployment branch or tag rule, only a branch or tag whose name begins with releases/ can deploy to the environment. (Wildcard characters won't match /. To match branches or tags that begin with release/ and contain an additional single slash, use release/*/*.) If you add main as a branch rule, a branch named main can also deploy to the environment.
+
+**Custom deployment protection rules**: You can enable your own custom protection rules to gate deployments with third-party services. For instance, you can use observability systems, change management systems, code quality systems, or other manual configurations that you use to assess readiness and provide automated approvals for deployments to GitHub.
+
+Once custom deployment protection rules are created and installed on a repository, you can enable the custom deployment protection rule for any environment in the repository.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-ci/media/2b-protection-rules.png)
+
+Settings page for configuring 'Environment1' with options for reviewers, wait timer, custom rules, and branch restrictions.
+
+**Note**
+
+If you are on a GitHub Free, GitHub Pro, or GitHub Team plan, the enviroment deployment projection rules are only available for public repositories; with the exception of branch & tag protection rules. For users of GitHub Pro or GitHub Team plans, branch and tag protection rules are also available for private repositories.
+
+## Scripts in your workflow
+In the preceding workflow snippet examples, the run keyword is used to print a string of text. Because the run keyword tells the job to execute a command on the runner, you use the run keyword to run actions or scripts.
+
+**yml**
+
+```
+jobs:
+  example-job:
+    steps:
+      - run: npm install -g bats
+```
+
+In this example, you're using npm to install the bats software testing package by using the run keyword. You can also run a script as an action. You can store the script in your repository, often done in a .github/scripts/ directory, and then supply the path and shell type using the run keyword.
+
+**yml**
+
+```
+jobs:
+  example-job:
+    steps:
+      - name: Run build script
+        run: ./.github/scripts/build.sh
+        shell: bash
+```
+
+## Cache dependencies with the cache action
+When building out a workflow, you'll often find the need to reuse the same outputs or download dependencies from one run to another. Instead of downloading these dependencies over and over again, you can cache them to make your workflow run faster and more efficiently. Caching dependencies reduces the time it takes to run certain steps in a workflow, because jobs on GitHub-hosted runners start in a clean virtual environment each time.
+
+To cache dependencies for a job, use GitHub's cache action. This action retrieves a cache identified by a unique key that you provide. When the action finds the cache, it then retrieves the cached files to the path that you configure. To use the cache action, you need to set a few specific parameters:
+
+| Parameter | Description | Required |
+|-----------|-------------|----------|
+| Key | Refers to the key identifier created when saving and searching for a cache. | Yes |
+| Path | Refers to the file path on the runner to cache or search. | Yes |
+| Restore-keys | Consists of alternative existing keys to caches if the desired cache key isn't found. | No |
+
+**yml**
+
+```
+steps:
+  - uses: actions/checkout@v2
+
+  - name: Cache NPM dependencies
+    uses: actions/cache@v2
+    with:
+      path: ~/.npm
+      key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+      restore-keys: |
+        ${{ runner.os }}-npm-cache-
+```
+
+In the preceding example, the path is set to ~/.npm and the key includes the runner's operating system and the SHA-256 hash of the package-lock.json file. Prefixing the key with an ID (npm-cache in this example) is useful when you're using the restore-keys fallback and have multiple caches.
+
+## Pass artifact data between jobs
+Similar to the idea of caching dependencies within your workflow, you can pass data between jobs within the same workflow. You can do this by using the upload-artifact and download-artifact actions. Jobs that are dependent on a previous job's artifacts must wait for the previous job to complete successfully before they can run. This is useful if you have a series of jobs that need to run sequentially based on artifacts uploaded from a previous job. For example, job_2 requires job_1 by using the needs: job_1 syntax.
+
+**yml**
+
+```
+name: Share data between jobs
+on: push
+jobs:
+  job_1:
+    name: Upload File
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello World" > file.txt
+      - uses: actions/upload-artifact@v2
+        with:
+          name: file
+          path: file.txt
+
+  job_2:
+    name: Download File
+    runs-on: ubuntu-latest
+    needs: job_1
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: file
+      - run: cat file.txt
+```
+
+The preceding example has two jobs. job_1 writes some text into the file file.txt. Then it uses the actions/upload-artifact@v2 action to upload this artifact and store the data for future use within the workflow. job_2 requires job_1 to complete by using the needs: job_1 syntax. It then uses the actions/download-artifact@v2 action to download that artifact, and then print the contents of file.txt.
+
+## Enable step debug logging in a workflow
+In some cases, the default workflow logs don't provide enough detail to diagnose why a specific workflow run, job, or step fails. For these situations, you can enable additional debug logging for two options: runs and steps. Enable this diagnostic logging by setting two repository secrets that require admin access to the repository to true:
+
+* To enable runner diagnostic logging, set the ACTIONS_RUNNER_DEBUG secret in the repository that contains the workflow to true.
+* To enable step diagnostic logging, set the ACTIONS_STEP_DEBUG secret in the repository that contains the workflow to true.
+
+## Access the workflow logs from the user interface
+When you think about successful automation, you aim to spend the least amount of time looking at what's automated so you can focus your attention on what's relevant. However, sometimes things don't go as planned, and you need to review what happened. That debugging process can be frustrating. GitHub provides a clear layout structure that enables a quick way to navigate between the jobs, while keeping the context of the currently debugging step. To view the logs of a workflow run in GitHub, you can follow these steps:
+
+1. Navigate to the Actions tab in your repository.
+2. In the left sidebar, click the desired workflow.
+3. From the list of workflow runs, select the desired run.
+4. Under Jobs, select the desired job.
+5. Read the log output.
+
+If you have several runs within a workflow, you can also select the Status filter after choosing your workflow and set it to Failure to only display the failed runs within that workflow.
+
+## Access the workflow logs from the REST API
+In addition to viewing logs using GitHub, you can also use GitHub's REST API to view logs for workflow runs, re-run workflows, or even cancel workflow runs. To view a workflow run's log using the API, you need to send a GET request to the logs endpoint. Keep in mind that anyone with read access to the repository can use this endpoint. If the repository is private, you must use an access token with the repo scope.
+
+For example, a GET request to view a specific workflow run log would follow this path:
+
+**HTTP**
+
+```
+GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs
+```
+
+## Identify when to use an installation token from a GitHub App
+Once your GitHub App is installed on an account, you can authenticate it as an app installation using the 'installation access token' for REST and GraphQL API requests. This allows the app to access resources owned by the installation, assuming the app was granted the necessary repository access and permissions. REST or GraphQL API requests made by an app installation are attributed to the app. In the following example, you replace INSTALLATION_ACCESS_TOKEN with the installation access token:
+
+```
+curl --request GET \
+--url "https://api.github.com/meta" \
+--header "Accept: application/vnd.github+json" \
+--header "Authorization: Bearer INSTALLATION_ACCESS_TOKEN" \
+--header "X-GitHub-Api-Version: 2022-11-28"
+```
+
+You can also use an installation access token to authenticate for HTTP-based Git access. Your app must have the 'Contents' repository permission. You can then use the installation access token as the HTTP password. You replace TOKEN in the example with the installation access token:
+
+```
+git clone https://x-access-token:TOKEN@github.com/owner/repo.git
+```
+
+
+# 2.4 Exercise - Create the CI workflow on GitHub
+
+This exercise checks your knowledge about how to create, customize, and test a continuous integration workflow for a project.
+
+## Getting started
+
+When you select the following *Start the exercise on GitHub* button, you'll go to a public GitHub template repository. That repository prompts you to complete a series of small challenges. Before starting the exercise, complete these tasks:
+
+* Select the *Start course* button or the *Use this template* feature within the template repository. This action will prompt you to create a new repository. We recommend creating a public repository, as private repositories will have GitHub Actions minutes billed.
+* After you make your own repository from the template, wait about 20 seconds and refresh.
+* Follow the instructions in the repository's README.md to understand how the exercise works, its learning objectives, and how to successfully complete the exercise.
+
+After you've finished the exercise in GitHub, return here for:
+
+* A quick knowledge check
+* A summary of what you've learned
+* A badge for completing this module
+
+**Note**  
+You do not need to modify any of the workflow files to complete this exercise. **Altering the contents in this workflow can break the exercise's ability to validate your actions, provide feedback, and grade the results.**
+
+https://github.com/skills/test-with-actions
+
+# 2.5 Module assessment
+
+Choose the best response for each question.
+
+## Check your knowledge
+
+### 1.
+**Artifacts from a GitHub Actions workflow can be saved with what action?**
+
+- **✅ The `actions/upload-artifact` action**
+- The `actions/checkout@v3` action
+- The `actions/download-artifact` action
+
+**Explanation:** The `actions/upload-artifact` action is specifically designed to save artifacts from a workflow. The `actions/checkout` action is for accessing repository code, and `actions/download-artifact` is for retrieving previously saved artifacts.
+
+### 2.
+**What is one way that GitHub Actions workflows can NOT be used?**
+
+- To automatically run test suites on each push
+- To kick off a review process
+- To automate common repetitive tasks, such as welcoming new contributors to a repository.
+- **✅ To upload a new secret to GitHub Secrets.**
+
+**Explanation:** GitHub Actions workflows cannot upload secrets to GitHub Secrets for security reasons. Secrets must be manually added through the repository settings by users with appropriate permissions. All other options are valid use cases for GitHub Actions.
+
+### 3.
+**Which action would you use to access a repository's code from the virtual machine provided by GitHub Actions?**
+
+- `actions/upload-artifact`
+- **✅ `actions/checkout`**
+- `npm install`
+- `actions/setup-node`
+
+**Explanation:** The `actions/checkout` action downloads the repository's source code to the GitHub Actions runner, making it available for subsequent steps. `actions/upload-artifact` saves files, `npm install` installs dependencies, and `actions/setup-node` configures Node.js environment.
+
+### 4.
+**How many builds will the following matrix produce?** `os: [ubuntu-latest, windows-latest] node-version: [14.x, 16.x, 18.x]`
+
+- **✅ 6**
+- 3
+- 5
+
+**Explanation:** A matrix creates builds for every combination of the specified values. With 2 operating systems and 3 Node.js versions, this produces 2 × 3 = 6 builds: ubuntu-latest with each Node version (3 builds) and windows-latest with each Node version (3 builds).
+
+### 5.
+**How can you pass data between jobs in a GitHub Actions workflow?**
+
+- **✅ By using the `needs` keyword**
+- By using the `outputs` keyword
+- By using the `env` keyword
+- By using the `secrets` keyword
+
+**Explanation:** The `needs` keyword establishes job dependencies and allows access to outputs from previous jobs. While `outputs` are used to define what data a job produces, `needs` is the mechanism that enables one job to access another job's outputs. `env` and `secrets` are for environment variables and sensitive data, not for passing data between jobs.
+
+
+
+# 2.6 Summary
+
+In this module, you implemented a CI solution using GitHub Actions and workflows.
+
+You can now:
+
+* Build and test a Node.js project by using GitHub Actions and a templated workflow.
+* Debug a failed test using the GitHub Actions log.
+* Customize your workflow with GitHub Actions to:
+  * Create a build artifact and save it.
+  * Get access to your build artifacts.
+  * Test against multiple targets.
+  * Add labels to your pull requests.
+
+## Next steps
+
+To continue your journey with GitHub Actions, check out the next module on this learning path. You can expand on what you learned here and use GitHub Actions for continuous delivery and implementing infrastructure as code.
+
+## Learn more
+
+Here are some links to more information on the subjects we discussed in this module.
+
+* GitHub Actions documentation
+* GitHub Marketplace
+* GitHub created actions
+* actions/checkout@v3
+* actions/upload-artifact
+* actions/download-artifact
+* pullreminders/label-when-approved-action
+* Metadata syntax for GitHub Actions
+* Workflow syntax for GitHub Actions
+* Events that trigger workflows
+* GitHub Actions usage limits
+* About GitHub Actions: Job
+* About CI: Job
+* npm install
+* npm run
+* npm test
+* Default environment variables
+* Contexts
+* Understanding GitHub Actions
+* Using the cache action
+* Passing data between jobs in a workflow
+* Enabling debug logging
+* Using workflow run logs
