@@ -1714,3 +1714,743 @@ Here are some links to more information on the subjects we discussed in this mod
 * Passing data between jobs in a workflow
 * Enabling debug logging
 * Using workflow run logs
+
+
+# 3 Build and deploy applications to Azure by using GitHub Actions
+
+Create two deployment workflows using GitHub Actions and Microsoft Azure.
+
+
+# 3.1 Introduction
+
+Continuous Delivery (CD) is the practice of using automation to build, test, configure, and deploy from the build environment all the way to the final production environment.
+
+Suppose that your development team is working on the company's product support website. You previously set up continuous integration (CI) by using GitHub Actions and workflows. Now you need to implement CD. Your CI workflow saves a container image. Your CD workflow must deploy this container to your staging and production environments. You talked with IT about how to create and tear down these environments as needed. You all decided to use GitHub Actions and workflows to support infrastructure as code.
+
+In this module, you learn how to use GitHub Actions and workflows to implement a CD solution that deploys to Microsoft Azure Web Apps. The deployment uses a GitHub Action from the GitHub Marketplace. You also automate creating and tearing down the deployment environments by using a workflow.
+
+## Learning objectives
+
+In this module, you will:
+
+* Discover options for triggering a CD GitHub Workflow.
+* Understand steps to remove workflow artifacts.
+* Identify important environment protections.
+* Control workflow execution with job conditionals.
+* Deploy to Microsoft Azure with a GitHub deploy action.
+* Store credentials with GitHub Secrets.
+* Create and destroy Azure resources with GitHub Actions and workflows.
+
+## Prerequisites
+
+* A GitHub account
+* The ability to navigate and edit files in GitHub
+  * For more information about GitHub, see Introduction to GitHub.
+* Basic familiarity with GitHub Actions and workflows
+  * If you aren't familiar with workflows, jobs and steps, check out the Automate development tasks by using GitHub Actions module.
+* Basic familiarity with continuous integration using GitHub Actions and workflows
+  * If you're unfamiliar with continuous integration using GitHub Actions and workflows, check out Build continuous integration workflows by using GitHub Actions
+* An Azure subscription
+
+
+# 3.2 How do I use GitHub Actions to deploy to Azure?
+
+This unit discusses how to use GitHub actions to deploy a container-based web app to Microsoft Azure Web Apps. It covers some options for triggering a workflow. Next, you learn how to work with conditionals in the workflow. Finally, you learn about how to create and delete Azure resources by using GitHub Actions.
+
+## Options for triggering a CD workflow
+There are several options for starting a CD workflow. In the previous module on CI with GitHub Actions, you learned how to trigger a workflow from a push to the GitHub repository. However, for CD, you might want to trigger a deployment workflow on some other event.
+
+One option is to trigger the workflow with ChatOps. ChatOps uses chat clients, chatbots, and real-time communication tools to run tasks. For example, you might leave a specific comment in a pull request that can kick off a bot. That bot might comment back with some statistics or run a workflow.
+
+Another option, and the one we use in our example, is to use labels in your pull request. Different labels can start different workflows. For example, add a stage label to begin a deployment workflow to your staging environment, or add a spin up environment label to run the workflow that creates the Microsoft Azure resources for you to deploy to. To use labels, your workflow looks like this:
+
+**yml**
+
+```
+on:
+  pull_request:
+    types: [labeled]
+```
+
+## Control execution with a job conditional
+Often, you only want to run a workflow if a certain condition is true.
+
+GitHub workflows provide the if conditional for this scenario. The conditional uses an expression that's evaluated at runtime. For example, you want to run this workflow if a stage label is added to the pull request.
+
+**yml**
+
+```
+if: contains(github.event.pull_request.labels.*.name, 'stage')
+```
+
+## Store credentials with GitHub Secrets
+You never want to expose sensitive information in the workflow file. GitHub Secrets is a secure place to store sensitive information that your workflow needs. Here's an example:
+
+In order to deploy to an Azure resource, the GitHub Action must have permission to access the resource. You don't want to store your Azure credentials in plain sight in the workflow file. Instead, you can store your credentials in GitHub Secrets.
+
+To store information in GitHub Secrets, create a secret on the portal.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-cd/media/2-secrets.png)
+
+Screenshot of the GitHub portal interface for creating a secret.
+
+Then, use the name of the secret you created in your workflow wherever you need that information. For example, use the Azure credential that was stored in GitHub Secrets in the creds: attribute of an Azure login action.
+
+**yml**
+
+```
+steps:
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+```
+
+## Deploy to Microsoft Azure using GitHub Actions
+The GitHub Marketplace has several actions that help you automate Azure-related tasks.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-cd/media/2-marketplace-azure.png)
+
+Screenshot of the GitHub Marketplace showing search results for Azure.
+
+You can also search and browse GitHub Actions directly in a repository's workflow editor. From the sidebar, you can search for a specific Action, view featured Actions, and browse featured categories.
+
+To find an Action:
+
+1. In your repository, browse to the workflow file that you want to edit.
+2. Select the Edit icon in the upper-right corner of the file view.
+3. Use the GitHub Marketplace sidebar to the right of the editor to browse Actions.
+
+Suppose you want to deploy a container-based web app to Azure Web Apps. If you search the GitHub Marketplace, you find these actions:
+
+* azure/webapps-deploy@v1
+* azure/login@v1 that we saw previously
+* azure/docker-login@v1
+
+If you add these actions to the Deploy-to-Azure job, your workflow looks like this:
+
+**yml**
+
+```
+  Deploy-to-Azure:
+    runs-on: ubuntu-latest
+    needs: Build-Docker-Image
+    name: Deploy app container to Azure
+    steps:
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: azure/docker-login@v1
+        with:
+          login-server: ${{env.IMAGE_REGISTRY_URL}}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy web app container
+        uses: azure/webapps-deploy@v1
+        with:
+          app-name: ${{env.AZURE_WEBAPP_NAME}}
+          images: ${{env.IMAGE_REGISTRY_URL}}/${{ github.repository }}/${{env.DOCKER_IMAGE_NAME}}:${{ github.sha }}
+
+      - name: Azure logout
+        run: |
+          az logout
+```
+
+Notice that this job depends on a previous job, Build-Docker-Image. The previous job creates the artifact that gets deployed.
+
+The azure/login@v1 action needs credentials to sign in to your Azure account so that it can access the Azure resources to which you want to deploy. Here, use the credentials that we stored in GitHub Secrets.
+
+The same is true for the azure/docker-login@v1 action. Since you're deploying a container image, you need to sign in to your private container registry.
+
+The azure/webapps-deploy@v1 action performs the deployment. It depends on the two preceding actions.
+
+## Create and delete Azure resources by using GitHub Actions
+Because CD is an automated process, you've already decided to use infrastructure as code to create and take down the environments you deploy to. GitHub Actions can automate these tasks on Azure, and you can include these actions in your workflow.
+
+**Note**
+
+Remember that it's important to tear down resources that you're no longer using as soon as possible to avoid unnecessary charges.
+
+One option is to create a new workflow with two jobs, one that spins up resources and one that deletes them. Then, use a conditional to run only the job you want. In this example, the conditional looks for a label in the pull request and runs the set-up-azure-resources job if the label is spin up environment and the destroy-azure-resources job if the label is destroy environment.
+
+**yml**
+
+```
+jobs:
+  set-up-azure-resources:
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.pull_request.labels.*.name, 'spin up environment')
+
+    ...
+
+  destroy-azure-resources:
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.pull_request.labels.*.name, 'destroy environment')
+
+    ...
+```
+
+The jobs use the Azure CLI to create and destroy the Azure resources. For more information about Azure CLI, see Overview of Azure CLI.
+
+Here's an example of the steps in the set-up-azure-resources job:
+
+**yml**
+
+```
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v2
+
+  - name: Azure login
+    uses: azure/login@v1
+    with:
+      creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+  - name: Create Azure resource group
+    if: success()
+    run: |
+      az group create --location ${{env.AZURE_LOCATION}} --name ${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+  - name: Create Azure app service plan
+    if: success()
+    run: |
+      az appservice plan create --resource-group ${{env.AZURE_RESOURCE_GROUP}} --name ${{env.AZURE_APP_PLAN}} --is-linux --sku F1 --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+  - name: Create webapp resource
+    if: success()
+    run: |
+      az webapp create --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --plan ${{ env.AZURE_APP_PLAN }} --name ${{ env.AZURE_WEBAPP_NAME }}  --deployment-container-image-name nginx --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+  - name: Configure webapp to use GitHub Packages
+    if: success()
+    run: |
+      az webapp config container set --docker-custom-image-name nginx --docker-registry-server-password ${{secrets.GITHUB_TOKEN}} --docker-registry-server-url https://docker.pkg.github.com --docker-registry-server-user ${{github.actor}} --name ${{ env.AZURE_WEBAPP_NAME }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+```
+
+Notice that you use GitHub actions to check out the repository and to sign in to Azure. After that, you create the resources you need and deploy the container by using the Azure CLI.
+
+
+# 3.3 Remove artifacts, create status badges, and configure environment protections
+
+In this unit, you learn how to remove workflow artifacts from GitHub and change the default retention period. Next, you learn how to create a workflow status badge and add it to your README.md file. Finally, you identify some important workflow environment protections and learn how to enable them.
+
+## Remove workflow artifacts from GitHub
+By default, GitHub stores any build logs and uploaded artifacts for 90 days before it deletes them. You can customize this retention period based on the type of repository and the usage limits set for your specific GitHub product. There's a lot more information about usage limits and artifact retention in Usage limits, billing, and administration.
+
+But suppose you're reaching your organization's storage limit for GitHub artifacts and packages. You want to remove old artifacts without increasing your usage limits and blocking your workflows. You can reclaim used GitHub Actions storage by deleting artifacts before they expire on GitHub. You can do this two ways, as described in the following sections. Both methods require write access to the repository.
+
+**Warning**
+
+Keep in mind that once you delete an artifact, it can't be restored.
+
+### Manually delete artifacts from your repository
+To manually delete an artifact on GitHub, navigate to the Actions tab, select the workflow from the left sidebar, and then select the run you want to see.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-cd/media/select-workflow-run.png)
+
+Screenshot that shows an example workflow run on GitHub.
+
+Under Artifacts, delete the artifact you want to remove.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-cd/media/delete-artifact.png)
+
+Screenshot that shows the trash can icon to delete an artifact on GitHub.
+
+You can also use the Artifacts REST API to delete artifacts. This API also allows you to download and retrieve information about work artifacts.
+
+### Change the default retention period
+You can change the default artifact and log retention period for your repository, organization, or enterprise account. Keep in mind that changing the retention period only applies to new artifacts and log files. It doesn't apply to existing objects. The process to configure these settings is a bit different for a repository, organization, or enterprise. Check the summary at the end of this module for more information on configuring artifacts and log retentions.
+
+In addition to configured settings across a repository, organization, or enterprise, you can define a custom retention period for individual artifacts right within the workflow file. This practice is good for individual use cases where you want a specific artifact's retention to be different than the default or configured setting. You can do this using a retention-days value within the step with the upload-artifact action.
+
+The following example uploads an artifact that persists for 10 days instead of the default 90 days:
+
+**yml**
+
+```
+- name: 'Upload Artifact'
+  uses: actions/upload-artifact@v2
+  with:
+    name: my-artifact
+    path: my_file.txt
+    retention-days: 10
+```
+
+## Add a workflow status badge to your repository
+It's helpful to know a workflow's status without having to visit the Actions tab to see if it successfully completed. Adding workflow status badges to your repository README.md file allows you to quickly see if your workflows are passing or failing. While it's common to add a status badge to a repository README.md file, you can also add it any web page. By default, status badges display the workflow statuses on your default branch, but you can also display workflow status badges on other branches using the branch and event parameters.
+
+Here's an example of what you need to add to a file to see a workflow status badge:
+
+**yml**
+
+```
+![example branch parameter.](https://github.com/mona/special-octo-eureka/actions/workflows/grading.yml/badge.svg?branch=my-workflow)
+```
+
+For example, adding the branch parameter along with the desired branch name at the end of the URL shows the workflow status badge for that branch instead of the default branch. This practice makes it easy to create a table-like view within your README.md file to display workflow statuses based on branches, events, services, or environments to name a few.
+
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-cd/media/my-workflow-status-badge.png)
+
+Screenshot that shows an example workflow status badge with the my-workflow branch.
+
+You can also create a status badge using GitHub. Navigate to the workflows section within the Actions tab and select a specific workflow. The Create status badge option allows you to generate the markdown for that workflow and set the branch and event parameters.
+
+![](https://learn.microsoft.com/en-us/training/github/github-actions-cd/media/create-status-badge.png)
+
+Screenshot that shows the option to create a status badge from the workflows section on GitHub.
+
+## Add workflow environment protections
+Security is a big deal, so it makes sense to configure your workflow environment with protection rules and secrets. With these elements in place, a job doesn't start or access any defined secrets in the environment until all of the environment's protection rules pass. Currently, protection rules and environment secrets only apply to public repositories.
+
+There are two environment protection rules that you can apply to workflows within public repositories, required reviewers and wait timer.
+
+* **Required reviewers** allow you to set a specific person or team to approve workflow jobs that reference the job's environment.
+* You can use **Wait timer** to delay a job for a specific amount of time after the job has been triggered.
+
+Suppose you need to create a workflow to a production environment that a dev team needs to approve before the deployment occurs. Use the following steps:
+
+1. Create a production environment within the repository.
+2. Configure the required reviewers environment protection to require an approval from the specific dev team.
+3. Configure the specific job within the workflow to look for the production environment.
+
+You can create and configure new repository environments from the repository's Settings tab under Environments.
+
+
+# 3.4 Exercise - Create a workflow that deploys a web app to Azure
+
+This exercise checks your knowledge on content covered in this module by using GitHub Actions and Microsoft Azure to create two deployment workflows.
+
+## Getting started
+
+When you select the *Start the exercise on GitHub* button, you navigate to a public GitHub template repository that prompts you to complete a series of small challenges. Before you can begin the exercise, complete the following tasks:
+
+* Select the *Start course* button or the *Use this template* feature within the template repository. This action prompts you to create a new repository. We recommend that you create a public repository. Private repositories use Actions minutes.
+* After you make your own repository from the template, wait about 20 seconds and refresh.
+* Follow the instructions in the repository's README to understand how the exercise works, its learning objectives, and how to successfully complete the exercise.
+
+When you finish the exercise in GitHub, return here for:
+
+* A quick knowledge check
+* A summary of what you've learned
+* To earn a badge for completing this module
+
+**Note**  
+You do not need to modify any of the workflow files to complete this exercise.
+
+**Altering the contents in this workflow can break the exercise's ability to validate your actions, provide feedback, or grade the results**.
+
+https://github.com/skills/deploy-to-azure
+
+# 3.5 Module assessment
+
+Choose the best response for each question.
+
+## Check your knowledge
+
+### 1.
+**How do you grant your GitHub repository access to Azure?**
+
+- It happens automatically.
+- Authenticate to Azure with GitHub.
+- **✅ Manage credentials using GitHub Secrets and use that secret name in the workflow.**
+- Manage credentials by generating tokens locally
+
+**Explanation:** To grant GitHub repository access to Azure, you need to store Azure credentials (such as service principal credentials) in GitHub Secrets and then reference those secrets in your workflow using `${{ secrets.AZURE_CREDENTIALS }}`. This is the secure and recommended way to authenticate with Azure from GitHub Actions.
+
+### 2.
+**What can trigger a workflow for deploying to Microsoft Azure?**
+
+- Only commit events
+- Any events that affect the repository's default branch
+- **✅ Any event, just like any other Action**
+
+**Explanation:** GitHub Actions workflows for Azure deployment can be triggered by any GitHub event, just like any other workflow. This includes push events, pull requests, labels, schedules, manual triggers (`workflow_dispatch`), and many others. Azure deployment workflows are not limited to specific types of events.
+
+### 3.
+**How do you make sure that your Azure credentials are not stored in plain text in your repository?**
+
+- **✅ Use GitHub Secrets to securely store your Azure credentials.**
+- Use your GitHub token to authenticate into Azure.
+- Put your credentials directly in your workflow file.
+
+**Explanation:** GitHub Secrets provide a secure way to store sensitive information like Azure credentials. These secrets are encrypted and only accessible to authorized workflows. Putting credentials directly in workflow files would expose them in plain text, and GitHub tokens cannot be used to authenticate with Azure services.
+
+
+# 3.6 Summary
+
+In this module, you learned how to use GitHub Actions and workflows to implement a CD solution that deploys a container-based web app to Microsoft Azure Web Apps. You also automated the creation and teardown of the deployment environments by using a workflow.
+
+You learned about:
+
+* Options for triggering a CD workflow.
+* Controlling workflow execution with job conditionals.
+* Deploying to Microsoft Azure with a GitHub `deploy` action.
+* Storing credentials with GitHub Secrets.
+* Using GitHub actions to create and delete Azure resources.
+
+## Learn more
+
+Here are some links to more information on the topics discussed in this module.
+
+* GitHub Actions documentation
+* GitHub Marketplace
+* GitHub created actions
+* Metadata syntax for GitHub Actions
+* Workflow syntax for GitHub Actions
+* GitHub Actions usage limits
+* Introduction to Docker Containers
+* actions/checkout@v1
+* actions/upload-artifact
+* actions/download-artifact
+* azure/webapps-deploy@v1
+* azure/login@v1
+* azure/docker-login@v1
+* Artifact and log retention policy
+* Artifacts REST API
+* Adding a workflow status badge
+* Environments
+
+
+
+# 4 Automate GitHub by using GitHub Script
+
+Learn to interact with the GitHub API from GitHub Actions by using GitHub Script.
+
+# 4.1 Introduction
+
+GitHub Script is a workflow action that provides you with access to the GitHub API from within GitHub Actions. It offers convenient support for any API usage that's available in octokit/rest.js.
+
+Suppose you maintain a vibrant GitHub repository. Your project has a substantial number of consumers and contributors, and you want to make sure they have a welcoming experience. You also find that the responsibilities of managing the team's planning and workload can really add up. You need a solution that enables you to hand off some of the mundane tasks to automation so that you can focus on areas where you really add value. You know that GitHub provides an API that lets you automatically reply to new issues and begin the triage workflow for new bug reports. You just haven't invested the time in figuring it all out, until now.
+
+In this module, you'll learn how to interact with the GitHub API from a GitHub Actions workflow by using GitHub Script.
+
+## Learning objectives
+
+In this module, you'll:
+
+* Use GitHub Script in your workflow.
+* Comment on issues by using Octokit.
+* Add issues to a project board by using Octokit.
+* Use the workflow expression syntax to filter when jobs run in a workflow.
+
+## Prerequisites
+
+* A GitHub account
+* The ability to navigate and edit files in GitHub
+* Familiarity with GitHub Actions
+* Familiarity with CI/CD
+
+We recommend that you complete Automate development tasks by using GitHub Actions before beginning this module.
+
+# 4.2 What is GitHub Script?
+
+In this unit, you'll learn how GitHub Script enables you to automate common GitHub processes by using GitHub Actions workflows.
+
+## What is GitHub Script?
+GitHub Script is an action that provides an authenticated Octokit client and enables JavaScript to be written directly in a workflow file. It runs in Node.js, so you have the power of that platform available when you write scripts.
+
+## What is Octokit?
+Octokit is the official collection of clients for the GitHub API. One of these clients, rest.js, provides JavaScript access to the GitHub REST interface.
+
+You have always been able to automate the GitHub API via octokit/rest.js, although it could be a chore to properly set up and maintain. One of the great advantages to using GitHub Script is that it handles all of this overhead so you can immediately start using the API. You don't need to worry about dependencies, configuration, or even authentication.
+
+## What can octokit/rest.js do?
+The short answer is that it can do virtually anything with respect to automating GitHub. In addition to having access to commits, pull requests, and issues, you also have access to users, projects, and organizations. You can retrieve lists of commonly used files, like popular licenses or .gitignore files. You can even render Markdown.
+
+If you're creating something that integrates GitHub, the odds are good that you'll find what you're looking for in the full octokit/rest.js documentation.
+
+## How is using GitHub Script different from octokit/rest.js?
+The main difference in usage is that GitHub Script provides a preauthenticated octokit/rest.js client named github.
+
+So instead of
+
+```
+octokit.issues.createComment({
+```
+
+you use
+
+```
+github.issues.createComment({
+```
+
+In addition to the github variable, the following variables are also provided:
+
+* **context** is an object that contains the context of the workflow run.
+* **core** is a reference to the @actions/core package.
+* **io** is a reference to the @actions/io package.
+
+## Creating a workflow that uses GitHub Script
+GitHub Script actions fit into a workflow like any other action. As a result, you can even mix them in with existing workflows, like those you might have already set up for CI/CD. To illustrate the convenience of GitHub Script, you'll now construct a complete workflow that uses it to automatically post a comment to all newly created issues.
+
+You'll start off with a name and an on clause that specifies that the workflow runs when issues are opened:
+
+**YAML**
+
+```
+name: Learning GitHub Script
+
+on:
+  issues:
+    types: [opened]
+```
+
+Next, you'll define a job named comment that runs on Linux with a series of steps:
+
+**YAML**
+
+```
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+```
+
+In this case, there's only one step: the GitHub Script action.
+
+**YAML**
+
+```
+      - uses: actions/github-script@0.8.0
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "🎉 You've created this issue comment using GitHub Script!!!"
+            })
+```
+
+Using GitHub Actions can really help automate the events that take place in your repositories. Imagine that a repository visitor opened a new issue containing information about a critical bug. You might want to thank them for bringing the bug to your attention, but this simple task can become overwhelming as your repository attracts more visitors. By automating an issue comment, you can automate the process of thanking visitors every time.
+
+## Using actions/github-script@0.8.0
+The actions/github-script@0.8.0 action, also known as GitHub Script, does all the difficult work for your integration with the GitHub API.
+
+This action requires a github-token that's provided at runtime so that requests are authenticated. This is automatically done for you, so you can use that code as-is.
+
+The script parameter can be virtually any JavaScript that uses the octokit/rest/js client stored in github. In this case, it's just one line (split across multiple lines for readability) that creates a hardcoded comment.
+
+After the workflow runs, GitHub Script logs the code it ran for review on the Actions tab:
+
+Screenshot of a completed GitHub Script workflow.
+
+## Running from a separate file
+You might sometimes need to use a significant amount of code to meet your GitHub Script scenario. When that happens, you can keep the script in a separate file and reference it from the workflow instead of putting all the script inline.
+
+Here's an example of a simple workflow that uses that technique:
+
+**YAML**
+
+```
+on: push
+
+jobs:
+  echo-input:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/github-script@v2
+        with:
+          script: |
+            const path = require('path')
+            const scriptPath = path.resolve('./path/to/script.js')
+            console.log(require(scriptPath)({context}))
+```
+
+Check out more GitHub Script examples.
+
+
+
+
+# 4.3 Exercise - Using GitHub Script in GitHub Actions
+
+In this unit, you'll learn more about how you can use GitHub Script to improve your workflow.
+
+## Add issues to a project board
+In addition to using octokit/rest.js to create comments and open pull requests, you can also use octokit/rest.js to manage GitHub Projects. In the following code sample, you create a workflow that runs whenever anyone adds a new issue to the repository. This adds the issue to a project board, which makes it easier for you to triage your work.
+
+```
+name: Learning GitHub Script
+on:
+  issues:
+    types: [opened]
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/github-script@0.8.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+            github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "🎉 You've created this issue comment using GitHub Script!!!"
+            })
+            github.projects.createCard({
+            column_id: {{columnID}},
+            content_id: context.payload.issue.id,
+            content_type: "Issue"
+            });
+```
+
+The first section of this workflow creates a comment whenever a new issue is created, which is covered in the previous unit. The next section creates a card based on this issue and adds it to the project board.
+
+## Separate workflow into steps
+One benefit of using actions is that you can separate jobs into smaller units of work called steps. In the preceding example workflow, you can separate the workflow into two steps.
+
+One advantage of breaking the current workflow into multiple steps is that it enables you to use expressions to apply logic. Using steps allows you to create rules around when steps are allowed to run and can help optimize your workflow run.
+
+To separate the example workflow into steps:
+
+* Name each step so that you can track it from the Actions tab.
+* Use expressions to determine whether a step should run (optional).
+
+In this example, the two tasks in the original workflow file are separated into individual steps:
+
+```
+name: Learning GitHub Script
+on:
+  issues:
+    types: [opened]
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Comment on new issue
+      uses: actions/github-script@0.8.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+            github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "🎉 You've created this issue comment using GitHub Script!!!"
+            })
+    - name: Add issue to project board
+      if: contains(github.event.issue.labels.*.name, 'bug')
+      uses: actions/github-script@0.8.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+            github.projects.createCard({
+            column_id: {{columnID}},
+            content_id: context.payload.issue.id,
+            content_type: "Issue"
+            });
+```
+
+Each step includes a descriptive name element that also helps you track it from the Actions tab.
+
+The Add issue to project board step also includes an if statement that specifies that the issue should be added to the project board only if it's labeled bug.
+
+## Use the Node.js environment
+GitHub Script also grants you access to a full Node.js environment. Although we don't recommend using GitHub Script to write the logic for complex actions, you can use it to add more functionality to the octo/rest.js API.
+
+For example, you could use Node.js to display a contribution guide whenever an issue is opened. You can use the Node.js file system to read a file and use it as the body of the issue comment. To access files within the repository, include the actions/checkout action as the first step in the workflow.
+
+The following example makes the following changes to the workflow file:
+
+* Adds the action/checkout action to read the templated response file that's located at .github/ISSUE_RESPONSES/comment.md
+* Adds JavaScript to use the Node.js File System module to place the contents of our templated response as the body of the issue comment
+
+```
+name: Learning GitHub Script
+on:
+  issues:
+    types: [opened]
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Comment on new issue
+        uses: actions/github-script@0.8.0
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+             const fs = require('fs')
+             const issueBody = fs.readFileSync(".github/ISSUE_RESPONSES/comment.md", "utf8")
+             github.issues.createComment({
+             issue_number: context.issue.number,
+             owner: context.repo.owner,
+             repo: context.repo.repo,
+             body: issueBody
+             })
+      - name: Add issue to project board
+        if: contains(github.event.issue.labels.*.name, 'bug')
+        uses: actions/github-script@0.8.0
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.projects.createCard({
+            column_id: {{columnID}},
+            content_id: context.payload.issue.id,
+            content_type: "Issue"
+            });
+```
+
+GitHub Script helped you create a comprehensive response to a new issue. This response is also based on a template in the repository, so it's easy to change. Finally, you also included a trigger to add the issue to the project board so you can easily triage it for future work.
+
+
+# 4.4 Module assessment
+
+Choose the best response for each question.
+
+## Check your knowledge
+
+### 1.
+**What is GitHub Script?**
+
+- A programming language that compiles to JavaScript.
+- An automation syntax for GitHub shell.
+- **✅ A workflow action that enables GitHub API access from GitHub Actions.**
+
+**Explanation:** GitHub Script is a workflow action that provides an authenticated Octokit client and enables JavaScript to be written directly in a workflow file. It gives you access to the GitHub API from within GitHub Actions workflows without needing to handle authentication or dependencies yourself.
+
+### 2.
+**What is the difference between GitHub Script and GitHub Actions?**
+
+- GitHub Actions is for automating build and release pipelines. It was written in the GitHub Script programming language.
+- **✅ GitHub Actions is a workflow engine that automates the execution of actions. GitHub Script is one of the actions available for use in a workflow.**
+- GitHub Actions automates workflows that run inside GitHub. GitHub Script automates workflows that run outside of GitHub.
+
+**Explanation:** GitHub Actions is the broader platform/workflow engine that automates various tasks, while GitHub Script is a specific action that you can use within GitHub Actions workflows. GitHub Script provides convenient access to the GitHub API using JavaScript within those workflows.
+
+### 3.
+**Why would someone use the following YAML in a GitHub Script action:** `if: contains(github.event.issue.labels.*.name, 'bug')`?
+
+- **✅ To ensure that the script runs only when the target issue is labeled as a bug.**
+- To make sure that new issue names don't violate the bug reporting policy when issues are created.
+- To automatically flag any commits containing code matching the `github.event.issue.labels.*.name` namespace pattern as a bug.
+
+**Explanation:** This is a conditional statement that checks if the issue has a label named 'bug'. The script will only execute when this condition is true, making it useful for running specific automation only on issues that are labeled as bugs. This helps control when certain actions should take place based on the issue's labels.
+
+
+# 4.5 Summary
+
+In this module, you learned how to interact with the GitHub API from GitHub Actions by using GitHub Script.
+
+You learned about:
+
+* Using GitHub Script in your workflow.
+* Commenting on issues by using Octokit.
+* Adding issues to a project board by using Octokit.
+* Using the workflow expression syntax to filter when jobs run in a workflow.
+
+GitHub Script is great for interacting with GitHub from GitHub Actions. But what if you want to interact with the API from somewhere else? In that case, you can learn to Automate DevOps processes by using GitHub Apps.
+
+## Learn more
+
+Here are some links to more information on the topics discussed in this module:
+
+* GitHub Script
+* Octokit
