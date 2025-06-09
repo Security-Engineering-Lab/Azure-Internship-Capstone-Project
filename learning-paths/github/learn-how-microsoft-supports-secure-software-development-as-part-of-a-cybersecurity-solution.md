@@ -259,3 +259,339 @@ Additionally, the DR plan now includes standard guidance dictating proper handli
 - **✅ They used Azure Key Vault to encrypt data in their storage accounts.**
 
 **Explanation:** According to the scenario, Contoso formalized a process that all backups must be encrypted at rest and the encryption keys must be secured in Key Vault. This shows they used Azure Key Vault to manage encryption keys for protecting their backup data, which helps protect data confidentiality (not integrity as the question incorrectly states).
+
+
+
+
+# 1.4 Design to protect integrity
+
+*Prevent corruption of design, implementation, operations, and data to avoid disruptions that can stop the system from delivering its intended utility or cause it to operate outside the prescribed limits. The system should provide information assurance throughout the workload lifecycle.*
+
+The key is to implement controls that prevent tampering of business logic, flows, deployment processes, data, and even the lower stack components, like the operating system and boot sequence. Lack of integrity can introduce vulnerabilities that can lead to breaches in confidentiality and availability.
+
+## Example scenario
+
+Contoso Paint Systems creates vapor sensing and ventilation control systems for industrial spray painting machines. The system is also used to automatically capture air quality data for environmental impact reporting purposes. They have a cloud-based application backing their IoT devices that are distributed throughout painting booths. On-premises components of the application run on Azure Stack HCI and custom IoT devices. The system is in early prototype phase, and the workload team plans to release the production version within a year.
+
+## Defend your supply chain
+Continuously protect against vulnerabilities and detect them in your supply chain to block attackers from injecting software faults into your infrastructure, build system, tools, libraries, and other dependencies. Vulnerabilities should be scanned for during build time and runtime
+
+Knowing the origin of software and verifying its authenticity throughout the lifecycle will provide predictability. You'll know about vulnerabilities well in advance so that you can proactively remediate them and keep the system secure in production.
+
+### Contoso's challenge
+
+The engineering team is implementing their build and release pipelines, but haven't yet addressed the integrity of the build system.
+
+They've opted to use a few open-source solutions in both the firmware and the cloud components.
+
+They've heard how a supply chain compromise or malicious insiders can corrupt code which can then be used to disrupt systems or even exfiltrate data. If their customer's environmental reporting were impacted in such a way that resulted in a failure to report or a misrepresentation that is found in an audit, the effect on Contoso and their customer could be catastrophic.
+
+### Applying the approach and outcomes
+
+The team modifies their build processes for both firmware and the backend cloud systems, and now include security scanning steps to alert on known common vulnerabilities and exposures (CVEs) in dependencies. Additionally, they now include malware scanning of the code and packages as well.
+
+They also look at antimalware options for running on Azure Stack HCI, such as Windows Defender Application Control.
+
+These measures help increase confidence that the firmware and software that get deployed as part of this solution won't perform unexpected actions, impacting the integrity of the system or the customer's environmental reporting requirements.
+
+## Employ strong cryptographic mechanisms
+Establish trust and verify by using cryptography techniques like code signing, certificates, and encryption. Protect those mechanisms by allowing reputable decryption.
+
+By adopting this approach, you'll know that changes to data or access to the system is verified by a trusted source.
+
+Even if encrypted data is intercepted in transit by a malicious actor, the actor won't be able to unlock or decipher the content. You can use digital signatures to ensure that the data wasn't tampered with during transmission.
+
+### Contoso's challenge
+
+The devices selected for sensing and data transfer are currently not capable of enough processing power to support HTTPS or even custom encryption.
+
+The workload team plans to use network boundaries as primary isolation technique.
+
+A risk analysis review highlighted that unencrypted communication between IoT devices and control systems can lead to tampering, and network segmentation shouldn't be considered sufficient.
+
+### Applying the approach and outcomes
+
+Working with the manufacturer of their custom IoT device, the team decides to use a higher powered device that supports not only certificate based communication, but also supports code signing validation on chip, so that only signed firmware will execute.
+
+## Optimize the security of your backups
+Ensure backup data is immutable and encrypted when data is replicated or transferred.
+
+By adopting this approach, you'll be able to recover data with confidence that backup data wasn't changed at rest, inadvertently or maliciously.
+
+### Contoso's challenge
+
+Every month the Environment Protection Agency emissions report is generated, but these reports only need to be submitted three times a year.
+
+The report gets generated and then stored in an Azure Storage account until it's needed to be sent. This is done as a backup in case the reporting system experiences a disaster.
+
+The backup report itself isn't encrypted, but is transferred over HTTPs to the storage account.
+
+### Applying the approach and outcomes
+
+After performing a security gap analysis, the team sees that leaving the backup unencrypted is a risk that should be addressed. The team addresses the risk by encrypting the report and storing it in Azure blob Storage's Write One, Read Many (WORM) immutable storage option.
+
+The new approach ensures that the integrity of the backup is maintained.
+
+As an additional integrity measure, the report generated out of the main system now compares a SHA hash against the authoritative backup to detect any tampering with the primary data source.
+
+## Check your knowledge
+
+### 1. Which of the following is a reason to adopt threat scanning in your supply chain
+
+- **✅ Scanning can help detect vulnerabilities in your code.**
+- Scanning prevents attackers from exploiting vulnerabilities in your software.
+- Scanning ensures that your code is free of vulnerabilities.
+- Scanning ensures that your code is free of malware.
+
+**Explanation:** Scanning can help detect vulnerabilities in your code, which is the primary purpose of supply chain threat scanning. While scanning is valuable, it doesn't prevent exploitation, guarantee complete freedom from vulnerabilities, or ensure complete absence of malware - it's a detection and awareness tool that enables proactive remediation.
+
+### 2. Which of these are examples of cryptographic controls?
+
+- Using Azure SQL Database's firewall function to block access to a database.
+- **✅ Using code signing and encryption.**
+- Using Azure Policy to enforce security baselines.
+- Using Microsoft Sentinel to scan your environment.
+
+**Explanation:** Code signing and encryption are cryptographic controls that use mathematical algorithms to protect data integrity and confidentiality. Firewalls, Azure Policy, and Microsoft Sentinel are security controls but not specifically cryptographic in nature.
+
+### 3. How did Contoso ensure that their report backup is immutable?
+
+- They automatically move the report to Archive Storage after it's created.
+- The backup is only kept on VM disk storage.
+- The report is automatically deleted after 30 days.
+- **✅ The report is backed up to Azure Storage using the write-once-read-many (WORM) feature.**
+
+**Explanation:** According to the scenario, Contoso addressed the risk by storing the encrypted report in Azure blob Storage's Write One, Read Many (WORM) immutable storage option. WORM storage ensures that data cannot be modified or deleted once written, providing immutability.
+
+
+# 1.5 Design to protect availability
+
+*Prevent or minimize system and workload downtime and degradation in the event of a security incident by using strong security controls. You must maintain data integrity during the incident and after the system recovers.*
+
+You need to balance availability architecture choices with security architecture choices. The system should have availability guarantees to ensure that users have access to data and that data is reachable. From a security perspective, users should operate within the allowed access scope, and the data must be trusted. Security controls should block bad actors, but they shouldn't block legitimate users from accessing the system and data.
+
+## Example scenario
+
+Contoso Concierge runs a hotel management software system used in over 50 hotel brands in the United States. It's responsible for booking, guest check-in, and tracks guest services and housekeeping staffing. It's a cloud-based system that runs out of two regions in the United States. It's mostly hosted on virtual machine scale sets. The clients in the hotels are browser-based.
+
+## Enhance reliability through robust security
+Use security controls and design patterns to prevent attacks and code flaws from causing resource exhaustion and blocking access.
+
+Adopting this approach helps ensure the system doesn't experience downtime caused by malicious actions, like distributed denial of service (DDoS) attacks.
+
+### Contoso's challenge
+
+The workload team and the workload's stakeholders consider the reliability of this system to be of the utmost importance because so many hotel guests depend on it for business and leisure travel. It must be up for hotels to run their business.
+
+The team has invested considerable resources into testing functional and nonfunctional requirements to ensure reliability stays high, including using safe deployment practices to reliably release application updates.
+
+While they have been focused heavily on reliability, the team has been less attentive to security. Recently, an update was released that contained a code flaw that was exploited by an attacker to bring down the whole system for many hotels. The attack overwhelmed the application servers in one region for over four hours one evening, causing issues for customers and hotel guests.
+
+The attacker used the Contoso application servers to proxy requests to a regional storage account to receive pregenerated folio information. An inordinately large malicious folio was generated which caused the application servers to exhaust resources on the application server as it was being loaded into memory, and client retries spread the issue across all application servers.
+
+### Applying the approach and outcomes
+
+The team looked into a design pattern to remove their application servers from the folio request flow, opting instead for a Valet Key approach. While this wouldn't have prevented the problem, it would've isolated the impact.
+
+They also added more input validation into the system to sanitize input, which will help prevent malicious attempts like this in the future.
+
+Now with input sanitization and a strengthened design, one type of risk has been mitigated.
+
+## Proactively limit attack vectors
+Implement preventative measures for attack vectors that exploit vulnerabilities in application code, networking protocols, identity systems, malware protection, and other areas.
+
+Implement code scanners, apply the latest security patches, update software, and protect your system with effective antimalware on an ongoing basis. Doing so helps to reduce the attack surface to ensure business continuity.
+
+### Contoso's challenge
+
+The VMs used to host the system are Azure Marketplace images with the latest Ubuntu OS. The bootstrapping processes for a VM set up a few certificates, tweaks some SSH configuration, and installs the application code, but no antimalware tools are employed.
+
+While Azure Application Gateway fronts the solution, it's only used as an Internet gateway; the web application firewall (WAF) function is not enabled currently.
+
+Both of these configuration choices leave the compute environment unprotected from vulnerabilities in code or through unintended installation of malware.
+
+### Applying the approach and outcomes
+
+After consulting with the security team in Contoso, the virtual machines are now enrolled in an enterprise-managed antivirus solution.
+
+The team also decides to enable and tune the WAF function to help protect the application code by eliminating known risky requests, such as SQL injection attempts, at the gateway level.
+
+The application and application platform now have additional defense in depth, to help protect against exploits that might impact the availability of the system.
+
+## Secure your recovery strategy
+Apply at least the same level of security rigor in your recovery resources and processes as you do in the primary environment, including security controls and frequency of backup.
+
+You should have a preserved safe system state available in disaster recovery. If you do, you can fail over to a secure secondary system or location and restore backups that won't introduce a threat.
+
+A well-designed process can prevent a security incident from hindering the recovery process. Corrupted backup data or encrypted data that can't be deciphered can slow down recovery.
+
+### Contoso's challenge
+
+While the system functions as active-active across regions, the team has a disaster recovery plan in place to help restore business continuity in worst case scenarios.
+
+Part of this plan includes shipping backups to a third region in the US.
+
+Unfortunately, the backups were landing in a system that wasn't frequently monitored and had relatively lax security controls. During a drill, they realized that all of the backups have been infected with malware. If they had a real disaster at that time, they wouldn't have been able to recover successfully.
+
+### Applying the approach and outcomes
+
+The team invested time and effort to secure the backup location, adding additional network and identity controls to protect the data. Backups are now also stored in immutable storage to prevent tampering.
+
+After reviewing their security controls, the team finds that during the recovery process, the application runs without a WAF for a period of time. They change the order of operations to close that gap.
+
+Now the team is confident that the backups and the recovery process for the system are no longer an easy-to-exploit attack vector.
+
+## Check your knowledge
+
+### 1. How did Contoso use security controls to respond to an attack that overwhelmed their system?
+
+- **✅ They adopted a design pattern that minimized the blast radius attacks like this one.**
+- They blocked access to public-facing services.
+- They invested in a third-party DDoS protection service.
+- They increased the number of virtual machines in their application.
+
+**Explanation:** Contoso adopted a Valet Key design pattern to remove their application servers from the folio request flow, which would isolate the impact and minimize the blast radius of similar attacks. They also added input validation to sanitize input and prevent malicious attempts.
+
+### 2. What is an example of a preventative measure that can be used to limit attack vectors?
+
+- Monitoring resource health
+- **✅ Using an anti-malware solution**
+- Enabling autoscaling on virtual machines
+- Using Azure Traffic Manager to block malicious traffic
+
+**Explanation:** Using an anti-malware solution is a preventative measure that helps protect systems from malware infections and reduces the attack surface. This is specifically mentioned in the module as one of the measures Contoso implemented to protect their virtual machines.
+
+### 3. True or false: when running in a recovery environment, it's OK to have a relaxed security posture in comparison to the production environment.
+
+- True
+- **✅ False**
+
+**Explanation:** False. The module clearly states that you should "apply at least the same level of security rigor in your recovery resources and processes as you do in the primary environment." Recovery environments should maintain the same security standards to prevent security incidents from hindering the recovery process.
+
+
+# 1.6 Sustain and evolve your security posture
+
+*Incorporate continuous improvement and apply vigilance to stay ahead of attackers who are continuously evolving their attack strategies*
+
+Your security posture must not degrade over time. You must continually improve security operations so that new disruptions are handled more efficiently. Strive to align improvements with the phases defined by industry standards. Doing so leads to better preparedness, reduced time to incident detection, and effective containment and mitigation. Continuous improvement should be based on lessons learned from past incidents.
+
+It's important to measure your security posture, enforce policies to maintain that posture, and regularly validate your security mitigations and compensating controls in order to continuously improve your security posture in the face of evolving threats.
+
+## Example scenario
+
+Contoso Race Day Performance creates data capture systems for professional rally car race teams. Most of the system is embedded in the cars and provides local feedback to the driving crew, but at end of the race all telemetry is uploaded to the cloud for analytical processing. The processing combines track and environmental conditions and vehicle telemetry data into reports that can be used by the race team to evaluate their run and fine tune their strategies. The cloud system uses Azure Spark in Azure Synapse Analytics. Ancillary systems in the workload all use PaaS offerings. The system is already in use by three of the top five race teams in the world.
+
+Race teams are highly protective of their data, and want to know what Contoso Race Day Performance is doing to keep up to date with evolving security threats that might compromise their data.
+
+## Perform threat modeling to identify and mitigate potential threats
+Analyze each component of your workflow and evaluate potential threats that each component could be subject to. Classify the identified threats using an industry-standard methodology.
+
+By adopting this approach, you can produce a report of attack vectors prioritized by their severity level. Additionally, you can identify threats and vulnerabilities quickly and set up countermeasures.
+
+### Contoso's challenge
+
+While they haven't had a security incident yet, the workload team doesn't have a standardized way to evaluate if there are any threat vectors that aren't adequately addressed in existing security controls.
+
+The team realizes they have a blind spot with regard to the security of their workload and they are at risk of being caught off-guard if there's a security incident.
+
+### Applying the approach and outcomes
+
+The team engages a security consulting specialist to learn how to perform threat modeling.
+
+After performing an initial threat modeling exercise, they find that they have well-designed controls for most threat vectors, but they do find a gap in one of the data cleanup tasks that happens after Azure Spark jobs are complete and found two insider threat vectors for data exfiltration.
+
+These gaps are scheduled for remediation in the next development cycle.
+
+The team also finds a legacy system used by a race team no longer using the service, which has significant access to race telemetry. Part of the remediation will be to decommission this system.
+
+## Independently verify your controls
+Run periodic security tests that are conducted by experts external to the workload team who attempt to ethically hack the system. Perform routine and integrated vulnerability scanning to detect exploits in infrastructure, dependencies, and application code.
+
+These tests enable you to validate security defenses by simulating real-world attacks by using techniques like penetration testing.
+
+Threats can be introduced as part of your change management. Integrating scanners into the deployment pipelines enables you to automatically detect vulnerabilities and even quarantine usage until the vulnerabilities are removed.
+
+### Contoso's challenge
+
+The threat modeling exercise helped the team uncover security gaps and they're now interested in validating their controls, especially after implementing their remediation.
+
+The team has experimented with open source tools in the past to test their security, and found the exercise fun and educational. However, they and the stakeholders would like to bring in security professionals to perform thorough and rigorous testing regularly.
+
+### Applying the approach and outcomes
+
+The team engages with a well-known Microsoft partner specializing in cloud security to discuss penetration testing.
+
+The workload team signs a Statement of Work for quarterly penetration testing service, mixing in one white-box test per year to ensure higher confidence.
+
+The consulting team also helps the dev team get antimalware installed on dev boxes and the self-hosted build agents.
+
+These measures give the workload team and the stakeholders a high degree of confidence that they'll be prepared for evolving threats moving forward.
+
+## Get current, and stay current
+Stay current on updates, patching, and security fixes. Continuously evaluate the system and improve it based on audit reports, benchmarking, and lessons from testing activities. Consider automation, as appropriate. Use threat intelligence powered by security analytics for dynamic detection of threats. At regular intervals, review the workload's conformance to Security Development Lifecycle (SDL) best practices.
+
+By adopting this approach, you'll be able to ensure that your security posture doesn't degrade over time. By integrating findings from real-world attacks and testing activities, you'll be able to combat attackers who continuously improve and exploit new categories of vulnerabilities. Automation of repetitive tasks decreases the chance of human error that can create risk.
+
+SDL reviews bring clarity around security features. SDL can help you maintain an inventory of workload assets and their security reports, which cover origin, usage, operational weaknesses, and other factors.
+
+### Contoso's challenge
+
+The developers responsible for writing the Apache Spark jobs are hesitant to introduce changes and generally take a "if it's not broken, don't fix it" approach to the jobs. This means that the Python and R packages they bring into the solution are likely to get stale over time.
+
+### Applying the approach and outcomes
+
+After the workload team reviews internal processes, they see that there's a risk of unpatched components being in the workload if the process for maintaining the Spark jobs isn't addressed.
+
+The teams adopt a new standard for the Apache jobs that requires that all technologies in use must be updated along with their regularly recurring update and patch schedules.
+
+By addressing this gap in security controls, the workload as a whole is less likely to be at risk of unpatched components. Their use of PaaS and SaaS services also helps limit their exposure to this risk as they don't have to patch underlying infrastructure.
+
+## Check your knowledge
+
+### 1. What type of exercise can help you identify gaps in your security controls?
+
+- Failure mode analysis
+- Health modeling
+- Intrusion detection and prevention
+- **✅ Threat modeling**
+
+**Explanation:** Threat modeling is specifically designed to analyze each component of your workflow and evaluate potential threats that each component could be subject to. As described in the module, it helps identify gaps in security controls and produces a report of attack vectors prioritized by their severity level.
+
+### 2. True or false: the workload team should handle all security testing.
+
+- True
+- **✅ False**
+
+**Explanation:** False. The module emphasizes the importance of independent verification through external experts. It states that security tests should be "conducted by experts external to the workload team who attempt to ethically hack the system" and mentions the value of bringing in security professionals for thorough and rigorous testing.
+
+### 3. In what way was Contoso at risk with their old process for their Apache Spark jobs?
+
+- The jobs were not being monitored for successful runs.
+- The jobs were automatically run over night when no one was able to monitor them.
+- **✅ The jobs weren't included in the update and patching process.**
+- The jobs were not being monitored for failed runs.
+
+**Explanation:** The module describes that developers took a "if it's not broken, don't fix it" approach to the Spark jobs, meaning the Python and R packages would get stale over time. This created a risk of unpatched components being in the workload, which the team addressed by adopting new standards requiring all technologies to be updated along with regular patch schedules.
+
+
+
+# 1.7 Summary
+
+In this module, you've looked at the five key principles of the Security pillar of the Azure Well-Architected Framework.
+
+A Well-Architected workload must be built with a zero-trust approach. A secure workload is resilient to attacks and incorporates the interrelated security principles of confidentiality, integrity, and availability (also known as the CIA triad) in addition to meeting business goals. Any security incident has the potential to become a major breach that damages the brand and reputation of the workload or organization.
+
+As you design your system, use the Microsoft Zero Trust model as the compass to mitigate security risks:
+
+* **Verify explicitly** so that only trusted identities perform intended and allowed actions that originate from expected locations. This safeguard makes it harder for attackers to impersonate legitimate users and accounts.
+* **Use least-privilege access** for the right identities, with the right set of permissions, for the right duration, and to the right assets. Limiting permissions helps keep attackers from abusing permissions that legitimate users don't even need.
+* **Assume breach** of security controls and design compensating controls that limit risk and damage if a primary layer of defense fails. Doing so helps you to defend your workload better by thinking like an attacker who's interested in success (regardless of how they get it).
+
+## Learn more
+
+To learn more about workload security, review the following documentation:
+
+* Security design principles
+* Design review checklist for Security
+* Cost Optimization tradeoffs
+* Cloud design patterns that support security
