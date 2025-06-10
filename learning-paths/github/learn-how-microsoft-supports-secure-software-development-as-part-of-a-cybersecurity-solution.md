@@ -595,3 +595,288 @@ To learn more about workload security, review the following documentation:
 * Design review checklist for Security
 * Cost Optimization tradeoffs
 * Cloud design patterns that support security
+
+
+
+# 2 Introduction to Azure DevOps
+
+Explore what DevOps is (and isn't) and learn how to get started with Azure DevOps.
+
+
+# 2.1 Introduction
+
+Azure DevOps can help your team release code in a more efficient, cooperative, and stable manner.
+
+In the previous module, you met the team at Tailspin Toys. They're working on a new game, but their release process has several problems that affect their ability to deliver quality products to their customers. The team knows they need to change, but they don't know how.
+
+The newest team member, Mara, believes DevOps will help. Her goal is to convince her teammates. She'll explain more about the value stream mapping (VSM) exercise she started in the previous module. Hopefully, her explanation will show the team why DevOps is the way forward.
+
+Let's rejoin the team as they learn about DevOps. Together, we'll discover what it takes to get an Azure DevOps practice started.
+
+## Learning objectives
+
+After completing this module, you'll be able to:
+
+* Identify what separates elite performers from low performers.
+* List what services Azure DevOps provides.
+* Create an Azure DevOps organization.
+
+## Prerequisites
+
+The modules in this learning path form a progression. We recommend that you start at the beginning of the Get started with Azure DevOps learning path before you start this module.
+
+## Meet the team
+
+You met the *Space Game* web team at Tailspin Toys in the previous module. As a refresher, here's who you'll work with in this module:
+
+**Andy** is the development lead.
+
+**Amita** is in QA.
+
+**Tim** is in operations.
+
+**Mara** just joined as a developer and reports to Andy.
+
+Mara has prior experience with DevOps and is helping the team adopt a more streamlined process by using Azure DevOps.
+
+
+
+# 2.2 What is DevOps?
+
+DevOps is the union of people, process, and products to enable continuous delivery of value to our customers. However, what exactly does that mean? Let's join the team as Mara explains what DevOps is, what it isn't, and what makes elite performers successful.
+
+Mara has called a short meeting with her teammates. Everyone has shown up, but no one wants to be there. She's put a box of donuts on the table.
+
+**Mara:** Hi, thanks for coming. I wanted to talk more about our value stream map and how we can make our processes more efficient.
+
+Mara's value stream map is still on the whiteboard from their previous meeting:
+
+Screenshot of a whiteboard showing the value stream map.
+
+**Mara:** Our value stream map shows where we lose efficiency in delivering value to our end users. Just like everyone else, we can improve, and we can decide which areas to tackle first.
+
+**Andy:** This shows us where we have problems, but not what to do about them.
+
+**Mara:** Right, it's an exercise that helps point us in the right direction. As for what to do about our problems, I think DevOps can help us. At my last company, our deployment rates went way up, lead times were faster, and operations had far fewer incidents. It took us a while to get there, but it was worth it. DevOps isn't a quick fix.
+
+**Tim:** I know someone who just got a job as a DevOps engineer. I think it's more for developers. That sounds like you, Andy.
+
+**Mara:** DevOps isn't a job title.
+
+**Amita:** Is there any software program we can get that can help us along, or a template? Maybe there's a DevOps spreadsheet.
+
+**Mara:** DevOps isn't a piece of software.
+
+**Andy:** It's more like a methodology.
+
+**Mara:** Not really.
+
+**Andy, Amita, Tim:** So what is it?!
+
+**Mara:** Here's the definition I like to use:
+
+DevOps is the union of people, process, and products to enable continuous delivery of value to our end users.
+
+In fact, Abel Wang, a Cloud Advocate at Microsoft, has a great set of videos with quick answers to some of our questions. Let's see how Abel defines DevOps:
+
+## Ask Abel
+
+Our goal is to give our customers games they'll love. We do that by working together with a shared set of practices and tools.
+
+**Amita:** What does that mean? What shared practices? What shared tools?
+
+**Mara:** Here's what I mean by practices:
+
+**Agile planning:** Together, we'll create a backlog of work that everyone on the team and in management can see. We'll prioritize the items so we know what we need to work on first. The backlog can include user stories, bugs, and any other information that helps us.
+
+**Continuous integration (CI):** We'll automate how we build and test our code. We'll run that every time a team member commits changes to version control.
+
+**Continuous delivery (CD):** CD is how we test, configure, and deploy from a build to a QA or production environment.
+
+**Monitoring:** We'll use telemetry to get information about an application's performance and usage patterns. We can use that information to improve as we iterate.
+
+**Amita:** I don't know about automated testing. My tests are manual and I do them after Andy hands off the code to me. I don't have time to change how I do everything.
+
+**Tim:** There's no way I'm letting any of you deploy to production.
+
+**Andy:** This will scare management. They never think further than the next release and they always want it yesterday.
+
+**Mara:** I know what you mean about management. I put together this handout about what makes an elite performing team.
+
+## What makes an elite performing team?
+Here's the handout that Mara prepared. The information is based on DevOps research reports and surveys conducted with technical professionals worldwide.
+
+DevOps helps companies experiment with ways to increase customer adoption and satisfaction. It can lead to better organizational performance, and often to higher profitability and market share.
+
+It uses metrics to create four categories by which to compare elite performers with low performers.
+
+Elite performers:
+
+### Deploy more frequently
+
+In fact, some teams deploy up to dozens of times per day.
+
+Practices such as monitoring, continuous testing, database change management, and integrating security earlier in the software-development process help elite performers deploy more frequently, and with greater predictability and security.
+
+### Reduce lead time from commit to deploy
+
+Lead time is the time it takes for a feature to make it to the customer. By working in smaller batches, automating manual processes, and deploying more frequently, elite performers can achieve in hours or days what once took weeks or even months.
+
+### Reduce change failure rate
+
+A new feature that fails in production or that causes other features to break can create a lost opportunity between you and your users. As high-performing teams mature, they reduce their change failure rate over time.
+
+### Recover from incidents more quickly
+
+When incidents do occur, elite performers are able to recover more quickly. Acting on metrics helps elite performers recover more quickly while also deploying more frequently.
+
+How you implement cloud infrastructure also matters. The cloud improves software delivery performance, and teams that adopt essential cloud characteristics are more likely to become elite performers.
+
+Outsourcing can save money and provide a flexible labor pool, but you must use it in the correct areas. Low-performing teams are more likely to outsource whole functions (like testing and operations) than their high-performing counterparts.
+
+## The bottom line
+DevOps is a key reason many elite performers are able to deliver value to customers in the form of new features and improvements, more quickly than their competitors. In this short video, Abel explains why you should learn more about DevOps:
+
+## Ask Abel
+
+## What DevOps isn't
+When considering what DevOps is, it's also important to make sure we learn what it's not. DevOps isn't:
+
+* A methodology.
+* A specific piece of software.
+* A quick fix for an organization's challenges.
+* Just a team or a job title (although these titles are reasonably common in the industry).
+
+
+# 2.3 What is Azure DevOps?
+
+Azure DevOps provides several tools you can use for better team collaboration. It also has tools for automated build processes, testing, version control, and package management. That's quite a bit to cover! We'll get to all the tools eventually. For now, let's follow the team as they begin with an overview of what Azure DevOps is and how they can get started.
+
+**Mara:** Amita asked about tools, and I'm proposing we use Azure DevOps.
+
+**Andy:** How can we use something for Azure if we're not deploying to the cloud? Plus, we deploy to Linux. Does that matter?
+
+**Mara:** These tools are great whether you're in the cloud or on-premises. It also doesn't matter if we're deploying to Linux or Windows or another platform. Azure DevOps is a suite of services that provides a solution for anyone who wants an enterprise-grade tool chain. Those tools help us implement all the practices we just talked about. Here's what you get:
+
+**Expand table**
+
+| Service | Description |
+|---------|-------------|
+| Azure Boards | These are agile tools that help us plan, track, and discuss our work, even with other teams. |
+| Azure Pipelines | These will let us build, test, and deploy with CI/CD that works with any language, platform, and cloud. |
+| Azure Test Plans | These are manual and exploratory testing tools. |
+
+Those are the three I was thinking about using right now. There are two other services we can think about later:
+
+**Expand table**
+
+| Service | Description |
+|---------|-------------|
+| Azure Repos | These provide unlimited, cloud-hosted private, and public Git repos. |
+| Azure Artifacts | These let us create, host, and share packages. |
+
+## Ask Abel
+
+Here's a short video where Abel explains the five parts of Azure DevOps:
+
+**Amita:** This sounds like a lot. Where do we start?
+
+**Mara:** Let's just try to do some planning by using Azure Boards. We'll see how that goes. You don't have to use every service Azure DevOps offers. You just use what you need.
+
+**Tim:** What do we have to do?
+
+**Mara:** It's easy. All we do is set up an account and an organization. The whole process only takes a couple of minutes.
+
+## Check your knowledge
+
+### 1.
+**What is DevOps?**
+
+- A job title for QA engineers
+- **✅ The union of people, process, and products to enable continuous delivery of value to our customers**
+- A methodology that teams implement quickly to solve all their challenges
+
+**Explanation:** DevOps is defined as "the union of people, process, and products to enable continuous delivery of value to our customers." It's not a job title or a quick-fix methodology, but rather a cultural and operational approach to software development and delivery.
+
+### 2.
+**DevOps is:**
+
+- **✅ A gradual process**
+- Only for startups
+- A piece of specialized software
+
+**Explanation:** DevOps is a gradual process that takes time to implement and mature. As mentioned in the previous module, "DevOps isn't a quick fix" and "It took us a while to get there, but it was worth it." It's not limited to startups and isn't a single piece of software.
+
+### 3.
+**Azure DevOps is:**
+
+- Meant for teams that deploy to Azure
+- **✅ A suite of services that provide an end-to-end tool chain**
+- A DevOps course offered by Microsoft
+
+**Explanation:** Azure DevOps is a suite of services that provides an end-to-end tool chain for software development and delivery. As Mara explained, "These tools are great whether you're in the cloud or on-premises" and work with any language, platform, and cloud - not just Azure deployments.
+
+
+# 2.4 Exercise - Create an Azure DevOps organization
+
+Microsoft provides free Azure DevOps accounts for individuals, small teams, and open-source projects. Enterprises can also sign up for Azure DevOps accounts that can scale to thousands of team members. We're going to sign up for a free Azure DevOps organization to see how its services can help us on our DevOps journey.
+
+**Note**
+
+In this learning path, you'll use Azure DevOps Services, which Microsoft hosts for you. There's also **Azure DevOps Server**, the on-premises version of Azure DevOps Services that you can install and run on your own network.
+
+## Create an Azure DevOps organization
+
+Follow along with the team by setting up your own free Azure DevOps organization:
+
+1. Go to dev.azure.com.
+
+2. Sign in by using your **Microsoft account**; or if you don't have a Microsoft account, select **Create One!** and finish the steps.
+
+**Note**
+
+You might have a Microsoft account already. Typically, these end with hotmail.com or outlook.com.
+
+3. Review the Terms of Service, Privacy Statement, and Code of Conduct, and select **Continue** if you agree to them.
+
+**Note**
+
+As the person creating the Azure DevOps organization, you'll automatically become the owner. Please be considerate when deciding on your account name and avoid existing legal entities.
+
+## Create an organization
+
+Next, set up an organization. Here's how:
+
+1. If you've never created an Azure DevOps organization, you'll see a window with a **Create new organization** button. If you have, you'll see a link that reads **New organization**. Select the option you see.
+
+2. In the **Azure DevOps Terms of Service and Privacy notification** window, select **Continue**.
+
+3. Create an organization for the Microsoft Learn modules next to the **dev.azure.com/** field. If you're prompted that the name is already taken, just add some numbers to the end to make it unique; for example, *Tailspin0523*.
+
+4. Choose a location near you where your projects will be hosted.
+
+5. Complete the captcha.
+
+6. Select **Continue**.
+
+The next screen prompts you to create a project. You'll do that in the next module.
+
+Congratulations! In the next module, the team will use Azure Boards to create its first project and backlog.
+
+
+# 2.5 Summary
+
+In this module, you learned about what DevOps is (and what it's *not*) and about the Microsoft DevOps suite, Azure DevOps. You also set up an account in Azure DevOps and created an organization.
+
+In a comparison between elite performers and low performers, elite performers deploy more frequently, more quickly, and with fewer failures. This mindset helps them better adapt to changing market conditions, experiment with new features, and recover from incidents with greater resiliency. DevOps gives you a path to become an elite performer.
+
+Even for elite performers, change happens gradually, often starting with the most immediate challenges or pain points. Adopting DevOps practices takes time.
+
+## Learn more
+
+We'll go deeper into Azure DevOps in future modules. You can also check out these resources:
+
+* What is DevOps?
+* How Microsoft plans with DevOps
+* What features and services do I get with Azure DevOps?
+
