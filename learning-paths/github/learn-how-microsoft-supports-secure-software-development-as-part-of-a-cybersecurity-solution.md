@@ -880,3 +880,377 @@ We'll go deeper into Azure DevOps in future modules. You can also check out thes
 * How Microsoft plans with DevOps
 * What features and services do I get with Azure DevOps?
 
+
+# 6 Manage secrets in your server apps with Azure Key Vault
+
+Your application requires service passwords, connection strings, and other secret configuration values to do its job. Storing and handling secret values is risky, and every usage introduces the possibility of leakage. Azure Key Vault, in combination with managed identities for Azure resources, enables your Azure web app to access secret configuration values easily and securely. It does so without needing to store any secrets in your source control or configuration.
+
+
+# 6.1 Introduction
+
+If you want to understand what can go wrong with managing an app's configuration secrets, look no further than the story of Steve, a senior developer.
+
+Steve was working at a pet food delivery company for a few weeks. While exploring the details of the company's web app—a .NET Core web app that used an Azure SQL database for storing order information and third-party APIs for credit card billing and mapping customer addresses—Steve accidentally pasted the connection string for the orders database into a public forum.
+
+Days later, the accounting department noticed that the company was delivering a substantial amount of pet food that wasn't paid for. Someone used the connection string to access the database and create orders by updating the database directly.
+
+After Steve realized his mistake, he hurriedly changed the database password to lock out the attacker. After Steve changed the password, the website started returning errors to users. The app server needed an updated configuration with the new password. Steve logged directly into the app server and changed the app configuration instead of redeploying, but the server was still showing failed requests.
+
+Steve forgot that multiple instances of the app ran on different servers. He only changed the configuration for one. A full redeployment was needed, causing another 30 minutes of downtime.
+
+Fortunately for Steve, the accounting department was able to correct the errors quickly, and only one day's worth of orders were affected. Steve might not be so lucky in the future, though, and needs to find a way to improve the security and maintainability of the app.
+
+If a database connection string, API key, or service password is leaked, it can be catastrophic. A leak could potentially lead to stolen or deleted data, financial harm, app downtime, and irreparable damage to business assets and reputation. Unfortunately, secret values often need to be deployed in multiple places simultaneously and changed at inopportune times. And you have to store them *somewhere*! See how Steve can reduce risk and improve the security and maintainability of his app with Azure Key Vault.
+
+## Learning objectives
+
+In this module, you will:
+
+* Explore what types of information can be stored in Azure Key Vault.
+* Create an Azure Key Vault and use it to store secret configuration values.
+* Enable secure access to the Azure Key Vault from an Azure App Service web app with managed identities for Azure resources.
+* Implement a web app that retrieves secrets from the Azure Key Vault.
+
+
+# 6.2 What is Azure Key Vault?
+
+Azure Key Vault is a *secret store*: a centralized cloud service for storing app secrets, such as configuration values like passwords and connection strings that must always remain secure. Key Vault helps you control your apps' secrets by keeping them in a single central location. It provides secure access, permissions control, and access logging.
+
+The main benefits of using Key Vault are:
+
+* Separation of sensitive app information from other configuration and code, which reduces the risk of accidental leaks.
+* Restricted secret access with access policies tailored to the apps and individuals that need them.
+* Centralized secret storage, meaning required changes only have to be made in one place.
+* Access logging and monitoring to help you understand how and when secrets are accessed.
+
+Secrets are stored in individual *vaults*, which are Azure resources used to group secrets together. Secret access and vault management is accomplished by using a REST API. All of the Azure management tools and client libraries available for many popular languages also support this API. Every vault has a unique URL where its API is hosted.
+
+**Important**
+
+*Key Vault is designed to store configuration secrets for server apps.* It's not intended for storing data belonging to your app's users. It shouldn't be used in the client-side part of an app. This behavior is reflected in its performance characteristics, API, and cost model.
+
+User data should be stored elsewhere, such as in an Azure SQL database with Transparent Data Encryption, or a storage account with Storage Service Encryption. Secrets your app uses to access those data stores can be kept in Key Vault.
+
+## What is a secret in Key Vault?
+
+In Key Vault, a secret is a name-value pair of strings. Secret names must be 1-127 characters long, contain only alphanumeric characters and dashes, and must be unique within a vault. A secret value can be any UTF-8 string up to 25 KB in size.
+
+**Tip**
+
+Secret names don't need to be considered especially secret themselves. You can store them in your app's configuration if your implementation calls for it. The same is true of vault names and URLs.
+
+**Note**
+
+Key Vault supports two additional kinds of secrets beyond strings: *keys* and *certificates*. Key Vault provides useful functionality specific to their use cases. This module does not cover these features and concentrates on secret strings like passwords and connection strings.
+
+## Vault authentication and permissions
+
+Key Vault's API uses Microsoft Entra ID to authenticate users and apps. Vault access policies are based on *actions* and are applied across an entire vault. For example, an app with `Get` (read secret values), `List` (list names of all secrets), and `Set` (create or update secret values) permissions to a vault can create secrets, list all secret names, and get and set all secret values in that vault.
+
+*All* actions performed on a vault require authentication and authorization. There's no way to grant any kind of anonymous access.
+
+**Tip**
+
+When you grant vault access to developers and apps, grant only the minimum set of permissions needed. Permissions restrictions help avoid accidents caused by code bugs, and reduce the impact of stolen credentials or malicious code injected into your app.
+
+Usually, developers only need `Get` and `List` permissions to a development-environment vault. Some engineers need full permissions to change and add secrets, when necessary.
+
+For apps, often only `Get` permissions are required. Some apps might require `List` depending on the way the app is implemented. The app in this module's exercise requires the `List` permission because of the technique it uses to read secrets from the vault.
+
+
+# 6.3 Exercise - Create a Key Vault and store secrets
+
+## Verify your account
+
+## Create Key Vaults for your applications
+
+A best practice is to create a separate vault for each deployment environment of each of your applications, such as development, test, and production. You can use a single vault to store secrets for multiple apps and environments, but the impact of an attacker gaining read access to a vault increases with the number of secrets in the vault.
+
+**Tip**
+
+If you use the same names for secrets across different environments for an application, the only environment-specific configuration you need to change in your app is the vault URL.
+
+Creating a vault requires no initial configuration. Your user identity is automatically granted the full set of secret management permissions. You can start adding secrets immediately. After you have a vault, you can add and manage secrets from any Azure administrative interface, including the Azure portal, the Azure CLI, and Azure PowerShell. When you set up your application to use the vault, you need to assign the correct permissions to it, as described in the next unit.
+
+## Create the Key vault and store the secret in it
+
+Given all the trouble the company's been having with application secrets. Management asks you to create a small starter app to set the other developers on the right path. The app needs to demonstrate best practices for managing secrets as simply and securely as possible.
+
+To start, create a vault and store one secret in it.
+
+### Create the Key Vault
+
+*Key Vault names must be globally unique, so pick a unique name*. Vault names must be 3-24 characters long and contain only alphanumeric characters and dashes. Make a note of the vault name you choose, because you need it throughout this exercise.
+
+To create your vault, run the following command in Azure Cloud Shell. Make sure to enter your unique vault name to the `--name` parameter.
+
+**Azure CLI**
+
+```
+az keyvault create \
+    --resource-group "[sandbox resource group name]" \
+    --location centralus \
+    --name <your-unique-vault-name>
+```
+
+When it finishes, you see JSON output describing the new vault.
+
+**Tip**
+
+The command used the pre-created resource group named **[sandbox Resource Group]**. When working with your own subscription, you would want to either create a new resource group or use an existing one you previously created.
+
+### Add the secret
+
+Now, add the secret. Our secret is named `SecretPassword` with a value of `reindeer_flotilla`. Make sure to replace `<your-unique-vault-name>` with the vault name you created in the `--vault-name` parameter.
+
+**Azure CLI**
+
+```
+az keyvault secret set \
+    --name SecretPassword \
+    --value reindeer_flotilla \
+    --vault-name <your-unique-vault-name>
+```
+
+Before you write the code for your app, you first need to learn a bit about how your app is going to authenticate to a vault.
+
+
+# 6.4 Vault authentication with managed identities for Azure resources
+
+Azure Key Vault uses Microsoft Entra ID to authenticate users and apps that try to access a vault. To grant our web app access to the vault, you first need to register your app with Microsoft Entra ID. Registering creates an identity for the app. After the app has an identity, you can assign vault permissions to it.
+
+Apps and users authenticate to Key Vault using a Microsoft Entra authentication token. Getting a token from Microsoft Entra ID requires a secret or certificate. Anyone with a token could use the app identity to access all of the secrets in the vault.
+
+Your app secrets are secure in the vault, but you still need to keep a secret or certificate outside of the vault to access them! This issue is called the *bootstrapping problem*, and Azure has a solution for it.
+
+## Managed identities for Azure resources
+
+Managed identities for Azure resources are an Azure feature your app can use to access Key Vault and other Azure services without having to manage a single secret outside of the vault. Using a managed identity is a simple and secure way to take advantage of Key Vault from your web app.
+
+When you enable managed identity on your web app, Azure activates a separate token-granting REST service specifically for your app to use. Your app requests tokens from this service instead of directly from Microsoft Entra ID. Your app needs to use a secret to access this service, but that secret is injected into your app's environment variables by App Service when it starts up. You don't need to manage or store this secret value anywhere, and nothing outside of your app can access this secret or the managed identity token service endpoint.
+
+Managed identities for Azure resources also register your app in Microsoft Entra ID for you. Microsoft Entra ID deletes the registration if you delete the web app or disable its managed identity.
+
+Managed identities are available in all editions of Microsoft Entra ID, including the Free edition included with an Azure subscription. Using it in App Service has no extra cost and requires no configuration, and you can enable or disable it on an app at any time.
+
+Enabling a managed identity for a web app requires only a single Azure CLI command with no configuration. You do it later when you set up an App Service app and deploy it to Azure. Before that, though, apply your knowledge of managed identities to write the code for our app.
+
+## Check your knowledge
+
+### 1.
+**How does using managed identities for Azure resources change the way an app authenticates to Azure Key Vault?**
+
+- The app uses a certificate to authenticate instead of a secret.
+- Each user of the app must enter a password.
+- **✅ The app gets tokens from a token service instead of Microsoft Entra ID.**
+- Azure Key Vault automatically recognizes managed identities and authenticates them automatically.
+
+**Explanation:** When using managed identities, Azure activates a separate token-granting REST service specifically for your app to use. Your app requests tokens from this service instead of directly from Microsoft Entra ID. This eliminates the need to manage secrets or certificates outside of the vault.
+
+### 2.
+**Which one of these statements describes a primary benefit of using managed identities for Azure resources to authenticate an app to Key Vault?**
+
+- Using managed identities improves application performance.
+- **✅ Using managed identities eliminates the need to handle secrets during configuration.**
+- Managed identities can automatically grant Azure Key Vault permissions.
+
+**Explanation:** The primary benefit of using managed identities is that it eliminates the bootstrapping problem - you don't need to manage or store any secrets outside of the vault. The secret needed to access the managed identity token service is injected into your app's environment variables by App Service, so you never have to handle it during configuration.
+
+## Check your answers
+
+
+# 6.5 Vault authentication with managed identities for Azure resources
+
+Azure Key Vault uses Microsoft Entra ID to authenticate users and apps that try to access a vault. To grant our web app access to the vault, you first need to register your app with Microsoft Entra ID. Registering creates an identity for the app. After the app has an identity, you can assign vault permissions to it.
+
+Apps and users authenticate to Key Vault using a Microsoft Entra authentication token. Getting a token from Microsoft Entra ID requires a secret or certificate. Anyone with a token could use the app identity to access all of the secrets in the vault.
+
+Your app secrets are secure in the vault, but you still need to keep a secret or certificate outside of the vault to access them! This issue is called the *bootstrapping problem*, and Azure has a solution for it.
+
+## Managed identities for Azure resources
+
+Managed identities for Azure resources are an Azure feature your app can use to access Key Vault and other Azure services without having to manage a single secret outside of the vault. Using a managed identity is a simple and secure way to take advantage of Key Vault from your web app.
+
+When you enable managed identity on your web app, Azure activates a separate token-granting REST service specifically for your app to use. Your app requests tokens from this service instead of directly from Microsoft Entra ID. Your app needs to use a secret to access this service, but that secret is injected into your app's environment variables by App Service when it starts up. You don't need to manage or store this secret value anywhere, and nothing outside of your app can access this secret or the managed identity token service endpoint.
+
+Managed identities for Azure resources also register your app in Microsoft Entra ID for you. Microsoft Entra ID deletes the registration if you delete the web app or disable its managed identity.
+
+Managed identities are available in all editions of Microsoft Entra ID, including the Free edition included with an Azure subscription. Using it in App Service has no extra cost and requires no configuration, and you can enable or disable it on an app at any time.
+
+Enabling a managed identity for a web app requires only a single Azure CLI command with no configuration. You do it later when you set up an App Service app and deploy it to Azure. Before that, though, apply your knowledge of managed identities to write the code for our app.
+
+## Check your knowledge
+
+### 1.
+**How does using managed identities for Azure resources change the way an app authenticates to Azure Key Vault?**
+
+- The app uses a certificate to authenticate instead of a secret.
+- Each user of the app must enter a password.
+- **✅ The app gets tokens from a token service instead of Microsoft Entra ID.**
+- Azure Key Vault automatically recognizes managed identities and authenticates them automatically.
+
+**Explanation:** When using managed identities, Azure activates a separate token-granting REST service specifically for your app to use. Your app requests tokens from this service instead of directly from Microsoft Entra ID. This eliminates the need to manage secrets or certificates outside of the vault.
+
+### 2.
+**Which one of these statements describes a primary benefit of using managed identities for Azure resources to authenticate an app to Key Vault?**
+
+- Using managed identities improves application performance.
+- **✅ Using managed identities eliminates the need to handle secrets during configuration.**
+- Managed identities can automatically grant Azure Key Vault permissions.
+
+**Explanation:** The primary benefit of using managed identities is that it eliminates the bootstrapping problem - you don't need to manage or store any secrets outside of the vault. The secret needed to access the managed identity token service is injected into your app's environment variables by App Service, so you never have to handle it during configuration.
+
+## Check your answers
+
+
+# 6.6 Exercise - Configure, deploy, and run your app in Azure
+
+## Verify your account
+
+## Choose your development language
+**C#** | **JavaScript**
+
+Now it's time to run your app in Azure. You need to create an Azure App Service app, set it up with a managed identity and your vault configuration, and deploy your code.
+
+## Create the App Service plan and app
+
+Creating an App Service app is a two-step process: First create the *plan*, then the *app*.
+
+The *plan* name only needs to be unique within your subscription, so you can use the same name: `keyvault-exercise-plan`. The app name needs to be globally unique, though, so pick your own.
+
+1. In Azure Cloud Shell, run the following command to create an App Service plan.
+
+   **Azure CLI**
+   ```bash
+   az appservice plan create \
+       --name keyvault-exercise-plan \
+       --sku FREE \
+       --location centralus \
+       --resource-group "[sandbox resource group name]"
+   ```
+
+2. Next, to create the Web App that uses the App Service plan you created, run the following command. Make sure to replace `<your-unique-app-name>` with your app's name in the `--name` parameter.
+
+   **Azure CLI**
+   ```bash
+   az webapp create \
+       --plan keyvault-exercise-plan \
+       --resource-group "[sandbox resource group name]" \
+       --name <your-unique-app-name>
+   ```
+
+## Add configuration to the app
+
+To deploy to Azure, follow the App Service best practice of putting the `VaultName` configuration in an app setting instead of a configuration file. To create the app setting, run this command. Make sure to replace both `<your-unique-app-name>` with your app's name in the `--name` parameter, and `<your-unique-vault-name>` with your vault's name in the `--settings` parameter.
+
+**Azure CLI**
+```bash
+az webapp config appsettings set \
+    --resource-group "[sandbox resource group name]" \
+    --name <your-unique-app-name> \
+    --settings 'VaultName=<your-unique-vault-name>'
+```
+
+## Enable managed identity
+
+Enabling managed identity on an app is a one-liner. To enable it on your app, run the following command. Make sure to replace `<your-unique-app-name>` with your app's name in the `--name` parameter.
+
+**Azure CLI**
+```bash
+az webapp identity assign \
+    --resource-group "[sandbox resource group name]" \
+    --name <your-unique-app-name>
+```
+
+From the resulting JSON output, copy the `principalId` value. `PrincipalId` is the unique ID of the app's new identity in Microsoft Entra ID, and you're going to use it in the next step.
+
+## Grant access to the vault
+
+The last step before deploying is to assign Key Vault permissions to your app's managed identity. Make sure to replace both `<your-unique-vault-name>` with your vault's name in the `--name` parameter, and enter the `principalId` value you copied from the previous step as the value for `object-id` in the following command. To establish `Get` and `List` access, run this command.
+
+**Azure CLI**
+```bash
+az keyvault set-policy \
+    --secret-permissions get list \
+    --name <your-unique-vault-name> \
+    --object-id <your-managed-identity-principleid>
+```
+
+## Deploy the app and try it out
+
+1. All your configuration is set, and you're ready to deploy! The following commands publish the site to the *pub* folder, zip it up into *site.zip*, and deploy the zip to App Service. Make sure to replace `<your-unique-app-name>` with your app's name in the `--name` parameter.
+
+   > **Note**  
+   > You'll need to `cd` back to the KeyVaultDemoApp directory if you're not still there.
+
+   **Azure CLI**
+   ```bash
+   dotnet publish -o pub
+   zip -j site.zip pub/*
+
+   az webapp deploy \
+       --src-path site.zip \
+       --resource-group "[sandbox resource group name]" \
+       --name <your-unique-app-name>
+   ```
+
+2. The deployment might take a minute or two to complete. After you get a result that indicates that the site deployed, open `https://<your-unique-app-name>.azurewebsites.net/api/SecretTest` in a browser. The app takes a moment to start up for the first time on the server, but after it does, you should see the secret value, *reindeer_flotilla*.
+
+Your app is finished and deployed!
+
+
+# 6.7 Summary
+
+In this module, you secured an app's secret configuration in Azure Key Vault. Your app code authenticated to the vault with a managed identity, and automatically loaded the secrets from the vault into memory at startup.
+
+## Clean up
+
+The sandbox automatically cleans up your resources when you're finished with this module.
+
+When you're working in your own subscription, it's a good idea at the end of a project to identify whether you still need the resources you created. Resources that you leave running can cost you money. You can delete resources individually or delete the resource group to delete the entire set of resources.
+
+To clean up your Cloud Shell storage, delete the *KeyVaultDemoApp* directory.
+
+## Next steps
+
+If this app was a real app, what would come next?
+
+* **Put all your app secrets in your vaults!** There's no longer any reason to have them in configuration files.
+* **Continue to develop the app.** Your production environment is all set up, so you don't need to repeat all the setup for future deployments.
+* **To support development, create a development-environment vault** that contains secrets with the same names but different values. Grant permissions to the development team and configure the vault name in the app's development-environment configuration file. Configuration depends on your implementation: for ASP.NET Core, `AddAzureKeyVault` automatically detects local installations of Visual Studio and the Azure CLI and use Azure credentials configured in those apps to sign in and access the vault. For Node.js, you can create a development-environment service principal with permissions to the vault and have the app authenticate using `loginWithServicePrincipalSecret`.
+* **Create more environments** for purposes like user acceptance testing.
+* **Separate vaults across different subscriptions and resource groups** to isolate them.
+* **Grant access to other environment vaults** to the appropriate people.
+
+## Further reading
+
+* Key Vault documentation
+* More about AddAzureKeyVault and its advanced options
+* This tutorial walks through using a Key Vault `SecretClient`, including manually authenticating it to Microsoft Entra ID using a client secret instead of using a managed identity.
+* Managed identities for Azure resources token service documentation for implementing the authentication workflow yourself.
+
+## Check your knowledge
+
+**1.**
+**Which of the following benefits is not a benefit of Azure Key Vault?**
+
+Secure storage of private user information. ✅
+Synchronizing application secrets among multiple instances of an application.
+Reducing the need for application developers to directly handle application secrets.
+Controlling access to application secrets with assignable permissions.
+
+**2.**
+**Which of these statements best describes Azure Key Vault's authentication and authorization process?**
+
+Applications authenticate to a vault with the username and password of the lead developer and have full access to all secrets in the vault.
+Applications and users authenticate to a vault with a Microsoft account and are authorized to access specific secrets.
+Applications and users authenticate to a vault with their Microsoft Entra identities and are authorized to perform actions on all secrets in the vault. ✅
+Applications authenticate to a vault with the username and password of a user that signs in to the web app, and is granted access to secrets owned by that user.
+
+**3.**
+**How does Azure Key Vault help protect your secrets after your app loads them?**
+
+Azure Key Vault automatically generates a new secret after every use.
+The Azure Key Vault client library protects regions of memory used by your application to prevent accidental secret exposure.
+Azure Key Vault double-encrypts secrets, requiring your app to decrypt them locally every time they're used.
+It doesn't protect your secrets. Secrets are unprotected once your application loads them. ✅
