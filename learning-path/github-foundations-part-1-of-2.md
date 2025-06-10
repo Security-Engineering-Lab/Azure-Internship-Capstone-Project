@@ -413,6 +413,8 @@ If you'd like to dig deeper, here are more resources:
 
 # 2 Introduction to GitHub
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/github-enterprise-platform.png)
+
 Learn to use key GitHub features, including issues, notifications, branches, commits, and pull requests.
 
 # 2.1 Introduction
