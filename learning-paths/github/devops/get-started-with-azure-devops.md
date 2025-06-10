@@ -188,23 +188,23 @@ Some people roll their eyes, but Mara presses on.
 
 Creating a new feature currently starts with creating a label in source control ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-01.png). We have one person who can create labels, Andy. We request a label by email. We use a centralized version-control system, so Andy waits until all the existing code is checked in and stable before he creates the label. After the label is created, we get an email saying we can begin work. This process takes up to three days and has no value to the customer. Things with no value to the customer should take as little time as possible.
 
-Coding a feature takes about four days for one person after we get access to all the files we need. We have to be on the corporate network in order to access source control. This time has value to the customer. They want this feature.
+Coding a feature takes about four days for one person after we get access to all the files we need.![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-02.png) We have to be on the corporate network in order to access source control. This time has value to the customer. They want this feature.
 
 ### Test processes
 
-After we decide that we have a stable build, we update a spreadsheet to tell Amita that there's a build ready for testing and where to find it. It takes her two days to get notified.
+After we decide that we have a stable build, we update a spreadsheet to tell Amita that there's a build ready for testing and where to find it. ![](https://github.com/user-attachments/assets/85b97056-3ddc-4db5-88a6-ecf8c561fb6d) It takes her two days to get notified.
 
-Amita manually tests the build. This process gets longer as the codebase grows. For now, let's say three days. She then emails Andy with bug reports. Testing doesn't add value, but it's necessary.
+Amita manually tests the build ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-04.png). This process gets longer as the codebase grows. For now, let's say three days. She then emails Andy with bug reports. Testing doesn't add value, but it's necessary.
 
-Andy then has to take time to triage the bugs and assign work. It can take another three days for Andy to understand the issues and get them to the right developers.
+Andy then has to take time to triage the bugs and assign work ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-04.png). It can take another three days for Andy to understand the issues and get them to the right developers.
 
 ### Operations processes
 
-When Amita approves a build, she hands it off to Tim. Tim needs to deploy this build to the preproduction servers for more testing. Often, the preproduction servers are out of sync with the latest patches and updates needed to run the website. It takes Tim about two days to deploy to preproduction and run some tests. Again, while deploying to preproduction doesn't add value, it's necessary.
+When Amita approves a build, she hands it off to Tim. Tim needs to deploy this build to the preproduction servers for more testing. Often, the preproduction servers are out of sync with the latest patches and updates needed to run the website. It takes Tim about two days to deploy to preproduction and run some tests. Again, while deploying to preproduction doesn't add value, it's necessary. ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-05.png)
 
 After a build is ready for production, leadership needs to approve the release before it can be deployed. The approval happens in a meeting. It takes four days to get leadership to meet and review the release.
 
-Eventually, Tim deploys the feature, and the feature makes it to the customer here on the upper-right corner of the VSM. If the production server configuration has drifted so it's out of sync with preproduction, Tim first needs to update it, which takes one day.
+Eventually, Tim deploys the feature, and the feature makes it to the customer here on the upper-right corner of the VSM. If the production server configuration has drifted so it's out of sync with preproduction, Tim first needs to update it, which takes one day. ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-06.png)
 
 ## Calculate the customer value metrics
 
@@ -262,4 +262,21 @@ Waste is time between tasks.
 Waste means we're having to rewrite code and throw away the old code.
 Waste is time spent on tasks that don't have direct customer value. ✅
 
+
+# 1.5 Summary
+
+As you can see, Mara and her team face a number of challenges. Although releases happen eventually, Mara feels they can happen much more frequently and efficiently.
+
+Mara hopes she can convince the team it's at least worth testing out a DevOps approach. Perhaps they can apply a few DevOps practices as they finish up work on the *Space Game* website.
+
+## What is DevOps?
+
+At this point, we haven't yet defined DevOps. We'll do that in the next module. But for now, think of DevOps as something that brings together people, processes and products, automating software delivery to provide continuous value to your users.
+
+Azure DevOps is a suite of services that spans the entire DevOps life cycle. Azure DevOps starts with planning and goes all the way through deployment and monitoring. If you already have some pieces in place, you can select which services you want to use. Azure DevOps integrates with many tools, like Jenkins.
+
+We'll go deeper into Azure DevOps in future modules. You can also check out these resources:
+
+* Azure DevOps
+* DevOps Resource Center
 
