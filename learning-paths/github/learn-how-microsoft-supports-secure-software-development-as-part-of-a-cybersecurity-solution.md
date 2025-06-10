@@ -255,8 +255,8 @@ Additionally, the DR plan now includes standard guidance dictating proper handli
 
 - They used Azure Disk Encryption to encrypt data on their virtual machines.
 - All of the data was encrypted by default.
-- They used Azure Storage Service Encryption to encrypt data in their storage accounts.
-- **✅ They used Azure Key Vault to encrypt data in their storage accounts.**
+- **✅ They used Azure Storage Service Encryption to encrypt data in their storage accounts.
+-  They used Azure Key Vault to encrypt data in their storage accounts.**
 
 **Explanation:** According to the scenario, Contoso formalized a process that all backups must be encrypted at rest and the encryption keys must be secured in Key Vault. This shows they used Azure Key Vault to manage encryption keys for protecting their backup data, which helps protect data confidentiality (not integrity as the question incorrectly states).
 
