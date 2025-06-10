@@ -280,3 +280,413 @@ We'll go deeper into Azure DevOps in future modules. You can also check out thes
 * Azure DevOps
 * DevOps Resource Center
 
+
+
+# 3 Choose an Agile approach to software development
+Learn to foster the DevOps values of transparency and team cooperation with Azure Boards.
+
+# 3.1 Introduction
+
+You've met the Tailspin team and learned a bit about their problems. Mara, the newest team member, is trying to convince her teammates that a DevOps approach, using the services in Azure DevOps, is a great way to solve them. She's taken it upon herself to do a *value stream mapping* (VSM) exercise, and she's shown everyone the results.
+
+Her next goal is to convince the Tailspin team to take their first DevOps steps by using an Agile approach and Azure Boards, a part of the Azure DevOps suite. Azure Boards helps teams collaborate and plan their work better. This module shows how the team creates its first board.
+
+After completing this module, you'll be able to:
+
+* Define the term Agile.
+* Begin to make recommendations for incorporating Agile practices into your organization.
+* Create a project in Azure DevOps.
+* Add work items to Azure Boards by using the Basic process.
+
+## Prerequisites
+
+The modules in this learning path form a progression. We recommend you start at the beginning of the Get started with Azure DevOps learning path before you work on this module.
+
+If you'd rather do only this module, go through Introduction to Azure DevOps first to set up your Azure DevOps organization.
+
+## Meet the team
+
+You met the *Space Game* web team at Tailspin Toys in previous modules. As a refresher, here's who you'll work with in this module:
+
+**Andy** is the development lead.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/andy.png)
+
+**Amita** is in QA.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/amita.png)
+
+**Tim** is in operations.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/tim.png)
+
+**Mara** just joined as a developer and reports to Andy.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/mara.png)
+
+Mara has prior experience with DevOps and is helping the team adopt a more streamlined process by using Azure DevOps.
+
+
+# 3.2 What is Agile?
+
+Agile is a term that's used to describe approaches to software development, emphasizing incremental delivery, team collaboration, continual planning, and learning. Agile isn't a process as much as it's a philosophy or mindset for planning the work that a team will do. It's based on iterative development and helps a team better plan for and react to the inevitable changes that occur in software development. Let's listen in on Mara's discussion with Andy after the latest release.
+
+Mara felt she'd made a few small steps toward interesting the team in DevOps, but progress has stalled. The team has been too busy fixing bugs in the last release to think about anything else.
+
+Recall that Irwin, the product manager, provided the team with some rather critical customer feedback about the racing game website. Resolving these issues wasn't fun. Andy and Mara would write code and then hand it to Amita, the tester. Amita always seemed to find new bugs and had to hand the code back. The build server failed. Tim couldn't get the game's website to work in production, even after it worked in dev and test. Everyone worked long hours and lost a couple of weekends.
+
+After they shipped the release, Mara and Andy sat down for coffee. They were both tired. Mara was discouraged, but Andy had a different attitude.
+
+**Andy:** I don't know why you're surprised. Getting software out the door is hard. It's always a slog. Have you ever done it differently?
+
+**Mara:** I have, and I think we could make things easier here, too. I really believe DevOps can help us.
+
+**Andy:** I remember we did a value-stream mapping exercise, but now what? We've got to get started on the new release. I thought we were done with DevOps.
+
+**Mara:** There's a lot more we can do. I think we should take the first step and do some Agile planning. We can use Azure Boards to help us.
+
+**Andy:** What do you mean by Agile?
+
+**Mara:** Agile is an approach to software development. The term "Agile" was coined in 2001 in the Agile Manifesto. The manifesto established some guiding principles for a better approach to software development. The manifesto says:
+
+We value:
+
+* Individuals and interactions over processes and tools.
+* Working software over comprehensive documentation.
+* Customer collaboration over contract negotiation.
+* Responding to change over following a plan.
+
+**Andy:** Look, if you know some magic way to make life easier, I'm all for it. My kids are always asleep by the time I get home. But this sounds very touchy-feely without any concrete solutions.
+
+**Mara:** It's not magic, but we can do it bit by bit. Azure DevOps gives us the tools we need to implement Agile practices. For now, when we want to plan, we can use Azure Boards. First, can you explain the build process to me and help me identify the big problems?
+
+After lots of coffee, Mara and Andy identify the biggest problems in the build process. All the issues came up during the last release. After Andy leaves, Mara looks at her scribbled notes and decides to do a little Agile planning herself. On her own, she uses the Basic process on Azure Boards to get all the problems in one place.
+
+Her next step is to show the board to the team and get them involved.
+
+## Recommendations for adopting Agile
+
+The team is getting ready to take their first steps toward adopting Agile. Here are some general recommendations that any team can use to incorporate Agile into their organization.
+
+### Create an organizational structure that supports Agile practices
+
+For most organizations, adopting Agile can be difficult. It requires a mind shift and a culture shift that challenges many existing policies and processes within the organization. Traditionally, most companies use a horizontal team structure. In practice, this means teams correspond to the software architecture. For example, there might be a team responsible for an application's user interface, another team responsible for data, and another team responsible for the service-oriented architecture.
+
+However, vertical teams provide better results for Agile projects. Vertical teams span the architecture and are aligned with product outcomes. For example, there might be a team responsible for the app's email portion, and team members come from all three of the previously mentioned disciplines. Another benefit of the vertical team structure is that scaling occurs by adding teams.
+
+### Mentor team members on Agile techniques and practices
+
+When they first start to adopt Agile techniques and practices, some teams decide to hire external coaches. Coaches might even work with multiple teams to help remove organizational roadblocks and silos, so they often have both teaching and managerial skills. They can also train team members in Agile techniques, like how to run stand-up and review meetings. Over time, though, it's important for team members to develop an ability to mentor each other. This means that most work should be done collaboratively and not by individuals who spend most of their time working alone.
+
+### Enable in-team and cross-team collaboration
+
+If collaboration is the key to becoming successful at Agile, what are some of the ways you can encourage it? Here are some ideas.
+
+#### Cultural change
+
+When changing a culture, keep a few things in mind. It's important that team members have a quiet, comfortable place to work. They need spaces where they can focus, without a lot of distractions and noise.
+
+Meetings are a fact of life, and they can feel like they take over a person's working life. To give team members more control, meetings need an agenda and strict time frames.
+
+Asynchronous communications, like email and messages, can feel overwhelming and people often feel they have to be answered right away. Make it clear that not all of these communications need an immediate response.
+
+Remote team members are now the norm in many companies. Everyone needs to feel comfortable with all their team members and to treat them equally, whether they're in the office or working offsite. Collaboration via communication should become part of the organization's DNA.
+
+We can't overemphasize the importance of good communication, even when there are disagreements. Conflict resolution is a good skill for any Agile team to have.
+
+#### Cross-functional teams
+
+Just as it's important for team members to work collaboratively, it's also important for teams to collaborate with each other. Cross-functional teams add new skills and perspectives that can broaden everyone's ability to solve challenges creatively. Cross-functional teams also make the entire organization more cohesive. They reduce turf wars and increase the sense that everyone is working toward a common goal.
+
+#### Tools for collaboration
+
+Good tools can help your Agile team members collaborate more effectively, both within the team and with other teams. Here are a few suggestions to help you get started:
+
+**Microsoft Teams:** Teams is an application that provides a workplace for chat, meetings, notes, and file storage.
+
+**Skype:** Skype is easy to use and a good general-purpose tool. Many people already have it installed.
+
+**Slack:** Slack provides many separate communication channels, all from a single interface. You can organize these channels in many ways, such as by project, team, or topic. Conversations are retained and are searchable. It's easy to add both internal and external team members. Slack directly integrates with many third-party tools, like GitHub for source code.
+
+Other common tools include Google Hangouts, Asana, Trello, GoToMeeting, and monday.com. Try to familiarize yourself with the options to see which of them suit the needs of your team and your company.
+
+
+# 3.3 What is Azure Boards?
+
+Azure Boards is a tool in Azure DevOps to help teams plan the work they need to do. The Tailspin team will use this tool to get a better idea of what work they need to do and how to prioritize it.
+
+Mara created her own project on Azure Boards using the Basic process. It shows the problems in the build process that she and Andy identified. Mara gets the team together for a quick demo.
+
+**Mara:** Hi everyone. I set up Azure Boards and wanted to show you some work items I came up with.
+
+**Andy:** What's a work item?
+
+**Mara:** Work items help us plan and manage a project. A work item can track all types of activities. Maybe it's a task to do, a bug to fix, or some other issue. We can assign them to people, and keep track of their progress.
+
+Perhaps it's easier to show you. Here's Azure Boards using the Basic process:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/build-initial-tasks.png)
+
+*Screenshot of Azure Boards showing the initial three tasks. Each task is in the To Do column.*
+
+**Amita:** Tell us about the Basic process. Are there other options?
+
+**Mara:** There are four processes from which to choose. We can use:
+
+**Capability Maturity Model Integration (CMMI):** This is really for large organizations, and it's pretty complicated. So I didn't use it.
+
+**Scrum:** Scrum depends on a Scrum master who leads the Scrum team. The Scrum master makes sure everybody understands Scrum theory, practices, and rules. We don't have a Scrum master. That's someone who usually receives some training and certification, so I didn't pick that one either.
+
+**Agile:** This seemed like the obvious choice because I'm always talking about Agile, but it has a few more things to consider than the simplest option.
+
+**Basic:** Basic is, well, basic. It's simple but gives us enough power to start doing effective planning right away. That's why I picked it. In the Basic workflow, you move work from To Do to Doing to Done.
+
+**Amita:** OK, let's use it to get started. We can switch to something else, right?
+
+**Mara:** Right! So, let's pick a few work items we think we can fix in a couple of weeks.
+
+Andy can identify with these issues, but the rest of the team has questions.
+
+**Tim:** These are mostly dev problems. But while we're on the subject, other teams are talking about code vulnerabilities. I've been asked to show that our code is secure. Is there a way we can add that?
+
+**Mara:** I know the list isn't complete. The problems on the board are the ones Andy and I talked about earlier. Some of these problems really need to get broken down into smaller tasks. I understand your concerns about code vulnerabilities. Andy, what do you think?
+
+**Andy:** Right now, just getting a build out the door is hard. Let's start with some of the basic problems. I do like that we have a central place where we can keep track of our issues. We can add issues to the backlog and prioritize them once we're ready.
+
+**Mara:** Before we add any issues, let's talk a bit more about what everyone is working on.
+
+Each team member shares what they're working on and other concerns they have. As a brainstorming activity, they add sticky notes to a whiteboard. Their whiteboard fills up quickly.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/choose-an-agile-approach/media/3-whiteboard.png)
+*Screenshot of a whiteboard containing sticky notes. The contents of the sticky notes aren't legible.*
+
+Eventually, the team settles on seven top issues. Andy volunteers to add tasks to Azure Boards while everyone watches. Here's what the board looks like:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/build-all-tasks.png)
+*Screenshot of Azure Boards showing a backlog of issues.*
+
+**Amita:** Wow, that's a lot of problems. How are we ever going to fix all those?
+
+**Mara:** We don't have to fix them all right away. For now, we've identified a backlog, or list of work from which we could pull. When we plan work, we get to choose what's most urgent or important.
+
+After some more discussion, the team decides to take on the three issues Mara originally proposed:
+
+* Stabilize the build server.
+* Create a Git-based workflow.
+* Create unit tests.
+
+**Mara:** These seem like the easiest issues to take on, and they address some recent challenges that came up. Let's set up a project, a team, and a sprint. Then we can decide who does what.
+
+**Tim:** What's a sprint?
+
+**Mara:** Good question. A sprint is the amount of time we have to complete our tasks. Sprints help keep us focused. At the end, we can have a short retrospective meeting to share what we've accomplished. After that, we can plan the next one.
+
+Everyone looks nervous.
+
+**Mara:** We're still learning. A sprint is typically two to four weeks long. Let's just say two weeks and see how that goes. These are mostly tasks Andy and I can tackle. We'll share our progress as we go. Then we can find ways to include everybody.
+
+Mara and the team are off to a good start. Next, you'll set up the project, team, and some tasks on Azure Boards.
+
+## Check your knowledge
+
+**1. The Agile Manifesto states:**
+
+Processes and tools come before the individuals that use them.
+You need to fully document new features before you build them.
+Responding to change comes before following a plan. ✅
+
+**2. Azure Boards is:**
+
+A way for your customers to provide feedback.
+A graphical way to plan and track your work. ✅
+A way to list all of your projects.
+
+**3. A sprint is:**
+
+A fixed amount of time a team has to complete a set of tasks. ✅
+Another name for a task board.
+Time your team sets aside to work on bugs.
+
+
+# 3.4 Exercise - Plan work using Azure Boards
+
+Here, you'll create a project, a team, and a board in Azure DevOps.
+
+The Tailspin team is eager to see how Azure Boards is going to work. With the pre-planning out of the way, they can start to use the tools and build the solution they planned.
+
+## Set up Azure Boards using the Basic process
+
+In this section, you'll set up an Azure DevOps project and Azure Boards for the Tailspin team.
+
+### Create the project
+
+Here, you'll create an Azure DevOps project.
+
+1. Sign in to your account at dev.azure.com.
+
+2. Select your organization.
+
+3. Select **+ New project**. If you don't already have existing projects in your organization, there won't be a **+ New project** button, and you can proceed to step 3.
+
+   The **Create a project** dialog box opens.
+
+4. In the **Project name** field, enter **Space Game - web**.
+
+5. In the **Description** field, enter **The Space Game website**.
+
+6. Under **Visibility**, choose whether to make your project public or private. For now, you can select **private**.
+
+   Open-source project creators will often choose **public** visibility so that others can view active issues and build status.
+
+7. Select **Advanced**.
+
+8. Under **Version control**, ensure that **Git** is selected. Under **Work item process**, ensure that **Basic** is selected.
+
+9. Select **Create Project**.
+
+After just a few moments, you're taken to your new project.
+
+### Create a team
+
+Here, you'll create a team for the project.
+
+1. Select **Project settings** in the lower corner.
+
+2. On the **Project details** page, under **General**, select **Teams**.
+
+3. Based on the name of the project **Space Game - web Team**, you see that a default team has been created. We'll use this team, but in practice you might have multiple teams that contribute to the same project.
+
+4. Select **Space Game - web Team**.
+
+   You'll see that you're already a member of this team. Let's add more members.
+
+### Add team members
+
+Now's a good time to add members to your team. Although not required, if you'd like to add a coworker to your Azure DevOps organization, here's how:
+
+1. Under **Members**, select **Add**.
+2. Enter the email address of the user you'd like to add, and then select **Save**.
+3. Repeat the process for any other members you'd like to add.
+
+Mara adds entries for herself and her team members: andy@tailspintoys.com, amita@tailspintoys.com, mara@tailspintoys.com, and tim@tailspintoys.com.
+
+In practice, you might manage your team through an identity and access management service like Microsoft Entra ID, and set the appropriate permission levels for each team member. We'll point you to more resources at the end of this module.
+
+### Create the board
+
+Although Mara and her team identified a number of issues, here you'll add the three work items Mara originally proposed to her team, which you can use to practice the process.
+
+1. In the column on the left, hover over **Boards** and select **Boards** from the menu that appears.
+
+2. Select **Space Game - web Team**. A blank board appears.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/choose-an-agile-approach/media/3-blank-board.png)
+   
+   *Screenshot of Azure Boards showing an initially empty board.*
+
+   Recall that you're using the Basic process. The Basic process involves three task states: **To Do**, **Doing**, and **Done**.
+
+   If you choose a different process, like Scrum, you'll see a layout that supports that process.
+
+3. In the **To Do** column, select the **+ New item** button.
+
+4. Enter **Stabilize the build server**, and then press Enter.
+
+5. Select the ellipsis (**...**) on the item you just created, then select **Open**.
+
+6. In the **Description** field, enter this text:
+
+   ```
+   The build server keeps falling over. The OS requires security patches and updates. It's also a challenge to keep build tools and other software up to date.
+   ```
+
+7. Select **Save & Close**.
+
+8. Follow the same steps for the next two items.
+
+   | Title | Description |
+   |-------|-------------|
+   | Create a Git-based workflow | Migrate source code to GitHub and define how we'll collaborate. |
+   | Create unit tests | Add unit tests to the project to help minimize regression bugs. |
+
+9. Drag **Stabilize the build server** to the top of the stack, then drag **Create a Git-based workflow** to the second item position. Your final board looks like this:
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/build-initial-tasks.png)
+
+   *Screenshot of Azure Boards showing the initial three tasks. Each task is in the To Do column.*
+
+### Define a sprint
+
+**Mara:** This is looking great. Now let's define a sprint.
+
+When you create an Azure Boards project, you get an initial sprint called **Sprint 1**. All you need to do is assign dates to the sprint and add tasks. Here's how to follow along with the team:
+
+1. In the left-side column, select **Sprints**.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/choose-an-agile-approach/media/4-boards-sprints-menu.png)
+   
+   *Screenshot of Azure DevOps showing the location of the Sprints menu.*
+
+3. Select the **Set dates** link in the upper-right corner.
+
+4. Leave the name as **Sprint 1**.
+
+5. In the **Start date** field, select the calendar and pick today's date.
+
+6. In the **End date** field, select the calendar and pick the date two weeks from today.
+
+7. Select **Save and close**.
+
+### Assign tasks and set the iteration
+
+An iteration is another name for a sprint.
+
+You have an initial set of work items and a timeline for your first sprint. Here, you'll connect work items to your sprint, and assign the tasks to yourself.
+
+1. Under **Boards**, select **Work items**.
+
+2. Select **Stabilize the build server**.
+
+3. In the **Iteration** dropdown, select **Sprint 1**.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/choose-an-agile-approach/media/3-assign-sprint.png)
+
+   *Screenshot of Azure Boards showing the location of the Sprint 1 iteration.*
+
+4. From the same window, select **No one selected**, and set yourself as the task owner.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/choose-an-agile-approach/media/3-assign-owner.png)
+
+   *Screenshot of Azure Boards showing the location of the task owner.*
+
+4. Select **Save**.
+
+6. Repeat the process for the other two work items.
+
+   * Create a Git-based workflow
+   * Create unit tests
+
+**Mara:** We did it! We created our first project on Azure Boards and we identified the first tasks we'll take on. It's great! As Andy and I do this work, we'll move each work item to the **Doing** state.
+
+**Amita:** Sounds good. I enjoyed getting together and deciding what's important to us right now. And, like Andy said, now we have a way to see everything all in one place.
+
+
+# 3.5 Summary
+
+In this module, the Tailspin team took their first steps towards adopting DevOps practices. You worked with them and learned how to use Azure Boards to get started with Agile work planning. A board gives you an easy way to see what's going on with a project and to manage your work. Some of the things you learned to do with Azure Boards include how to:
+
+* Create projects.
+* Create work items.
+* Associate work items with a sprint, or iteration.
+
+## Learn more
+
+This module touches on Agile and Agile processes, but there's a lot more to learn.
+
+If you're interested in learning more about the benefits of Agile, check out What is Agile Development?
+
+In this module, you followed the Basic process. You'll continue using this process in upcoming modules. For your own projects, learn how to choose a process that best fits your team. You can also learn more about each process Azure Boards supports.
+
+* Agile process
+* Scrum process
+* CMMI process
+
+Also in this module, you added fictitious team members to your project. Learn more about how to add users to your organization or project.
+
+As you plan and track your work with Azure Boards, you can refer to our complete Azure Boards Documentation to get the most out of them.
