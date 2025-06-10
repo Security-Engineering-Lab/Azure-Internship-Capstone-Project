@@ -690,3 +690,21 @@ In this module, you followed the Basic process. You'll continue using this proce
 Also in this module, you added fictitious team members to your project. Learn more about how to add users to your organization or project.
 
 As you plan and track your work with Azure Boards, you can refer to our complete Azure Boards Documentation to get the most out of them.
+
+
+# 4 Manage Agile software delivery plans across teams
+
+Learn how to optimize delivery efficiency by improving work plan visibility across teams.
+
+#### Learning objectives
+After completing this module, you'll be able to:
+
+- Describe how delivery plans allow multiple teams to plan, schedule, and coordinate their work.
+- Create a delivery plan and adjust a team's sprint workload to optimize delivery efficiency.
+- Review dependencies between work items shown in a delivery plan.
+
+
+
+
+
+
