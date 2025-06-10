@@ -622,6 +622,8 @@ In the previous unit, you added a new file into the repository by pushing a comm
 
 A commit is a change to one or more files on a branch. Every time a commit is created, it's assigned a unique ID and tracked along with the time and contributor. Commits provide a clear audit trail for anyone reviewing the history of a file or linked item, such as an issue or pull request.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/2-commits.png)
+
 *A screenshot of a list of GitHub commits to a main branch.*
 
 Within a git repository, a file can exist in several valid states as it goes through the version control process. The primary states for a file in a Git repository are **Untracked** and **Tracked**.
@@ -645,11 +647,15 @@ The team member submitting the pull request asks one or more reviewers to verify
 
 Once the changes have been approved (if required), the pull request's source branch (the compare branch) is merged into the base branch.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/2-pull-request.png)
+
 *A screenshot of a pull request and a comment within the pull request.*
 
 Now that we know of all the ingredients, let's review the GitHub flow.
 
 ## The GitHub flow
+
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/2-branching.png)
 
 *Screenshot showing a visual representation of the GitHub Flow in a linear format that includes a new branch, commits, pull request, and merging the changes back to main in that order.*
 
@@ -699,6 +705,8 @@ For this walkthrough, we'll go over how to create an issue from a repository. Bu
 
 2. Under your repository name, select **Issues**.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/issues-tab.png)
+
 *Screenshot showing the top portion of the main page of a repository with the Issues section highlighted.*
 
 3. Select **New issue**.
@@ -706,6 +714,8 @@ For this walkthrough, we'll go over how to create an issue from a repository. Bu
 4. If your repository uses issue templates, next to the type of issue you'd like to open select **Get started**.
 
    If the type of issue you'd like to open isn't included in the available options, select **Open a blank issue**. If not using templates, skip to Step 5.
+
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/open-a-blank-issue.png)
 
 *A screenshot of the issue templates menu, with the Open a blank issue option highlighted.*
 
@@ -742,10 +752,13 @@ When you first enable GitHub Discussions, you're invited to configure a welcome 
 
 2. Under your repository name, select **Settings**.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/settings-tab.png)
+
 *A screenshot of the top portion of the main page of a repository with the Settings section highlighted.*
 
 3. Scroll down to the **Features** section and under **Discussions**, select **Setup discussions**.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/set-up-discussion.png)
 *A screenshot of the Discussions box with the green Setup discussion button highlighted.*
 
 4. Under **Start a new discussion**, edit the template to align with the resources and tone you want to set for your community.
@@ -762,12 +775,15 @@ Any authenticated user who can view the repository can create a discussion in th
 
 2. Under your repository or organization name, select **Discussions**.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/discussions-tab.png)
+
 *A screenshot of the top portion of the main page of a repository with the Discussions section highlighted.*
 
 3. On the right side of the page, select **New discussion**.
 
 4. Select a discussion category by selecting **Get started**. All discussions must be created in a category. For repository discussions, people with maintain or admin permissions to the repository define the categories for discussions in that repository.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/announcements.png)
 *A screenshot of the select a discussion category menu selection, with the top option Announcements and the get started button highlighted.*
 
 Each category must have a unique name, emoji pairing, and a detailed description stating its purpose. Categories help maintainers organize how conversations are filed. They're customizable to help distinguish categories that are Q&A or more open-ended conversations. The following table shows the default categories for discussions and their purpose.
@@ -783,6 +799,7 @@ Each category must have a unique name, emoji pairing, and a detailed description
 
 5. Under **Discussion title** enter a title for your discussion, and under **Write** enter the body of your discussion.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/start-a-new-discussion.png)
 *A screenshot of starting a new discussion page with the Discussion title box and content box empty.*
 
 6. Select **Start discussion**.
