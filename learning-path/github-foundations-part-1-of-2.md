@@ -413,8 +413,6 @@ If you'd like to dig deeper, here are more resources:
 
 # 2 Introduction to GitHub
 
-![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/github-enterprise-platform.png)
-
 Learn to use key GitHub features, including issues, notifications, branches, commits, and pull requests.
 
 # 2.1 Introduction
@@ -449,6 +447,8 @@ In this unit, we review the following learning objectives:
 - Introduction to gists and wikis
 
 ## GitHub
+
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/github-enterprise-platform.png)
 
 *A conceptual image of the GitHub Platform with layers from top to bottom: AI, Collaboration, Productivity, Security, and Scale.*
 
@@ -508,13 +508,19 @@ Let's tackle creating a repository from github.com.
 
 1. In the upper-right corner of any page, use the drop-down menu, and select **New repository**.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/2-new-repo-option.png)
+
 *A screenshot of the drop-down menu of the plus sign in the top right corner of GitHub.com, with the first option being New repository.*
 
 2. Use the **Owner** drop-down menu to select the account you want to own the repository.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/2-selecting-repo-owner.png)
+
 *A screenshot of the drop-down menu of who should be the owner of the new repository.*
 
 3. Type a name for your repository, and an optional description.
+
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/2-repo-name-text-box.png)
 
 *An image of the text box of the repository name highlighted.*
 
@@ -539,6 +545,8 @@ Let's review how to add a file to your repository.
 
 3. Once added, above the list of files select the **Add file ᐁ** drop-down menu. Then select **Create new file**.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/add-file-options.png)
+
 *A screenshot of the option to add a file to your new repository highlighted in red with the add file button towards the right of the screen.*
 
 4. In the file name field, type the name and extension for the file. To create subdirectories, type the `/` directory separator.
@@ -546,6 +554,8 @@ Let's review how to add a file to your repository.
 5. In the file contents text box, type content for the file.
 
 6. To review the new content, above the file contents, select **Preview**.
+
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/2-preview-option-in-a-file.png)
 
 *Screenshot showing a yml file with the preview button highlighted in the top left.*
 
@@ -555,9 +565,12 @@ Let's review how to add a file to your repository.
 
 9. If you have more than one email address associated with your account on GitHub.com, select the email address drop-down menu. Then select the email address to use as the Git author email address. Only verified email addresses appear in this drop-down menu. If you enabled email address privacy, then `[username]@users.noreply.github.com` is the default commit author email address.
 
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/2-commit-description-box.png)
 *Screenshot showing a commit change with a description box and the drop-down menu of the email to select as the author of the commit.*
 
 10. Below the Commit message fields, decide whether to add your commit to the current branch or to a new branch. If your current branch is the default branch, you should choose to create a new branch for your commit, and then create a pull request.
+
+![](https://learn.microsoft.com/en-us/training/github/introduction-to-github/media/2-create-a-new-branch.png)
 
 *Screenshot showing creating a new branch from a commit option select with the textbox of the new branch below it.*
 
