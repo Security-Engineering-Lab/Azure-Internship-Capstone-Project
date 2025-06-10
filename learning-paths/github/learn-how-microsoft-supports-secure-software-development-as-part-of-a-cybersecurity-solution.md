@@ -651,6 +651,8 @@ Mara has called a short meeting with her teammates. Everyone has shown up, but n
 
 Mara's value stream map is still on the whiteboard from their previous meeting:
 
+![](https://learn.microsoft.com/en-us/training/azure-devops/get-started-with-devops/media/2-vsm-whiteboard1.png)
+
 Screenshot of a whiteboard showing the value stream map.
 
 **Mara:** Our value stream map shows where we lose efficiency in delivering value to our end users. Just like everyone else, we can improve, and we can decide which areas to tackle first.
