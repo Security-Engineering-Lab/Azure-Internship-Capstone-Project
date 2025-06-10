@@ -703,8 +703,412 @@ After completing this module, you'll be able to:
 - Create a delivery plan and adjust a team's sprint workload to optimize delivery efficiency.
 - Review dependencies between work items shown in a delivery plan.
 
+# 4.1 Introduction
+
+Azure DevOps can help your team scale their development processes to deliver bigger, more ambitious projects. Let's rejoin the Tailspin Toys team as they tackle common problems that organizations face as they grow. Together, we'll discover what it takes to manage work schedules across multiple teams effectively.
+
+You met the team at Tailspin Toys earlier in this learning path. In the previous module, you watched as they began to manage their work schedule through Azure Boards. Soon, word of their early success began to spread, and now other teams are exploring how they can enjoy the same benefits.
+
+As more teams adopt Azure Boards, the organization begins to see the network effects of having their planning consolidate around a consistent process. Problems that were once written off as a cost of doing business now have achievable solutions. Let's watch the team as they lead their organization in its evolution.
+
+After completing this module, you'll be able to:
+
+* Describe how *delivery plans* enable multiple teams to plan, schedule, and coordinate their work.
+* Create a delivery plan and adjust a team's sprint workload to optimize delivery efficiency.
+* View dependencies within work items within a team or across teams.
+* Resolve dependencies that have issues.
+
+## Prerequisites
+
+The modules in this learning path form a progression. We recommend that you start at the beginning of the Get started with Azure DevOps learning path before you work on this module.
+
+If you'd rather do only this module, go through Introduction to Azure DevOps first to set up your Azure DevOps organization.
+
+## Meet the team
+
+You met the *Space Game* web team at Tailspin Toys in previous modules. As a refresher, here's who you'll work with in this module:
+
+**Andy** is the development lead.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/andy.png)
+
+**Mara** just joined as a developer and reports to Andy.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/mara.png)
+
+Mara has prior experience with DevOps and is helping the team adopt a more streamlined process by using Azure DevOps.
 
 
+# 4.2 What are delivery plans?
+
+As development organizations grow, they need to reorganize into smaller teams that can efficiently manage portioned units of work. These teams usually have their work schedules, boards, and other processes that meet their unique needs within the context of the organization's larger goals. Over time, organizations might find that they enjoy network benefits by consolidating their processes around a consistent framework.
+
+A delivery plan is a visualization of one or more work schedules. It's intended to provide teams and management an overall view of what each team is planning to produce and when. It allows decisions to be made that optimize the investments across the organization.
+
+Teams must regularly review their delivery plans to ensure that their work schedule aligns with other teams' schedules. These reviews should address questions like:
+
+* Are we sure we can deliver what we've committed to on our current schedule?
+* Are we confident that the teams we depend on will deliver what we need on their current schedule?
+* Are there lulls in our schedule that we could fill with work?
+* Are there issues with dependencies within a team or across teams?
+
+Delivery plans add value at any point in a project's lifecycle. Because they're dynamically generated based on team backlogs, they're always up-to-date and offer the latest insights.
+
+Let's join the Tailspin web team in their discussion.
+
+**Andy:** I just had a great meeting with engineering management. I demoed the work we're doing with Azure Boards, and they're excited about the prospect of getting other teams on board.
+
+**Mara:** Awesome! When will they get started?
+
+**Andy:** That's the best part. They already have! Last night the game engine project lead created a team with some sprints and began adding work items. I took a quick look this morning, and it's shaping up nicely. Let me show you what they're up to.
+
+Andy navigates to the game engine's current sprint board. He and Mara review the work items with great interest.
+
+**Andy:** Hmm...I just noticed that they're not planning to deploy their beta by the end of this sprint. Aren't we expecting to integrate our leaderboard with the beta database during our next sprint? We can't do that if they don't ship the beta first.
+
+**Mara:** That's a good point. We have a dependency on that team to produce that deliverable so we can produce one of our own.
+
+**Andy:** This could have really hurt our productivity next sprint. I'm going to give them a call to find out what's going on.
+
+Unfortunately, more sophisticated team structures can result in gaps or lags in communication. When one team is blocked, they might not be able to produce something another team is dependent on. This might not be a major issue for a small group of teams that have daily meetings for all concerned. However, as teams scale in size and location, it can become untenable for everyone to know everything going on everywhere. It's at this point that organizations need to transition from a pure "push" model (like in-person or email announcements) to a "pull" model (where teams can review and track each other's schedules).
+
+**Andy:** Okay, I just spoke with the dev lead. She told me their team is blocked from shipping the beta until the art team returns from Cliffchella.
+
+**Mara:** The mountaintop music festival?
+
+**Andy:** Yeah, apparently, it's a huge deal in the design community, and their entire team just drops off the grid for a whole week to attend. The game engine team is pretty upset because it slipped their schedule by three weeks. Had they known it was coming, they would have made sure to get the artifacts they needed ahead of time. They also apologized for not letting us know sooner. They didn't realize we would be waiting on their beta to ship our part.
+
+**Mara:** Well, at least we can be glad that the game engine team is publishing their sprint plans. It helped us find this dependency issue early enough to adjust our schedule.
+
+**Andy:** I just wish there was a way to see these potential risks coming more easily. Our teams have so many dependencies across the company that there's no way we can attend every meeting and subscribe to every distribution group.
+
+**Mara:** We should create a delivery plan so that we can see our team sprints side-by-side. This will help both teams more easily identify how our schedules affect each other.
+
+## Recommendations for managing multiple Agile teams
+
+An Agile approach, along with Azure DevOps can substantially improve project transparency and predictability. However, projects might still run into traditional challenges, often related to personnel or miscommunication. Here are a few things to consider as you scale your Agile efforts.
+
+### Build trust in your people and processes
+
+Early detractors of Agile implementations are often skeptical about their ability to improve team performance. It's important for thought leaders within the organization to build trust by illustrating how the tools and processes produce results. Sometimes these results are improvements in productivity, which are easy to quantify. However, don't forget to highlight the team wins that occur by circumventing potential problems, such as avoidable schedule slips or quality issues. As people begin to associate the benefits with the process that achieved them, you'll get more enthusiasm.
+
+### Elevate the organization above the team (and individual)
+
+Some teams and individuals get territorial when new processes or policies are proposed. Rather than framing new policies as negatively exposing the performance of specific teams or individuals, highlight how the new transparency across the organization informs everyone of expectations. Having a single place where anyone can trace how their work relates to the organization meeting its goals will drive home the importance of their commitment to the process.
+
+### Foster a culture of transparency
+
+Unfortunately, the term "transparency" gets a bad rap. Nobody asks for more transparency when everything is going great. Instead, transparency (or lack thereof) is often blamed when teams are struggling. Even with all of the opportunities for transparency afforded for Agile teams, it's still subject to the honesty of individuals and teams. Emphasize that one of the reasons for transparency is to be able to identify and address potential issues before it's too late. Everyone understands that people sometimes run into circumstances that prevent them from meeting schedule deadlines. But if they don't feel safe in reporting disappointing news until the last possible moment, it can have a much more destructive impact. Building a comfort level with transparency can start with thanking people for reporting expected delays as early as possible.
+
+
+# 4.3 What is Delivery Plans?
+
+Delivery Plans is a hub in Azure DevOps that helps organizations plan and review work schedules across multiple teams. The Tailspin team can use this hub to get a better idea of how their work relates to the work of other teams.
+
+Mara created a delivery plan and added the sprints for her team and the game engine team. Excited to show off the potential, she invites Andy over for a quick demo.
+
+**Mara:** After our last conversation, I looked into our options for managing delivery plans. I found the Delivery Plans hub that seems to give us everything we need.
+
+**Andy:** I'm interested to see what you've come up with. There's a lot of stress throughout the organization about the beta slip, so anything we can do to improve schedule efficiency will be welcome.
+
+**Mara:** Okay, here it is. See those red icons. Those indicate we've got some issues with dependencies between work items.
+
+*Screenshot of a delivery plan showing schedules for the Web team and the Engine team.*
+
+**Mara:** Delivery Plans allows us to create a "delivery plan." Once we create that, we can add in the backlogs of teams within the organization. They're shown in parallel so that we can see what each team is planning to deliver against a calendar backdrop.
+
+**Andy:** This view looks great! Now we know when something we're dependent on won't be available in time. We can even gauge the likelihood of delay based on how much other work and dependencies those teams have taken on. This should help mitigate some of the "schedule chicken" behavior that sometimes goes on around here.
+
+> **Note**
+> 
+> Schedule chicken is when two or more teams are at risk of not meeting deadlines, but none of them want to admit it. Instead, each wait for another to slip their schedule first and then uses the other team's slip as a pretext for delaying their delivery.
+
+**Mara:** Yes, and we can also use this as an opportunity to let other teams know if we're going to slip something they're dependent on. It helps us build trust in our people and processes.
+
+Andy nods in agreement. It would be nice for the teams to have more faith in each other.
+
+**Andy:** Now that we know about the beta slip, we have to move our associated work out to a future sprint. On the bright side, it gives us an opportunity to pull some new work in to replace it. Let's swap the integration work with those two leaderboard bugs.
+
+Mara drags the integration work item out to the following sprint. She then drags the two leaderboard bugs back in to fill the available capacity.
+
+*Screenshot of the delivery plan after work is reorganized.*
+
+**Mara:** I also added the current beta date as a milestone. Now we'll always have it in place as a reference point for the work we're planning.
+
+**Andy:** We should also add events like Cliffchella and the annual company party.
+
+**Mara:** Why the company party? Does that affect the schedule?
+
+**Andy:** It might. Every year the DBAs enter the pie-eating contest, and they all end up calling in sick the next day. I'm not saying we should expect it to happen again this year, but I do think we should be prepared. And now we have the tools for it.
+
+## Check your knowledge
+
+**1. What is a delivery plan?**
+
+A list of work items scheduled to be completed by a specific date.
+A visualization of one or more work schedules against a calendar backdrop. ✅
+A document describing when and how a product will be delivered to the customer.
+
+**2. Which of the following isn't a good reason to use a delivery plan?**
+
+You need to gauge the likelihood of other teams producing their deliverables on their current schedules based on their commitments.
+You need to plan your team's work schedule at least in part based on the work schedules of other teams.
+You need to understand how other teams are going to produce their deliverables. ✅
+
+**3. When is a good time to start using delivery plans?**
+
+You should create a delivery plan before you start planning work sprints.
+You should wait until all work is planned before creating a delivery plan.
+Creating a delivery plan can be valuable at any point in a project. ✅
+
+
+
+# 4.4 Exercise - Set up your environment
+
+In this section, you make sure that your Azure DevOps organization is set up to complete the rest of this module.
+
+To meet these objectives, you:
+
+* Set up an Azure DevOps project for this module.
+
+## Get the Azure DevOps project
+
+Set up your Azure DevOps organization to complete the rest of this module by running a template that creates a project in Azure DevOps.
+
+The modules in this learning path are part of a progression. You follow the Tailspin web team through their DevOps journey. For learning purposes, each module has an associated Azure DevOps project.
+
+### Run the template
+
+Run a template that sets up your Azure DevOps organization.
+
+1. Get and run the ADOGenerator project in Visual Studio or the IDE of your choice.
+
+2. When prompted to **Enter the template number from the list of templates**, enter **37** for **Manage Agile software delivery plans across teams**, then press **Enter**.
+
+3. Choose your authentication method. You can set up and use a Personal Access Token (PAT) or use device login.
+
+   > **Note**
+   > 
+   > If you set up a PAT, make sure to authorize the necessary **scopes**. In this case, you can use **Full access**.
+
+4. Enter your Azure DevOps organization name, then press **Enter**.
+
+5. If prompted, enter your Azure DevOps PAT, then press **Enter**.
+
+6. Enter a project name such as *Space Game - web - Delivery plans*, then press **Enter**.
+
+7. Once your project is created, go to your Azure DevOps organization in your browser (at `https://dev.azure.com/<your-organization-name>/`) and select the project.
+
+> **Important**
+> 
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Be sure to follow the cleanup steps even if you don't complete this module.
+
+
+# 4.5 Exercise - Plan a sprint using Delivery Plans
+
+Now you can create a delivery plan and use it to plan a sprint in Azure DevOps.
+
+The Tailspin team is eager to see how Delivery Plans is going to work. They already have two teams with sprints set up in Azure DevOps, so now they can review and optimize the work schedules.
+
+To do this, you:
+
+* Create a delivery plan.
+* Add team sprints and milestones.
+* Rearrange work items to fit the overall schedule.
+
+## Create a delivery plan
+
+You create a delivery plan from the **Delivery Plans** tab of Azure Boards. You can create as many delivery plans as you need to manage different aspects of your organization.
+
+1. From Azure DevOps, navigate to your project.
+
+2. Under **Boards**, select **Delivery Plans**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/boards-delivery-plans.png)
+
+3. Select **New plan**.
+
+4. In the form, enter these fields:
+   * **Name**: *Space Game Delivery Plan*.
+   * Select the **Backlog items** backlog for the **Space Game Web Team**.
+   * Add the **Space Game Engine Team's Backlog items** backlog using the **Add team** option.
+
+   The Web team and the Engine team share a common set of backlog items.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/5-create-delivery-plan.png)
+
+5. Select **Create**.
+
+> **Note**
+> 
+> The team project generated for this module uses the *Scrum* process, not the *Basic* process used in other modules in this learning path. While the Basic process uses *Issues*, the Scrum process uses *Backlog items*, which are functionally the same for the purposes of this module. You can use Delivery Plans with either process.
+
+## Add schedule milestone markers
+
+Milestone markers can be added to the delivery plan as reference points. They help you plan work within the context of significant or external dates. Let's add a few markers now. To do so:
+
+1. Select your delivery plan.
+
+2. In the top right toolbar, select **Settings**, and then, on the **Plan settings** pane, select **Markers**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/5-configure-plan-settings.png)
+
+3. From the **Markers** tab, select **Add marker**.
+
+4. In the form, enter these fields:
+   * **Date**: Select a date one week from now
+   * **Label**: Cliffchella
+   * **Color**: Red
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/5-add-marker.png)
+
+5. Repeat the process to add markers with labels, dates, and colors:
+   * **Beta**: five weeks from today (blue)
+   * **Annual company party**: six weeks from today (green)
+
+6. Select **Save**.
+
+7. Use the **Scroll calendar** and **Zoom out** controls to bring all markers into view.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/5-show-all-markers.png)
+
+8. Select the **Beta** marker at the top of the design plan. A solid line shows the boundary of the beta milestone.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/5-analyze-milestones.png)
+
+## Optimize the work schedule
+
+1. Notice that there's a work item for the Web team to **Integrate with beta DB**. It's scheduled for completion before the beta will be ready. This is a problem because this work item is dependent on that beta.
+
+2. Drag the integration work item from **Sprint 3** to **Sprint 4** to ensure that its dependency will be available.
+
+3. This change opens a significant amount of bandwidth in **Sprint 3**. Because that time is now available for productive work, drag the two **Fix** work items from **Sprint 4** back into **Sprint 3**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/5-adjust-work-schedule.png)
+
+Your final sprint plan should look similar to this:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/5-optimized-work-schedule.png)
+
+Although the team has made some adjustments, they haven't addressed all the dependency issues that are identified in the delivery plan. In the next unit, they learn more about dependencies and how to resolve the issues that can occur in the schedule.
+
+
+# 4.6 Exercise - Track dependencies using Delivery Plans
+
+The Tailspin team noted previously that some cards in the delivery plans have green icons ![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/6-dependency-green-icon.png)  or red  ![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/6-dependency-red-icon.png) icons attached. You'll now learn about how these icons showcase the dependencies that exist between work items and how to resolve dependency issues.
+
+The team created dependencies between several work items using the **Predecessor/Successor** link type. The links they've created automatically appear in the delivery plan they created. Now they need to review these dependencies and address any dependencies that have issues.
+
+To do this, you:
+
+* Review delivery plans for dependencies.
+* Identify work items with dependency issues.
+* Resolve dependencies that have issues.
+
+## View work items with dependencies
+
+The first thing the team notices when they open the delivery plan is that link icons appear. Cards with a green ![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/6-dependency-green-icon.png) icon indicate there are no dependency issues. Cards with a red icon ![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/6-dependency-red-icon.png) indicate there are issues with one or more dependencies.
+
+Dependency issues arise when a *predecessor* work item is scheduled to finish after a *successor* work item.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/6-view-dependencies-delivery-plans.png)
+
+## View lines linking work items with dependencies
+
+To view the work items that share in a dependency, select the card with an icon attached. Here, we select the *Update privacy policy* card.
+
+A link appears that indicates which work item is participating in the dependency. In this case, it highlights that the *Complete community interaction training* work item for the Engine Team. The arrow indicates the direction of the dependency, and the black line reinforces that there's no issue.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/6-view-dependency-across-teams-no-issues-delivery-plans.png)
+
+To dismiss the dependency line, select the card or anywhere in the view.
+
+Now, choose a card with an issue. Here we select *Update site branding*. An issue is shown with the link to the *Push beta* item defined for the Engine Team. The red line indicates there's an issue and the arrow indicates that the *Push beta* item is scheduled to complete after *Update site branding*, which depends on it being completed first.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/6-view-dependency-across-teams-with-issues-delivery-plans.png)
+
+## Open the dependency dialog
+
+To review details of the *Push beta* work item, choose the card's icon to open the Dependencies dialog. The first dependency indicates an issue where the *Update site branding* work item requires the *Push beta* work to be completed first. The second dependency listed shows no issue.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/6-open-dependency-dialog-with-issues-delivery-plans.png)
+
+
+## Resolve dependencies that have issues
+
+The team decides to change the order in which to complete selected work items so as to resolve the dependency issues. They perform the following actions:
+
+* **Web team**:
+   * Drag *Create a Git-based workflow* card from **Sprint 1** to **Sprint 2**.
+   * Drag *Check open source code for vulnerabilities and licensing terms* card from **Sprint 2** to **Sprint 1**.
+   * Drag *Update site branding* card from **Sprint 4** to **Sprint 6**.
+* **Engine team**:
+   * Drag *Push beta* card from **Sprint 6** to **Sprint 5**.
+
+> **Tip**
+> 
+> If the icons don't update as expected, refresh your browser by pressing **Ctrl+F5**.
+
+Once these changes have been made, the team sees that all dependency issues have been resolved.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-delivery-plans/media/6-all-dependency-issues-resolved-delivery-plans.png)
+
+You've just completed some invaluable work that impacts the organization in a meaningful way. Management can feel confident that work will progress without foreseeable delays. Now, instead of waiting on dependencies to be delivered, teams will always have productive work to take on. Sure, things might change as circumstances develop, but at least now everyone knows where to go to stay up to date.
+
+
+# 4.7 Exercise - Clean up your environment
+
+Now that you're done with the tasks for this module, clean up your Azure DevOps environment.
+
+## Optional - Delete your project
+
+This module provided a template that you ran to create a clean environment for the module.
+
+Delete your Azure DevOps project, including what's in Azure Boards. In future modules, you can run another template that brings up a new project in a state where this module leaves off. Choose this option if you don't need your DevOps project for future reference.
+
+To delete the project:
+
+1. In Azure DevOps, go to your project. Earlier we recommended that you name this project **Space Game - web - Delivery plans**.
+
+2. Select **Project settings** in the lower corner.
+
+3. At the bottom of the **Project details** area, select **Delete**.
+
+4. In the window that appears, enter the project name, and then select **Delete** again.
+
+Your project is now deleted.
+
+# 4.8 Summary
+
+In this module, the Tailspin team took on some common organizational challenges around software delivery and adapted their process to better handle them. Some of the things you learned to do with Azure DevOps include how to:
+
+* Create a delivery plan.
+* Add team sprints and milestones to a delivery plan.
+* Rearrange work items to fit the overall schedule.
+* View dependencies between work items in a delivery plan.
+* Resolve dependencies that have issues.
+
+## Learning path summary
+
+Congratulations, you've completed the final module in the *Get started with Azure DevOps* learning path. In this learning path, you:
+
+* Saw how a value stream map can help you examine your existing processes and technologies.
+* Saw what DevOps is (and isn't), and created an Azure DevOps organization.
+* Learned how Azure Boards helps teams plan the work that needs to be done. You used the Basic process to set up a basic backlog of tasks you'll work on in upcoming modules.
+* Learned how to optimize sprint workloads across multiple Agile teams.
+* Learned how to view and track dependencies within and across several Agile teams.
+
+## Continue the journey
+
+You've seen the team identify their top-priority problems, but how will they solve them? If you want to work along with them and learn how to configure build pipelines that continuously build, test, and verify your applications, go to Build applications with Azure DevOps.
+
+For more self-paced, hands-on learning around Azure DevOps, also check out Azure DevOps Labs.
+
+## Learn more
+
+This module focused on how delivery plans can help you manage work schedules across multiple teams. However, there are many things to consider when coordinating projects at scale.
+
+To learn more about some of the other features Azure DevOps provides for scaling your team projects, such as team hierarchies, project portfolio management, and dashboards, see Plan for Agile at scale.
 
 
 
