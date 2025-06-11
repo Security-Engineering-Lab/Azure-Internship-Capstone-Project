@@ -225,9 +225,13 @@ Mara is going to do exactly that, and by following the procedures, you can do th
 
 5. Choose **Custom defined** and choose **Show all scopes**.
 
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/create-a-build-pipeline/media/3-show-all-scopes.png)
+   
    *Screenshot of viewing all scopes for a personal access token.*
 
 6. Select the following scope: **Agent Pools (Read & manage)**, and choose **Create**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-a-build-pipeline/media/3-agent-pools-read-and-manage.png)
 
    *Screenshot of selecting agent pool permissions for a personal access token.*
 
@@ -255,6 +259,8 @@ Let's fork the Space Game web project into your GitHub account:
 
 3. Select **Fork**:
 
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-a-build-pipeline/media/3-github-fork-button.png)
+
    *Screenshot of GitHub showing the location of the Fork button.*
 
 4. To fork the repository into your account, follow the instructions.
@@ -266,6 +272,8 @@ Before you create your Codespace, you create several secrets that help your self
 1. Go to your forked GitHub repository and select **Settings > Secrets and variables > Codespaces**.
 
    *Screenshot of GitHub Codespaces secrets.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-a-build-pipeline/media/3-add-codespaces-secret.png)
 
 2. Create the following Codespaces Repository secrets.
 
@@ -284,6 +292,7 @@ Next, you set up Codespaces so that you can build the website, work with source 
 
 1. In your forked GitHub repository, select **Code**, select **Code** again, choose the **Codespaces** tab, and choose **+** to create a new Codespace.
 
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-a-build-pipeline/media/3-create-new-options-codespaces.png)
    *Screenshot of create a new Codespace with options.*
 
 2. Wait for your Codespace to build. This build can take a few moments, but you only have to do it once in this step of the training module.
@@ -296,6 +305,8 @@ A remote is a Git repository where team members collaborate (similar to a reposi
 
 1. In the Visual Studio Code online editor, go to the terminal window and choose **bash** from the right-hand side.
 
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-a-build-pipeline/media/3-terminal-window.png)
+   
    *Screenshot of terminal window in Visual Studio Code online editor.*
 
 2. To list your remotes, run the `git remote` command:
@@ -356,13 +367,19 @@ A remote is a Git repository where team members collaborate (similar to a reposi
 
 2. You see a new message in the Visual Studio editor. Your application running on port 5000 is available. Select **Open in Browser** to go to the running app.
 
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-a-build-pipeline/media/3-port-forwarding-message.png)
+
    *Screenshot of port forwarding Codespaces message.*
 
 3. In the new browser window, you should see the Space Game web site:
 
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-a-build-pipeline/media/3-space-game-top.png)
+
    *Screenshot of a web browser showing the Space Game web site.*
 
 4. You can interact with the page, including the leaderboard. When you select a player's name, you see details about that player:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-a-build-pipeline/media/3-space-game-leaderboard-profile.png)
 
    *Screenshot of a web browser showing the Space Game leaderboard.*
 
