@@ -108,14 +108,265 @@ You met the Space Game web team at Tailspin Toys in previous modules. As a refre
 
 *Cartoon depiction of Andy.*
 
-**Andy** is the development lead.
 ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/andy.png)
+**Andy** is the development lead.
+
 *Cartoon depiction of Amita.*
 
-**Amita** is in QA.
 ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/amita.png)
-*Cartoon depiction of Mara.*
+**Amita** is in QA.
 
-**Mara** just joined as a developer and reports to Andy.
+*Cartoon depiction of Mara.*
 ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/mara.png)
+**Mara** just joined as a developer and reports to Andy.
+
 Mara has prior experience with DevOps, and is helping the team adopt a more streamlined process by using Microsoft Azure DevOps.
+
+# 1.2 What is Azure Pipelines?
+
+## Choose your training module development environment
+
+Microsoft Azure Pipelines is a cloud service you can use to automatically build, test, and deploy your code project. You can also make it available to other users, and it works with just about any language or project type.
+
+Mara is excited about replicating the team's build process on Azure Pipelines. Amita, the tester, finally has some free time and wants to catch up. Mara decides that now is a great time to tell her about her plan: setting up an automated build pipeline for the Space Game web site by using Azure Pipelines.
+
+When she hears Mara's plan, Amita is a bit hesitant, but because Mara's plan is to replicate the build process but not replace it, she's also curious. She knows the build process could use some improvements.
+
+**Amita:** It sounds like an interesting exercise, but you must want to prove a DevOps point!
+
+**Mara:** You already know me so well!
+
+**Amita:** What improvements do you expect to see, especially because you're going to do what we already do?
+
+**Mara:** I think that just moving to Azure Pipelines will bring many benefits. Remember, Azure Pipelines is a cloud service. We can use it to automatically build and test code. And it will be available to others as well. It works with just about any language or project type.
+
+Our build server has problems, and even keeping it up to date is hard. Because Azure Pipelines provides build servers that Microsoft hosts and maintains, it always has the latest patches and security updates. We won't have to worry about maintaining build servers.
+
+Also, we have all kinds of scripts written by different people. We don't even understand how some of them work. Azure Pipelines comes with a catalog of tasks. A task is a packaged script or procedure that's been abstracted with a set of inputs. I'm going to try to map what our build scripts do to those tasks. At least we can standardize how things get done and increase the level of automation.
+
+And Azure Pipelines works with many different languages and app types. If we want to expand in those directions, we won't have to retool.
+
+**Amita:** I know it's selfish, but why do I care? One of my big problems is that I never know when a build is ready to test. Sometimes someone remembers to update the spreadsheet, but many times they forget. It seems like I'm the last person to know.
+
+**Mara:** Right, that's something we can easily fix. We can set up the pipeline to notify you automatically, either through email or some other notification, when a build is ready. You'll never have to wait for someone to remind you again.
+
+**Amita:** Okay, so your goal right now is to build the app and let me know when it's ready?
+
+**Mara:** Right! Of course, I've got bigger plans. I know you're all going to love this first step, so I want to build on it to give us true continuous integration.
+
+**Amita:** Give me the five-minute rundown on continuous integration.
+
+**Mara:** Let me draw you a picture.
+
+Mara moves to the whiteboard and draws the pipeline.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-a-build-pipeline/media/2-whiteboard-pipeline-with-callouts.png)
+
+*Screenshot of a hand-drawn illustration of a CI pipeline. The Build, Test, and Verify stages act on code. The build artifact is the output.*
+
+**Mara:** This is my CI pipeline. CI is the process of automating the building and testing of code every time a team member commits changes to version control. I know we don't do automated testing yet, but give it time.
+
+A pipeline defines the continuous integration process for the app. It's made up of steps called tasks. ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-01.png) You can think of it as a script that defines how your build, test, and deployment steps are run. I'm going to try to map our scripts to tasks.
+
+The pipeline runs when you submit code changes. ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-02.png) You can configure the pipeline to run automatically, or you can run it manually. You connect your pipeline to a source repository like GitHub, Bitbucket, or Subversion. One of our tasks for this sprint is to start using GitHub, so we'll use GitHub for this project.
+
+A build agent ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-03.png) builds or deploys the code. When your build or deployment runs, the system begins one or more jobs. An agent is an installable software that runs one build or deployment job at a time. Because we're using Azure Pipelines, we can use a Microsoft-hosted agent. With Microsoft-hosted agents, maintenance and upgrades are taken care of for us. Each time we run a pipeline, we'll get a fresh virtual machine. There are several virtual machine images to choose from, including Ubuntu 22.04, which is what we use.
+
+The final product of the pipeline is a build artifact. ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-04.png) Think of an artifact as the smallest compiled unit that we need to test or deploy the app. For example, an artifact can be:
+
+* A Java or .NET app packaged into a .jar or .zip file.
+* A C++ or JavaScript library.
+* A virtual machine, cloud, or Docker image.
+
+And that's it. I know we can do this.
+
+**Amita:** It sounds great. Let's see what you have to do to get it to work and how long it takes you. You can give us all a demo.
+
+**Mara:** Will do!
+
+## Manage build agents
+
+Now that you and the team are familiar with Azure Pipelines, let's talk a bit more about build agents. A build agent is a piece of installable software that runs one build or deployment job at a time. To build your code or deploy your software, you need at least one agent. As you add more code and people, you'll eventually need more than one agent. There are two main categories of agents.
+
+**Microsoft-hosted agents** are agents that Microsoft manages, so maintenance and upgrades are taken care of for you. Each time you run a pipeline, you get a new agent for each job in the pipeline. In this module, when you choose Local development environment using a Microsoft-hosted agent, you're running your pipeline on a Microsoft-hosted agent. To run pipelines on a Microsoft-hosted agent, your organization must have at least one Microsoft-hosted parallel job. Check your Microsoft-hosted parallel jobs count to ensure that you have at least one Microsoft-hosted parallel job. If your Microsoft-hosted parallel jobs count is zero (new Azure DevOps organizations typically have zero parallel jobs), you can request a free grant. The approval process for the free grant typically takes two to three business days.
+
+**Self-hosted agents** are agents that you manage. You configure the virtual machines or containers by installing the agent software and desired tools, and register the agents with Azure DevOps. In this module, when you choose GitHub Codespaces development environment using a self-hosted agent, you're using a self-hosted agent running in your GitHub Codespaces container. Self-hosting the agent on a GitHub Codespaces container isn't a typical production scenario, but it does provide an environment for completing this training module.
+
+## Check your knowledge
+
+**1. Which of these is an example of a build artifact?**
+
+The code compiler used to build the application.
+A Windows Installer (.msi) file that contains a C++ desktop application. ✅
+An email that summarizes the build run.
+
+
+# 1.3 Exercise - Get the sample application
+
+## Choose your training module development environment
+
+Get ready to start building a CI pipeline with Microsoft Azure Pipelines. The first step is to build and run the Space Game web app. Understanding how to build software manually, prepares you to repeat the process in the pipeline.
+
+Mara is going to do exactly that, and by following the procedures, you can do the same thing.
+
+## Create an Azure DevOps personal access token
+
+1. Sign in to your organization (https://dev.azure.com/{yourorganization}). If you don't already have an Azure DevOps organization, create a free organization before you begin. After you sign in, if you have more than one organization, choose Azure DevOps and go to the organization that you plan to use to complete this module. In this example, the name of the organization is fabrikam.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-a-build-pipeline/media/3-choose-organization.png)
+
+   *Screenshot of choosing your Azure DevOps organization.*
+
+2. From your home page, open user settings and select **Personal access tokens**.
+
+3. Select **+ New Token**.
+
+4. Name your token using any name that you prefer. The token is used when the Codespace registers its agent with your Azure DevOps organization, so you can keep the default expiration.
+
+5. Choose **Custom defined** and choose **Show all scopes**.
+
+   *Screenshot of viewing all scopes for a personal access token.*
+
+6. Select the following scope: **Agent Pools (Read & manage)**, and choose **Create**.
+
+   *Screenshot of selecting agent pool permissions for a personal access token.*
+
+7. When you're done, copy the token and store it in a secure location. For your security, it won't be shown again.
+
+> **Warning**
+> 
+> Treat and use a PAT like your password and keep it secret.
+
+## Create a fork
+
+The first step to using a project in Git is to create a fork so you can work with and modify the source files. A fork is a copy of a GitHub repository. The copy exists in your account and lets you make any changes you want without affecting the original project.
+
+Although you can propose changes to the original project, in this lesson, you work with the Space Game web project as though it was the original project owned by Mara and the team.
+
+> **Note**
+> 
+> If you have previously forked this repository, for example if you have previously completed this module or another Tailspin Toys training module, we recommend that you delete your fork and create a new fork using the following steps. If you don't want to delete your fork, ensure that you sync your fork.
+
+Let's fork the Space Game web project into your GitHub account:
+
+1. In a web browser, go to GitHub and sign in.
+
+2. Go to the Space Game web project.
+
+3. Select **Fork**:
+
+   *Screenshot of GitHub showing the location of the Fork button.*
+
+4. To fork the repository into your account, follow the instructions.
+
+## Set up secrets for self-hosted agent
+
+Before you create your Codespace, you create several secrets that help your self-hosted Azure DevOps agent run. In production, you wouldn't want to use a self-hosted agent in GitHub Codespaces. However, because your team is using Codespaces for testing, it's a good temporary solution to use it when you're building your pipelines.
+
+1. Go to your forked GitHub repository and select **Settings > Secrets and variables > Codespaces**.
+
+   *Screenshot of GitHub Codespaces secrets.*
+
+2. Create the following Codespaces Repository secrets.
+
+   | Name | Value |
+   |------|-------|
+   | ADO_ORG | Name of the Azure DevOps organization you're using to complete this module. In this example, fabrikam is the name of the organization. This organization name must be the same one you used when you created your PAT in the previous step. |
+   | ADO_PAT | The Personal Access Token that you created in the previous step. |
+
+> **Tip**
+> 
+> In this training module, your agent is assigned to the Default agent pool. If don't want to run your agent in the Default pool (for example, you're running this training module using your production Azure DevOps environment and you have other agents in the Default pool), you can create a secret named ADO_POOL_NAME and specify the name of the agent pool to use. If this secret isn't specified, the Default pool is used.
+
+## Set up Codespaces
+
+Next, you set up Codespaces so that you can build the website, work with source files, and run your pipeline using a self-hosted agent.
+
+1. In your forked GitHub repository, select **Code**, select **Code** again, choose the **Codespaces** tab, and choose **+** to create a new Codespace.
+
+   *Screenshot of create a new Codespace with options.*
+
+2. Wait for your Codespace to build. This build can take a few moments, but you only have to do it once in this step of the training module.
+
+3. When the build completes, you're redirected to an online version of Visual Studio Code. Your Codespace comes with a fresh installation of Visual Studio Code, similar to a fresh installation of Visual Studio Code on your local machine. When the Codespace first starts, Visual Studio Code online might prompt you to provide certain configurations or ask you about preferences. You can choose the preferences that suit your Visual Studio Code usage style.
+
+## Set the upstream remote
+
+A remote is a Git repository where team members collaborate (similar to a repository on GitHub). Let's list your remotes and add a remote that points to Microsoft's copy of the repository so you can get the latest sample code.
+
+1. In the Visual Studio Code online editor, go to the terminal window and choose **bash** from the right-hand side.
+
+   *Screenshot of terminal window in Visual Studio Code online editor.*
+
+2. To list your remotes, run the `git remote` command:
+
+   ```bash
+   git remote -v
+   ```
+
+   You have both fetch (download) and push (upload) access to your repository:
+
+   ```
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (fetch)
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (push)
+   ```
+
+   Origin specifies your repository on GitHub. When you fork code from another repository, it's common to name the original remote (the one you forked from) upstream.
+
+3. To create a remote named upstream that points to the Microsoft repository, run this `git remote add` command:
+
+   ```bash
+   git remote add upstream https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git
+   ```
+
+4. Run `git remote` a second time to see the changes:
+
+   ```bash
+   git remote -v
+   ```
+
+   You see that you still have both fetch (download) and push (upload) access to your repository. You also now have fetch and push access to the Microsoft repository:
+
+   ```
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (fetch)
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (push)
+   upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git (fetch)
+   upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git (push)
+   ```
+
+## Build and run the web app
+
+1. In the Visual Studio Code online editor, navigate to the terminal window, and to build the app, run this `dotnet build` command:
+
+   ```bash
+   dotnet build --configuration Release
+   ```
+
+2. From the terminal window, to run the app, run this `dotnet run` command:
+
+   ```bash
+   dotnet run --configuration Release --no-build --project Tailspin.SpaceGame.Web
+   ```
+
+   .NET solution files can contain more than one project. The `--project` argument specifies the project for the Space Game web app.
+
+## Verify the application is running
+
+1. In development mode, the Space Game website is configured to run on port 5000.
+
+2. You see a new message in the Visual Studio editor. Your application running on port 5000 is available. Select **Open in Browser** to go to the running app.
+
+   *Screenshot of port forwarding Codespaces message.*
+
+3. In the new browser window, you should see the Space Game web site:
+
+   *Screenshot of a web browser showing the Space Game web site.*
+
+4. You can interact with the page, including the leaderboard. When you select a player's name, you see details about that player:
+
+   *Screenshot of a web browser showing the Space Game leaderboard.*
+
+5. When you're finished, return to the terminal window, and to stop the running app, select **Ctrl + C**.
+
+
+
