@@ -356,3 +356,563 @@ In this module, you learned how to safeguard your applications in Azure against 
 - Verify your program dependencies and libraries are safe to use
 
 By following the five items in this list, you've taken leaps and strides towards ensuring that your applications are safe and that they remain that way.
+
+
+# 5 Control access to your APIs with Azure API Management
+
+Discover how to protect your APIs from unauthorized use with API keys and client certificate authentication.
+
+# 5.1 Introduction
+
+Azure API Management allows you to carefully identify and control who can access the data published by your APIs.
+
+Suppose you work for a meteorological company, which has an API that customers use to access weather data for forecasts and research. There's proprietary information in this data, and you'd like to ensure that only paying customers have access. You want to use **Azure API Management** to properly secure this API from unauthorized use.
+
+In this module, you'll use two basic methods to secure access to an API in Azure API Management:
+
+- Subscriptions
+- Client certificates
+
+By the end of this module, you'll be able to ensure that only people with the right credentials can access the information in your API. You'll also be ready to explore more advanced options to secure access to an API.
+
+## Learning objectives
+
+In this module, you will:
+
+- Create an Azure API gateway.
+- Import a RESTful API into the gateway.
+- Implement policies to secure the API from unauthorized use.
+- Call an API to test the applied policies.
+
+## Prerequisites
+
+- Familiarity with basic concepts of web APIs, such as operations and endpoints
+- Familiarity with certificates
+- You need an Azure subscription to complete the exercises. If you don't have an Azure subscription, create a free account and add a subscription before you begin. If you're a student, you can take advantage of the Azure for students offer.
+
+
+
+# 5.2 What is API Management?
+
+Azure API Management helps organizations unlock the potential of their data and services by publishing APIs to external partners and internal developers. Businesses are extending their operations as a digital platform by creating new channels, finding new customers, and driving deeper engagement with existing ones. API Management provides the core competencies to ensure a successful API program through developer engagement, business insights, analytics, security, and protection. You can use API Management to take any backend and launch a full-fledged API program based on it.
+
+To use API Management, administrators define *APIs* in the portal. Each API consists of one or more operations and can be added to one or more products. To use an API, developers subscribe to a product that contains that API, then call the API's operations, subject to any usage policies that might be in effect. Common scenarios include:
+
+- Securing mobile infrastructure by gating access with API keys, preventing distributed denial of service (DDoS) attacks by using throttling, or using advanced security policies like JSON web token (JWT) validation.
+- Offering fast partner onboarding through the developer portal to independent software vendor (ISV) partner ecosystems, enabling them to build an API facade to decouple from internal implementations that aren't ready for partner consumption.
+- Running an internal API program that offers a centralized location for the organization to communicate between the API gateway and the backend. Communications about the availability and latest changes to APIs would be on a secured channel with gated access based on organizational accounts.
+
+## Components of API Management
+
+API Management is made up of the following components:
+
+**API gateway**
+
+The API gateway is the endpoint that:
+
+- Accepts API calls and routes them to the backend.
+- Verifies API keys, JWT tokens, certificates, and other credentials.
+- Enforces usage quotas and rate limits.
+- Transforms your API on the fly without code modifications.
+- Caches backend responses, where the capability is set up.
+- Logs call metadata for analytics purposes.
+
+**Azure portal**
+
+The Azure portal is the administrative interface where you set up your API program. You can also use it to:
+
+- Define or import API schema.
+- Package APIs into products.
+- Set up policies such as quotas or transformations on the APIs.
+- Get insights from analytics.
+- Manage users.
+
+**Developer portal**
+
+The developer portal serves as the main web presence for developers. From here, they can:
+
+- Read API documentation.
+- Try out an API via the interactive console.
+- Create an account and subscribe to get API keys.
+- Access analytics on their own usage.
+
+
+# 5.3 Create subscriptions in Azure API Management
+
+When you publish an API with API Management, you define who can access the API through the gateway.
+
+For your meteorological app, you want to ensure that only customers who are subscribed to your service can access the API and use your forecast data. You accomplish this access control by issuing subscription keys.
+
+> **Important**
+> 
+> Subscriptions in this context are not related to Azure subscriptions used for managing your Azure account.
+
+Here, you'll learn how to use subscription keys to secure your APIs.
+
+## Subscriptions and keys
+
+You can choose to make your APIs and the information they contain freely available. But usually, you want to restrict access to users who have paid or organizations with which you have a working relationship. One way to control access to your APIs is by using subscriptions. Subscriptions are used to segment user access to an API.
+
+Subscription keys form the authorization to enable access to these subscriptions. Whenever a client makes a request to a protected API, a valid subscription key must be included in the HTTP request; otherwise, the call will be rejected.
+
+A subscription key is a unique, autogenerated key that can be passed as part of an API call. The key is directly related to a subscription, which can be scoped to different areas. Subscriptions give you granular control over permissions and policies.
+
+The three main subscription scopes are:
+
+| Scope | Details |
+|-------|---------|
+| All APIs | Applies to every API accessible from the gateway. |
+| Single API | Applies to a single imported API and all of its endpoints. |
+| Product | A product is a collection of one or more APIs that you configure in API Management. You can assign APIs to more than one product. Products can have different access rules, usage quotas, and terms of use. So, if you want your partners and suppliers to have different access rights to your WeatherData API, assign the API to a product, and then use the Azure portal to associate APIs with a product. |
+
+Applications that call a protected API must include a subscription key in every request.
+
+You can regenerate these subscription keys at any time; for example, if you suspect that a key has been shared with unauthorized users, you can create a new one.
+
+*Screenshot of subscription keys in the Azure portal.*
+
+Every subscription has two keys: a primary key and a secondary key. Having two keys makes it easier when you do need to regenerate a key. For example, if you want to change the primary key and avoid downtime, use the secondary key in your apps.
+
+For products in which subscriptions are enabled, clients must supply a key when making calls to APIs in that product. Developers can obtain a key by submitting a subscription request. If you approve the request, you must send them the subscription key securely; for example, in an encrypted message. This step is a core part of the API Management workflow.
+
+## Call an API with the subscription key
+
+Applications must include a valid key in all HTTP requests that make calls to API endpoints that are protected by a subscription. Keys can be passed in the request header or as a query string parameter in the URL.
+
+The default subscription key header name is `Ocp-Apim-Subscription-Key`, and the default query string name is `subscription-key`.
+
+To test out your API calls, you can use a test console in the Azure portal, or the developer portal, or command-line tools such as curl. Here's an example of a GET request using the developer portal, which shows the subscription key header:
+
+*Screenshot that shows how to call your API from developer portal.*
+
+Here's an example of how you'd pass a key in a request header using curl:
+
+```bash
+curl --header "Ocp-Apim-Subscription-Key: <key string>" https://<apim gateway>.azure-api.net/api/path
+```
+
+Here's an example of how you'd use a curl command to pass a key as a query string in a URL:
+
+```bash
+curl https://<apim gateway>.azure-api.net/api/path?subscription-key=<key string>
+```
+
+If a required key isn't passed in the header, or as a query string in the URL, you'll get a 401 Access Denied response from the API gateway.
+
+
+# 5.4 Exercise - Create subscriptions in Azure API Management
+
+You can use the Azure API Management user interface in the Azure portal to create subscriptions and obtain subscription keys for use in client apps.
+
+Suppose your weather company decided to make its meteorological data available to clients who subscribe and pay for this service. The critical requirement is to only allow access to clients who are allocated a key. As lead developer, you need to create an API gateway. You'll use the gateway to publish a RESTful Weather API that exposes an OpenAPI endpoint. You'll then secure the endpoint and allocate a client key.
+
+In this unit, you'll:
+
+- Publish a RESTful Weather API.
+- Deploy an API Management gateway.
+- Expose the Weather API through the gateway endpoint.
+- Restrict access based on a subscription key.
+
+> **Important**
+> 
+> You need your own Azure subscription to run this exercise, and you might incur charges. If you don't already have an Azure subscription, create a free account before you begin.
+
+## Deploy the Weather Web API
+
+You've developed a .NET Core app that returns weather information. The app includes Swashbuckle to generate OpenAPI documentation.
+
+To save time, let's start by running a script to host our API in Azure. The script performs the following steps:
+
+- Create an Azure App Service plan in the free tier
+- Create a Web API within an Azure App Service, configured for Git deployment from a local repo
+- Set account-level deployment credentials for our app
+- Configure Git locally
+- Deploy our Web API to our App Service instance
+
+1. Sign in to the Azure portal.
+
+2. In the Azure taskbar, select the Cloud Shell icon to open Azure Cloud Shell.
+
+   *Screenshot of Cloud Shell icon in taskbar.*
+
+3. Run the following git clone command in Azure Cloud Shell to clone the repo that contains the source for our app, and our setup script from GitHub.
+
+   ```bash
+   git clone https://github.com/MicrosoftDocs/mslearn-control-authentication-with-apim.git
+   ```
+
+4. Go to the repo folder directory locally by running the following cd command.
+
+   ```bash
+   cd mslearn-control-authentication-with-apim
+   ```
+
+5. As its name suggests, setup.sh is the script you'll run to create our API. It will generate a public web app that exposes an OpenAPI interface.
+
+   ```bash
+   bash setup.sh
+   ```
+
+   The script has seven parts and takes about a minute to run. Observe that, during deployment, all dependencies needed for our app to run are automatically installed on the remote App Service.
+
+6. When the script has finished, it outputs two URLS: a Swagger URL and an Example URL. You can use these URLs to test the app deployment.
+
+7. To test that our app deployed correctly, copy and paste the Swagger URL from Azure Cloud Shell output into your favorite browser. The browser should display the Swagger UI for our app and declare the following RESTful endpoints:
+
+   - `api/weather/{latitude}/{longitude}`, which returns meteorological data for the current day given the specified latitude and longitude (double values).
+   - `api/weather/{date}/{latitude}/{longitude}`, which returns meteorological data for the specified day (date value) at the specified latitude and longitude (double values).
+
+   *Screenshot of the app Swagger view.*
+
+![](https://learn.microsoft.com/en-us/training/modules/control-authentication-with-apim/media/3-swagger.png)
+
+8. Finally, copy and save the Example URL from Azure Cloud Shell output. This location is the Swagger JSON URL. You'll need it later in this exercise.
+
+## Deploy an API gateway
+
+The next step in this exercise is to create an API gateway in the Azure portal. In the next exercise, you'll use this gateway to publish your API.
+
+1. Sign into the Azure portal.
+
+2. On the Azure resource menu or from the Home page, under Azure services, select **Create a resource**. The Create a resource pane appears.
+
+3. In the resource menu, search for and select **API Management**. Select **Create**. The Install API Management gateway pane appears.
+
+4. On the **Basics** tab, enter the following values for each setting.
+
+   | Setting | Value |
+   |---------|-------|
+   | **Project details** | |
+   | Subscription | Select your subscription. |
+   | Resource group | Select a new or existing resource group. A resource group is a logical container that holds related resources for an Azure solution. |
+   | **Instance details** | |
+   | Region | Select an available region. |
+   | Resource name | Enter `apim-WeatherDataXXXX`; replace the XXXX with a random number to ensure that the name is globally unique. Make a note of this resource name; it will be the API gateway name that you'll need it later in this exercise. |
+   | Organization name | Enter `Weather-Company`. |
+   | Administrator email | The email address to receive all system notifications. |
+   | **Pricing tier** | |
+   | Pricing tier | From the dropdown list, select **Consumption**. |
+
+5. Select **Review + create**, and after validation passes, select **Create**.
+
+   > **Note**
+   > 
+   > The Consumption tier provides fast deployment for testing and has a pay-for-use pricing model. The overall API management experience is similar to the other pricing tiers.
+
+6. You can view the progress of the deployment, along with the resources that are being created.
+
+## Import the API
+
+After deployment has completed, import the Weather API into the API Management gateway by using the following procedure.
+
+1. Select **Go to resource**. The Overview pane of the API Management service for your resource appears.
+
+2. In the left menu pane, under **APIs**, select **APIs**. The APIs pane for your API Management service appears, with template selections for creating/displaying an API.
+
+3. Under **Create from definition**, select **OpenAPI**. The Create from OpenAPI specification dialog box appears.
+
+4. In the **OpenAPI specification** field, paste the Swagger JSON URL that you saved earlier in the exercise. When you press Enter or select a different area of the dialog box, other fields will be populated for you. This data is imported from the OpenAPI specification that Swagger created.
+
+5. Accept the defaults for all the other settings, and then select **Create**.
+
+   *Screenshot of dialog box with swagger.json url highlighted.*
+
+![](https://learn.microsoft.com/en-us/training/modules/control-authentication-with-apim/media/3-import-the-api.png)
+
+6. The **Design** tab of the Weather Data API displays all operations, which consists of two GET operations.
+
+## Add a subscription key to access the Weather API
+
+The final step is to add a subscription key for the Weather Data API.
+
+1. In the left menu pane, under **APIs**, select **Subscriptions**. The Subscriptions pane for your API Management service appears.
+
+2. On the top menu bar, select **Add subscription**. The New subscription pane appears.
+
+![](https://learn.microsoft.com/en-us/training/modules/control-authentication-with-apim/media/3-cloud-shell-icon.png)
+  
+   *Screenshot showing how to add a new subscription.*
+
+3. Enter the following values for each setting.
+
+   | Setting | Value |
+   |---------|-------|
+   | Name | `weather-data-subscription` |
+   | Display name | `Weather Data Subscription` |
+   | Allow tracing | No checkmark |
+   | Scope | From the dropdown list, select **API**. |
+   | API | From the dropdown list, select **Weather Data**. |
+
+4. Select **Create**. The Subscriptions pane lists two subscriptions, Built-in all-access subscription and your Weather Data Subscription.
+
+5. At the end of the Weather Data Subscription row, select the ellipsis, and in the context menu select **Show/hide keys**. The Primary and Secondary key values show.
+
+6. Copy the Primary key from Weather Data Subscription to your clipboard and save it in something like Notepad. You'll need this key in the next step.
+
+
+
+## Test the subscription key
+
+The API is secured with a key. Now, we'll test the API without and with the key to demonstrate secure access.
+
+1. Make a request without passing a subscription key. In Azure Cloud Shell, run the following cURL command. Substitute the `[Name Of Gateway]` placeholder with the resource name for the API gateway (`apim-WeatherDataNNNN`) that you created in the previous task.
+
+   ```bash
+   curl -X GET https://[Name Of Gateway].azure-api.net/api/Weather/53/-1
+   ```
+
+   This command has no subscription key and should return a 401 Access Denied error, similar to the following.
+
+   ```json
+   { "statusCode": 401, "message": "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API." }
+   ```
+
+2. Now, run the following command. Substitute the `Name Of Gateway` placeholder with the resource name for the API gateway (`apim-WeatherDataNNNN`). Also, substitute the `Primary Key` placeholder with the primary key you copied from the show/hide step.
+
+   ```bash
+   curl -X GET https://[Name Of Gateway].azure-api.net/api/Weather/53/-1 \
+     -H 'Ocp-Apim-Subscription-Key: [Primary Key]'
+   ```
+
+   If you included the closing quote, this command should result in a successful response similar to the following code.
+
+   ```json
+   {"mainOutlook":{"temperature":32,"humidity":34},"wind":{"speed":11,"direction":239.0},"date":"2019-05-16T00:00:00+00:00","latitude":53.0,"longitude":-1.0}
+   ```
+
+# 5.5 Use client certificates to secure access to an API
+
+Certificates can be used to provide TLS mutual authentication between the client and the API gateway. You can configure the API Management gateway to allow only requests with certificates containing a specific thumbprint. The authorization at the gateway level is handled through inbound policies.
+
+For your meteorological app, you have some customers who have client certificates issued by a certificate authority (CA) that you both trust. You want to allow those customers to authenticate by passing those certificates.
+
+Here, you'll learn how to configure API Management to accept client certificates.
+
+## TLS client authentication
+
+With TLS client authentication, the API Management gateway can inspect the certificate contained within the client request and check for properties like:
+
+| Property | Reason |
+|----------|--------|
+| Certificate Authority (CA) | Only allow certificates signed by a particular CA. |
+| Thumbprint | Allow certificates containing a specified thumbprint. |
+| Subject | Only allow certificates with a specified subject. |
+| Expiration Date | Only allow certificates that haven't expired. |
+
+These properties aren't mutually exclusive, and you can combine them to form your own policy requirements. For example, you can specify that the certificate passed in the request hasn't expired, and has been signed by a particular certificate authority.
+
+Client certificates are signed to ensure that they aren't tampered with. When a partner sends you a certificate, verify that it comes from them and not an imposter. There are two common ways to verify a certificate:
+
+- Check who issued the certificate. If the issuer was a certificate authority that you trust, you can use the certificate. You can configure the trusted certificate authorities in the Azure portal to automate this process.
+
+- If the certificate is issued by a partner, verify that it came from them. For example, if they deliver the certificate in person, you can be sure of its authenticity. These certificates are known as self-signed certificates.
+
+## Accept client certificates in the Consumption tier
+
+The Consumption tier in API Management is designed to conform with serverless design principles. If you build your APIs from serverless technologies, such as Azure Functions, this tier is a good fit. In the Consumption tier, you must explicitly enable the use of client certificates, which you can do on the Custom domains pane. This step isn't necessary in other tiers.
+
+*Screenshot showing configuring the gateway to request certificates.*
+
+![](https://learn.microsoft.com/en-us/training/modules/control-authentication-with-apim/media/5-config-request-certificates.png)
+
+## Create certificate authorization policies
+
+Create these policies in the inbound processing policy file within the API Management gateway.
+
+*Screenshot showing the inbound processing policy button.*
+
+![](https://learn.microsoft.com/en-us/training/modules/control-authentication-with-apim/media/5-inbound-policy.png)
+
+
+### Check the thumbprint of a client certificate
+
+Every client certificate includes a thumbprint, which is a hash calculated from other certificate properties. The thumbprint ensures that the values in the certificate haven't been altered since the certificate was issued by the certificate authority. You can check the thumbprint in your policy. The following example checks the thumbprint of the certificate passed in the request.
+
+```xml
+<choose>
+    <when condition="@(context.Request.Certificate == null || context.Request.Certificate.Thumbprint != "desired-thumbprint")" >
+        <return-response>
+            <set-status code="403" reason="Invalid client certificate" />
+        </return-response>
+    </when>
+</choose>
+```
+
+### Check the thumbprint against certificates uploaded to API Management
+
+In the previous example, only one thumbprint would work, so only one certificate would be validated. Usually, each customer or partner company would pass a different certificate with a different thumbprint. To support this scenario, obtain the certificates from your partners, and use the Client certificates pane in the Azure portal to upload them to the API Management resource. Then, add this code to your policy.
+
+```xml
+<choose>
+    <when condition="@(context.Request.Certificate == null || !context.Request.Certificate.Verify()  || !context.Deployment.Certificates.Any(c => c.Value.Thumbprint == context.Request.Certificate.Thumbprint))" >
+        <return-response>
+            <set-status code="403" reason="Invalid client certificate" />
+        </return-response>
+    </when>
+</choose>
+```
+
+### Check the issuer and subject of a client certificate
+
+The following example checks the issuer and subject of the certificate passed in the request.
+
+```xml
+<choose>
+    <when condition="@(context.Request.Certificate == null || context.Request.Certificate.Issuer != "trusted-issuer" || context.Request.Certificate.SubjectName.Name != "expected-subject-name")" >
+        <return-response>
+            <set-status code="403" reason="Invalid client certificate" />
+        </return-response>
+    </when>
+</choose>
+```
+
+
+
+# 5.6 Exercise - Use client certificates to secure access to an API
+
+You configure API Management to accept client certificates by using inbound policies.
+
+Suppose your weather company has decided to secure its API through certificate authentication for certain clients who already use certificate authentication in other systems. This setup will allow those clients to use existing certificates to authenticate themselves against the API Management gateway.
+
+In this exercise, you'll:
+
+- Create a self-signed certificate.
+- Configure the gateway to request client certificates.
+- Get the thumbprint for the certificate.
+- Edit the inbound policy to allow only clients with the specified certificate in their request.
+- Call the API Management gateway and pass the certificate by using curl.
+
+> **Note**
+> 
+> This exercise uses the resources that you set up in the previous exercise.
+
+## Create self-signed certificate
+
+First, use Cloud Shell to create a self-signed certificate, which you'll then use for authentication between the client and the API Management gateway.
+
+1. To create the private key and the certificate, run the following commands in Cloud Shell.
+
+   ```bash
+   pwd='<Enter a secure password here>'
+   pfxFilePath='selfsigncert.pfx'
+   openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privateKey.key -out selfsigncert.crt -subj /CN=localhost
+   ```
+
+   To make this example easy to follow, the preceding commands include the password used to secure the private key. Whenever you generate a private key for your own use, make sure you generate a secure password and control access to it appropriately.
+
+2. Now, convert the certificate to PEM format, which the curl tool can use, by running these commands:
+
+   ```bash
+   openssl pkcs12 -export -out $pfxFilePath -inkey privateKey.key -in selfsigncert.crt -password pass:$pwd
+   openssl pkcs12 -in selfsigncert.pfx -out selfsigncert.pem -nodes
+   ```
+
+   When you're prompted, enter your secure password, and then press Enter.
+
+## Configure the gateway to request client certificates
+
+Because you're using the Consumption tier for API Management, you must configure the gateway to accept client certificates. Follow these steps.
+
+1. From the Azure portal that is already open, select your API Management service (`apim-WeatherDataNNNN`).
+
+2. In the left menu pane, under **Deployment and infrastructure**, select **Custom domains**. The Custom domains pane for your API Management service appears.
+
+3. For **Request client certificate**, select **Yes**, and on the top menu bar, select **Save**.
+
+   *Screenshot of configuring the gateway to request certificates.*
+
+![](https://learn.microsoft.com/en-us/training/modules/control-authentication-with-apim/media/5-config-request-certificates.png)
+
+## Get the thumbprint for the certificate
+
+In this section, you'll configure API Management to accept a request only if it has a certificate with a certain thumbprint (fingerprint). Let's get that thumbprint from the certificate.
+
+> **Note**
+> 
+> An SSL certificate thumbprint is also known as an SSL certificate fingerprint.
+
+1. In Cloud Shell, run the following code.
+
+   ```bash
+   Fingerprint="$(openssl x509 -in selfsigncert.pem -noout -fingerprint)"
+   Fingerprint="${Fingerprint//:}"
+   echo ${Fingerprint#*=}
+   ```
+
+2. Copy the complete output (a hexadecimal string) and paste this fingerprint value into a text file.
+
+## Edit inbound policy to only allow requests with a valid certificate
+
+Now, create the authentication policy in the API Management gateway.
+
+1. In the Azure portal, select your API Management service. If necessary, in the Azure resource menu, or from the home page, select **All resources**, and then select your API Management service.
+
+2. In the left menu pane, under **APIs**, select **APIs**. The APIs pane for your API Management service appears.
+
+3. In the secondary menu, select **Weather Data**.
+
+4. In the **Inbound processing** box, select the **</>** icon to open Policies code editor. The HTML code for the policies node displays.
+
+   *Screenshot of the inbound processing policy button.*
+
+![](https://learn.microsoft.com/en-us/training/modules/control-authentication-with-apim/media/5-inbound-policy.png)
+
+5. Replace the `<inbound>` node of the policy file with the following XML, substituting the fingerprint you copied earlier for the `desired-fingerprint` placeholder:
+
+   ```xml
+   <inbound>
+       <choose>
+           <when condition="@(context.Request.Certificate == null || context.Request.Certificate.Thumbprint != "desired-fingerprint")" >
+               <return-response>
+                   <set-status code="403" reason="Invalid client certificate" />
+               </return-response>
+           </when>
+       </choose>
+       <base />
+   </inbound>
+   ```
+
+6. Select **Save**.
+
+## Call the gateway and pass the client certificate
+
+You can now test the new authentication policy with and without the certificate.
+
+1. To test the API without the certificate, run the following command in Cloud Shell, replacing the placeholder values with your API gateway name and subscription key.
+
+   ```bash
+   curl -X -v GET https://[api-gateway-name].azure-api.net/api/Weather/53/-1 \
+     -H 'Ocp-Apim-Subscription-Key: [Subscription Key]' 
+   ```
+
+   This command should return a 403 Client certificate error, and no data will be returned.
+
+2. In Cloud Shell, to test the API with the certificate, copy and paste the following cURL command, using the primary subscription key from the first exercise (you can also obtain this primary key from the Subscriptions pane for your WeatherData API Management service). Remember to include your API gateway name.
+
+   ```bash
+   curl -X GET https://[api-gateway-name].azure-api.net/api/Weather/53/-1 \
+     -H 'Ocp-Apim-Subscription-Key: [subscription-key]' \
+     --cert-type pem \
+     --cert selfsigncert.pem
+   ```
+
+   This command should result in a successful response displaying weather data similar to the following.
+
+   ```json
+   {"mainOutlook":{"temperature":32,"humidity":34},"wind":{"speed":11,"direction":239.0},"date":"2019-05-16T00:00:00+00:00","latitude":53.0,"longitude":-1.0}
+   ```
+
+# 5.6 Summary
+
+In this module, you've learned about API management and how you can control authentication through subscriptions and certificate authentication. You've also learned how the authentication models can be divided into granular levels of restrictions, offering different authorization mechanisms to different clients.
+
+> **Important**
+> 
+> In this module you created resources using your Azure subscription. You want to clean up these resources so that you will not continue to be charged for them. You can delete resources individually or delete the resource group to delete the entire set of resources.
+
+## Learn more
+
+- API Management documentation
+- Subscriptions in Azure API Management
+- How to secure back-end services using client certificate authentication in Azure API Management
+- Authentication and authorization to APIs in API Management
