@@ -471,6 +471,8 @@ You can regenerate these subscription keys at any time; for example, if you susp
 
 *Screenshot of subscription keys in the Azure portal.*
 
+![](https://learn.microsoft.com/en-us/training/modules/control-authentication-with-apim/media/2-subscription-keys.png)
+
 Every subscription has two keys: a primary key and a secondary key. Having two keys makes it easier when you do need to regenerate a key. For example, if you want to change the primary key and avoid downtime, use the secondary key in your apps.
 
 For products in which subscriptions are enabled, clients must supply a key when making calls to APIs in that product. Developers can obtain a key by submitting a subscription request. If you approve the request, you must send them the subscription key securely; for example, in an encrypted message. This step is a core part of the API Management workflow.
@@ -484,6 +486,8 @@ The default subscription key header name is `Ocp-Apim-Subscription-Key`, and the
 To test out your API calls, you can use a test console in the Azure portal, or the developer portal, or command-line tools such as curl. Here's an example of a GET request using the developer portal, which shows the subscription key header:
 
 *Screenshot that shows how to call your API from developer portal.*
+
+![](https://learn.microsoft.com/en-us/training/modules/control-authentication-with-apim/media/2-key-header-portal.png)
 
 Here's an example of how you'd pass a key in a request header using curl:
 
