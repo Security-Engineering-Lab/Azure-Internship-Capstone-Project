@@ -358,6 +358,949 @@ In this module, you learned how to safeguard your applications in Azure against 
 By following the five items in this list, you've taken leaps and strides towards ensuring that your applications are safe and that they remain that way.
 
 
+# 3 Create security baselines
+
+In this module, you learn how to create security baselines for your Azure services by ensuring that your settings meet the minimum requirements described in CIS Benchmarks for Azure v. 1.3.0.
+
+# 3.1 Introduction
+
+Azure doesn't monitor security or respond to security incidents within the customer's area of responsibility. Azure does provide many tools, like Microsoft Defender for Cloud and Microsoft Sentinel, that customers can use for this purpose. There's also an effort to help make every service as secure as possible by default; that is, every service comes with a baseline that is already designed to help provide security for most common use cases. Because Azure can't predict how you'll use a service, you should always review security controls to evaluate whether they adequately mitigate risks.
+
+This module guides you through the steps of creating a security baseline for Azure services. Each unit provides a checklist of items to verify in the services you're using in your architecture.
+
+## Learning objectives
+
+In this module, you'll:
+
+* Learn about Azure platform security baselines and how they were created.
+* Create and validate a security baseline for the most commonly used Azure services.
+
+
+# 3.2 Understand the Azure platform security baseline
+
+
+The Microsoft cybersecurity group and the Center for Internet Security (CIS) have developed best practices to help establish security baselines for the Azure platform.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/cis-benchmark.png)
+
+
+Microsoft initially partnered with CIS to develop an off-the-shelf hardened Azure virtual machine (VM). An initiative then began to create a CIS benchmark—a document that details CIS best practices—for Azure security services and tools to facilitate security and compliance for customer applications running on Azure services.
+
+> **Tip**
+> 
+> The **CIS Microsoft Azure Foundations Security Benchmark v. 3.0.0** provides prescriptive guidance for establishing a secure baseline configuration for Azure. This guide was tested against the listed Azure services as of September 2024. The scope of this benchmark is to establish the foundational level of security for anyone who adopts Azure.
+
+## Create a platform security baseline
+
+Various security standards can help cloud-service customers achieve workload security when they use cloud services. The following recommended technology groupings help create secure cloud-enabled workloads. These recommendations aren't an exhaustive list of all possible security configurations and architectures. These security baseline recommendations are a starting point.
+
+CIS has two implementation levels and several categories of recommendations:
+
+* **Level 1**: Recommended minimum security settings
+   * These settings should be configured on all systems.
+   * These settings should cause little or no interruption of services or reduced functionality.
+* **Level 2**: Recommendations for highly secure environments
+   * These settings might result in reduced functionality.
+
+The following table provides the categories and number of recommendations made for each category in CIS Microsoft Azure Foundations Security Benchmark v. 3.0.0:
+
+**Expand table**
+
+| Technology group | Description | # of recommendations |
+|------------------|-------------|---------------------|
+| **Identity & Access Management (IAM)** | Recommendations related to IAM policies | 30 |
+| **Microsoft Defender for Cloud** | Recommendations related to the configuration and use of Microsoft Defender for Cloud | 35 |
+| **Storage accounts** | Recommendations for setting storage account policies | 17 |
+| **Azure SQL Database** | Recommendations for helping to secure Azure SQL databases | 22 |
+| **Logging and monitoring** | Recommendations for setting logging and monitoring policies for your Azure subscriptions | 21 |
+| **Networking** | Recommendations for helping to securely configure Azure networking settings and policies | 7 |
+| **VMs** | Recommendations for setting security policies for Azure compute services, and specifically VMs | 11 |
+| **Other** | Recommendations regarding general security and operational controls, including recommendations related to Azure Key Vault and resource locks | 13 |
+| **Total recommended** | | **156** |
+
+Let's explore each category in more detail.
+
+
+# 3.3 Create an Identity & Access Management baseline
+
+Identity and access management (IAM) is key to granting access and to the security enhancement of corporate assets. To secure and control your cloud-based assets, you must manage identity and access for your Azure administrators, application developers, and application users.
+
+## IAM security recommendations
+
+The following sections describe the IAM recommendations that are in CIS Microsoft Azure Foundations Security Benchmark v. 3.0.0. Included with each recommendation are the basic steps to complete in the Azure portal. You should complete these steps for your own subscription and by using your own resources to validate each security recommendation. Keep in mind that Level 2 options might restrict some features or activities, so carefully consider which security options you decide to enforce.
+
+> **Important**
+> 
+> You must be an administrator for the Microsoft Entra instance to complete some of these steps.
+
+## Restrict access to the Microsoft Entra administration portal - Level 1
+
+Users who aren't administrators shouldn't have access to the Microsoft Entra administration portal because the data is sensitive and under the rules of least privilege.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Entra ID**.
+
+2. In the left menu under **Manage**, select **Users**.
+
+3. In the left menu, select **User settings**.
+
+4. In **User settings**, under **Administration center**, ensure that **Restrict access to Microsoft Entra administration center** is set to **Yes**. Setting this value to **Yes** prevents all non-administrators from accessing any data in the Microsoft Entra administration portal. The setting doesn't restrict access to using PowerShell or another client, such as Visual Studio.
+
+5. If you change any settings, select **Save** in the menu bar.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/restrict-access-admin-portal.png)
+
+## Enable multifactor authentication for Microsoft Entra users
+
+- **Enable multifactor authentication for Microsoft Entra ID privileged users - Level 1**
+- **Enable multifactor authentication for Microsoft Entra non-privileged users - Level 2**
+
+Enable multifactor authentication for all Microsoft Entra users.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Entra ID**.
+
+2. In the left menu under **Manage**, select **Users**.
+
+3. In the **All users** menu bar, select **Per-user MFA**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/multifactor-authentication-option-azure-portal.png)
+
+4. In the **Per-user multifactor authentication** window, check the box for all users, then select **Enable MFA**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/multifactor-authentication-window-enable.png)
+
+
+## Don't remember multifactor authentication on trusted devices - Level 2
+
+Remembering the multifactor authentication feature for devices and browsers that are trusted by the user is a free feature for all multifactor authentication users. Users can bypass subsequent verifications for a specified number of days after they've successfully signed in to a device by using multifactor authentication.
+
+If an account or device is compromised, remembering multifactor authentication for trusted devices can negatively affect security. A security recommendation is to turn off remembering multifactor authentication for trusted devices.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Entra ID**.
+
+2. In the left menu under **Manage**, select **Users**.
+
+3. In the **All users** menu bar, select **Per-user MFA**.
+
+4. In the **Per-user multifactor authentication** window, select a user. Select the **User MFA settings** button.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/multifactor-authentication-window.png)
+
+5. Select the **Restore multifactor authentication on all remembered devices** checkbox, and then select **Save**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/multifactor-authentication-user-settings.png)
+
+## Ensure guest users are reviewed on a regular basis - Level 1
+
+Ensure that no guest users exist, or alternatively, if the business requires guest users, ensure that guest permissions are limited.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Entra ID**.
+
+2. In the left menu under **Manage**, select **Users**.
+
+3. Select the **Add filters** button.
+
+4. For **Filters**, select **User type**. For **Value**, select **Guest**. Select **Apply** to verify that no guest users exist.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/guest-users-verification.png)
+
+5. If you change any settings, select **Save** in the menu bar.
+
+## Password options
+
+### Notify users on password resets - Level 1
+### Notify all admins when other admins reset passwords - Level 2
+### Require two methods to reset passwords - Level 1
+
+With multifactor authentication set, an attacker would have to compromise both identity authentication forms before they could maliciously reset a user's password. Ensure that password reset requires two forms of identity authentication.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Entra ID**.
+
+2. In the left menu under **Manage**, select **Password reset**.
+
+3. In the left menu under **Manage**, select **Authentication methods**.
+
+4. Set the **Number of methods required to reset** to **2**.
+
+5. If you change any settings, select **Save** in the menu bar.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/require-two-authentication-methods.png)
+
+## Establish an interval for reconfirming user authentication methods - Level 1
+
+If authentication reconfirmation is turned off, registered users aren't prompted to reconfirm their authentication information. The more secure option is to turn on authentication reconfirmation for a set interval.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Entra ID**.
+
+2. In the left menu under **Manage**, select **Password reset**.
+
+3. In the left menu under **Manage**, select **Registration**.
+
+4. Ensure that **Number of days before users are asked to re-confirm their authentication information** is not set to **0**. The default is **180 days**.
+
+5. If you change any settings, select **Save** in the menu bar.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/days-until-reconfirm.png)
+
+## Guest invite setting - Level 2
+
+Only administrators should be able to invite guest users. Restricting invitations to administrators ensures that only authorized accounts have access to Azure resources.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Entra ID**.
+
+2. In the left menu under **Manage**, select **Users**.
+
+3. In the left menu, select **User settings**.
+
+4. In the **User settings** pane, under **External users**, select **Manage external collaboration settings**.
+
+5. In **External collaboration settings**, under **Guest invite settings**, select **Only users assigned to specific admin roles can invite guest users**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/members-invite-guests.png)
+
+6. If you change any settings, select **Save** in the menu bar.
+
+## Users can create and manage security groups - Level 2
+
+When this feature is enabled, all users in Microsoft Entra ID can create new security groups. You should restrict security group creation to administrators.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Entra ID**.
+
+2. In the left menu under **Manage**, select **Groups**.
+
+3. In the **All groups** pane, in the left menu under **Settings**, select **General**.
+
+4. For **Security Groups**, ensure that **Users can create security groups in Azure portals, API or PowerShell** is set to **No**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/security-group-settings.png)
+
+5. If you change any settings, select **Save** in the menu bar.
+
+## Self-service group management enabled - Level 2
+
+Unless your business requires delegating self-service group management to various users, we recommend disabling this feature as a safety precaution.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Entra ID**.
+
+2. In the left menu under **Manage**, select **Groups**.
+
+3. In the **All groups** pane, in the left menu under **Settings**, select **General**.
+
+4. Under **Self Service Group Management**, ensure that all options are set to **No**.
+
+5. If you change any settings, select **Save** in the menu bar.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/self-service-groups.png)
+
+## Application options - Allow users to register apps - Level 2
+
+Require administrators to register custom applications.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Entra ID**.
+
+2. In the left menu under **Manage**, select **Users**.
+
+3. In the left menu, select **User settings**.
+
+4. In the **User settings** pane, ensure that **App registrations** is set to **No**.
+
+5. If you change any settings, select **Save** in the menu bar.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/identity-access-management-azure-active-directory/app-registrations.png)
+
+
+
+
+# 3.4 Create a Microsoft Defender for Cloud baseline
+
+Microsoft Defender for Cloud provides unified security management and advanced threat protection for workloads that run in Azure, on-premises, and in other clouds. The following Defender for Cloud recommendations, if followed, will set various security policies on an Azure subscription. These policies define the set of controls that are recommended for your resources with an Azure subscription.
+
+## Microsoft Defender for Cloud security recommendations
+
+The following sections describe the Microsoft Defender for Cloud recommendations that are in CIS Microsoft Azure Foundations Security Benchmark v. 3.0.0. Included with each recommendation are the basic steps to complete in the Azure portal. You should complete these steps for your own subscription and by using your own resources to validate each security recommendation. Keep in mind that Level 2 options might restrict some features or activity, so carefully consider which security options you decide to enforce.
+
+## View Microsoft Defender for Cloud built-in security policies
+
+To see the Microsoft Defender for Cloud security policies for your Azure subscription:
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Defender for Cloud**.
+
+2. In the left menu under **Management**, select **Environment settings**.
+
+3. Select the subscription to open the **Policy settings** pane.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/microsoft-defender-for-cloud/environment-settings.png)
+
+The enabled policies define the Microsoft Defender for Cloud recommendations, as shown in the following example:
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/microsoft-defender-for-cloud/policy-settings.png)
+
+## Enable System Updates - Level 1
+
+Microsoft Defender for Cloud daily monitors Windows and Linux VMs and computers for missing operating system updates. Defender for Cloud retrieves a list of available security and critical updates from Windows Update or Windows Server Update Services (WSUS). Which updates are on the list depends on which service you configure on a Windows computer. Defender for Cloud also checks for the latest updates on Linux systems. If your VM or computer is missing a system update, Defender for Cloud recommends that you apply system updates.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Defender for Cloud**.
+
+2. In the left menu under **Management**, select **Environment settings**.
+
+3. Select the subscription.
+
+4. In the left menu, select **Security policy**.
+
+5. Under **Default initiative**, select a subscription or management group.
+
+6. Select the **Parameters** tab.
+
+7. Ensure that the **Only show parameters that need input or review** box is cleared.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/microsoft-defender-for-cloud/security-policies-parameters.png)
+
+8. Ensure that **System updates should be installed on your machines** is one of the policies listed.
+
+In the following example, the Microsoft Defender for Cloud agent hasn't been deployed to a VM or physical machine, so the message **AuditIfNotExists** appears. **AuditIfNotExists** enables auditing on resources that match the if condition. If the resource isn't deployed, **NotExists** appears.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/microsoft-defender-for-cloud/parameters-system-updates.png)
+
+If **System updates should be installed on your machines** is enabled, **Audit** appears. If deployed but disabled, **Disabled** appears.
+
+9. If you change any settings, select the **Review + Save** tab, and then select **Save**.
+
+## Enable Security Configurations - Level 1
+
+Microsoft Defender for Cloud monitors security configurations by applying a set of more than 150 recommended rules for hardening the OS. These rules are related to firewalls, auditing, password policies, and more. If a machine is found to have a vulnerable configuration, Defender for Cloud generates a security recommendation.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Defender for Cloud**.
+
+2. In the left menu under **Management**, select **Environment settings**.
+
+3. Select the subscription.
+
+4. In the left menu, select **Security policy**.
+
+5. Under **Default initiative**, select a subscription or management group.
+
+6. Select the **Parameters** tab.
+
+7. Ensure that **Vulnerabilities in security configuration on your virtual machine scale sets should be remediated** is one of the policies.
+
+8. If you change any settings, select the **Review + Save** tab, and then select **Save**.
+
+> **Note**
+> 
+> All of the following policy categories that have a (*) in their title are on the Parameters tab. In some cases, there are several options in each category.
+
+## Enable endpoint protection (*) - Level 1
+Endpoint protection is recommended for all VMs.
+
+## Enable disk encryption (*) - Level 1
+Microsoft Defender for Cloud recommends that you use Azure Disk Encryption if you have Windows or Linux VM disks. Disk encryption lets you encrypt your Windows and Linux infrastructure as a service (IaaS) VM disks. Encryption is recommended for both the OS and the data volumes on your VM.
+
+## Enable Network Security Groups (*) - Level 1
+Microsoft Defender for Cloud recommends that you enable a network security group (NSG). NSGs contain a list of Access Control List (ACL) rules that allow or deny network traffic to your VM instances in a virtual network. NSGs can be associated either with subnets or with individual VM instances within that subnet. When an NSG is associated with a subnet, the ACL rules apply to all the VM instances in that subnet. In addition, traffic to an individual VM can be restricted further by associating an NSG directly with that VM.
+
+## Enable a web application firewall (*) - Level 1
+Microsoft Defender for Cloud might recommend that you add a web application firewall (WAF) from a Microsoft partner to secure your web applications.
+
+## Enable vulnerability assessment (*) - Level 1
+The vulnerability assessment in Microsoft Defender for Cloud is part of the Defender for Cloud VM recommendations. If Defender for Cloud doesn't find a vulnerability assessment solution installed on your VM, it recommends that you install one. A partner agent, after being deployed, starts reporting vulnerability data to the partner's management platform. In turn, the partner's management platform provides vulnerability and health monitoring data back to Defender for Cloud.
+
+## Enable storage encryption (*) - Level 1
+When storage encryption is enabled, any new data in Azure Blob Storage and Azure Files is encrypted.
+
+## Enable JIT network access (*) - Level 1
+Just-in-time (JIT) network access can be used to lock down inbound traffic to your Azure VMs. JIT network access reduces exposure to attacks while providing easy access to connect to VMs when needed.
+
+## Enable adaptive application control (*) - Level 1
+Adaptive application control is an intelligent, automated end-to-end approved application listing solution from Microsoft Defender for Cloud. It helps you control which applications can run on your Azure and non-Azure VMs (Windows and Linux), which, among other benefits, helps harden your VMs against malware. Defender for Cloud uses machine learning to analyze the applications running on your VMs. It helps you apply the specific approval rules by using adaptive application control intelligence. The capability greatly simplifies the process of configuring and maintaining approved application policies.
+
+## Enable SQL auditing and threat detection (*) - Level 1
+Microsoft Defender for Cloud recommends that you turn on auditing and threat detection for all databases on your servers that run Azure SQL. Auditing and threat detection can help you maintain regulatory compliance, understand database activity, and gain insight into discrepancies and anomalies that might alert you to business concerns or suspected security violations.
+
+## Enable SQL encryption (*) - Level 1
+Microsoft Defender for Cloud recommends that you enable Transparent Data Encryption (TDE) on SQL databases running in Azure. TDE protects your data and helps you meet compliance requirements by encrypting your database, associated backups, and transaction log files at rest. Enabling TDE doesn't require making changes to your applications.
+
+## Set security contact email and phone number - Level 1
+
+Microsoft Defender for Cloud recommends that you provide security contact details for your Azure subscription. Microsoft uses this information to contact you if the Microsoft Security Response Center finds that your customer data has been accessed by an unauthorized party. The Microsoft Security Response Center performs select security monitoring of the Azure network and infrastructure and receives threat intelligence and abuse complaints from third parties.
+
+1. Sign in to the Azure portal. Search for and select **Cost Management + Billing**. Depending on your subscriptions, you'll either see the **Overview** pane or the **Billing scopes** pane.
+
+2. If you see the **Overview** pane, continue to the next step.
+   If you see the **Billing scopes** pane, select your subscription to go to the **Overview** pane.
+
+3. In the **Overview** pane, in the left menu under **Settings**, select **Properties**.
+
+4. Validate the contact information that appears. If you need to update the contact information, select the **Update sold to** link and enter the new information.
+
+5. If you change any settings, select **Save**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/microsoft-defender-for-cloud/update-contact-information.png)
+
+## Enable Send me emails about alerts - Level 1
+
+Microsoft Defender for Cloud recommends that you provide security contact details for your Azure subscription.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Defender for Cloud**.
+
+2. In the left menu under **Management**, select **Environment settings**.
+
+3. Select the subscription.
+
+4. In the left menu under **Settings**, select **Email notifications**.
+
+5. In the **All users with the following roles** dropdown, select your role or, in **Additional email addresses (separated by commas)**, enter your email address.
+
+6. Select the **Notify about alerts with the following severity** checkbox, select an alert severity, and then select **Save**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/microsoft-defender-for-cloud/email-notifications-settings.png)
+
+## Enable Send email also to subscription owners - Level 1
+
+Microsoft Defender for Cloud recommends that you provide security contact details for your Azure subscription.
+
+In the **Email notifications** pane described in the preceding section, you can add more email addresses separated by commas.
+
+If you change any settings, in the menu bar, select **Save**.
+
+
+# 3.5 Create an Azure storage accounts baseline
+
+An Azure Storage account provides a unique namespace where you can store and access your Azure Storage data objects.
+
+## Azure Storage account security recommendations
+
+The following sections describe the Azure Storage recommendations that are in CIS Microsoft Azure Foundations Security Benchmark v. 3.0.0. Included with each recommendation are the basic steps to complete in the Azure portal. You should complete these steps for your own subscription and by using your own resources to validate each security recommendation. Keep in mind that Level 2 options might restrict some features or activity, so carefully consider which security options you decide to enforce.
+
+## Require security-enhanced transfers - Level 1
+
+This is a step you should take to ensure the security of your Azure Storage data is to encrypt the data between the client and Azure Storage. The first recommendation is to always use the HTTPS protocol. Using HTTPS ensures secure communication over the public internet. To enforce the use of HTTPS when you call REST APIs to access objects in storage accounts, turn on the **Secure transfer required** option for the storage account. After you turn on this control, connections that use HTTP are refused. Complete the following steps for each storage account in your subscription.
+
+1. Sign in to the Azure portal. Search for and select **Storage accounts**.
+
+2. In the **Storage accounts** pane, select a storage account.
+
+3. In the left menu under **Settings**, select **Configuration**.
+
+4. In the **Configuration** pane, ensure that **Secure transfer required** is set to **Enabled**.
+
+5. If you change any settings, select **Save** in the menu bar.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-storage-accounts/secure-transfer.png)
+
+## Enable binary large object (blob) encryption - Level 1
+
+Azure Blob Storage is the Microsoft object storage solution for the cloud. Blob Storage is optimized to store massive amounts of unstructured data. Unstructured data is data that doesn't adhere to a specific data model or definition. Examples of unstructured data include text and binary data. Storage service encryption protects your data at rest. Azure Storage encrypts your data as it's written in its datacenters, and it automatically decrypts it for you as you access it.
+
+1. Sign in to the Azure portal. Search for and select **Storage accounts**.
+
+2. In the **Storage accounts** pane, select a storage account.
+
+3. In the left menu under **Security + networking**, select **Encryption**.
+
+4. In the **Encryption** pane, note that Azure Storage encryption is enabled for all new and existing storage accounts and that it can't be disabled.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-storage-accounts/encryption.png)
+
+## Periodically regenerate access keys - Level 1
+
+When you create a storage account in Azure, Azure generates two 512-bit storage access keys. These keys are used for authentication when the storage account is accessed. Rotating these keys periodically ensures that any inadvertent access to or exposure of these keys is limited by time. Complete the following steps for each storage account in your Azure subscription.
+
+1. Sign in to the Azure portal. Search for and select **Storage accounts**.
+
+2. In the **Storage accounts** pane, select a storage account.
+
+3. In the left menu, select **Security + networking**, then select **Access keys**.
+
+4. Review the **Last rotated** date for each key.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-storage-accounts/activity-log-timespan.png)
+
+5. If you aren't using Azure Key Vault with key rotation, you can select the **Rotate key** button to manually rotate your access keys.
+
+## Require shared access signature tokens to expire within an hour - Level 1
+
+A shared access signature is a URI that grants restricted access rights to Azure Storage resources. You can provide a shared access signature to clients that shouldn't be trusted with your storage account key, but to whom you want to delegate access to certain storage account resources. By distributing a shared access signature URI to these clients, you can grant them access to a resource for a specified period of time, with a specified set of permissions.
+
+> **Note**
+> 
+> For the recommendations in CIS Microsoft Azure Foundations Security Benchmark v. 3.0.0, shared access signature token expiry times can't be automatically verified. The recommendation requires manual verification.
+
+## Require shared access signature tokens to be shared only via HTTPS - Level 1
+
+Shared access signature tokens should be allowed only over HTTPS protocol. Complete the following steps for each storage account in your Azure subscription.
+
+1. Sign in to the Azure portal. Search for and select **Storage accounts**.
+
+2. In the **Storage accounts** pane, select a storage account.
+
+3. In the menu under **Security + networking**, select **Shared access signature**.
+
+4. In the **Shared access signature** pane, under **Start and expiry date/time**, set the **Start** and **End** dates and times.
+
+5. Under **Allowed protocols**, select **HTTPS only**.
+
+6. If you change any settings, select the **Generate SAS and connection string** button at the bottom of the screen.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-storage-accounts/shared-access-signature.png)
+
+Configure shared access signature features in the next sections.
+
+## Enable Azure Files encryption - Level 1
+
+Azure Disk Encryption encrypts the OS and data disks in IaaS VMs. Client-side encryption and server-side encryption (SSE) are both used to encrypt data in Azure Storage. Complete the following steps for each storage account in your Azure subscription.
+
+1. Sign in to the Azure portal. Search for and select **Storage accounts**.
+
+2. In the **Storage accounts** pane, select a storage account.
+
+3. In the left menu under **Security + networking**, select **Encryption**.
+
+4. In the **Encryption** pane, note that Azure Storage encryption is enabled for all new and existing blob storage and file storage, and that it can't be disabled.
+
+![Screenshot that shows encryption is automatically enabled for all blobs and files in storage accounts.](screenshot-placeholder)
+
+## Require only private access to blob containers - Level 1
+
+You can enable anonymous, public-read access to a container and its blobs in Azure Blob Storage. By turning on anonymous, public-read access, you can grant read-only access to these resources without sharing your account key, and without requiring a shared access signature. By default, a container and any blobs within it might be accessed only by a user that has been given appropriate permissions. To grant anonymous users read access to a container and its blobs, you can set the container access level to public.
+
+However, if you grant public access to a container, anonymous users can read blobs within a publicly accessible container without the request being authorized. A security recommendation is to instead set access to storage containers to private. Complete the following steps for each storage account in your Azure subscription.
+
+1. Sign in to the Azure portal. Search for and select **Storage accounts**.
+
+2. In the **Storage accounts** pane, select a storage account.
+
+3. In the left menu under **Data storage**, select **Containers**.
+
+4. In the **Containers** pane, ensure that **Public access level** is set to **Private**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-storage-accounts/container-private-access-setting.png)
+
+
+
+# 3.6 Create an Azure SQL Database baseline
+
+Azure SQL Database is a cloud-based relational database family of products that support many of the same features offered in Microsoft SQL Server. Azure SQL Database provides an easy transition from an on-premises database to a cloud-based database that has built-in diagnostics, redundancy, security, and scalability.
+
+## Azure SQL Database security recommendations
+
+The following sections describe the Azure SQL Database recommendations that are in CIS Microsoft Azure Foundations Security Benchmark v. 3.0.0. Included with each recommendation are the basic steps to complete in the Azure portal. You should complete these steps for your own subscription and by using your own resources to validate each security recommendation.
+
+## Enable auditing - Level 1
+
+Auditing for Azure SQL Database and Azure Synapse Analytics tracks database events and writes them to an audit log in your Azure storage account, Azure Log Analytics workspace, or in Azure Event Hubs. Auditing also:
+
+* Helps you maintain regulatory compliance, understand database activity, and gain insight into discrepancies and anomalies that might alert you to business concerns or suspected security violations.
+* Enables and facilitates adherence to compliance standards, although it doesn't guarantee compliance.
+
+To turn on auditing, complete the following steps for each database in your Azure subscription.
+
+1. Sign in to the Azure portal. Search for and select **SQL databases**.
+
+2. In the left menu under **Security**, select **Auditing**.
+
+3. In the **Auditing** pane, enable **Enable Azure SQL Auditing**, and then select at least one audit log destination.
+
+4. If you change any settings, select **Save** in the menu bar.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-sql-database/auditing-enable.png)
+
+For more information about auditing, see Auditing for Azure SQL Database and Azure Synapse Analytics.
+
+## Enable SQL protections in Microsoft Defender for Cloud - Level 1
+
+Microsoft Defender for Cloud detects anomalous activities that indicate unusual and potentially harmful attempts to access or exploit databases. Defender for Cloud can identify:
+
+* Potential SQL injection.
+* Access from an unusual location or datacenter.
+* Access from an unfamiliar principal or from a potentially harmful application.
+* Brute-force SQL credentials.
+
+You can access and manage SQL threats in the Defender for Cloud menu.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Defender for Cloud**.
+
+2. In the left menu under **Management**, select **Environment settings**.
+
+3. Select your subscription.
+
+4. In the **Defender plans** pane, select **Select types** in the **Databases** row, then set **Azure SQL Databases** to **On**.
+
+5. Select **Continue**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-sql-database/defender-for-cloud-plans-azure-sql-database.png)
+
+6. Return to Azure **Home**. Search for and select **SQL databases**, then select the database you want to view.
+
+7. For each database instance, in the left menu under **Security**, select **Microsoft Defender for Cloud**. View security recommendations, alerts, and vulnerability assessment findings for your SQL Database instance.
+
+## Configure audit retention for more than 90 days - Level 1
+
+Audit logs should be preserved for security and discovery, and to meet legal and regulatory compliance requirements. Complete the following steps for each Azure SQL Database instance in your Azure subscription.
+
+1. Sign in to the Azure portal. Search for and select **SQL databases**, then select a database.
+
+2. In the left menu under **Security**, select **Auditing**.
+
+3. Select your **Audit log destination**, and then expand **Advanced properties**.
+
+4. Ensure that **Retention (Days)** is *greater than 90 days*.
+
+5. If you change any settings, select **Save** in the menu bar.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-sql-database/auditing-retention.png)
+
+
+
+# 3.7 Create a logging and monitoring baseline
+
+Logging and monitoring are critical requirements when you try to identify, detect, and mitigate security threats. A proper logging policy can ensure that you can determine when a security violation has occurred. The policy also can potentially identify who is responsible. Azure activity logs provide data about external access to a resource, and they provide diagnostic logs, so you have information about the operation of a specific resource.
+
+> **Note**
+> 
+> An Azure activity log is a subscription log that provides insight into subscription-level events that occurred in Azure. By using the activity log, you can determine the what, who, and when for any write operations that occurred on the resources in your subscription.
+
+## Logging policy recommendations
+
+The following sections describe the security recommendations in CIS Microsoft Azure Foundations Security Benchmark v. 3.0.0 to set logging and monitoring policies on your Azure subscriptions. Included with each recommendation are the basic steps to complete in the Azure portal. You should complete these steps for your own subscription and by using your own resources to validate each security recommendation. Keep in mind that Level 2 options might restrict some features or activity, so carefully consider which security options you decide to enforce.
+
+## Ensure that a diagnostic setting exists - Level 1
+
+The Azure activity log provides insight into subscription-level events that occurred in Azure. This log includes a range of data, from Azure Resource Manager operational data to updates on Azure Service Health events. The activity log previously was called an audit log or an operational log. The Administrative category reports control-plane events for your subscriptions.
+
+Each Azure subscription has a single activity log. The log provides data about resource operations that originated outside Azure.
+
+Diagnostic logs are emitted by a resource. Diagnostic logs provide information about the operation of the resource. You must enable diagnostic settings for each resource.
+
+1. Sign in to the Azure portal. Search for and select **Monitor**.
+
+2. In the left menu, select **Activity log**.
+
+3. In the **Activity log** menu bar, select **Export activity logs**.
+
+4. If no settings are shown, select your subscription, and then select **Add diagnostic setting**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-logging-monitoring/add-diagnostic-setting.png)
+
+5. Enter a name for your diagnostic setting, and then select log categories and destination details.
+
+6. In the menu bar, select **Save**.
+
+Here's an example of how to create a diagnostic setting:
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-logging-monitoring/configure-diagnostic-setting.png)
+
+## Create an activity log alert for creating a policy assignment - Level 1
+
+If you monitor policies that are created, you can see which users can create policies. The information might help you detect a breach or misconfiguration of your Azure resources or subscription.
+
+1. Sign in to the Azure portal. Search for and select **Monitor**.
+
+2. In the left menu, select **Alerts**.
+
+3. In the **Alerts** menu bar, select the **Create** dropdown, and then select **Alert rule**.
+
+4. In the **Create an alert rule** pane, select **Select scope**.
+
+5. In the **Select a resource** pane, in the **Filter by resource type** dropdown, select **Policy assignment (policyAssignments)**.
+
+6. Select a resource to monitor.
+
+7. Select **Done**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-logging-monitoring/add-alert-resource.png)
+
+8. To finish creating the alert, complete the steps that are described in Create an alert rule from the Azure Monitor Alerts pane.
+
+## Create an activity log alert for creating, updating, or deleting a network security group - Level 1
+
+By default, no monitoring alerts are created when NSGs are created, updated, or deleted. Changing or deleting a security group can allow internal resources to be accessed from improper sources or for unexpected outbound network traffic.
+
+1. Sign in to the Azure portal. Search for and select **Monitor**.
+
+2. In the left menu, select **Alerts**.
+
+3. In the **Alerts** menu bar, select the **Create** dropdown, and then select **Alert rule**.
+
+4. In the **Create an alert rule** pane, select **Select scope**.
+
+5. In the **Select a resource** pane, in the **Filter by resource type** dropdown, select **Network security groups**.
+
+6. Select **Done**.
+
+7. To finish creating the alert, complete the steps that are described in Create an alert rule from the Azure Monitor Alerts pane.
+
+## Create an activity log alert for creating or updating a SQL Server firewall rule - Level 1
+
+Monitoring for events that create or update a SQL Server firewall rule provides insight into network access changes, and it might reduce the time it takes to detect suspicious activity.
+
+1. Sign in to the Azure portal. Search for and select **Monitor**.
+
+2. In the left menu, select **Alerts**.
+
+3. In the **Alerts** menu bar, select the **Create** dropdown, and then select **Alert rule**.
+
+4. In the **Create alert rule** pane, select **Select scope**.
+
+5. In the **Select a resource** pane, in the **Filter by resource type** dropdown, select **SQL servers**.
+
+6. Select **Done**.
+
+7. To finish creating the alert, complete the steps that are described in Create an alert rule from the Azure Monitor Alerts pane.
+
+
+
+
+# 8 Create a Networking baseline
+
+By design, Azure networking services maximize flexibility, availability, resiliency, security, and integrity. Network connectivity is possible between resources that are located in Azure, between on-premises and Azure-hosted resources, and to and from the internet and Azure.
+
+## Azure networking security recommendations
+
+The following sections describe the Azure networking recommendations that are in CIS Microsoft Azure Foundations Security Benchmark v. 3.0.0. Included with each recommendation are the basic steps to complete in the Azure portal. You should complete these steps for your own subscription and by using your own resources to validate each security recommendation. Keep in mind that Level 2 options might restrict some features or activity, so carefully consider which security options you decide to enforce.
+
+## Restrict RDP and SSH access from the internet - Level 1
+
+You can reach Azure VMs by using Remote Desktop Protocol (RDP) and the Secure Shell (SSH) protocol. You can use these protocols to manage VMs from remote locations. The protocols are standard in datacenter computing.
+
+The potential security problem with using RDP and SSH over the internet is that attackers can use brute-force techniques to gain access to Azure VMs. After the attackers gain access, they can use your VM as a launching pad to compromise other machines on your virtual network, or even attack networked devices outside Azure.
+
+We recommended that you disable direct RDP and SSH access from the internet for your Azure VMs. Complete the following steps for each VM in your Azure subscription.
+
+1. Sign in to the Azure portal. Search for and select **Virtual machines**.
+
+2. Select a virtual machine.
+
+3. In the left menu under **Networking**, select **Network settings**.
+
+4. Verify that the **Inbound port rules** section doesn't have a rule for RDP, for example: port=3389, protocol = TCP, Source = Any or Internet. You can use the **Delete** icon to remove the rule.
+
+5. Verify that the **Inbound port rules** section doesn't have a rule for SSH, for example: port=22, protocol = TCP, Source = Any or Internet. You can use the **Delete** icon to remove the rule.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-networking/rdp.png)
+
+When direct RDP and SSH access from the internet are disabled, you have other options that you can use to access these VMs for remote management:
+
+- Point-to-site VPN
+- Site-to-site VPN
+- Azure ExpressRoute
+- Azure Bastion Host
+
+## Restrict SQL Server access from the internet - Level 1
+
+Firewall systems help prevent unauthorized access to computer resources. If a firewall is turned on but isn't correctly configured, attempts to connect to SQL Server might be blocked.
+
+To access an instance of SQL Server through a firewall, you must configure the firewall on the computer that's running SQL Server. Allowing ingress for the IP range 0.0.0.0/0 (Start IP of 0.0.0.0 and End IP of 0.0.0.0) allows open access to any and all traffic, potentially making the SQL Server database vulnerable to attacks. Ensure that no SQL Server databases allow ingress from the internet. Complete the following steps for each SQL Server instance.
+
+1. Sign in to the Azure portal. Search for and select **SQL servers**.
+
+2. In the menu pane under **Security**, select **Networking**.
+
+3. In the **Networking** pane, on the **Public access** tab, ensure that a firewall rule exists. Ensure that no rule has a Start IP of **0.0.0.0** and End IP of **0.0.0.0** or another combination that allows access to wider public IP ranges.
+
+4. If you change any settings, select **Save**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-networking/firewall.png)
+
+## Enable Network Watcher - Level 1
+
+NSG flow logs are an Azure Network Watcher feature that gives you information about IP ingress and egress traffic through an NSG. Flow logs are written in JSON format and show:
+
+- Outbound and inbound flows on a per-rule basis.
+- The network interface (NIC) the flow applies to.
+- 5-tuple information about the flow: source and destination IP addresses, source and destination ports, and the protocol that was used.
+- Whether the traffic was allowed or denied.
+- In version 2, throughput information like bytes and packets.
+
+1. Sign in to the Azure portal. Search for and select **Network Watcher**.
+
+2. Select **Network Watcher** for your subscription and location.
+
+3. If no NSG flow logs exist for your subscription, create an NSG flow log.
+
+## Set NSG flow log retention period to more than 90 days - Level 2
+
+When you create or update a virtual network in your subscription, Network Watcher is automatically enabled in your virtual network's region. Your resources aren't affected and no charge is assessed when Network Watcher is automatically enabled.
+
+You can use NSG flow logs to check for anomalies and to gain insight into suspected breaches.
+
+1. Sign in to the Azure portal. Search for and select **Network Watcher**.
+
+2. In the left menu under **Logs**, select **NSG flow logs**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-networking/nsg-flow.png)
+
+3. Select an NSG flow log.
+
+4. Ensure that **Retention (days)** is greater than **90 days**.
+
+5. If you change any settings, select **Save** in the menu bar.
+
+
+
+# 3.9 Create an Azure VM baseline
+
+Azure Policy is an Azure service you can use to create, assign, and manage policies. The policies you create enforce different rules and effects over your resources so that those resources stay compliant with your corporate standards and service-level agreements. Azure Policy meets this need by evaluating your resources for noncompliance with assigned policies. For example, you can have a policy to allow only a certain SKU size of VM in your environment. After this policy is implemented, new and existing resources are evaluated for compliance. With the right type of policy, you can bring existing resources into compliance.
+
+## Azure VM security recommendations
+
+The following sections describe the Azure VM security recommendations that are in CIS Microsoft Azure Foundations Security Benchmark v. 3.0.0. Included with each recommendation are the basic steps to complete in the Azure portal. You should complete these steps for your own subscription and by using your own resources to validate each security recommendation. Keep in mind that Level 2 options might restrict some features or activity, so carefully consider which security options you decide to enforce.
+
+## Ensure that OS disks are encrypted - Level 1
+
+Azure Disk Encryption helps protect and safeguard your data to meet your organization's security and compliance commitments. Azure Disk Encryption:
+
+- Uses the BitLocker feature of Windows and the DM-Crypt feature of Linux to provide volume encryption for the OS and data disks of Azure VMs.
+- Integrates with Azure Key Vault to help you control and manage disk encryption keys and secrets.
+- Ensures that all data on the VM disks is encrypted at rest when it is in Azure storage.
+
+Azure Disk Encryption for Windows and Linux VMs is in General Availability in all Azure public regions and Azure Government regions for Standard VMs and VMs with Azure Premium Storage.
+
+If you use Microsoft Defender for Cloud (recommended), you're alerted if you have VMs that aren't encrypted. Complete the following steps for each VM in your Azure subscription.
+
+1. Sign in to the Azure portal. Search for and select **Virtual machines**.
+
+2. Select a virtual machine.
+
+3. In the left menu under **Settings**, select **Disks**.
+
+4. Under **OS disk**, ensure that the OS disk has an encryption type set.
+
+5. Under **Data disks**, ensure that each disk has an encryption type set.
+
+6. If you change any settings, select **Save** in the menu bar.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-virtual-machines/disk-encryption.png)
+
+## Ensure that only approved VM extensions are installed - Level 1
+
+Azure VM extensions are small applications that provide post-deployment configuration and automation tasks on Azure VMs. For example, if a VM requires software installation or antivirus protection or if the VM needs to run a script, you can use a VM extension. You can run an Azure VM extension by using the Azure CLI, PowerShell, an Azure Resource Manager template, or the Azure portal. You can bundle extensions with a new VM deployment or run them against any existing system. To use the Azure portal to ensure that only approved extensions are installed on your VMs, complete the following steps for each VM in your Azure subscription.
+
+1. Sign in to the Azure portal. Search for and select **Virtual machines**.
+
+2. Select a virtual machine.
+
+3. In the left menu under **Settings**, select **Extensions + applications**.
+
+4. In the **Extensions + applications** pane, ensure that the extensions that are listed are approved for use.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-virtual-machines/extensions.png)
+
+## Ensure that the OS patches for the VMs are applied - Level 1
+
+Microsoft Defender for Cloud monitors Windows and Linux VMs and computers daily for missing operating system updates. Defender for Cloud retrieves a list of available security and critical updates from Windows Update or Windows Server Update Services (WSUS). The updates you receive depend on which service you configure on the Windows computer. Defender for Cloud also checks for the latest updates in Linux systems. If your VM or computer is missing a system update, Defender for Cloud recommends that you apply system updates.
+
+1. Sign in to the Azure portal. Search for and select **Microsoft Defender for Cloud**.
+
+2. In the left menu under **General**, select **Recommendations**.
+
+3. In **Recommendations**, ensure that there are no recommendations for **Apply system updates**.
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/azure-virtual-machines/defender-for-cloud-recommend.png)
+
+## Ensure that VMs have an endpoint protection solution installed and running - Level 1
+
+Microsoft Defender for Cloud monitors the status of antimalware protection. It reports this status in the **Endpoint protection issues** pane. Defender for Cloud highlights issues like detected threats and insufficient protection, which can make your VMs and computers vulnerable to antimalware threats. By using the information in **Endpoint protection issues**, you can begin to create a plan to address any issues that are identified.
+
+Use the same process as described in the preceding recommendation.
+
+
+
+# 3.10 Other baseline security considerations
+
+You should follow a few more security recommendations to set general security and operational controls on your Azure subscription.
+
+## More security recommendations
+
+The following sections describe additional recommendations that are in CIS Microsoft Azure Foundations Security Benchmark v. 3.0.0. Included with each recommendation are the basic steps to complete in the Azure portal. You should complete these steps for your own subscription and by using your own resources to validate each security recommendation. Keep in mind that Level 2 options might restrict some features or activity, so carefully consider which security options you decide to enforce.
+
+## Set an expiration date on all keys in Azure Key Vault - Level 1
+
+In addition to the key, the following attributes might be specified for a key in Azure Key Vault. In a JSON request, an attribute's keyword and braces { } are required, even if no attribute is specified. For example, for the optional IntDate attribute, the default value is forever. The exp (expiration time) attribute identifies the expiration time at or after which the key must not be used for a cryptographic operation, except for certain operation types under specific conditions. Processing the exp attribute requires that the current date and time are before the expiration date and time set in the exp value.
+
+We recommend that you rotate your keys in your key vault and set an explicit expiry time for each key. This process ensures that keys can't be used beyond their assigned lifetimes. Key Vault stores and manages secrets as sequences of 8-bit bytes called octets, with a maximum size of 25 KB each for each key. For highly sensitive data, clients should consider more layers of protection for data. One example is to encrypt data by using a separate protection key prior to storage in Key Vault. Complete the following steps for all keys in each of your key vaults.
+
+1. Sign in to the Azure portal. Search for and select **Key vaults**.
+
+2. Select a key vault.
+
+3. In the left menu under **Objects**, select **Keys**.
+
+4. In the **Keys** pane for the key vault, ensure that each key in the vault has **Expiration date** set as appropriate.
+
+5. If you change any settings, select **Save** in the menu bar.
+
+## Set an expiration date on all secrets in Azure Key Vault - Level 1
+
+Securely store and tightly control access to tokens, passwords, certificates, API keys, and other secrets. Ensure that an expiration time is set for all secrets in Azure Key Vault. Complete the following steps for all secrets in each of your key vaults.
+
+1. Sign in to the Azure portal. Search for and select **Key vaults**.
+
+2. In the left menu under **Objects**, select **Secrets**.
+
+3. In the **Secrets** pane for the key vault, ensure that each secret in the vault has **Expiration date** set as appropriate.
+
+The following screenshot illustrates setting an expiration date on a password:
+
+![](https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/other-security-considerations/key-vault-set-secret-expiration-date.png)
+
+4. If you change any settings, select **Save** in the menu bar.
+
+## Set resource locks for mission-critical Azure resources - Level 2
+
+As an administrator, you might need to lock a subscription, resource group, or resource to prevent other users from accidentally deleting or modifying a critical resource. In the Azure portal, the lock levels are **Read-only** and **Delete**. Unlike role-based access control, you use management locks to apply a restriction to all users and roles. Azure Resource Manager locks apply only to operations that happen in the management plane, which consists of operations sent to https://management.azure.com. The locks don't restrict how resources perform their own functions. Resource changes are restricted, but resource operations aren't restricted.
+
+> **Tip**
+> 
+> For example, a Read-only lock on an instance of Azure SQL Database prevents you from deleting or modifying the database. It doesn't prevent you from creating, updating, or deleting data in the database. Data transactions are permitted because those operations aren't sent to https://management.azure.com.
+
+Complete the following steps for all mission-critical resources in your Azure subscription.
+
+1. Sign in to the Azure portal. Search for and select **All resources**.
+
+2. Select a resource, resource group, or subscription that you want to lock.
+
+3. In the menu under **Settings**, select **Locks**.
+
+4. In the **Locks** pane, in the menu bar, select **Add**.
+
+5. In the **Add lock** pane, enter a name for the lock and select a lock level. Optionally, you can add notes that describe the lock.
+
+6. Select **OK**.
+
+![https://learn.microsoft.com/en-us/training/modules/create-security-baselines/media/other-security-considerations/lock-resource.png]
+
+
+
+# 3.11 Summary
+
+We've covered many things in this module to create a baseline security checklist for commonly used Azure services. Let's quickly recap what we've gone through:
+
+* **Turn on Microsoft Defender for Cloud - it's free**. Upgrade your Azure subscription to turn on Microsoft Defender for Cloud. Defender for Cloud's enhanced security features help you:
+   * Find and fix security vulnerabilities.
+   * Apply access and application controls to block malicious activity.
+   * Detect threats by using analytics and intelligence.
+   * Respond quickly when under attack.
+* **Adopt Center for Internet Security (CIS) Benchmarks**. Apply the benchmarks to existing tenants.
+* **Use CIS VMs for new workloads**. Get CIS hardened VM images in Azure Marketplace.
+* **Store your keys and secrets in Azure Key Vault** (not in your source code). Key Vault is designed to support any type of secret, including passwords, database credentials, API keys, and certificates.
+* **Install a web application firewall**. A web application firewall (WAF) is a feature of Azure Application Gateway that provides centralized protection of your web applications from common exploits and vulnerabilities. Third parties also offered Azure-supported WAFs.
+* **Enforce multifactor verification for users, especially for your administrator accounts**. Multifactor authentication for Microsoft Entra users helps administrators protect their organizations and users by requiring more than one authentication method.
+* **Encrypt your virtual hard disk files**. Encryption helps protect your boot volume and data volumes at rest in storage, along with your encryption keys and secrets.
+* **Connect Azure VMs and appliances to other networked devices by placing them in Azure virtual networks**. VMs that are connected to an Azure virtual network can connect to devices that are on the same virtual network, on different virtual networks, on the internet, or on your own on-premises networks.
+
+## Strong operational security practices to implement
+
+Implement these strong operational security practices every day:
+
+* **Manage your VM updates**. Azure VMs, like all on-premises VMs, are meant to be user-managed. Azure doesn't push Windows updates to these VMs. Ensure that you have solid processes in place for important operations like patch management and backup.
+* **Enable password management**. Use appropriate security policies to prevent abuse.
+* **Review your workload protection dashboard regularly**. Get a central view of the security state of all of your Azure resources, and take action on the recommendations regularly.
+
+## Further reading
+
+To explore the topics presented in this module in more detail, see CIS Microsoft Azure Foundations Security Benchmark.
+
+
+
 # 5 Control access to your APIs with Azure API Management
 
 Discover how to protect your APIs from unauthorized use with API keys and client certificate authentication.
@@ -920,3 +1863,15 @@ In this module, you've learned about API management and how you can control auth
 - Subscriptions in Azure API Management
 - How to secure back-end services using client certificate authentication in Azure API Management
 - Authentication and authorization to APIs in API Management
+
+
+
+
+
+### Reference:
+1) CIS Microsoft Azure Benchmarks, https://www.cisecurity.org/benchmark/azure
+2) 
+
+
+
+
