@@ -670,3 +670,217 @@ Configuration data stored in an App Configuration store, which includes all keys
 
 
 
+# 3.4 Manage application features
+
+Feature management is a modern software-development practice that decouples feature release from code deployment and enables quick changes to feature availability on demand. It uses a technique called feature flags (also known as feature toggles, feature switches, and so on) to dynamically administer a feature's lifecycle.
+
+## Basic concepts
+
+Here are several new terms related to feature management:
+
+**Feature flag:** A feature flag is a variable with a binary state of on or off. The feature flag also has an associated code block. The state of the feature flag triggers whether the code block runs or not.
+
+**Feature manager:** A feature manager is an application package that handles the lifecycle of all the feature flags in an application. The feature manager typically provides extra functionality, such as caching feature flags and updating their states.
+
+**Filter:** A filter is a rule for evaluating the state of a feature flag. A user group, a device or browser type, a geographic location, and a time window are all examples of what a filter can represent.
+
+An effective implementation of feature management consists of at least two components working in concert:
+
+- An application that makes use of feature flags.
+- A separate repository that stores the feature flags and their current states.
+
+How these components interact is illustrated in the following examples.
+
+## Feature flag usage in code
+
+The basic pattern for implementing feature flags in an application is simple. You can think of a feature flag as a Boolean state variable used with an if conditional statement in your code:
+
+**C#**
+```csharp
+if (featureFlag) {
+    // Run the following code
+}
+```
+
+In this case, if featureFlag is set to True, the enclosed code block is executed; otherwise, it's skipped. You can set the value of featureFlag statically, as in the following code example:
+
+**C#**
+```csharp
+bool featureFlag = true;
+```
+
+You can also evaluate the flag's state based on certain rules:
+
+**C#**
+```csharp
+bool featureFlag = isBetaUser();
+```
+
+You can extend the conditional to set application behavior for either state:
+
+**C#**
+```csharp
+if (featureFlag) {
+    // This following code will run if the featureFlag value is true
+} else {
+    // This following code will run if the featureFlag value is false
+}
+```
+
+## Feature flag declaration
+
+Each feature flag has two parts: a name and a list of one or more filters that are used to evaluate if a feature's state is on (that is, when its value is True). A filter defines a use case for when a feature should be turned on.
+
+When a feature flag has multiple filters, the filter list is traversed in order until one of the filters determines the feature should be enabled. At that point, the feature flag is on, and any remaining filter results are skipped. If no filter indicates the feature should be enabled, the feature flag is off.
+
+The feature manager supports appsettings.json as a configuration source for feature flags. The following example shows how to set up feature flags in a JSON file:
+
+**JSON**
+```json
+"FeatureManagement": {
+    "FeatureA": true, // Feature flag set to on
+    "FeatureB": false, // Feature flag set to off
+    "FeatureC": {
+        "EnabledFor": [
+            {
+                "Name": "Percentage",
+                "Parameters": {
+                    "Value": 50
+                }
+            }
+        ]
+    }
+}
+```
+
+## Feature flag repository
+
+To use feature flags effectively, you need to externalize all the feature flags used in an application. This approach allows you to change feature flag states without modifying and redeploying the application itself.
+
+Azure App Configuration is designed to be a centralized repository for feature flags. You can use it to define different kinds of feature flags and manipulate their states quickly and confidently. You can then use the App Configuration libraries for various programming language frameworks to easily access these feature flags from your application.
+
+
+# 3.5 Secure app configuration data
+
+In this unit you learn how to secure your apps configuration data by using:
+
+- Customer-managed keys
+- Private endpoints
+- Managed identities
+
+## Encrypt configuration data by using customer-managed keys
+
+Azure App Configuration encrypts sensitive information at rest using a 256-bit AES encryption key provided by Microsoft. Every App Configuration instance has its own encryption key managed by the service and used to encrypt sensitive information. Sensitive information includes the values found in key-value pairs. When customer-managed key capability is enabled, App Configuration uses a managed identity assigned to the App Configuration instance to authenticate with Microsoft Entra ID. The managed identity then calls Azure Key Vault and wraps the App Configuration instance's encryption key. The wrapped encryption key is then stored and the unwrapped encryption key is cached within App Configuration for one hour. App Configuration refreshes the unwrapped version of the App Configuration instance's encryption key hourly. This ensures availability under normal operating conditions.
+
+### Enable customer-managed key capability
+
+The following components are required to successfully enable the customer-managed key capability for Azure App Configuration:
+
+- Standard tier Azure App Configuration instance
+- Azure Key Vault with soft-delete and purge-protection features enabled
+- An RSA or RSA-HSM key within the Key Vault: The key must not be expired, it must be enabled, and it must have both wrap and unwrap capabilities enabled
+
+Once these resources are configured, two steps remain to allow Azure App Configuration to use the Key Vault key:
+
+1. Assign a managed identity to the Azure App Configuration instance
+2. Grant the identity GET, WRAP, and UNWRAP permissions in the target Key Vault's access policy.
+
+## Use private endpoints for Azure App Configuration
+
+You can use private endpoints for Azure App Configuration to allow clients on a virtual network to securely access data over a private link. The private endpoint uses an IP address from the virtual network address space for your App Configuration store. Network traffic between the clients on the virtual network and the App Configuration store traverses over the virtual network using a private link on the Microsoft backbone network, eliminating exposure to the public internet.
+
+Using private endpoints for your App Configuration store enables you to:
+
+- Secure your application configuration details by configuring the firewall to block all connections to App Configuration on the public endpoint.
+- Increase security for the virtual network ensuring data doesn't escape.
+- Securely connect to the App Configuration store from on-premises networks that connect to the virtual network using VPN or ExpressRoutes with private-peering.
+
+## Managed identities
+
+A managed identity from Microsoft Entra ID allows Azure App Configuration to easily access other Microsoft Entra ID-protected resources, such as Azure Key Vault. The identity is managed by the Azure platform. It doesn't require you to provision or rotate any secrets.
+
+Your application can be granted two types of identities:
+
+- **A system-assigned identity** is tied to your configuration store. It's deleted if your configuration store is deleted. A configuration store can only have one system-assigned identity.
+- **A user-assigned identity** is a standalone Azure resource that can be assigned to your configuration store. A configuration store can have multiple user-assigned identities.
+
+### Add a system-assigned identity
+
+To set up a managed identity using the Azure CLI, use the az appconfig identity assign command against an existing configuration store. The following Azure CLI example creates a system-assigned identity for an Azure App Configuration store named myTestAppConfigStore.
+
+**Bash**
+```bash
+az appconfig identity assign \ 
+    --name myTestAppConfigStore \ 
+    --resource-group myResourceGroup
+```
+
+### Add a user-assigned identity
+
+Creating an App Configuration store with a user-assigned identity requires that you create the identity and then assign its resource identifier to your store. The following Azure CLI examples create a user-assigned identity called myUserAssignedIdentity and assign it to an Azure App Configuration store named myTestAppConfigStore.
+
+Create an identity using the az identity create command:
+
+**Bash**
+```bash
+az identity create --resource-group myResourceGroup --name myUserAssignedIdentity
+```
+
+Assign the new user-assigned identity to the myTestAppConfigStore configuration store:
+
+**Bash**
+```bash
+az appconfig identity assign --name myTestAppConfigStore \ 
+    --resource-group myResourceGroup \ 
+    --identities /subscriptions/[subscription id]/resourcegroups/myResourceGro
+```
+
+
+# 3.6 Module assessment
+
+## Check your knowledge
+
+### 1. What is the purpose of labels in Azure App Configuration?
+
+- [x] Labels are used to differentiate key-values with the same key in App Configuration. ✅
+- [ ] Labels are used to encrypt key-values in App Configuration.
+- [ ] Labels are used to limit the size of key-values in App Configuration.
+
+**Answer:** Labels are used to differentiate key-values with the same key in App Configuration.
+
+**Explanation:** Labels in Azure App Configuration serve as a way to create variants of the same key. This allows you to have multiple versions of a configuration value for different environments (like development, staging, production) or different scenarios while using the same key name.
+
+---
+
+### 2. What is the role of a feature manager in managing application features?
+
+- [ ] A feature manager is a rule for evaluating the state of a feature flag.
+- [ ] A feature manager is a variable with a binary state of on or off.
+- [x] A feature manager is an application package that handles the lifecycle of all the feature flags in an application. ✅
+
+**Answer:** A feature manager is an application package that handles the lifecycle of all the feature flags in an application.
+
+**Explanation:** As defined in the documentation, a feature manager is an application package that handles the lifecycle of all feature flags in an application. It typically provides extra functionality such as caching feature flags and updating their states.
+
+---
+
+### 3. What is the purpose of using customer-managed keys in Azure App Configuration?
+
+- [ ] To enable authentication with Microsoft Entra ID
+- [ ] To permanently store the unwrapped encryption key
+- [x] To encrypt sensitive information at rest ✅
+
+**Answer:** To encrypt sensitive information at rest
+
+**Explanation:** Customer-managed keys in Azure App Configuration are used to encrypt sensitive information at rest. While App Configuration already encrypts data using Microsoft-managed keys, customer-managed keys provide additional control by allowing organizations to use their own encryption keys stored in Azure Key Vault for encrypting sensitive configuration data.
+
+# 3.7 Summary
+
+In this module, you learned how to:
+
+- Explain the benefits of using Azure App Configuration
+- Describe how Azure App Configuration stores information
+- Implement feature management
+- Securely access your app configuration information
+
+
