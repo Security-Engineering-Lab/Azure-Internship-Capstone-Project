@@ -308,3 +308,106 @@ Exemplifying these recommendations, Microsoft has a well-established live site c
 * Configuration as code.
 
 
+# 2.3 What is Agile?
+
+
+We used the term agile in the previous module to describe one of the essential elements of DevOps culture, representing the ability to rapidly respond to customer feedback and needs. This term also appeared several times in the unit describing the correlation between DevOps and the application lifecycle. However, there's also another, more specific meaning of Agile (in the capitalized format), which describes an approach to software development and project management. Such an approach is commonly associated with DevOps practices. In our sample scenario, transitioning from the traditional Waterfall approach to Agile would help the organization realize a range of DevOps benefits. In this unit, explore the primary characteristics of Agile and examine its correlation with DevOps.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/plan-with-devops/media/3-agile-methods.png)
+
+
+## Agile principles and values
+
+Agile is an approach to software development that promotes team collaboration, continuous improvement, and automation, with the ultimate goal of faster, more reliable, and customer-centric software delivery. The term originated from the Agile Manifesto, created in 2001 by a group of software developers, providing a set of guiding principles for modern software development. The manifesto included four foundational statements that prioritized individuals and interactions, working solutions, and customer collaboration over rigid processes and tools. In particular, these statements assigned more value to:
+
+- Individuals and interactions over processes and tools.
+- Working software over comprehensive documentation.
+- Customer collaboration over contract negotiation.
+- Responding to change over following a plan.
+
+## Agile methods and practices
+
+The Agile Manifesto and Agile principles provide a set of values and guidelines, but they're intentionally not prescriptive in terms of specific methods and practices. Instead, Agile is meant to be flexible and easily adaptable, allowing organizations and teams to choose a more detailed approach according to their preferences and needs.
+
+These detailed, comprehensive approaches are commonly referred to as frameworks. Their purpose is to cover all phases of the DevOps lifecycle, including planning, development, delivery, and operations. Some of the more popular Agile frameworks include Scrum and Kanban.
+
+## What is Scrum?
+
+Scrum is a framework used by teams to manage work and solve problems collaboratively in short (typically between one and four weeks long) iterations called sprints. To facilitate collaboration and progress, sprints are structured based on events, artifacts, and roles.
+
+- **Events**, commonly referred to as ceremonies, include meetings taking place daily (Daily Scrum, typically limited to 15 minutes, also known as daily standup) and at the beginning and end of each sprint (Sprint Planning, Sprint Review, and Sprint Retrospective).
+- **Artifacts** define a prioritized list of features, enhancements, and fixes to develop. Such artifacts might cover the span of a project or a sprint (Product Backlog or Sprint Backlog, respectively), or they might aid Daily Scrum meetings (task boards and sprint burndown charts). A task board provides a visual way to track the progress of each backlog item. It displays backlog items divided into the tasks required to complete it. Tasks are placed in separate columns (labeled To do, In progress, and Done) based on their status. The sprint burndown chart serves as a visual indicator of whether the team is on track to complete its assigned work by the end of the sprint. It consists of a graph that displays the daily total of remaining work, typically shown in hours.
+- **Roles** include the product owner, Scrum master, and Scrum team, each with its clearly defined responsibilities. The product owner represents the project stakeholders and is responsible for defining, maintaining, and prioritizing the product backlog. The Scrum master oversees the Scrum process, looking for areas for improvements, resolving any blocking issues, and ensuring that the Scrum principles are followed. The Scrum team is responsible for building the product, with the ownership of its engineering and quality components.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/plan-with-devops/media/3-agile-scrum-lifecycle-diagram.png)
+
+
+In the Sprint Planning event, the team chooses backlog items to work on during the upcoming sprint. The selection is made based on priority and an estimated amount of work required to complete an item. The metric called velocity is used to measure the amount of work a team can complete in a given sprint. Once the sprint execution starts, the team decides how to work on the Sprint Backlog items. During Sprint review, the team demonstrates their accomplishments to stakeholders. Sprint retrospective is part of continuous learning. It serves as the opportunity to review the most recently completed sprint, identify areas for improvement, and help determine the list of actions for the next sprint.
+
+## What is Kanban?
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/plan-with-devops/media/3-what-is-kanban.png)
+
+Kanban is the Japanese word for a signboard or billboard. In the context of Agile, the concept of Kanban has been conceived as a means for improving the efficiency of manufacturing processes, but, in recent years, it became prevalent in software development projects.
+
+The key principle of this approach is visualization of project-related work in the form of Kanban boards. These can be physical boards or software applications that display cards arranged into columns representing the status of individual project items. Commonly used column names include To-do, Doing, and Done, although teams can customize them to accurately reflect all relevant stages in a project delivery workflow (such as development and testing). Visualizing work as cards in different states on a board simplifies the assessment of project status and identifying potential productivity issues.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/plan-with-devops/media/3-agile-kanban-board-sample.png)
+
+
+These cards correspond to product backlog items in the Scrum framework. The cards can be customized to include references to other items in the product delivery process, such as tasks and test cases.
+
+While the concept of a backlog is common in Kanban and Scrum, it's important to note that Kanban is more flexible and doesn't involve iterations. Work items can be added, reprioritized, or removed from the backlog based on the team's capacity and the changing needs of the project or service being managed with Kanban.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/plan-with-devops/media/3-kanban-pull-model.png)
+
+In particular, Kanban promotes the use of a pull model, in which stakeholders add requests to the backlog list of tasks, items, or work that needs to be completed. The development team selects items from the backlog and adds them into the active work process depending on their priority and the team's resources availability. This minimizes the quality issues associated with the pull model, in which stakeholders arbitrarily assign work to development teams, frequently with unrealistic deadlines. In addition, to optimize productivity, Kanban supports imposing limits on the number of items that the development team is currently working on, referred to as work in progress or simply WIP.
+
+Kanban framework also relies on lead time and cycle time metrics to measure effectiveness and throughput of its workflow. Lead time is the total time it takes for a work item to transition from its inception until its delivery to the customer. Cycle time represents the duration of the actual work on an item once it has been pulled into the active work state.
+
+Another commonly used component of Kanban is a cumulative flow diagram (CFD). It's a chart that illustrates the number of items in each state over time, typically across several weeks. It resembles a stacked time series chart, with the horizontal axis representing the timeline and the vertical axis representing the cumulative number of work items. Each state is displayed as a differently colored area, facilitating identifying trends in backlog item processing. An increase in size of one or more colored areas typically indicates an issue in the workflow, such as a bottleneck or inefficiency.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/plan-with-devops/media/3-agile-kanban-cumulative-flow-diagram.png)
+
+## What are the differences between Scrum and Kanban?
+
+Both Scrum and Kanban are considered to be Agile frameworks with the common goal of improving the efficiency and effectiveness of software development. However, each of them offers a different approach to reaching this goal, including their respective principles and practices. In particular:
+
+- **Work cadence**: Scrum uses fixed-length sprints, while Kanban operates based on a continuous flow model, with work being pulled by development teams according to the availability of their resources.
+- **Roles and ceremonies**: Scrum has clearly defined roles and ceremonies, while Kanban doesn't prescribe any, instead allowing teams to adapt these according to their specific needs.
+- **Work planning**: Scrum uses a prioritized backlog with work committed to during sprint planning. Kanban uses a dynamic backlog, with no commitments for a specific period. In addition, Kanban supports the concept of WIP limits.
+- **Adaptability to change**: Scrum discourages changes to committed work during the sprint. Kanban facilitates adaptation to changes at any point.
+- **Visualizations**: Scrum uses sprint boards and burndown charts. Kanban relies on Kanban boards.
+- **Metrics**: Scrum uses sprint-related metrics such as velocity and burndown charts. Kanban emphasizes such metrics as lead time and cycle time.
+
+
+# 2.4 Explore DevOps practices
+
+Incorporating DevOps into the application lifecycle involves implementing a range of DevOps practices. The ability to maximize DevOps benefits is highly dependent on the extent to which this implementation is successful. In our sample scenario, the organization would need to introduce significant changes to its operating model, starting with promoting collaboration and communication between development and operations teams as well as investing in version control, automation, continuous integration, continuous testing, continuous delivery, and continuous monitoring. You'll explore these practices in this unit.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/plan-with-devops/media/4-devops-practices.png)
+
+## Version control
+
+Version control is the practice of managing updates to code by storing it in designated repositories, tracking its revisions, and maintaining change history. This facilitates code reviews and the ability to recover from programming errors. In addition, version control systems (VCS) such as Git allow for collaboration in code authoring among multiple developers through such features as repository cloning, pull requests, code change merges, conflict resolution, and support for rollbacks. The use of version control is a fundamental DevOps practice. Version control is also a prerequisite for such practices as continuous integration and infrastructure as code.
+
+## Continuous Integration (CI) and Continuous Testing
+
+One of the core practices of DevOps is automation. In this case, automation applies to the process of merging code changes, testing them, and building resulting artifacts, as early in the application lifecycle as possible. The intention is to detect any potential issues in the development phase, since this minimizes the effort and cost involved in fixing them. Automated tests validate that code changes haven't introduced errors or regression issues.
+
+## Continuous Delivery (CD)
+
+Continuous delivery automates the process of deploying artifacts built as part of CI, making them available to their consumers. CD automates progression of these artifacts through different environments, such as testing, staging, and production. Continuous integration and continuous delivery (CI/CD) together form a unified, streamlined, end-to-end software development and delivery process.
+
+## Continuous monitoring
+
+Continuous monitoring provides automated real-time visibility into the health and performance of the entire application stack, including its underlying infrastructure. This is accomplished through the collection of telemetry, including logs and metrics, and customizable alerting that delivers notifications about anomalous behavior, facilitating prompt remediation actions.
+
+## Continuous Security (DevSecOps)
+
+Security is an essential part of every phase of the DevOps-based application lifecycle, which is the reason for coining the term DevSecOps. DevSecOps is an extension of DevOps, with the focus on integrating security practices into each stage—from planning, through coding, testing, and deployment, to operations.
+
+## Infrastructure as Code (IaC)
+
+Infrastructure as Code is an integral component of modern software development and operations practices. It involves the use of programming methods to provision and manage infrastructure services. IaC defines infrastructure components such as servers, network devices, and databases by using code. Such code typically resides in a VCS, which manages and tracks changes to infrastructure configurations. The use of code facilitates automated provisioning and configuration of infrastructure, enhancing efficiency, consistency, and scalability. In addition, IaC can be (and frequently is) integrated with CI/CD, yielding a comprehensive software delivery strategy by combining infrastructure provisioning, with application build, test, and deployment into one continuous, fully automated sequence.
+
