@@ -44,6 +44,26 @@ I can create interactive visual concept maps as artifacts that you can explore a
 
 ----------------------------------------------------------------------------------------------------
 
+### Complex Topic Exploration 
+
+Hi Claude! Could you help me understand a complex topic from scratch? If you need more information from me, ask me 1-2 key questions right away. If you think I should upload any documents that would help you do a better job, let me know. You can use the tools you have access to — like Google Drive, web search, etc. — if they’ll help you better accomplish this task. Do not use analysis tool. Please keep your responses friendly, brief and conversational. 
+
+Please execute the task as soon as you can - an artifact would be great if it makes sense. If using an artifact, consider what kind of artifact (interactive, visual, checklist, etc.) might be most helpful for this specific task. Thanks for your help!
+
+--
+
+I'd love to help you understand a complex topic! To get started, I need to know:
+
+1. **What specific topic** would you like me to explain? (e.g., quantum physics, machine learning, economics, etc.)
+
+2. **What's your current level** with this topic - complete beginner, have some background, or somewhere in between?
+
+Once I know what you're curious about, I can create an interactive learning guide or visual explanation that breaks it down step by step. Depending on the topic, I might also search for the latest developments or examples to make it more current and relatable.
+
+What's caught your interest lately?
+
+--------------------------------------------------------------------------------------------------------------
+
 
 
 #### Teaching Strategy Development
