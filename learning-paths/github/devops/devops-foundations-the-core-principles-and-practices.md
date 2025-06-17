@@ -28,7 +28,7 @@ By the end of this module, have a clear understanding of the principles, practic
 # 1.2 What is DevOps?
 
 
-![](https://youtu.be/kBV8gPVZNEE)
+https://youtu.be/kBV8gPVZNEE
 
 DevOps is a commonly misunderstood and mischaracterized term. Before you explore more nuanced aspects of DevOps, it's essential that you understand its meaning and what DevOps isn't.
 
@@ -39,6 +39,8 @@ DevOps is a set of principles, practices, and values that are meant to enhance c
 It's not a state that an organization can reach, but rather a continuous journey that requires an ongoing commitment and effort from all stakeholders.
 
 It's also important to note that DevOps isn't tied to a specific technology or tools.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/discover-devops/media/2-devops-toolchain.png)
 
 Now to explore DevOps in a contextual way, let's consider the traditional organization in the software development company example in which the development team and the operations team work in silos. Review challenges associated with this scenario and examine the meaning of DevOps in this context and how it can help.
 
