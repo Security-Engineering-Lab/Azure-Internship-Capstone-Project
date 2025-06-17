@@ -24,8 +24,25 @@ I'd love to help you create a curriculum inspired by your favorite cultural move
 
 Once I know these details, I can create a comprehensive curriculum as an interactive artifact that you can reference and modify. No need to upload documents right now - I can research the movement and create something tailored to your needs!
 
------------------------------------
+---------------------------------------------------------------------------------------------------------------------------
 
+#### Concept Map Development Strategy
+
+Hi Claude! Could you develop concept maps? If you need more information from me, ask me 1-2 key questions right away. If you think I should upload any documents that would help you do a better job, let me know. You can use the tools you have access to — like Google Drive, web search, etc. — if they’ll help you better accomplish this task. Do not use analysis tool. Please keep your responses friendly, brief and conversational. 
+
+Please execute the task as soon as you can - an artifact would be great if it makes sense. If using an artifact, consider what kind of artifact (interactive, visual, checklist, etc.) might be most helpful for this specific task. Thanks for your help!
+
+--
+
+Yes, I can definitely help you create concept maps! I'd love to get started right away.
+
+Just need to know:
+1. **What topic or subject** do you want the concept map to cover?
+2. **What's the purpose** - is this for studying, teaching, project planning, or something else?
+
+I can create interactive visual concept maps as artifacts that you can explore and potentially modify. Once you give me the topic, I'll build something useful for you right away!
+
+----------------------------------------------------------------------------------------------------
 
 
 
@@ -35,7 +52,7 @@ Hi Claude! Could you develop teaching strategies? If you need more information f
 
 Please execute the task as soon as you can - an artifact would be great if it makes sense. If using an artifact, consider what kind of artifact (interactive, visual, checklist, etc.) might be most helpful for this specific task. Thanks for your help!
 
----
+--
 
 I'd love to help you develop teaching strategies! To create the most useful resource for you, I need to understand your specific context:
 
