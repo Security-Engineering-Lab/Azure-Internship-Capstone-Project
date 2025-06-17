@@ -44,7 +44,7 @@ I can create interactive visual concept maps as artifacts that you can explore a
 
 ----------------------------------------------------------------------------------------------------
 
-### Complex Topic Exploration 
+#### Complex Topic Exploration 
 
 Hi Claude! Could you help me understand a complex topic from scratch? If you need more information from me, ask me 1-2 key questions right away. If you think I should upload any documents that would help you do a better job, let me know. You can use the tools you have access to — like Google Drive, web search, etc. — if they’ll help you better accomplish this task. Do not use analysis tool. Please keep your responses friendly, brief and conversational. 
 
@@ -63,6 +63,32 @@ Once I know what you're curious about, I can create an interactive learning guid
 What's caught your interest lately?
 
 --------------------------------------------------------------------------------------------------------------
+
+#### Learning Journal Design 
+
+Hi Claude! Could you design learning journals? If you need more information from me, ask me 1-2 key questions right away. If you think I should upload any documents that would help you do a better job, let me know. You can use the tools you have access to — like Google Drive, web search, etc. — if they’ll help you better accomplish this task. Do not use analysis tool. Please keep your responses friendly, brief and conversational. 
+
+Please execute the task as soon as you can - an artifact would be great if it makes sense. If using an artifact, consider what kind of artifact (interactive, visual, checklist, etc.) might be most helpful for this specific task. Thanks for your help!
+
+
+I'd love to help you design learning journals! To create something that'll work perfectly for your needs, I have a couple of key questions:
+
+1. **Who are these for?** (Students, professionals, personal use, etc. - and what age/level?)
+
+2. **What's the main focus?** (General reflection, specific subject learning, skill development, project tracking, etc.)
+
+I'll create an interactive learning journal template that you can customize based on your answers. Let me start with a versatile design that covers the most common learning journal elements:I've created an interactive learning journal template with a beautiful, engaging design! It includes sections for goals, key learnings, challenges, reflection, progress tracking with star ratings, and next steps.
+
+The journal is fully functional with auto-resizing text areas, interactive star ratings, and save/clear options. It's responsive and works great on both desktop and mobile.
+
+Let me know your answers to those questions and I can customize it further - maybe add subject-specific sections, adjust the reflection prompts, or modify it for a particular age group or learning context!
+
+
+---------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 
 
