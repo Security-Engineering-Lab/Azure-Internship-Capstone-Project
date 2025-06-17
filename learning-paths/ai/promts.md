@@ -105,6 +105,27 @@ I'm thinking an interactive timeline artifact would work great for this - someth
 If you have any existing study materials, curriculum docs, or learning resources you'd like me to reference, feel free to upload them and I can incorporate those into the timeline structure.
 
 
+-------------------------------------------------------------------------------------------
+
+#### Learning Portfolio Framework
+
+Hi Claude! Could you design learning portfolios? If you need more information from me, ask me 1-2 key questions right away. If you think I should upload any documents that would help you do a better job, let me know. You can use the tools you have access to — like Google Drive, web search, etc. — if they’ll help you better accomplish this task. Do not use analysis tool. Please keep your responses friendly, brief and conversational. 
+
+Please execute the task as soon as you can - an artifact would be great if it makes sense. If using an artifact, consider what kind of artifact (interactive, visual, checklist, etc.) might be most helpful for this specific task. Thanks for your help!
+
+--
+
+I'd love to help you design learning portfolios! To create something really useful for you, I need to understand:
+
+1. **Who are these portfolios for?** (Students at what level - K-12, college, professional development, etc.)
+
+2. **What's the main purpose?** (Assessment tool, showcasing growth over time, college applications, job interviews, etc.)
+
+These details will help me design portfolios that actually serve your specific needs. I can definitely create an interactive template or framework as an artifact once I know more about your context!
+
+Are there any existing portfolio examples or requirements documents you'd like me to reference? I can search for best practices or access any files you might have.
+
+-------------------------------------------------------------------------------
 
 
 
