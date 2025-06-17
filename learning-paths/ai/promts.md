@@ -86,6 +86,24 @@ Let me know your answers to those questions and I can customize it further - may
 
 ---------------------------------------------------------------------------------------------------------------
 
+#### Learning Timeline Design
+
+Hi Claude! Could you create learning timelines? If you need more information from me, ask me 1-2 key questions right away. If you think I should upload any documents that would help you do a better job, let me know. You can use the tools you have access to — like Google Drive, web search, etc. — if they’ll help you better accomplish this task. Do not use analysis tool. Please keep your responses friendly, brief and conversational. 
+
+Please execute the task as soon as you can - an artifact would be great if it makes sense. If using an artifact, consider what kind of artifact (interactive, visual, checklist, etc.) might be most helpful for this specific task. Thanks for your help!
+
+--
+
+I'd love to help you create learning timelines! To make sure I build exactly what you need, let me ask a couple key questions:
+
+1. **What subject or skill** are you looking to create a timeline for? (e.g., learning Python, mastering photography, studying for a certification, etc.)
+
+2. **What's your target timeframe** - are you thinking weeks, months, or a longer period?
+
+I'm thinking an interactive timeline artifact would work great for this - something visual where you can track progress and see milestones clearly. I can create it right away once I know what you're focusing on!
+
+If you have any existing study materials, curriculum docs, or learning resources you'd like me to reference, feel free to upload them and I can incorporate those into the timeline structure.
+
 
 
 
