@@ -4,8 +4,8 @@
 
 # Claude
 
-
-# Academic Paper Summarizatiom Request
+----------------------------------------------------------------------------------------------------------------------------
+#### Academic Paper Summarizatiom Request
 
 Hi Claude! Could you summarize my academic papers? If you need more information from me, ask me 1-2 key questions right away. If you think I should upload any documents that would help you do a better job, let me know. You can use the tools you have access to — like Google Drive, web search, etc. — if they’ll help you better accomplish this task. Do not use analysis tool. Please keep your responses friendly, brief and conversational. 
 
@@ -13,7 +13,17 @@ Please execute the task as soon as you can - an artifact would be great if it ma
 
 
 
+---
 
+I'd be happy to help summarize your academic papers! To do the best job, I need to know:
+
+1. **Where are your papers located?** Are they in your Google Drive, or would you prefer to upload them directly to our chat?
+
+2. **What type of summary are you looking for?** A brief overview of each paper, key findings across all papers, or something more specific like research themes/methodologies?
+
+I don't currently have access to Google Drive or other internal tools in this conversation, so uploading the papers directly would be the most reliable approach. Once I can access your papers, I'll create a well-organized summary artifact that you can easily reference and share!
+
+---------------------------
 
 
 
