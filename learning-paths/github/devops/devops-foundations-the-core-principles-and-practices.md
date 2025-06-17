@@ -132,6 +132,8 @@ Application lifecycle phases include planning, development, delivery, and operat
 
 *Screenshot of the DevOps and Application Lifecycle.*
 
+![](https://learn.microsoft.com/en-us/training/wwl-azure/discover-devops/media/5-devops-lifecycle.png)
+
 ### Planning
 
 The planning phase involves reviewing customer needs in order to outline and define features and capabilities of the software to be developed. Such software can range from individual microservices to portfolios consisting of multiple products. The outcome defines software requirements, scope, and milestones for the application's development and deployment. From the DevOps perspective, the primary considerations during this phase include agility, customer-centric focus, alignment, and visibility.
@@ -249,3 +251,60 @@ The main takeaways from this module are:
 * DevOps brings significant value to organizations by accelerating time to market, enabling agility and responsiveness, promoting stability and reliability, and minimizing mean time to recovery.
 
 * DevOps practices optimize application lifecycle management, impacting every phase from planning to operations, with security considerations accounted for throughout each phase.
+
+
+
+
+# 2 Plan with DevOps
+
+Plan your software development projects agilely using GitHub Projects boards. You'll facilitate collaboration, shared responsibility, continuous learning, and optimization through version control, continuous integration and continuous testing, and Infrastructure as Code.
+
+
+# 2.1 Introduction
+
+DevOps influences the entire application lifecycle starting with the planning phase.
+
+Imagine that you work for a software development company in the retail industry. Your company is planning to migrate an online store from an old app to a new app to stay competitive in the market. The development and operations teams are working in silos, with little collaboration and communication, and lack of accountability, which has made planning your project more difficult. To address these issues, your organization decides to adopt a DevOps approach to build mutual respect among teams, set clearly defined roles and responsibilities, become agile, and implement practices that improve collaboration and communication.
+
+In this module, learn how to foster a DevOps culture in an organization by promoting collaboration, transparency, shared responsibility, and continuous learning. You'll learn about the importance of an Agile approach to software development and project management as part of DevOps, the characteristics of different agile frameworks, fundamental DevOps practices such as version control, continuous integration, continuous testing, continuous delivery, continuous monitoring, continuous security, and Infrastructure as Code, and how GitHub Projects can facilitate the planning of your projects.
+
+By the end of this module, you'll have a clear understanding of the principles, practices, and values of DevOps and how they can be applied to optimize application lifecycle management in every phase from planning to operations.
+
+
+# 2.2 Foster DevOps culture
+
+
+In order to fully realize DevOps benefits, organizations need to make a conscious effort of fostering the DevOps culture among their teams. This involves promoting collaboration, automation, and a mindset of continuous improvement, which ultimately will lead to faster, more reliable, and customer-centric software delivery. Such effort would be essential in our sample scenario, where the organization just started exploring the option to adopt DevOps practices. However, changing a corporate culture is a challenging undertaking. In this unit, you'll review a set of recommendations that should facilitate addressing this challenge.
+
+## How should organizations foster DevOps culture?
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/plan-with-devops/media/2-foster-devops-culture.png)
+
+Given the core DevOps culture elements, there are many actions that organizations can take to develop and foster their internal DevOps culture:
+
+* **Build mutual respect within and between its teams**: Teams should operate by using a code of ethics based on mutual respect and blameless culture. Teams should take collaborative ownership of any issues encountered during software delivery and identify improvement opportunities rather than looking for a culprit.
+
+* **Clearly define roles and responsibilities of each individual team**: Team decision-making should be democratic, but structured to ensure that decisions are made efficiently. When there are differing opinions about a situation, someone must be responsible for making the final decision based on the evidence that's presented.
+
+* **Facilitate continuous learning and improvement**: Organizations should establish architecture review boards and centers of excellence to develop and maintain their best practices in the areas of development, operations, and security. Team structure should ensure that everyone is a specialist in their function and a generalist in all other functions so that team members can support each other when needed.
+
+* **Commit to optimization**: Business and customer-driven needs should be the primary factors that determine the overall DevOps strategy. The teams need to regularly review their standard operating procedures, apply creative thinking, and seek areas of improvement.
+
+* **Embrace safe experimentation**: Organizations should develop means for testing and evaluating new functionality in isolation from the production environment and delivering innovative solutions in compliance with safe deployment practices.
+
+Exemplifying these recommendations, Microsoft has a well-established live site culture that is based on the principles of DevOps. The company has a strong focus on customer satisfaction and operational excellence, and it has a culture of continuous learning and improvement. Key aspects of Microsoft's live site culture:
+
+* Learn once and share.
+* Drive with data.
+* Automate everything.
+* Use telemetry to drive decisions.
+* Embrace failure.
+* Root cause is key.
+* Lock down the environment.
+* Monitor everything.
+* Plan for scale.
+* Live site first.
+* Detect before customers.
+* Configuration as code.
+
+
