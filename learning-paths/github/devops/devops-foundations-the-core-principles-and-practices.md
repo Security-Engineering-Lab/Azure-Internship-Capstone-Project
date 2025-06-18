@@ -593,7 +593,7 @@ The main takeaways from this module are that fostering a DevOps culture requires
 Streamline updates to your software development projects by applying version control with Git and GitHub. Your software lifecycle improves through the implementation of continuous integration, shift-left testing, and shift-left security.
 
 
-# 2.1 Introduction
+# 3.1 Introduction
 
 Version control and source control are essential practices in DevOps, particularly in the development phase, enabling continuous integration and infrastructure as code.
 
@@ -607,7 +607,7 @@ In this module, learn about the principles and benefits of version and source co
 By the end of this module, you'll have a clear understanding of version control and source control principles, the usage of Git and GitHub for managing software development projects, the importance of continuous integration, and the shift-left approach for testing and security in DevOps.
 
 
-# 2.2 Explore source control and version control
+# 3.2 Explore source control and version control
 
 The use of source and version control is a fundamental DevOps practice. It's also a prerequisite for such practices as continuous integration and infrastructure as code, both of which are crucial to reaching the full DevOps potential. The organization in our sample scenario should review its current collaborative software development strategy and transition to a distributed version control model such as Git, especially considering its plans to use GitHub for its software lifecycle management. This, however, requires sound understanding of the version and source control principles and their benefits, which we'll cover here.
 
@@ -633,7 +633,7 @@ Version control keeps track of changes to files within its scope of management. 
 
 * **Automation**: Version control is an essential part of continuous integration and automated deployments. Automated build and testing can be triggered automatically whenever a new version of the code is pushed to the version control repository or merged with the main branch. Different versions of the code can be deployed into different environments.
 
-# 2.3 Explore version control using Git
+# 3.3 Explore version control using Git
 
 There are different types of version control systems (VCS), but generally they can be categorized as centralized and distributed. In recent years (partially due to the growing popularity of DevOps), the latter category gained significant popularity, with Git becoming the de facto standard in modern software development. This particular VCS would be the most suitable choice for the organization in our sample scenario, especially considering its intention to use GitHub as the target platform for its DevOps transition. In this unit, explore the use of Git as version control.
 
@@ -706,7 +706,7 @@ As described earlier, Git is a multi-platform, open-source DVCS that facilitates
 **Branch protection**: enforcing conditions that must be satisfied before a merge can take place (such as, for example, completed pull request reviews).
 
 
-# 2.4 Explore GitHub flow
+# 3.4 Explore GitHub flow
 
 GitHub flow illustrates how GitHub can add value to the traditional Git-based collaborative software development. Its purpose is to streamline updates to GitHub-hosted projects by providing a prescriptive guidance on the process of applying changes to the project's repository. The organization in our sample scenario would likely benefit from incorporating GitHub Flow into their DevOps practices, especially considering their lack of experience in using Git-based repositories. In this unit, review the sequence of steps that represent the most common use case of GitHub flow.
 
@@ -735,7 +735,7 @@ GitHub flow consists of the following steps:
 8. **Deleting the branch**. Once the merge is complete, you can delete the branch you created. This helps minimize the size of the repository and prevents an accidental use of stale branches.
 
 
-# 2.5 Explore Continuous Integration
+# 3.5 Explore Continuous Integration
 
 Continuous integration (CI) is one of the most fundamental DevOps elements. It promotes collaboration, contributes to early detection of code quality issues, and benefits the streamlined development process. It also serves as the foundation of continuous delivery and deployment. By employing the CI practices, the organization described in our sample scenario will be able to eliminate the manual effort involved in building and testing its applications, effectively expediting their delivery to their users. To help you gain full appreciation of CI benefits, we'll describe them in this unit.
 
@@ -755,7 +755,7 @@ The primary benefits associated with continuous integration are based on the gen
 
 
 
-# 2.6 Explore shift-left testing
+# 3.6 Explore shift-left testing
 
 
 Testing in application lifecycle management is essential to maximize code quality and minimize operational risk associated with deploying and updating software. The term shift-left in this context conveys the idea of moving testing activities as early as possible in the development phase. The organization in our sample scenario should consider incorporating this approach into its DevOps strategy in order to minimize the current security and stability issues. In this unit, review different types of tests that could be implemented in this manner and then examine their implementation methods.
@@ -777,7 +777,7 @@ Software development incorporates a wide range of test types, but those of a par
 **Acceptance tests**: These tests determine whether a software product meets the business requirements and is ready for a delivery to its consumers. Acceptance testing isn't suitable for the shift-left strategy, but it might be possible to incorporate some of its elements early in the software development lifecycle. For example, acceptance criteria and user stories, which are essential components of acceptance testing, should be introduced early in the development process. This facilitates collaboration between development teams, product owners, and project stakeholders. In addition, software consumers and project stakeholders should be engaged in the earlier testing phases in order to share their feedback. This might involve using such methods as alpha or beta testing, usability testing, or early releases, ahead of the formal acceptance testing.
 
 
-# 2.7 Explore shift-left security
+# 3.7 Explore shift-left security
 
 The *shift-left* approach is recommended not only in regard to testing. The same idea extends into the realm of security. The principles of DevSecOps are meant to convey the significance of incorporating security into every phase of DevOps (starting with planning and development), in the manner sometimes referred to as *Continuous Security*. The organization described in our sample scenario is well-aware of the implications of ignoring these principles. In this unit, examine the meaning of the *shift-left* approach to security and the recommended ways to implement it.
 
@@ -790,7 +790,7 @@ In the context of security, shift-left translates into introducing security acti
 Continuous monitoring, which is part of continuous security, is another element suitable for the shift-left approach. Its implementation involves applying logging, monitoring, and incident response mechanisms from the beginning of development.
 
 
-# 2.8 Implement flow of work with GitHub
+# 3.8 Implement flow of work with GitHub
 
 ## Scenario
 
@@ -822,7 +822,7 @@ https://microsoftlearning.github.io/AZ-2008_DevOps_Foundations_Core_Principles_P
 
 
 
-# 2.9 Module assessment
+# 3.9 Module assessment
 
 Choose the best response for each question.
 
@@ -917,7 +917,7 @@ Choose the best response for each question.
 
 
 
-# 2.10 Summary
+# 3.10 Summary
 
 In this module, you have learned about the importance of source control and version control in DevOps. These practices are crucial for achieving continuous integration and infrastructure as code. Transitioning to a distributed version control model like Git is recommended, especially if using GitHub for software lifecycle management. Git allows for tracking changes, creating branches, merging branches, collaborating with multiple developers, and automating processes like continuous integration and deployment.
 
