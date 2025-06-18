@@ -125,6 +125,8 @@ Drag the View MITRE by threat scenarios slider to the right to view the coverage
 
 Screenshot of the MITRE ATT&CK threat scenarios drop down menu.
 
+![](https://learn.microsoft.com/en-us/training/wwl-sci/what-is-threat-hunting-azure-sentinel/media/mitre-threat-hunting-scenario.png)
+
 ## Simulate possible rules coverage
 
 In the MITRE matrix, simulated coverage refers to detections that are available, but not currently configured, in your Microsoft Sentinel workspace. View your simulated coverage to understand your organization's possible security status, were you to configure all detections available to you.
