@@ -755,5 +755,170 @@ The primary benefits associated with continuous integration are based on the gen
 
 
 
+# 2.6 Explore shift-left testing
 
 
+Testing in application lifecycle management is essential to maximize code quality and minimize operational risk associated with deploying and updating software. The term shift-left in this context conveys the idea of moving testing activities as early as possible in the development phase. The organization in our sample scenario should consider incorporating this approach into its DevOps strategy in order to minimize the current security and stability issues. In this unit, review different types of tests that could be implemented in this manner and then examine their implementation methods.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/develop-with-devops/media/6-shift-left-quality-vision.png)
+
+## What tests should be part of shift-left testing?
+
+Software development incorporates a wide range of test types, but those of a particular interest to us include:
+
+**Unit tests**: These tests focus on the smallest testable parts of an application code, such as individual functions or methods. The objective is to establish whether each unit of code can successfully perform its intended operation in isolation from the rest of the codebase and external dependencies. Such tests should be fully automated, quick (complete within 30 seconds), and provide full code coverage (which basically means that all unit tests should collectively test the entire codebase). Unit testing is suitable for the shift-left approach. We recommend applying it to all code as early in the development cycle as possible, preferably at the beginning of the programming phase.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/develop-with-devops/media/6-test-vision.png)
+
+**Smoke tests**: These tests are meant to assess the core functionality of an application in a test environment. While they test the actual application (rather than its individual, isolated components, as unit tests do), their purpose is to determine if the application build or deployment is sufficiently stable to warrant more in-depth testing. However, they don't verify interoperability between apps. As with unit tests, they should be fully automated and relatively quick (user interaction can be simulated by using browser automation tools and user interface automation frameworks). The term smoke test is meant to convey the idea of smoke indicating a major issue (fire) that should be addressed as soon as possible. Smoke testing should also be implemented early in the development cycle, preferably as soon as a version of the software providing its core functionality is available. This applies to both the application build and deployment phases.
+
+**Integration tests**: These tests validate interaction between different application components. Unlike unit tests, they can take a considerable amount of time to complete. The extended duration of these tests is commonly used as an argument for running them early in the software development lifecycle. In general, you should consider integration tests in scenarios for which unit or smoke tests aren't suitable. However, the recommendation is to schedule them to execute in regular intervals. This approach offers a reasonable compromise between a potential delay in detecting integration issues and an extra wait time required to complete them.
+
+**Acceptance tests**: These tests determine whether a software product meets the business requirements and is ready for a delivery to its consumers. Acceptance testing isn't suitable for the shift-left strategy, but it might be possible to incorporate some of its elements early in the software development lifecycle. For example, acceptance criteria and user stories, which are essential components of acceptance testing, should be introduced early in the development process. This facilitates collaboration between development teams, product owners, and project stakeholders. In addition, software consumers and project stakeholders should be engaged in the earlier testing phases in order to share their feedback. This might involve using such methods as alpha or beta testing, usability testing, or early releases, ahead of the formal acceptance testing.
+
+
+# 2.7 Explore shift-left security
+
+The *shift-left* approach is recommended not only in regard to testing. The same idea extends into the realm of security. The principles of DevSecOps are meant to convey the significance of incorporating security into every phase of DevOps (starting with planning and development), in the manner sometimes referred to as *Continuous Security*. The organization described in our sample scenario is well-aware of the implications of ignoring these principles. In this unit, examine the meaning of the *shift-left* approach to security and the recommended ways to implement it.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/develop-with-devops/media/7-shift-security-left.png)
+
+## What is shift-left security?
+
+In the context of security, shift-left translates into introducing security activities as early in the software lifecycle processes as possible. This starts with incorporating security in software design by using threat modeling in order to identify potential future threats, assess risks, and define mitigation strategies. The process continues throughout software development by implementing a range of security-related activities such as code reviews and automated security testing. Code reviews should include security-focused assessments, targeting security flaws, adherence to coding standards, and potential vulnerabilities. Automated security testing involves such tasks as static application security testing (SAST), dynamic application security testing (DAST), and software composition analysis (SCA), which are integrated into continuous integration/continuous deployment (CI/CD) pipelines.
+
+Continuous monitoring, which is part of continuous security, is another element suitable for the shift-left approach. Its implementation involves applying logging, monitoring, and incident response mechanisms from the beginning of development.
+
+
+# 2.8 Implement flow of work with GitHub
+
+## Scenario
+
+Remember this module's scenario in which you're working for a software development company in the retail industry that is planning to migrate an online store from an old app to a new app called eShopOnWeb. Since you have decided to use Git and GitHub to facilitate application lifecycle management, this lab gives you the opportunity to start by forking an existing repo, configuring it, create an issue, creating a branch, updating files in the branch, creating and merging a pull request, closing the issue, and validate the changes.
+
+## Objectives
+
+In this lab, you will:
+
+* Implement and manage repos with GitHub
+
+## Prerequisites
+
+* Complete the first lab in this series, Lab 01 - Agile Planning and Management using GitHub.
+
+## Requirements
+
+* Use the same GitHub account you created for the purpose of the first lab.
+* This lab requires **Microsoft Edge** or an Azure DevOps-supported browser.
+* **GitHub account:** If you don't already have a GitHub account that you can use for this lab, create one by following the instructions available in the article Creating an account on GitHub.
+
+## Exercises
+
+During this lab, you'll complete the following exercises:
+
+* Exercise 1: Implement and manage repos with GitHub
+
+https://microsoftlearning.github.io/AZ-2008_DevOps_Foundations_Core_Principles_Practices/Instructions/Labs/02-implement-manage-repositories-using-github.html
+
+
+
+# 2.9 Module assessment
+
+Choose the best response for each question.
+
+*AI-generated content The question and answer choices in this module assessment were created with AI.*
+
+**Provide feedback**
+
+## 1.
+**How does collaboration differ in centralized versus distributed version control systems?**
+
+- ✅ **Distributed systems allow changes to be committed locally before synchronization.**
+- Centralized systems enable disconnected authoring of code.
+- Distributed systems prevent changes to checked-out files by others.
+
+## 2.
+**Which feature of GitHub allows developers to propose changes and request their review before merging?**
+
+- Commit
+- Clone
+- ✅ **Pull requests**
+
+## 3.
+**What is a unique characteristic of centralized version control systems compared to distributed ones?**
+
+- Each developer has a fully functional local copy of the repository.
+- ✅ **Requires network connectivity for updates and history retrieval.**
+- Branches are created independently in local copies.
+
+## 4.
+**In a distributed version control system, what is a primary benefit of having local repositories for each team member?**
+
+- Ensures all changes are immediately visible to all team members.
+- ✅ **Ability to work offline without network connectivity.**
+- Simplifies the branching and merging process.
+
+## 5.
+**What is the role of the 'main' branch in GitHub workflow?**
+
+- ✅ **The 'main' branch serves as the primary branch where final, reviewed code is merged and maintained.**
+- It is a temporary branch used for feature development and testing.
+- The 'main' branch is used to store automated test results and logs.
+
+## 6.
+**In GitHub, what does it mean to 'merge a branch'?**
+
+- Creating a duplicate of a branch for backup purposes.
+- Deleting a branch after development is complete.
+- ✅ **Combining changes from one branch into another, typically integrating them into the main branch.**
+
+## 7.
+**What is the primary role of the 'main' branch in a Git repository?**
+
+- To automatically merge all incoming changes from feature branches.
+- ✅ **To serve as the default branch containing the stable codebase for production releases.**
+- To store experimental code that is not yet ready for production.
+
+## 8.
+**During a code review in GitHub, a developer notices that a proposed change breaks the build. What GitHub feature should they use to propose modifications before merging the branch?**
+
+- Push
+- ✅ **Pull request**
+- Fork
+
+## 9.
+**Which concept ensures multiple developers can work on the same codebase simultaneously without conflict in Git?**
+
+- Commit
+- Staging area
+- ✅ **Branching**
+
+---
+
+## Answer Explanations:
+
+**1.** In distributed systems, developers can commit changes to their local repository and synchronize later, unlike centralized systems that require immediate network connectivity.
+
+**2.** Pull requests are GitHub's mechanism for proposing changes and requesting code reviews before merging.
+
+**3.** Centralized systems require network connectivity for most operations, while distributed systems can work offline.
+
+**4.** Local repositories in distributed systems allow developers to work without network connectivity.
+
+**5.** The main branch serves as the stable, production-ready branch where reviewed code is integrated.
+
+**6.** Merging combines changes from one branch into another, typically integrating feature branches into main.
+
+**7.** The main branch contains the stable codebase that's ready for production releases.
+
+**8.** Pull requests allow developers to propose and discuss changes before merging, including suggesting modifications.
+
+**9.** Branching allows multiple developers to work on different features simultaneously without conflicts.
+
+
+
+# 2.10 Summary
+
+In this module, you have learned about the importance of source control and version control in DevOps. These practices are crucial for achieving continuous integration and infrastructure as code. Transitioning to a distributed version control model like Git is recommended, especially if using GitHub for software lifecycle management. Git allows for tracking changes, creating branches, merging branches, collaborating with multiple developers, and automating processes like continuous integration and deployment.
+
+The main takeaways from this module are that version control systems can be categorized as centralized or distributed, with Git being the most popular choice for DevOps environments. GitHub is a cloud-based service that hosts Git repositories and provides collaboration tools. The GitHub flow process helps streamline updates to GitHub-hosted projects. Continuous integration is a key component of DevOps that promotes collaboration and early detection of code quality issues. Shift-left testing involves moving testing activities as early as possible in the development phase to improve code quality and minimize operational risk. It includes unit tests, smoke tests, integration tests, and acceptance tests. Shift-left security is also important, integrating security activities early in the software lifecycle and continuing throughout development.
