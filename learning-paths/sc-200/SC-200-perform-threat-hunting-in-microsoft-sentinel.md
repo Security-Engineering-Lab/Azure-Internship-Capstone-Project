@@ -141,6 +141,9 @@ Select items in the Simulated rules drop-down menu to simulate your organization
 
 For example, select Hunting queries, and then select Hunting queries View link to jump to the Microsoft Sentinel Hunting page. There, you see a filtered list of the hunting queries that are associated with the selected technique, and available for you to configure in your workspace.
 
+![](https://learn.microsoft.com/en-us/training/wwl-sci/what-is-threat-hunting-azure-sentinel/media/mitre-simulated-rules.png)
+
+
 ## Use the MITRE ATT&CK framework in analytics rules and incidents
 
 Having a scheduled analytical rule with MITRE techniques applied running regularly in your Microsoft Sentinel workspace enhances the security status shown for your organization in the MITRE coverage matrix.
