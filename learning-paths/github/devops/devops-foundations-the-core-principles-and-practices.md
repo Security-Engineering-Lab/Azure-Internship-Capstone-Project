@@ -1033,5 +1033,124 @@ CD practices feature several delivery patterns for progressive exposure. Their p
 ![](https://learn.microsoft.com/en-us/training/wwl-azure/deliver-with-devops/media/4-dark-launches.png)
 
 
+# 4.5 Explore continuous delivery with GitHub Actions
+
+GitHub Actions provide the mechanism for implementing software delivery workflows by using the capabilities of the GitHub platform. This would be the most optimal CI/CD approach for the organization in our sample scenario, considering its plans to use GitHub for its DevOps journey. In this unit, you'll learn about using GitHub Actions to build and run CI/CD workflows.
+
+## What are GitHub Actions?
+
+https://youtu.be/cP0I9w2coGU
+
+In the context of GitHub, the term actions actually have a dual meaning. The first one (capitalized Actions) represents the GitHub service, which provided the ability to implement CI/CD workflows. The second one (lower case actions) designates reusable units that can be included in workflows to deliver a specific functionality, such as running scripts and executables, building and uploading artifacts, or setting up access to an Azure subscription.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/deliver-with-devops/media/5-continuous-delivery-github.png)
+
+## What are the main components of GitHub Actions?
+
+The key components of GitHub Actions include:
+
+**workflow**: a sequence of steps stored in a YAML-formatted file. Workflows execute the steps once they're triggered either manually or (more frequently) automatically by repository-related activities, such as pushes or branch merges.
+
+**job**: a top element of a workflow. Jobs within a workflow can run in parallel or sequentially.
+
+**step**: a top element within a job. Each step is a task or action that performs a specific activity, such as running a script or building an artifact.
+
+**action**: a prebuild or custom-developed activity (as mentioned earlier). GitHub provides a marketplace where you can find a wide range of prebuilt actions.
+
+**variable**: a named value that allows you to store and reuse data across steps in a workflow. You can create your own custom variables or use any of the predefined, default environment variables automatically set within each workflow.
+
+**secret**: an encrypted variable that can be used to store sensitive data.
+
+## How to create a GitHub Actions workflow?
+
+To create a GitHub Actions workflow, use the following steps:
+
+1. **Create a repository**. To implement GitHub Actions workflow, you'll need a GitHub account and a repository. By default, a new repository includes the default branch, typically named main.
+
+2. **Create a .github/workflows directory**. GitHub Actions workflows should reside in the .github/workflows directory in the repository root.
+
+3. **Create a YAML file**. GitHub Actions workflow has the YAML format. Its name is arbitrary, but the extension is expected to be set to .yml.
+
+4. **Define the workflow in the YAML file and save the changes**. The YAML file needs to include the workflow definition.
+
+5. **Commit the saved file to the repository**. To finalize the workflow changes, you need to execute commit, as with any file that is part of the repository. If you decide to author a workflow on your local computer (rather than by using the GitHub web interface), you would clone the repository after you create it, apply and commit changes locally, and then push them to GitHub.
+
+Here's a simple example of a GitHub Actions workflow that displays a message Hello from GitHub Actions! once executed.
+
+```yml
+name: Simple GitHub Actions workflow
+
+on: [push]
+
+jobs:
+  say_hello:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Run Build Script
+      run: |
+        echo "Hello, GitHub Actions!"
+```
+
+The first line of the workflow defines its name, which is displayed on the repository's Actions tab in the GitHub web interface. The on: [push] line designates the event, which triggers the workflow run (in this case, a push to any branch in the workflow's repository).
+
+The workflow consists of a single job named say_hello, as indicated by the content following the jobs: line. The next line (runs-on: ubuntu-latest) determines the type of operating system that should be used to run the job. The choice is dependent on the tasks the job contains and, in this case, the job would run as well on any Windows-based operating system.
+
+The job consists of two steps, as indicated by the content following the steps: line. The step syntax supports an optional name attribute, which might help understand the step's purpose when reviewing the workflow runs. The remainder of the syntax is dependent on the type of action that a given step is meant to carry out. In this example, the first step is checking out the current repository (which downloads the content of the repository to the system where the job is running), while the second one runs the echo command, which displays a friendly message.
+
+To integrate the CI/CD functionality into GitHub Actions workflows, you would add a series of steps (in one or more jobs) that perform automated build, test, and deployment actions. Once the workflow execution is triggered, you could track its progress by navigating to the "Actions" tab in your GitHub repository.
+
+> **Note**
+>
+> You will have a chance to work with more meaningful examples of GitHub Actions workflows that illustrate CI/CD integration in the lab of this module.
+
+
+
+# 4.6 Implement CI/CD with GitHub Actions and IaC with Bicep
+
+## Scenario
+
+Remember this module's scenario in which you work for a software development company in the retail industry that wants to ensure that the release process of a new version of their online store application is efficient and reliable while minimizing the risk of errors. Since you have decided to use GitHub to facilitate application lifecycle management, this lab gives you the opportunity to fork and review the GitHub repo containing the source code of a web app, a GitHub Actions workflow, and a Bicep template. Additionally, you'll be able to configure the target environment and validate the Infrastructure as Code (IaC) and CI/CD functionality.
+
+Please note that in the previous lab, you configured GitHub Pages, which means you have already implemented continuous deployment, potentially without even realizing it. GitHub Pages uses GitHub Actions in the background to perform automated deployments following any commits to the main branch. You can verify this by navigating to the Actions tab on the main page of the forked repo, Spoon-Knife. Now, you will enhance this functionality. Specifically, you will use a custom-developed GitHub Actions workflow with a Bicep template to provision a couple of Azure App Service web apps in different Azure regions and deploy a custom .NET web app into both of them.
+
+## Objectives
+
+In this lab, you will:
+
+* Prepare the Azure subscription for the lab
+* Implement Infrastructure as Code (IaC) and CI/CD with GitHub Actions and a Bicep template
+
+## Prerequisites
+
+* Use the same GitHub account you created for the purpose of the first lab.
+* Complete the first lab in this series, Lab 01 - Agile Planning and Management using GitHub.
+* Complete the second lab in this series, Lab 02 - Implement Flow of Work with GitHub.
+
+## Requirements
+
+* This lab requires **Microsoft Edge** or an Azure DevOps-supported browser.
+* **GitHub account:** If you don't already have a GitHub account that you can use for this lab, create one by following the instructions available in the article Creating an account on GitHub.
+* An **Azure subscription** to which you have at least the **Contributor-level access**. If you don't have an Azure subscription, you can sign up for a free trial.
+
+## Exercises
+
+During this lab, you'll complete the following exercises:
+
+* Exercise 0: Prepare the Azure subscription for the lab
+* Exercise 1: Implement Infrastructure as Code (IaC) and CI/CD with GitHub Actions and a Bicep template
+
+https://microsoftlearning.github.io/AZ-2008_DevOps_Foundations_Core_Principles_Practices/Instructions/Labs/03-implement-ci-cd-with-github-actions-and-iac-with-bicep.html
+
+
+# 4.7 Summary
+
+In this module, you have learned about two important concepts in DevOps: continuous integration (CI) and continuous delivery (CD). CI focuses on building and testing software artifacts, while CD automates the process of delivering these artifacts to users. Continuous delivery involves automating the generation of software releases, ensuring they're deployable, and making them available to consumers. It aims to minimize the time to deploy and mitigate issues. Continuous delivery is an iterative process that involves transitioning the latest software release through different environments for testing and validation.
+
+The main takeaways from this module are that continuous delivery offers several benefits, including accelerated release cycles, increased resiliency, improved collaboration, and efficient resource utilization. It allows for faster deployment of software releases and enables organizations to gather customer feedback gradually. Progressive exposure techniques, such as deployment rings, blue/green deployments, feature flags, and dark launches, contribute to increased resiliency in continuous delivery practices. Additionally, GitHub Actions are a powerful tool for implementing software delivery workflows on the GitHub platform, allowing you to build and run CI/CD workflows using various components.
+
 
 
