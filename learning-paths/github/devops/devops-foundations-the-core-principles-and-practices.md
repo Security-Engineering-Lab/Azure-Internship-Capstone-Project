@@ -922,3 +922,116 @@ Choose the best response for each question.
 In this module, you have learned about the importance of source control and version control in DevOps. These practices are crucial for achieving continuous integration and infrastructure as code. Transitioning to a distributed version control model like Git is recommended, especially if using GitHub for software lifecycle management. Git allows for tracking changes, creating branches, merging branches, collaborating with multiple developers, and automating processes like continuous integration and deployment.
 
 The main takeaways from this module are that version control systems can be categorized as centralized or distributed, with Git being the most popular choice for DevOps environments. GitHub is a cloud-based service that hosts Git repositories and provides collaboration tools. The GitHub flow process helps streamline updates to GitHub-hosted projects. Continuous integration is a key component of DevOps that promotes collaboration and early detection of code quality issues. Shift-left testing involves moving testing activities as early as possible in the development phase to improve code quality and minimize operational risk. It includes unit tests, smoke tests, integration tests, and acceptance tests. Shift-left security is also important, integrating security activities early in the software lifecycle and continuing throughout development.
+
+
+# 4 Deliver with DevOps
+
+Build and run continuous integration and continuous delivery workflows using GitHub Actions. Your workflows will have accelerated release cycles, increased resiliency, improved collaboration and reusability, and infrastructure as code.
+
+#### Learning objectives
+Upon completion of this module, you'll be able to:
+- Define the concept of continuous delivery.
+- Describe the concept and implementation methods of IaC.
+- Review the progressive exposure techniques and deployment practices.
+- Explore DevOps shift-right testing scenarios.
+- Describe how to implement continuous delivery with GitHub Actions.
+
+
+# 4.1 Introduction
+
+Continuous integration and continuous delivery (CI/CD) are important concepts in DevOps that focus on building, testing, and automating the delivery of software artifacts.
+
+Imagine that you work for a software development company in the retail industry that is preparing to release a new version of their online store application. The company wants to ensure that the release process is efficient, reliable, and minimizes the risk of errors. Therefore, you decide to follow a DevOps approach and use GitHub for software lifecycle management. By implementing CI/CD, the company can automate the build, test, and deployment processes, reducing manual effort and improving the overall quality of the software. It allows the company to deliver new features and bug fixes to their users quickly and consistently.
+
+In this module, learn about continuous delivery (CD) and its benefits such as accelerated release cycles, increased resiliency, improved collaboration, and reusability, continuous integration (CI), and its relationship with CD, infrastructure as Code (IaC) and its principles, applying CI/CD practices to IaC deployment, and progressive exposure techniques in continuous delivery. Additionally, you'll be introduced to GitHub Actions and its components, including how to create a GitHub Actions workflow, to support the implementation of CI/CD.
+
+By the end of this module, you'll be able to apply CI/CD practices to your software development workflows and improve the efficiency and reliability of your software releases.
+
+
+# 4.2 Explore continuous delivery
+
+Continuous integration (CI) and continuous delivery (CD) are closely related DevOps concepts, representing two distinct stages of the software delivery process. As you know from the previous module, the purpose of CI is to build and test software artifacts. CD automates the process of delivering these artifacts to their intended recipients. By implementing CD, organizations such as the one described in the sample scenario, are able to eliminate the manual effort involved in application deployment. In this unit, explore the characteristics and benefits of CD.
+
+## What is continuous delivery?
+
+Continuous delivery comprises the practices, which automate generation of software releases, ensure they are in a deployable state, and make them available to their consumers. Its focus is on minimizing the *time to deploy* and *time to mitigate (TTM)*, also known as *time to remediate (TTR)*. The latter refers to scenarios where a newly released version of the application reaches the production environment and needs to be rolled back.
+
+Continuous delivery tends to be an iterative process, where the same artifact representing the latest software release transitions through several environments, which are dedicated, for example, to user acceptance testing, staging, and production. This provides ample opportunities to validate its functionality and stability.
+
+It's worth noting that DevOps nomenclature includes two closely related terms, which have similar names and the same acronym – continuous delivery and continuous deployment. Both deal with automating and streamlining the software delivery process. The primary distinction between them is that the latter strives to implement full automation, including the production environment, while in case of the former, that final delivery requires a manual approval.
+
+Akin to CI, automation is based on release definitions created by developers and implemented in the repository hosting platform. For example, GitHub offers for this purpose GitHub Actions workflow, while Azure DevOps relies on Azure Pipelines.
+
+## What are the benefits of continuous delivery?
+
+Benefits associated with continuous delivery are direct results of its automation and the shift-left approach. The most relevant ones include:
+
+* **Accelerated release cycles**: Organizations are able to increase the delivery speed of new features, enhancements, and bug fixes, which translates into reduced time-to-market, ultimately benefiting customers.
+
+* **Increased resiliency**: Automated testing allows for detecting issues early in the delivery process. Automated deployment ensures consistency across environments and minimizes the potential impact of human errors. Automation also tends to considerably simplify the rollback process in case there's a need to revert to a previous software version. Incremental rollout (which we'll cover later in this module) facilitate discovery of any potential issues before they might have a wider scale impact. Rapid feedback loops reduce response time if an issue is discovered.
+
+* **Improved collaboration**: CD promotes interaction across development, operations, and security teams by integrating with CI, resulting in one cohesive process encompassing build, testing, and delivery.
+
+* **Efficient resource utilization**: Automation tends to minimize time spent on manual, repetitive, and time-consuming tasks, resulting in optimized usage of human resources.
+
+
+# 4.3 Explore Infrastructure as Code
+
+Infrastructure as Code is an integral component of modern software development and operations practices. It involves the use of programming methods to provision and manage infrastructure services. IaC is beneficial in cloud-based environments, such as the one described in the sample scenario. However, any organization that relies on computing assets for its revenue can take advantage of its capabilities. In this unit, you'll learn about the main principles of IaC and the most common techniques of implementing these principles.
+
+## What are the main principles of IaC?
+
+While individual implementations of IaC may differ significantly, they all tend to follow a set of common principles, including:
+
+**Version control**: IaC defines infrastructure components, including compute, storage, and network resources by using code. Such code typically resides in a VCS, which facilitates tracking changes to infrastructure in the same manner as tracking software versions.
+
+**Declarative syntax**: IaC relies on declarative syntax in order to describe the desired state of the infrastructure. This contrasts with a more traditional imperative syntax, which involves writing code that defines a step-by-step procedure leading to that state. The declarative approach tends to be more efficient for many reasons. For one, it relies on the intelligence of the platform hosting the infrastructure components, minimizing the possibility of programming errors or inefficiencies. In addition, it ensures idempotence.
+
+**Idempotence**: This term designates the characteristic of an action where the outcome is always the same, regardless of the number of times the action is performed. Since the declarative syntax describes the end state only, using it guarantees that each code execution will always yield the same result. This ensures the consistency of the target environment and precludes the possibility of unintended side effects of intermediary changes.
+
+**Automation**: The use of code facilitates automated provisioning and configuration, enhancing efficiency, consistency, and scalability. This also eliminates the potential impact of manual errors.
+
+**CI/CD integration**: IaC can be (and frequently is) integrated with CI/CD, yielding a comprehensive software delivery strategy by combining infrastructure provisioning, with application build, test, and deployment into one continuous, fully automated sequence.
+
+**Reusability**: IaC promotes the use of reusable code modules, in accordance with the best programming practices. This facilitates development of software libraries consisting of standardized infrastructure building blocks that can be shared across projects. As a result, organizations benefit from increased consistency, simplified maintenance, and minimized duplication of efforts.
+
+## How to implement IaC?
+
+Implementing IaC starts with identifying infrastructure requirements, including compute, storage, and networking components. Details depend largely on the platform hosting that infrastructure and could differ significantly depending, for example, on the use of public or private cloud environments.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/deliver-with-devops/media/3-infrastructure-as-code.png)
+
+The choice of the platform will also have an impact on the choice of the IaC technology and tools. For example, each public cloud provider offers its own set of IaC capabilities. In the case of Microsoft Azure, these capabilities are based on Azure Resource Manager (ARM) and Bicep templates. There are also solutions that offer multicloud support, such as Terraform. The choice of tool determines the type of files and the corresponding directory structure of your projects. This should allow you to set up repositories in the version control system of your choice. VCS repos facilitate tracking infrastructure changes, intra and cross-team collaboration, automation for deployments and rollbacks, as well as integration with CI/CD workflows.
+
+With the repository in place, you should start building an IaC code library, consisting of modules representing building blocks of your future infrastructure deployments. Such blocks could, for example, represent individual servers, networks, or data stores, which you can mix and match in an arbitrary manner to construct multi-resource solutions.
+
+The next step would typically involve integrating your IaC environment with CI/CD workflows. Commonly, this would involve using the same set of repositories, facilitating combining deployment of infrastructure with building, testing, and delivery of the software hosted on that infrastructure. However, the integration should extend to applying CI/CD practices to your IaC deployments. In particular, you should ensure that, as with CI/CD, you utilize development and staging environments, automate testing, implement monitoring and feedback loops, and properly secure your infrastructure code and the IaC processes.
+
+
+# 4.4 Explore progressive exposure techniques
+
+As described in the first unit of this module, continuous delivery offers numerous benefits, including accelerated release cycles, improved collaboration, efficient resource utilization, and increased resiliency. The last of these ties, to some extent, to the ability to deliver new software versions to their intended recipients in a gradual manner. This helps to limit the scope of a negative impact if there is undetected code quality issues and gather customer feedback that might influence the decision to continue with the delivery. The organization in the sample scenario would be able to utilize this capability in order to mitigate its current operational challenges. In this unit, you'll learn about different progressive exposure techniques that contribute to increased resiliency.
+
+## What are progressive exposure techniques?
+
+CD practices feature several delivery patterns for progressive exposure. Their purpose is to minimize potential damage caused by programming errors that CI-based code analysis, reviews, and automated testing failed to uncover (this objective is also commonly referred to as *controlling the blast radius*). The most commonly used techniques include:
+
+* **Deployment rings**: A ring designates a deployment targeting a particular group of users, which is later monitored to determine their experiences. The first deployment ring is sometimes called *canary*, referencing the term *canary in the coal mine* borrowed from the old mining practice of using canaries to warn about elevated levels of carbon monoxide. CD automates transitioning from one ring to the next, although the transition might depend on a manual approval. Such practices might be required in order to comply with regulatory requirements or internal governance rules.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/deliver-with-devops/media/4-deployment-rings.png)
+
+* **Blue/green deployments**: The two colors designate two different versions of the same application, with *blue* representing the current (known as stable) version and *green* representing an updated one (being released). The intention is to have both versions running side-by-side and using load balancing to gradually increase the volume of incoming requests from the *blue* to *green* version. If there's an issue with *green*, the incoming requests can be easily rerouted back to *blue*.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/deliver-with-devops/media/4-blue-green.png)
+
+* **Feature flags** (also referred to as **feature toggles**): A feature flag designates a programming method, which involves placing throughout code conditional statements, which selectively disable or enable certain code segments. The statements are activated by setting a value of a flag, which is typically placed in an external configuration store. Effectively, it's possible to enable or disable new features on an as-needed basis without having to modify or deploy the code.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/deliver-with-devops/media/4-feature-flags.png)
+
+* **Dark launches**: Dark launches represent a deployment strategy that involves deploying new features in an inactive state and enabling them in a controlled manner after deployment. This approach typically relies on the use of feature flags.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/deliver-with-devops/media/4-dark-launches.png)
+
+
+
+
