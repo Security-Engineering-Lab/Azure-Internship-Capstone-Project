@@ -1153,4 +1153,310 @@ In this module, you have learned about two important concepts in DevOps: continu
 The main takeaways from this module are that continuous delivery offers several benefits, including accelerated release cycles, increased resiliency, improved collaboration, and efficient resource utilization. It allows for faster deployment of software releases and enables organizations to gather customer feedback gradually. Progressive exposure techniques, such as deployment rings, blue/green deployments, feature flags, and dark launches, contribute to increased resiliency in continuous delivery practices. Additionally, GitHub Actions are a powerful tool for implementing software delivery workflows on the GitHub platform, allowing you to build and run CI/CD workflows using various components.
 
 
+# 5 Operate with DevOps
 
+Achieve operational excellence and enhance developer experience in your organization through DevOps. Your operational and development practices improve by implementing shift-right testing, observability through performance and security monitoring, Site Reliability Engineering and platform engineering.
+
+#### Learning objectives
+
+Upon completion of this module, you'll be able to:
+
+- Explore the concepts of operational excellence.
+- Review infrastructure and application monitoring solutions.
+- Review infrastructure and application security monitoring solutions.
+- Describe the correlation between SRE and DevOps.
+
+
+# 5.1 Introduction
+
+Operational Excellence in DevOps is the ability to deliver high-quality software products and services faster and more reliably, while minimizing errors, waste, and risks. 
+
+Imagine that you work for a software development company in the retail industry that is experiencing frequent downtime and performance issues with a new online store application. These issues are causing frustration for both the internal development team and the external customers. As a result, the company is losing revenue, and its reputation is being tarnished. 
+
+The management team realizes that they need to improve their operational practices to address these challenges and achieve operational excellence. They decide to adopt DevOps principles and practices to promote efficiency, resiliency, and continuous improvement in their day-to-day operations.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/operate-with-devops/media/1-operate-with-devops.png)
+
+In this module, learn about operational excellence in the context of DevOps and how it can be achieved through practices such as:
+
+- Continuous operations
+- Continuous monitoring
+- Health modeling
+- Reliability engineering
+- Incident management
+- Security integration
+- Shift-right testing
+- Observability
+- Performance monitoring
+- Security monitoring and assessment
+- Site Reliability Engineering (SRE)
+- Platform engineering
+
+Additionally, you learn how to minimize downtime, proactively detect issues, increase resiliency, efficiently respond to incidents, integrate security, and test features in the production environment.
+
+By the end of this module, you'll have a clear understanding of operational excellence in the context of DevOps and how it can help organizations improve their operational practices and address current challenges.
+
+
+
+# 5.2 Explore operational excellence
+
+DevOps practices not only cover software build, testing, and delivery, but they also extend to operational aspects of the organizational life. In particular, DevOps can help in reaching operational excellence by following its principles in day-to-day operations. The organization described in the sample scenario would benefit from adopting this approach in order to address its current challenges. In this unit, learn about the core aspects of operational excellence in the context of DevOps.
+
+## What is operational excellence?
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/operate-with-devops/media/2-monitoring.png)
+
+Operational excellence is a set of practices that promote efficiency, resiliency, and continuous improvement in day-to-day operations. The key aspects of operational excellence overlap to a large extent with DevOps practices such as automation, collaboration, continuous improvement, scalability, and flexibility. However, there are a few that is covered here due to their operational significance. These aspects include:
+
+* **Continuous operations**: targets creating and maintaining an environment where the need for downtime is minimized or even eliminated.
+
+* **Continuous monitoring, observability**: emphasizes the importance of monitoring applications and the underlying infrastructure in real-time. The ultimate objective is to proactively (rather than reactively) detect any impending issues.
+
+* **Health modeling**: involves creating models that represent the expected behavior and performance of a target system under different conditions. This serves as the baseline for detecting any anomalies, which might indicate potential issues.
+
+* **Reliability engineering**: uses chaos engineering and fault injection practices to apply proactive measures that lead to increased resiliency.
+
+* **Incident management**: focuses on efficient incident response and resolution, including well-defined incident management, reliable communication channels, automated remediation, and continuous learning to minimize the possibility of recurring issues.
+
+* **Security integration**: incorporates security practices into the operations lifecycle.
+
+* **Shift-right testing**: uses practices such as dark launching and feature flags in the production environment.
+
+
+
+# 5.3 Explore shift-right testing
+
+As explained earlier in the course, testing in application lifecycle management is essential to maximizing code quality and minimizing operational risk associated with deploying and updating software. This is the reason for applying the *shift-left* approach, which introduces testing activities as early as possible in the development phase. However, there are certain aspects of testing, which aren't effective when carried out in this manner. Instead, to fully serve their purpose, they need to be performed in the production environment. This is referred to as the *shift-right* approach. The organization in our sample scenario would need to use this in order to properly assess the reliability of their systems in combination with fault injection. In this unit, examine this and other criteria in which shift-right testing is justified.
+
+## What are the reasons for shift-right testing?
+
+While the shift-left testing is ideal for unit and smoke testing, it's performed under conditions that typically differ significantly from those applicable to intended delivery targets. Even quality assurance and staging environments rarely fully reflect the complexities of their production counterparts. Effectively, the best way to fully examine the behavior of a workload following its deployment is to test it at that point.
+
+Testing in production provides the following benefits:
+
+* Reflects the actual working conditions, including extra load associated with handling end-user requests.
+* Takes into account factors, which would be difficult to simulate, such as connectivity to external systems.
+* Reflects changes in workload demand over time.
+
+## What are typical shift-right testing scenarios?
+
+While the shift-right testing approach could be justified in many scenarios, there are few in which it's suitable. These scenarios include:
+
+* **Microservices deployments**: the microservices architecture typically consists of a large number of independently developed components. A sheer number of combinations of these services might justify the shift-right testing in order to focus on the scenarios most relevant in the actual production environment (according to their real-life usage).
+
+* **Evaluating impact of network bandwidth and latency conditions**: network conditions tend to be challenging to simulate, so if a workload's performance is highly latency or bandwidth dependent, the shift-right testing might be the most suitable option.
+
+* **User acceptance testing**: the actual users' feedback might be essential to validate the workload's performance and usability.
+
+* **Validation failover procedures in redundant configurations**: fault injection and disaster recovery testing are meant to assess resiliency of production workloads. Fault injection involves intentionally introducing failures into individual components of a workload during its execution in order to identify any weaknesses and mitigate them, increasing the overall reliability.
+
+**Note**
+
+Chaos engineering is another concept in the area of DevOps reliability testing. As with fault injection, it involves simulating failures (in this case, to create a controlled *chaos* in the system being tested). However, its scope is typically broader, targeting the entire system, rather than just its individual components, and its testing scenarios tend to be more comprehensive. Effectively, chaos engineering is typically limited to *canary* environments that have very limited or no production impact.
+
+**Note**
+
+You can use Azure Chaos Studio to implement chaos engineering experiments that target solutions hosted in Microsoft Azure. You will step through an example of such experiments in the lab of this module.
+
+
+# 5.4 Explore observability through performance monitoring
+
+As mentioned earlier in this module, observability is one of the fundamental aspects of operational excellence. Its purpose is to provide insights into the operational status of systems and applications. It involves continuous monitoring and evaluating of that operational status. One of the primary targets of observability is performance. Performance monitoring-based observability could yield significant benefits to any organization that depends on technology for its revenue, including the one described in the sample scenario. In this unit, learn about how these benefits can be realized.
+
+## What is the role of performance monitoring in observability?
+
+In the context of observability, performance monitoring relies on collecting real-time telemetry, such as metrics, logs, and traces to evaluate the overall health of your workloads. Metrics contain quantitative data, logs offer detailed information about events, and traces enable data correlation across distributed systems. To perform the evaluation, you also need to develop a health model, representing the operational status of the workloads under normal working conditions. Performance monitoring uses the health model to detect anomalies, performance bottlenecks, and performance-related issues as soon as they occur.
+
+Data collected through performance monitoring is also essential in incident response. It provides a detailed status of the affected workloads prior to, during, and after the incident, which simplifies troubleshooting and helps minimize *mean time to resolution (MTTR)*. Other metrics that help assess effectiveness of performance monitoring include:
+
+* **Time to detect (TTD)**: measures the time it takes for the diagnostic data about an incident to reach development and operations teams.
+* **Time to mitigate (TTM)**: measures the time it takes development and operations teams to act on the monitoring information and mitigate the impact of the incident.
+* **Time to remediate (TTR)**: measures the time it takes development and operations teams to resolve the root cause of the incident.
+
+In addition, continuous monitoring drives continuous improvement by providing data for post-incident reviews and root cause analysis. It also helps transition from the reactive to proactive remediation approach.
+
+Lastly, monitoring is commonly used for shift-right testing. By combining it with a continuous delivery workflow, you'll be able to detect any anomalies introduced by new software releases and facilitate their swift mitigation. This includes the ability to discover issues that are overlooked in preproduction environments.
+
+
+#  5.5 Explore observability through security assessment
+
+
+Observability is also essential for security monitoring and assessment, facilitating detection of and response to security incidents. Security observability includes monitoring for abnormal patterns indicating potential threats, identifying vulnerabilities in software and the underlying infrastructure, and auditing activities in the monitored environment. The organization in the sample scenario was subject to several security exploits, which could have been prevented or at least mitigated by applying the principles of security observability. In this unit, learn about some of the more common ways of applying these principles.
+
+## How to apply the principles of security observability?
+
+Security techniques, which are part of the DevSecOps strategy can be grouped into two main categories depending on whether they focus on preventing breaches or whether they're part of the assumed breach approach. The DevOps planning, development, and delivery stages focus primarily on breach prevention by using such techniques as threat models, security development lifecycle, code reviews, static application security testing (SAST), dynamic application security testing (DAST), and software composition analysis (SCA). In the operational stage, it's common to combine breach prevention and assume breach techniques, including war game exercises, live site penetration tests, security monitoring, and security assessment.
+
+War game exercises are events where two teams, referred to as red and blue, are tasked with assessing the security of a given environment. The red team takes on the role of an attacker. It attempts to emulate real-world attacks in order to find gaps in security and use them to demonstrate the potential impact of their exploits. The blue team assumes the role of a defender. Its objective is to detect and respond to the red team's attacks.
+
+Live site penetration tests are performed by authorized security professionals who actively attempt to exploit vulnerabilities in the target environment. The objective is identifying, assessing, and remediating these vulnerabilities before they're subject to actual exploits.
+
+Security monitoring and security assessment are integral components of DevOps security observability, contributing jointly to the continuous and proactive identification, analysis, and response to security-related events and vulnerabilities. Security monitoring largely follows the same approach as the one applicable to performance monitoring, collecting real-time telemetry, such as metrics, logs, and traces to track overall security of your workloads. Security assessment relies on that telemetry to evaluate security of the organization's information systems, applications, and infrastructure in order to identify vulnerabilities, assess risks, and provide recommendations for their remediation.
+
+It's common to use for this purpose a dedicated solution that implements the Security Information and Event Management (SIEM) functionality, such as cloud-hosted Microsoft Sentinel. Microsoft Sentinel combines telemetry data from a wide range of sources, automatically correlating them and looking for patterns by using artificial intelligence and machine learning.
+
+You can also take advantage of the functionality built into Microsoft DevOps platforms, such as GitHub or Azure DevOps. In particular, GitHub offers many tools that implement security monitoring and assessment, such as GitHub Advanced Security.
+
+https://youtu.be/DA_WbNRFPT0
+
+Its Dependabot automatically scans repos-hosted software for any external dependencies, searching for known vulnerabilities against the GitHub's Advisory Database. In case such vulnerabilities are found, Dependabot automatically generates pull requests to upgrade them to nonvulnerable versions.
+
+GitHub Advanced Security combines several security features and capabilities that enhance software delivery workflows including code scanning, secret scanning, and dependency reviews. For example, Security Code Scanning scans repo-hosted source code, detecting security vulnerabilities and programming errors.
+
+https://youtu.be/lm9a9R9P6uc
+
+It integrates with GitHub Actions, allowing for automated and continuous code analysis as part of CI/CD workflows.
+
+
+
+# 5.6 Explore resiliency with site reliability engineering
+
+One of the primary objectives of DevOps is increasing reliability and efficiency of software delivery through the integration between the development and operations practices and through collaboration between the development and operations teams. In this context, DevOps shares its goals and principles with Site Reliability Engineering (SRE). By combining them, the organizations that develop and maintain software solutions (like the one described in the sample scenario of this module), will be able to increase their resiliency and availability. To better understand how this can be accomplished, this unit describes the correlation between SRE and DevOps and provides high-level guidance regarding implementing SRE.
+
+## What is the correlation between SRE and DevOps?
+
+SRE, pioneered by Google in early 2000s but widely adopted since then, promotes the application of software engineering practices to operations tasks. These practices guide you through the process of building, deploying, and operating reliable, scalable, and highly efficient software systems. You probably noticed that DevOps offers similar guidance. What distinguishes SRE from DevOps is its focus on *reliability engineering*. The *engineering* part of this term is meant to convey the use of specific, well-defined practices to accomplish its goals.
+
+## How to implement SRE?
+
+Implementing SRE requires following these well-defined practices. However, SRE implementations might also involve broader cultural and organizational changes. To start, review the core concepts of SRE and define them according to your own specific requirements. SRE relies on explicit definition and measurement of reliability through quantifiable *Service Level Objectives* (*SLOs*) that determine the acceptable level of service characteristics, such as availability, latency, or error rates. *Service Level Indicators (SLIs)* are used to measure different aspects of the service's behavior that affect reliability. *Service Level Agreements (SLAs)* reference *SLIs* to define the acceptable performance. The *SLAs* serve as the foundation for *SLOs*.
+
+SRE also introduces the concept of error budgets, which represents the acceptable degree of service degradation within a specified timeframe. The intention behind this concept is to optimize, rather than maximize reliability. This is important for two reasons:
+
+* Increased reliability translates into more effort and a higher cost.
+* High pace of changes tends to be disruptive and, as a result, might negatively affect reliability.
+
+Using error budgets facilitates finding a balance between reliability, cost, and the pace of changes.
+
+The initial steps of your implementation should include defining SLOs, establishing SLIs and SLAs, and setting up error budgets. The remaining steps include:
+
+* Applying automation throughout software delivery process (although the focus of SRE is on automation of operational tasks, such as scaling, monitoring, and incident response).
+* Setting up comprehensive monitoring and observability processes.
+* Defining incident management processes.
+* Defining change management processes.
+* Planning proactively for capacity needs.
+* Promoting continuous learning and continuous improvement through regular post-incident reviews and root cause analysis. Regularly review SLOs, error budgets, and operational practices.
+* Integrating SRE practices with development processes.
+* Fostering communication between the SRE team and other stakeholders.
+
+
+# 5.7 Improve developer experience with platform engineering
+
+Platform engineering is a practice that aims to enhance the developer experience by improving security, compliance, costs, and time-to-business value through self-service and a secure, governed framework. The development team in the software development company scenario will highly benefit from this mindset shift towards a product-based approach to deliver value to the company.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/operate-with-devops/media/7-platform-engineering.png)
+
+Diagram showing the platform engineering process
+
+Platform engineering focuses on providing developers with the necessary tools and resources to streamline their development process. By implementing self-service capabilities, developers can access the required infrastructure, services, and environments without relying on external teams or waiting for manual provisioning. This empowers developers to work more efficiently and reduces the time spent on nondevelopment tasks.
+
+Furthermore, platform engineering emphasizes the importance of developer experiences. It aims to create a seamless and intuitive environment for developers to write code, collaborate, and deploy their applications. By providing a user-friendly interface and automating repetitive tasks, developers can focus more on coding and delivering value to the business.
+
+![](https://learn.microsoft.com/en-us/training/wwl-azure/operate-with-devops/media/7-platform-engineering-tiers.png)
+
+Diagram showing the platform engineering tiers
+
+Improving developer experience with platform engineering also involves ensuring security and compliance. By implementing a secure and governed framework, developers can adhere to best practices and regulatory requirements without hindering their productivity. This includes features such as access controls, monitoring, and auditing to maintain a secure development environment.
+
+Platform engineering aims to enhance the developer experience by providing self-service capabilities, a user-friendly environment, and ensuring security and compliance. By adopting this practice, development teams can improve their efficiency, reduce time-to-market, and deliver high-quality software.
+
+
+# 5.8 Enhance workload resiliency Traffic Manager and Azure Chaos Studio
+
+## Scenario
+
+Remember this module's scenario in which you work for a software development company in the retail industry that is experiencing frequent downtime and performance issues with their new online store application. Since you have decided to enhance workload and test resiliency using Traffic Manager and Azure Chaos Studio respectively, this lab gives you the opportunity to implement a Traffic Manager profile and validate Traffic Manager functionality, configure Azure Chaos Studio environment, and implement and validate an experiment.
+
+In the previous lab, you deployed two instances of a .NET web app into two Azure regions. In this lab, you will first create a resilient configuration that implements the load balancing functionality of Azure Traffic Manager between the two web app instances. Next, you will use Azure Chaos Studio to trigger a failure in one of the apps to test the resiliency of the load balancing implementation.
+
+## Objectives
+
+In this lab, you will:
+
+* Prepare the Azure subscription for the lab
+* Enhance workload resiliency by using Traffic Manager
+* Test workload resiliency by using Azure Chaos Studio
+* Remove the resources used in the labs
+
+## Prerequisites
+
+* Complete the first lab in this series, Lab 01 - Agile Planning and Management using GitHub.
+* Use the same GitHub account you created for the purpose of the first lab.
+* Complete the second lab in this series, Lab 02 - Implement Flow of Work with GitHub.
+* Complete the third lab in this series, Lab 03 - Implement CI/CD with GitHub Actions and IaC with Bicep.
+
+## Requirements
+
+* This lab requires **Microsoft Edge** or an Azure DevOps-supported browser.
+* **GitHub account:** If you don't already have a GitHub account that you can use for this lab, create one by following the instructions available in the article Creating an account on GitHub.
+* An **Azure subscription** to which you have at least the **Owner-level access**. If you do not have an Azure subscription, you can sign up for a free trial.
+
+## Exercises
+
+During this lab, you'll complete the following exercises:
+
+* Exercise 0: Prepare the Azure subscription for the lab
+* Exercise 1: Enhance workload resiliency by using Traffic Manager
+* Exercise 2: Test workload resiliency by using Azure Chaos Studio
+
+https://microsoftlearning.github.io/AZ-2008_DevOps_Foundations_Core_Principles_Practices/Instructions/Labs/04-enhance-workload-traffic-manager-test-azure-chaos-studio.html
+
+# 5.9 Module assessment
+
+Choose the best response for each question.
+
+## 1.
+**What do continuous operations target in the context of operational excellence?**
+
+- Maximizing downtime for maintenance.
+- **Minimizing or eliminating the need for downtime.**
+- Minimizing the need for automation.
+
+## 2.
+**What is the shift-right approach in application lifecycle management?**
+
+- **Testing performed in the production environment to fully examine the behavior of a workload following its deployment.**
+- Testing performed only in quality assurance and staging environments.
+- Testing performed only in the development phase.
+
+## 3.
+**What is the purpose of performance monitoring in observability?**
+
+- To collect qualitative data about events.
+- To provide insights into the financial status of systems and applications.
+- **To detect anomalies, performance bottlenecks, and performance-related issues as soon as they occur.**
+
+## 4.
+**What is the purpose of Security Information and Event Management (SIEM) solutions in security observability?**
+
+- **To collect real-time telemetry data from a wide range of sources, automatically correlate them, and look for patterns to identify security-related events and vulnerabilities.**
+- To perform live site penetration tests and identify vulnerabilities in the target environment.
+- To scan repo-hosted source code for security vulnerabilities and programming errors.
+
+## 5.
+**What is the purpose of error budgets in SRE?**
+
+- To reduce the cost of operations.
+- To maximize reliability at all costs.
+- **To find a balance between reliability, cost, and the pace of changes.**
+
+---
+
+## Відповіді:
+
+1. **Minimizing or eliminating the need for downtime** - Continuous operations спрямовані на створення та підтримку середовища, де потреба в простоях мінімізована або навіть усунена.
+
+2. **Testing performed in the production environment to fully examine the behavior of a workload following its deployment** - Shift-right підхід передбачає тестування в продакшн середовищі для повного вивчення поведінки навантаження після його розгортання.
+
+3. **To detect anomalies, performance bottlenecks, and performance-related issues as soon as they occur** - Моніторинг продуктивності використовує модель здоров'я для виявлення аномалій, вузьких місць та проблем з продуктивністю одразу після їх виникнення.
+
+4. **To collect real-time telemetry data from a wide range of sources, automatically correlate them, and look for patterns to identify security-related events and vulnerabilities** - SIEM рішення збирають телеметричні дані з широкого спектра джерел, автоматично корелюють їх та шукають закономірності для виявлення подій та вразливостей, пов'язаних з безпекою.
+
+5. **To find a balance between reliability, cost, and the pace of changes** - Error budgets допомагають знайти баланс між надійністю, вартістю та темпом змін, оптимізуючи, а не максимізуючи надійність.
+
+
+# 5.10 Summary
+
+In this module, you have learned about operational excellence in the context of DevOps. Operational excellence involves practices such as continuous operations, monitoring, health modeling, reliability engineering, incident management, security integration, and shift-right testing. These practices aim to promote efficiency, resiliency, and continuous improvement in day-to-day operations. By adopting these practices, organizations can minimize downtime, proactively detect issues, increase resiliency, efficiently respond to incidents, integrate security, and test features in the production environment.
+
+One of the key takeaways from this module is the concept of shift-right testing. Shift-right testing involves testing in the production environment to fully assess the reliability of systems. This approach is suitable for scenarios such as microservices deployments, evaluating network conditions, user acceptance testing, and validating failover procedures. Another important concept is observability, which plays a crucial role in operational excellence. Observability provides insights into the operational status of systems and applications, aiding in performance monitoring, incident response, proactive remediation, and security monitoring.
