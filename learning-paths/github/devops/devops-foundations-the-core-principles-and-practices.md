@@ -451,3 +451,140 @@ When creating a project, you can either start from scratch or use many project t
 
 
 
+# 2.6 Agile plan and management using GitHub
+
+## Scenario
+
+Remember this module's scenario in which you're working for a software development company in the retail industry that is planning to migrate its online store to a new app but is experiencing difficulties planning the project due to little collaboration and communication between the development and operations teams. Since you have decided to use GitHub for Agile planning and management, this lab gives you the opportunity to create a GitHub repo, associated milestones and issues, a project, and project board. Additionally, you'll be able to add a draft item to the project board and an item based on an issue and review the automation settings.
+
+## Objectives
+
+In this lab, you will:
+
+* Create a GitHub repo, project, and project board
+* Create and manage project board items
+
+## Requirements
+
+* This lab requires **Microsoft Edge** or an Azure DevOps-supported browser.
+* **Set up an GitHub account:** If you don't already have a GitHub account that you can use for this lab, create one by following the instructions available in the article Creating an account on GitHub.
+
+## Exercises
+
+During this lab, you'll complete the following exercises:
+
+* Exercise 1: Create a GitHub repo, project, and project board
+* Exercise 2: Create and manage project board items
+
+https://microsoftlearning.github.io/AZ-2008_DevOps_Foundations_Core_Principles_Practices/Instructions/Labs/01-agile-planning-management-using-github.html
+
+
+# 2.7 Module assessment
+
+
+Choose the best response for each question.
+
+*AI-generated content The question and answer choices in this module assessment were created with AI.*
+
+**Provide feedback**
+
+## 1.
+**Your team is planning the next sprint using GitHub Projects. How can you ensure that tasks are prioritized effectively on the project board?**
+
+✅ **Use labels and milestones to indicate priority and deadlines for tasks**
+
+- Create multiple project boards for different team members
+- Assign all tasks to a single team member for oversight
+
+## 2.
+**Your DevOps team wants to implement a framework that emphasizes work visualization and limits the number of tasks being handled at once. Which framework should they choose?**
+
+- Scrum
+- ✅ **Kanban**
+- Extreme Programming (XP)
+
+## 3.
+**Suppose your organization is using GitHub Projects to manage a software development task. How can you automatically update the status of an issue to 'Done' when it is closed?**
+
+- Manually change the status of each issue to 'Done' after closing.
+- ✅ **Enable the built-in workflow that sets the status to 'Done' when issues are closed.**
+- Use a pull request to change the status to 'Done'.
+
+## 4.
+**In GitHub Projects, what is the purpose of using labels on issues and pull requests?**
+
+- To initiate automated testing processes
+- ✅ **To categorize and track project goals, bugs, and status of work items**
+- To assign tasks to team members automatically
+
+## 5.
+**A company wants to improve its software delivery process by adopting DevOps practices, including version control and CI/CD. What is the primary benefit of implementing CI/CD in this context?**
+
+- ✅ **It automates the testing and deployment of code changes, reducing manual intervention.**
+- It provides a platform for developers to collaboratively author code.
+- It tracks changes to code, allowing rollbacks when necessary.
+
+## 6.
+**An organization wants to implement DevOps practices to improve its software delivery process. Which DevOps practice should be prioritized to ensure that code changes are tested before deployment?**
+
+- ✅ **Continuous Integration**
+- Continuous Monitoring
+- Version Control
+
+## 7.
+**In a DevOps environment focusing on customer-centric software delivery, which Agile framework prioritizes continuous improvement and collaboration over rigid processes and tools?**
+
+- ✅ **Agile Manifesto**
+- Lean
+- Scrum
+
+## 8.
+**What impact does version control have on the agility of a development team in a DevOps environment?**
+
+- It limits agility by enforcing strict coding standards and review processes.
+- ✅ **It enhances agility by allowing simultaneous work on multiple features without conflicts.**
+- It reduces agility by requiring all changes to be manually merged.
+
+## 9.
+**Which of the following Agile frameworks emphasizes a continuous flow model and allows for work items to be added or reprioritized based on team capacity and changing needs?**
+
+- ✅ **Kanban**
+- Scrum
+- Waterfall
+
+---
+
+## Answer Explanations:
+
+**1.** Labels and milestones help organize and prioritize tasks effectively on project boards.
+
+**2.** Kanban emphasizes visualization and WIP (Work In Progress) limits.
+
+**3.** GitHub Projects has built-in workflows for automatic status updates.
+
+**4.** Labels serve as categorization and tracking tools for different types of work.
+
+**5.** CI/CD's primary benefit is automation of testing and deployment processes.
+
+**6.** Continuous Integration ensures code is tested before deployment through automated builds and tests.
+
+**7.** The Agile Manifesto emphasizes individuals and interactions over processes and tools.
+
+**8.** Version control enables parallel development and conflict resolution, enhancing agility.
+
+**9.** Kanban operates on continuous flow without fixed iterations, allowing flexible prioritization.
+
+
+
+# 2.8 Summary
+
+
+In this module, you learned about fostering a DevOps culture by building mutual respect among teams, defining roles and responsibilities, facilitating continuous learning and improvement, committing to optimization based on business and customer needs, and embracing safe experimentation.
+
+By promoting collaboration, automation, and a mindset of continuous improvement, organizations can achieve faster, more reliable, and customer-centric software delivery.
+
+The module also covered Agile methodologies such as Scrum and Kanban, which provide frameworks for managing work and solving problems in iterative cycles. Scrum uses fixed-length sprints and defined roles and ceremonies, while Kanban operates on a continuous flow model and allows teams to adapt their own processes.
+
+The main takeaways from this module are that fostering a DevOps culture requires a focus on collaboration, automation, and continuous improvement. By implementing Agile methodologies like Scrum and Kanban, organizations can effectively manage work and solve problems in iterative cycles. Additionally, incorporating DevOps practices such as version control, continuous integration and testing, continuous delivery, continuous monitoring, continuous security, and infrastructure as code can streamline the software development and delivery process.
+
+
