@@ -338,8 +338,7 @@ The connector for Azure Activity uses policy assignments, so it might take 15 to
 
 
 
-
-# 5.3 Explore creation and management of threat-hunting queries
+# 2.3 Explore creation and management of threat-hunting queries
 
 Microsoft Sentinel contains powerful query tools that can help you, as part of the Security Operations Center team, find and isolate security threats and unwanted activity in Contoso's environment.
 
@@ -432,7 +431,7 @@ Custom queries allow you to define the following:
 
 Custom queries are listed alongside built-in queries for management.
 
-## 5.4 Explore Microsoft Sentinel on GitHub
+## 2.4 Explore Microsoft Sentinel on GitHub
 
 The Microsoft Sentinel repository contains out-of-the-box detections, exploration queries, hunting queries, workbooks, playbooks, and more to help you secure your environment and hunt for threats. Microsoft and the Microsoft Sentinel community contribute to this repo.
 
@@ -504,7 +503,7 @@ Choose the best response for the following question.
 
 
 
-# 5.5 Observe threats over time with livestream
+# 2.5 Observe threats over time with livestream
 
 You can use the hunting livestream to test queries against live events as they occur. Livestream provides interactive sessions that can notify you when Microsoft Sentinel finds matching events for your query.
 
@@ -566,7 +565,7 @@ Choose the best response for the following question.
 **Time parameters** - Параметри часу не можуть використовуватися в livestream запитах, оскільки livestream запити виконуються безперервно проти живого середовища в реальному часі. Це зазначено в тексті: "Livestream queries run continuously against your live environment, so you can't use time parameters in a livestream query."
 
 
-# 5.6 Exercise - Hunt for threats by using Microsoft Sentinel
+# 2.6 Exercise - Hunt for threats by using Microsoft Sentinel
 
 As a security engineer working for Contoso, you recently noticed that a significant number of virtual machines (VMs) were deleted from your Azure subscription. You want to simulate a deleted VM, analyze this occurrence, and understand the key elements of the potential threat in Microsoft Sentinel.
 
@@ -652,7 +651,7 @@ After you finish using the Azure resources that you created in this exercise, de
 
 
 
-# 5.7 Summary
+# 2.7 Summary
 
 As part of the Security Operations Center team, you need to protect Contoso's environment. To accomplish this goal, you first need to detect any threats to the environment.
 
@@ -661,7 +660,7 @@ In this module, you learned how to hunt for threats by using the tools available
 Now, you can lead your team in using Microsoft Sentinel to help protect Contoso's environment through threat detection.
 
 
-# 6 Use Search jobs in Microsoft Sentinel
+# 3 Use Search jobs in Microsoft Sentinel
 
 In Microsoft Sentinel, you can search across long time periods in large datasets by using a search job.
 
@@ -670,7 +669,7 @@ After completing this module, you'll be able to:
 - Use Search Jobs in Microsoft Sentinel
 - Restore archive logs in Microsoft Sentinel
 
-# 6.1 Introduction
+# 3.1 Introduction
 
 In Microsoft Sentinel, you can search across long time periods in large datasets by using a search job. You also have the option to restore archived logs to include in the search job.
 
@@ -685,7 +684,7 @@ After completing this module, you'll be able to:
 - Basic knowledge of operational concepts such as Kusto Query Language (KQL), logging, and archiving
 
 
-# 6.2 Hunt with a Search Job
+# 3.2 Hunt with a Search Job
 
 One of the primary activities of a security team is to search logs for specific events. For example, you might search logs for the activities of a specific user within a given time-frame.
 
@@ -747,7 +746,7 @@ View the status and results of your search job by going to the Saved Searches ta
 
 
 
-# 6.3 Restore historical data
+# 3.3 Restore historical data
 
 When you need to do a full investigation on data stored in archived logs, restore a table from the Search page in Microsoft Sentinel. Specify a target table and time range for the data you want to restore. Within a few minutes, the log data is restored and available within the Log Analytics workspace. Then you can use the data in high-performance queries that support full KQL.
 
@@ -800,7 +799,7 @@ To save costs, we recommend you delete the restored table when you no longer nee
 
 **Next unit: Module assessment**
 
-# 6.4 Module assessment
+# 3.4 Module assessment
 
 Choose the best response for each of the questions below.
 
@@ -838,7 +837,7 @@ Choose the best response for each of the questions below.
 3. **Analytics logs and Basic logs** - У модулі зазначено, що Search jobs підтримують обидва типи логів: "Use search to find events in any of the following log types: Analytics logs, Basic logs."
 
 
-# 6.6 Summary and resources
+# 3.5 Summary and resources
 
 You should have learned how to perform search on large datasets in Microsoft Sentinel.
 
@@ -848,7 +847,7 @@ You should now be able to:
 * Restore archived logs in Microsoft Sentinel
 
 
-## Hunt for threats using notebooks in Microsoft Sentinel
+## 4 Hunt for threats using notebooks in Microsoft Sentinel
 
 Learn how to use notebooks in Microsoft Sentinel for advanced hunting.
 
