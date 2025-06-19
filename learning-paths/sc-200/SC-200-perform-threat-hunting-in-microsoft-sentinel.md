@@ -857,4 +857,70 @@ Upon completion of this module, the learner is able to:
 - Describe notebooks in Microsoft Sentinel
 - Create and use notebooks in Microsoft Sentinel
 
+# 4.1 Introduction
 
+You can use notebooks in Microsoft Sentinel for advanced hunting.
+
+You're a Security Operations Analyst working at a company that implemented Microsoft Sentinel. You want to mature your Security Operations team to proactively hunt for malicious activity in your environment with advanced machine learning capabilities.
+
+After developing your hunting hypothesis, you utilize a Jupyter notebook to integrate machine learning libraries, advanced visualizations, and external data to detect malicious activity patterns.
+
+After completing this module, you'll be able to:
+
+* Explore API libraries for advanced threat hunting in Microsoft Sentinel
+* Describe notebooks in Microsoft Sentinel
+* Create and use notebooks in Microsoft Sentinel
+
+## Prerequisites
+
+* Basic knowledge of operational concepts such as monitoring, logging, and alerting
+* Familiarity deploying Azure services
+* Familiarity with scripting and Python coding
+
+# 4.2 Access Azure Sentinel data with external tools
+
+Before hunting with notebooks, it's essential to understand the foundation of Microsoft Sentinel is the Log Analytics data store, which combines high-performance querying, dynamic schema, and scales to massive data volumes. The Azure portal and all Microsoft Sentinel tools use a standard API to access this data store. The same API is also available for external tools such as Python and PowerShell. There are two libraries that you can use to simplify API access:
+
+* Kqlmagic
+* msticpy
+
+## Kqlmagic
+
+The Kqlmagic library provides an easy to implement API wrapper to run KQL queries.
+
+## msticpy
+
+Microsoft Threat Intelligence Python Security Tools is a set of Python tools intended to be used for security investigations and hunting. Many of the tools originated as code Jupyter notebooks written to solve a problem as part of a security investigation. Some of the tools are only useful in notebooks (for example, much of the nbtools subpackage), but many others can be used from the Python command line or imported into your code.
+
+The package addresses three central needs for security investigators and hunters:
+
+* Acquiring and enriching data
+* Analyzing data
+* Visualizing data
+
+msticpy can query using KQL; the library also provides predefined queries for Microsoft Sentinel, Microsoft Defender XDR for Endpoint, and the Microsoft Security Graph. An example of a function is the list_logons_by_account, which retrieves the logon events for an account. For details about msticpy visit: https://msticpy.readthedocs.io/
+
+
+# 4.3 Hunt with notebooks
+
+A Jupyter Notebook allows you to create and share documents that contain live code, equations, visualizations, and explanatory text. Uses include data cleaning and transformation, numerical simulation, statistical modeling, machine learning, and much more. Jupyter extends the scope of what you can do with Microsoft Sentinel data. It combines full programmability with a vast library collection for machine learning, visualization, and data analysis. These attributes make Jupyter a useful tool for security investigation and hunting.
+
+![](https://learn.microsoft.com/en-us/training/wwl-sci/perform-threat-hunting-sentinel-with-notebooks/media/sentinel-notebooks-map.png)
+
+Several notebooks, developed by some of Microsoft's security analysts, are packaged with Microsoft Sentinel. Some of these notebooks are built for a specific scenario and can be used as-is. Others are samples intended to illustrate techniques and features that you can copy or adapt for use in your own notebooks. Other notebooks may also be imported from the Microsoft Sentinel Community GitHub.
+
+Notebooks have two components:
+
+* The browser-based interface where you enter and run queries and code and where the execution results are displayed.
+* The kernel is responsible for parsing and executing the code itself.
+
+The Microsoft Sentinel notebook's kernel runs on an Azure virtual machine (VM). Several licensing options exist to use more powerful virtual machines if your notebooks include complex machine learning models.
+
+The Microsoft Sentinel notebooks use many popular Python libraries such as pandas, matplotlib, bokeh, etc. There are a great many other Python packages for you to choose from, covering areas such as:
+
+* Visualizations and graphics
+* Data processing and analysis
+* Statistics and numerical computing
+* Machine learning and deep learning
+
+The msticpy package is used in many of the included notebooks. Msticpy tools are explicitly designed to help with creating notebooks for hunting and investigation.
