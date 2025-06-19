@@ -924,3 +924,189 @@ The Microsoft Sentinel notebooks use many popular Python libraries such as panda
 * Machine learning and deep learning
 
 The msticpy package is used in many of the included notebooks. Msticpy tools are explicitly designed to help with creating notebooks for hunting and investigation.
+
+
+# 4.4 reate a notebook
+
+To get started with Notebooks, use the Getting Started Guide For Microsoft Sentinel ML Notebooks notebook.
+
+1. In the Microsoft Sentinel navigation menu, expand the Threat Management section, and select **Notebooks**
+
+2. You need to create an Azure Machine Learning (ML) Workspace. From the menu, select **Configure Azure Machine Learning**, then **Create new Azure ML workspace**.
+
+3. In the **Subscription** box, select your subscription.
+
+4. Select **Create a new Resource group** and choose a name for your new resource group.
+
+5. In the **Workspace details** section:
+
+   - Give your workspace a unique name.
+   - Choose your **Region**
+   - Keep the default **Storage account**, **Key vault**, and **Application insights** information.
+   - The **Container registry** option can remain as **None**.
+
+6. At the bottom of the page, select **Review + create**. Then on the next page, select **create**. It takes a moment to deploy the workspace.
+
+**Note**
+
+It takes a few minutes to deploy the Machine Learning workspace.
+
+7. After **Your deployment is complete** message appears, return to Microsoft Sentinel.
+
+8. Navigate to the **Threat Management** section, and select **Notebooks**.
+
+9. Select the **Templates** tab.
+
+10. Select the **A Getting Started Guide For Microsoft Sentinel ML Notebooks** from the list.
+
+11. Select **Create from template** button on the bottom of the detail pane.
+
+12. Review the default options and then select **Save**.
+
+13. Select the **Launch notebook** button.
+
+14. Select **Close** if an informational window appears in the Microsoft Azure Machine Learning studio.
+
+15. In the command bar, to the right of the **Compute:** selector, select the **+** symbol to **Create Azure ML compute instance**. Hint: It might be hidden inside the ellipsis icon (...).
+
+**Note**
+
+You can have more screen space by hiding the Azure ML Studio left menu selections. Select the Hamburger menu (3 horizontal lines on the top left), and by collapsing the Notebooks Files by selecting the << icon.
+
+16. Type a unique name in the **Compute name** field. This identifies your compute instance.
+
+17. Scroll down and select the first option available.
+
+**Tip**
+
+Workload type: Development on Notebooks (or other IDE) and lightweight testing.
+
+18. Select the **Review + Create** button at the bottom of the screen, then scroll down and select **Create**. Close any feedback window that appears. This takes a few minutes. You see a notification (bell icon) when it completes and the Compute instance left icon turns from blue to green.
+
+19. Once the Compute is created and running, verify that the kernel to use is **Python 3.10 - Pytorch and Tensorflow**.
+
+**Tip**
+
+This is shown in the right of the menu bar. If that kernel isn't selected, select the **Python 3.10 - Pytorch and Tensorflow** option from the drop-down list. You can select the **Refresh** icon on the far right to see the kernel options.
+
+20. Select the **Authenticate** button and wait for the authentication to complete.
+
+21. Clear all the results from the notebook by selecting the **Clear all outputs** (Eraser icon) from the menu bar and follow the Getting Started tutorial.
+
+**Tip**
+
+This can be found by selecting the ellipsis (...) from the menu bar.
+
+22. Review section 1 **Introduction** in the notebook and proceed to section 2 **Initializing the notebook and MSTICPy**.
+
+**Tip**
+
+Section 1.2 **Running code in notebooks** lets you practice running small lines of Python code.
+
+23. In section 2 **Initializing the notebook and MSTICPy**, review the content on **Initializing the notebook and installing the MSTICPy package**.
+
+24. Run the Python code to initialize the cell by selecting the **Run cell** button (Play icon) to the left of the code.
+
+25. It should take >30 seconds to run. Once it completes, review the output messages and disregard any warnings about the Python kernel version or other error messages.
+
+26. The code ran successfully if **msticpyconfig.yaml** was created in the **utils** folder in the file explorer pane on the left. It can take another 30 seconds for the file to appear. If it doesn't appear, select the **Refresh** icon in the file explorer pane.
+
+**Tip**
+
+You can clear the output messages by selecting the ellipsis (...) on the left of the code window for the **Output** menu and selecting the **Clear output** (square with an x*) icon.
+
+27. Select the **msticpyconfig.yaml** file in the file explorer pane on the left to review the contents of the file and then close it.
+
+28. Proceed to section 3 **Querying data with MSTICPy** and review the contents. Don't run the **Multiple Microsoft Sentinel workspaces** code cell as it fails, but the other code cells can be run successfully.
+
+**Note**
+
+If you can't complete the steps above to access the Notebook, you can follow it on its GitHub viewer page instead. Getting Started with Azure ML Notebooks and Microsoft Sentinel
+
+
+# 4.5 Explore notebook code
+
+The following code blocks provide a representative example of using notebooks to work with Microsoft Sentinel data.
+
+## Code Block
+
+In this snippet of code:
+
+* Create a new variable [test_query] that contains the KQL query.
+* Next, you run the query [qry_prov.exec_query()]. This utilizes the msticpy library to execute the KQL query in the Microsoft Sentinel Log Analytics related workspace. The results are stored in the [test_df] variable.
+* Next, display the first five rows with the xxx_xxxx.head() function.
+
+![](https://learn.microsoft.com/en-us/training/wwl-sci/perform-threat-hunting-sentinel-with-notebooks/media/threat-hunt-1.png)
+
+## Code Block
+
+In this snippet of code:
+
+* You create a new function called lookup_res that takes a variable row.
+* Next, you save the IP address stored in row to the variable [ip].
+* The next line of code uses the msticpy function [ti.lookup_ioc()] to query the ThreatIntelligenceIndicator table for a row that is sourced from VirusTotal with a matching ip-address.
+* Next, the msticpy function [ti.result_to_df()] will return a DataFrame representation of response.
+* The new function returns the Severity of the IP address.
+![](https://learn.microsoft.com/en-us/training/wwl-sci/perform-threat-hunting-sentinel-with-notebooks/media/threat-hunt-3.png)
+
+
+## Code Block
+
+In this snippet of code:
+
+* Create a new variable [vis_q] that contains the KQL query.
+* Next, you run the query [qry_prov.exec_query()]. This utilizes the msticpy library to execute the KQL query in the Microsoft Sentinel Log Analytics related workspace. The results are stored in the [vis_data] variable.
+* Then, [qry_prov.exec_query()] returns a pandas DataFrame that provides visualization features. You then plot a bar graph with the unique IP addresses and how many times they were used in the first five entries of the Dataframe.
+
+![](https://learn.microsoft.com/en-us/training/wwl-sci/perform-threat-hunting-sentinel-with-notebooks/media/threat-hunt-2.png)
+
+
+# 4.6 Module assessment
+
+**200 XP** • 3 minutes
+
+Choose the best response for each of the questions below.
+
+## Check your knowledge
+
+### 1.
+**The msticpy package provides which of the following functionality?**
+
+- Data wrangling
+- **Analyzing data**
+- Creating data
+
+### 2.
+**Which is a component of notebooks in Microsoft Sentinel?**
+
+- Telemetry analyzer
+- **Kernel**
+- Workbook
+
+### 3.
+**What coding language is most commonly used in the sample Notebooks?**
+
+- **Python**
+- C#
+- Java
+
+---
+
+## Відповіді:
+
+1. **Analyzing data** - Згідно з модулем, msticpy package призначений для аналізу даних: "The package addresses three central needs for security investigators and hunters: Acquiring and enriching data, Analyzing data, Visualizing data."
+
+2. **Kernel** - У модулі чітко зазначено: "Notebooks have two components: The browser-based interface where you enter and run queries and code and where the execution results are displayed. The kernel is responsible for parsing and executing the code itself."
+
+3. **Python** - Модуль вказує, що notebooks використовують Python бібліотеки: "The Microsoft Sentinel notebooks use many popular Python libraries such as pandas, matplotlib, bokeh, etc." та "There are a great many other Python packages for you to choose from."
+
+#  4.7 Summary and resources
+
+You should have learned how to perform advanced hunting in Microsoft Sentinel.
+
+You should now be able to:
+
+* Explore API libraries for advanced threat hunting in Microsoft Sentinel
+* Describe notebooks in Microsoft Sentinel
+* Create and use notebooks in Microsoft Sentinel
+
