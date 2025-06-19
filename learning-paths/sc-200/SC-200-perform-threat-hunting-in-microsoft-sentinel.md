@@ -665,7 +665,7 @@ Now, you can lead your team in using Microsoft Sentinel to help protect Contoso'
 
 In Microsoft Sentinel, you can search across long time periods in large datasets by using a search job.
 
-####Learning objectives
+#### Learning objectives
 After completing this module, you'll be able to:
 - Use Search Jobs in Microsoft Sentinel
 - Restore archive logs in Microsoft Sentinel
@@ -685,5 +685,177 @@ After completing this module, you'll be able to:
 - Basic knowledge of operational concepts such as Kusto Query Language (KQL), logging, and archiving
 
 
+# 6.2 Hunt with a Search Job
+
+One of the primary activities of a security team is to search logs for specific events. For example, you might search logs for the activities of a specific user within a given time-frame.
+
+In Microsoft Sentinel, you can search across long time periods in large datasets by using a search job. While you can run a search job on any type of log, search jobs are ideally suited to search archived logs. If you need to do a full investigation on archived data, you can restore that data into the hot cache to run high performing queries and analytics.
+
+## Search large datasets
+
+Use a search job when you start an investigation to find specific events in logs within a given time frame. You can search all your logs to find events that match your criteria and filter through the results.
+
+Search in Microsoft Sentinel is built on top of search jobs. Search jobs are asynchronous queries that fetch records. The results are returned to a search table that's created in your Log Analytics workspace after you start the search job. The search job uses parallel processing to run the search across long time spans, in large datasets. So search jobs don't impact the workspace's performance or availability.
+
+Search results remain in a search results table that has a ***_SRCH** suffix.
+
+## Supported log types
+
+Use search to find events in any of the following log types:
+
+* Analytics logs
+* Basic logs
+
+## Limitations of a search job
+
+Before you start a search job, be aware of the following limitations:
+
+* Optimized to query one table at a time.
+* Search date range is up to one year.
+* Supports long running searches up to a 24-hour time-out.
+* Results are limited to one million records in the record set.
+* Concurrent execution is limited to five search jobs per workspace.
+* Limited to 100 search results tables per workspace.
+* Limited to 100 search job executions per day per workspace.
+
+## Start a search job
+
+Go to Search in Microsoft Sentinel to enter your search criteria.
+
+1. In the Azure portal, go to Microsoft Sentinel and select the appropriate workspace.
+2. Under General, select Search.
+3. In the Search box, enter the search term.
+4. Select the appropriate Time range.
+5. Select the Table that you want to search.
+6. When you're ready to start the search job, select Search.
+
+When the search job starts, a notification and the job status show on the search page.
+
+7. Wait for your search job to complete. Depending on your dataset and search criteria, the search job may take a few minutes or up to 24 hours to complete. If your search job takes longer than 24 hours, it times out. If that happens, refine your search criteria and try again.
+
+## View search job results
+
+View the status and results of your search job by going to the Saved Searches tab.
+
+1. In your Microsoft Sentinel workspace, select Search > Saved Searches.
+2. On the search card, select View search results.
+3. By default, you see all the results that match your original search criteria. In the search query, notice the time columns referenced.
+   * TimeGenerated is the date and time the data was ingested into the search table.
+   * _OriginalTimeGenerated is the date and time the record was created.
+4. To refine the list of results returned from the search table, edit the KQL query.
+5. As you're reviewing your search job results, bookmark rows that contain information you find interesting so you can attach them to an incident or refer to them later.
+
+
+
+# 6.3 Restore historical data
+
+When you need to do a full investigation on data stored in archived logs, restore a table from the Search page in Microsoft Sentinel. Specify a target table and time range for the data you want to restore. Within a few minutes, the log data is restored and available within the Log Analytics workspace. Then you can use the data in high-performance queries that support full KQL.
+
+A restored log table is available in a new table that has a ***_RST** suffix. The restored data is available as long as the underlying source data is available. But you can delete restored tables at any time without deleting the underlying source data. To save costs, we recommend you delete the restored table when you no longer need it.
+
+## Limitations of log restore
+
+Before you start to restore an archived log table, be aware of the following limitations:
+
+* Restore data for a minimum of two days.
+* Restore data more than 14 days old.
+* Restore up to 60 TB.
+* Restore is limited to one active restore per table.
+* Restore up to four archived tables per workspace per week.
+* Limited to two concurrent restore jobs per workspace.
+
+## Restore archived log data
+
+To restore archived log data in Microsoft Sentinel, specify the table and time range for the data you want to restore. Within a few minutes, the log data is available within the Log Analytics workspace. Then you can use the data in high-performance queries that support full KQL.
+
+You can restore archived data directly from the Search page or from a saved search.
+
+1. In the Azure portal, go to Microsoft Sentinel and select the appropriate workspace.
+2. Under General, select Search.
+3. Restore log data in one of two ways:
+   * At the top of Search page, select Restore, or
+   * Select the Saved Searches tab and Restore on the appropriate search.
+4. Select the table you want to restore.
+5. Select the time range of the data that you want restore.
+6. Select Restore.
+7. Wait for the log data to be restored. View the status of your restoration job by selecting on the Restoration tab.
+
+## View restored log data
+
+View the status and results of the log data restore by going to the Restoration tab. You can view the restored data when the status of the restore job shows Data Available.
+
+1. In your Microsoft Sentinel workspace, select Search > Restoration.
+2. When your restore job is complete, select the table name.
+3. Review the results.
+
+The Logs query pane shows the name of table containing the restored data. The Time range is set to a custom time range that uses the start and end times of the restored data.
+
+## Delete restored data tables
+
+To save costs, we recommend you delete the restored table when you no longer need it. When you delete a restored table, Azure doesn't delete the underlying source data.
+
+1. In your Microsoft Sentinel workspace, select Search > Restoration.
+2. Identify the table you want to delete.
+3. Select Delete for that table row.
+
+**Next unit: Module assessment**
+
+# 6.4 Module assessment
+
+Choose the best response for each of the questions below.
+
+## Check your knowledge
+
+### 1.
+**When you're restoring an archive log, what will the table suffix be?**
+
+- **_RST**
+- _Restore
+- _RSTR
+
+### 2.
+**What is the suffix for the search result tables?**
+
+- _SR
+- **_SRCH**
+- _SCH
+
+### 3.
+**Which log types are supported by Search jobs?**
+
+- Analytics logs only.
+- Basic logs only.
+- **Analytics logs and Basic logs.**
+
+---
+
+## Відповіді:
+
+1. **_RST** - Згідно з текстом модуля: "A restored log table is available in a new table that has a ***_RST** suffix."
+
+2. **_SRCH** - Згідно з текстом модуля: "Search results remain in a search results table that has a ***_SRCH** suffix."
+
+3. **Analytics logs and Basic logs** - У модулі зазначено, що Search jobs підтримують обидва типи логів: "Use search to find events in any of the following log types: Analytics logs, Basic logs."
+
+
+# 6.6 Summary and resources
+
+You should have learned how to perform search on large datasets in Microsoft Sentinel.
+
+You should now be able to:
+
+* Create and view a Search Job in Microsoft Sentinel
+* Restore archived logs in Microsoft Sentinel
+
+
+## Hunt for threats using notebooks in Microsoft Sentinel
+
+Learn how to use notebooks in Microsoft Sentinel for advanced hunting.
+
+#### Learning objectives
+Upon completion of this module, the learner is able to:
+- Explore API libraries for advanced threat hunting in Microsoft Sentinel
+- Describe notebooks in Microsoft Sentinel
+- Create and use notebooks in Microsoft Sentinel
 
 
