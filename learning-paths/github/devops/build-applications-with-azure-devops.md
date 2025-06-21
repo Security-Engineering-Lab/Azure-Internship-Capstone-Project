@@ -1364,3 +1364,470 @@ The Build and release tasks section can help you map your existing build command
 ### Create your own build pipeline
 
 In this module, you created the pipeline from Azure DevOps. You can repeat a similar process to create your own pipeline. You can also create a pipeline from the GitHub Marketplace app.
+
+
+# 2 Implement a code workflow in your build pipeline by using Git and GitHub
+
+Collaborate with others and merge only the highest quality code.
+
+
+# 2.1 Introduction
+
+In **Create a build pipeline with Azure Pipelines**, you created a basic but complete build configuration for an ASP.NET Core web application.
+
+In this module, you'll extend this build configuration by implementing a code-collaboration strategy that uses Git and GitHub.
+
+Collaboration is a key DevOps value. Developers need a way to work with source code and share their code revisions with others. A source-control system facilitates cooperation among developers and more frequent deployments to improve the product.
+
+Azure DevOps works with different kinds of source control, but many Azure DevOps organizations choose to use Git. Git is a distributed system in which all contributors have their own copy of the work. In this module, you'll use the branching and merging capabilities of Git to more efficiently work with other developers. You'll also use GitHub, a central location for teams to host their projects and share their work.
+
+## Learning objectives
+
+After completing this module, you'll be able to:
+
+* Collaborate with others by choosing an appropriate branching and merging strategy.
+* Add a badge to your GitHub repository to show the status of the latest build.
+* Add a dashboard widget to help visualize your build history.
+* Set up a rule on your GitHub repository to require a review.
+
+## Prerequisites
+
+The modules in this learning path form a progression. Information in one module is the basis for further learning in the next module.
+
+To follow the progression from the beginning, first complete the **Get started with Azure DevOps** learning path.
+
+We also recommend you start at the beginning of this learning path, **Build applications with Azure DevOps**.
+
+If you want to complete only this module, you need to set up a development environment on your Windows, macOS, or Linux system. You'll need these prerequisites:
+
+* An Azure DevOps organization
+* A GitHub account
+* Visual Studio Code
+* .NET 6.0 SDK
+* Git
+
+You can get started with Azure DevOps for free.
+
+This environment lets you complete the exercises in this and future modules. You can also use it to apply your new skills to your own projects.
+
+**Note:** Azure Pipelines support a vast array of **languages and application types**. In this module, you'll be working with a .NET application but you can apply the patterns you learn here to your own projects that use your favorite programming languages and frameworks.
+
+## Meet the team
+
+In earlier modules, you met the *Space Game* web team at Tailspin Toys. The *Space Game* web team is here again to work with you in this module:
+
+**Andy** is the development lead.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/andy.png)
+
+**Amita** is in QA.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/amita.png)
+
+**Mara** just joined as a developer and reports to Andy.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/mara.png)
+
+Mara has prior experience with DevOps and is helping the team adopt a more streamlined process that uses Azure DevOps.
+
+
+
+# 2.2 Choose a code-flow strategy
+
+It's important to choose a code-flow strategy that fits the way your team works. You have several strategies to consider. At the end of the module, you can explore options. The Tailspin web team decides to develop a code-flow strategy that's based on Git and GitHub.
+
+When Mara set up Azure Boards, she and the team identified a few initial tasks to address. One task was to create a Git-based workflow.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/build-initial-tasks.png)
+
+Let's listen in on the team as they work out a better way to collaborate. Currently, they're using a centralized version-control system, but the plan is to move to Git, a distributed system.
+
+Mara is diligently working on her assigned features when Andy walks in.
+
+**Andy:** Hi Mara. In the leadership meeting this morning, it was brought up that our team and the game-development team are using different version-control systems. To streamline how we share resources between teams, we've been asked to move to a distributed version-control system that can better handle the collaboration.
+
+**Mara:** That's good to know. If you remember, we put it on our board. Currently, we're using a centralized version-control system. It works great for us now, but I agree that a distributed version-control system is a better choice when we start to share between teams and our team gets bigger. It's also a task on our board to increase visibility so that all the stakeholders know what everyone is doing. I think a distributed source-control system like Git would also help.
+
+**Andy:** I've been wanting to try Git for a while. I never seem to have the time. Is it difficult to learn or set up? If it seems reasonable, maybe we could work on it now. I'm tired of always putting things off. And it would be nice to be able to see what everyone is doing and to have access to the entire repository. OK, what's it all about?
+
+**Mara:** Let me explain it, and then you can decide if it sounds like something we want to implement right away.
+
+Mara and Andy move to the whiteboard for a discussion on version control.
+
+## What is Git and distributed version control?
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/2-whiteboard-centralized-vs-distributed-drawing.png)
+
+**Mara:** The drawing on the left is centralized version control, like what we're using now. We have a central version of the code base ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-01.png) in Team Foundation Version Control (TFVC) that everyone uses. We each work on the files we need to change and then merge them back into the main repository when we're finished with them.
+
+**Andy:** Yes, and that's working for us. Well, except when I was blocked that time when a breaking change got merged into the central repo.
+
+**Mara:** Right! You were blocked. ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-02.png) We could use a branching strategy with TFVC to solve the blocking issue, but in our current configuration, merging might get a bit more complicated. And when we had that breaking change ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-03.png), no one could get any work done until we got that resolved. That problem is always lurking, because we're all using the same copy of the code.
+
+On the right is a drawing of distributed version control. We still have a central repository ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-04.png) that's the stable version of the code base, but each developer has their own copy of it from which to work. This frees us up to experiment and try various approaches without affecting the central repository.
+
+Distributed version control also ensures that only the working code ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/callout-05.png) is merged into the central repository. We could even set it up so that code can't be merged until it's reviewed.
+
+What's cool about Azure DevOps is that it works well both with centralized version-control systems and distributed version-control systems.
+
+**Andy:** What happens when more than one person changes the same file?
+
+**Mara:** Often, Git can merge multiple changes automatically. Of course, we want to always make sure that the combination of changes results in code that works. When Git can't automatically merge changes, it marks the conflicts directly in the files so that a human can choose which changes to accept.
+
+**Andy:** Right now, our code is stored on our own server. If we move to using distributed version control, where will the code be stored?
+
+**Mara:** I'm glad you asked. That's where hosting comes in.
+
+## Where can I host my repository?
+
+**Mara:** When we're deciding where to host our repositories, we have a few options. For example, we can host them on a local server, in Bitbucket, or in GitHub. Bitbucket and GitHub are web-based hosting solutions. We can access them from anywhere.
+
+**Andy:** Have you used either of them?
+
+**Mara:** I've used GitHub in the past. It has features that are important to developers, like easy access to change logs and version-control features from either the command line or the online portal.
+
+**Andy:** So how does Git work?
+
+## How do I work with Git?
+
+**Mara:** Like I mentioned before, with distributed systems, developers are free to access any file they need without affecting other developers' work because they have their own copy of the repository. A clone is your local copy of a repository.
+
+When we work on a feature or a bug fix, we usually want to try out different approaches until we find the best solution. However, trying out code on your copy of the main code base isn't a good idea, because you might not want to keep the first few tries.
+
+To give you a better option, Git has a feature called branching, where you can maintain as many copies as you want and merge back only the one you want to keep. This keeps the main branch stable.
+
+**Andy:** I get the concepts so far. How do I check in my code?
+
+## How do my local changes get up to the main code base?
+
+**Mara:** In Git, the default branch, or trunk, is typically called main.
+
+When you feel your code is ready to be merged into the main branch in the central repository that's shared by all developers, you create what's called a pull request. When you create a pull request, you're telling the other developers that you have code ready to review, and you want it merged into the main branch. When your pull request is approved and then merged, it becomes part of the central code base.
+
+## What does a branching workflow look like?
+
+**Step 1:** When you begin to work on a new feature or bug fix, the first thing you want to do is ensure that you're starting with the latest stable code base. To do this, you can synchronize your local copy of the main branch with the server's copy. This pulls into your local copy all other developer changes that were pushed to the main branch on the server since your last sync.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/2-github-paths-1.png)
+
+**Step 2:** To ensure that you're working only on your copy of the code, you create a new branch just for that feature or bug fix. As you can imagine, having many branches for all the things you're doing might get hard to remember, so using a good naming convention is critical.
+
+Before you make changes to a file, you check out a new branch so that you know you're working on the files from that branch and not from a different branch. You can switch branches anytime by checking out that branch.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/2-github-paths-2.png)
+
+**Step 3:** You're now safe to make whatever changes you want because these changes are only in your branch. As you work, you can commit your changes to your branch to ensure that you don't lose any work. This also provides a way to roll back any changes you've made to earlier versions. Before you can commit changes, you need to stage your files so that Git knows which ones you're ready to commit.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/2-github-paths-3.png)
+
+**Step 4:** The next step is to push, or upload, your local branch up to the remote repository (such as GitHub) so that others can see what you're working on. Don't worry, this won't merge your changes yet. You can push up your work as often as you'd like. In fact, that's a good way to back up your work or allow yourself to work from multiple computers.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/2-github-paths-4.png)
+
+**Step 5:** This step is a common one but not required. When you're satisfied that your code is working as you want it to, you can pull, or merge, the remote main branch back into your local main branch. Changes have been taking place there that your local main branch doesn't have yet. After you've synchronized the remote main branch with yours, merge your local main branch into your working branch and test your build again.
+
+This process helps ensure that your feature works with the latest code. It also helps ensure that your work will integrate smoothly when you submit your pull request.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/2-github-paths-5.png)
+
+**Step 6:** Your local code now needs to be committed and pushed up to the hosted repository. This is the same as steps 3 and 4.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/2-github-paths-6.png)
+
+**Step 7:** You're finally ready to propose your changes to the remote main branch. To do this, you begin a pull request. When configured in Azure Pipelines or another CI/CD system, this step triggers the build process, and you can watch your changes move through the pipeline. After the build succeeds and others approve your pull request, your code can be merged into the remote main branch. (It's still up to a human to merge the changes.)
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/2-github-paths-7.png)
+
+**Andy:** This all looks complicated and hard to learn.
+
+**Mara:** Git can seem intimidating because it's so powerful, but after you get the hang of the flow, it starts to feel natural.
+
+You'll use only a few commands daily. Here's a summary:
+
+| Category | To perform this task | Use this command |
+|----------|---------------------|------------------|
+| Repository management | Create a Git repository | `git init` |
+| | Download a remote repository | `git clone` |
+| Branch | Create a branch | `git checkout` |
+| Stage and commit changes | See which files have been changed | `git status` |
+| | Stage files to commit | `git add` |
+| | Commit files to your branch | `git commit` |
+| Remote synchronization | Download a branch from a remote repository | `git pull` |
+| | Upload a branch to a remote repository | `git push` |
+
+**Andy:** That sounds like a great starting point. I can definitely handle that. I can learn more advanced commands as I need them.
+
+---
+
+## Check your knowledge
+
+### 1. Which type of version control enables you to work from your own copy of the main repository?
+
+- [ ] Centralized version control
+- [ ] Team Foundation Version Control
+- [x] **Distributed version control**
+
+### 2. A Git branch is used to:
+
+- [ ] Copy only the part of the repository that you want to work with.
+- [x] **Make changes and experiment with the codebase without affecting other developers' work.**
+- [ ] Create an entirely new repository that's not connected to the main repository.
+
+### 3. The git pull command:
+
+- [ ] Uploads changes from your local repository to the remote repository.
+- [x] **Downloads and merges the latest changes from the remote repository into your local repository.**
+
+---
+
+## Відповіді на запитання:
+
+**1. Правильна відповідь: Distributed version control**
+Розподілена система контролю версій дозволяє кожному розробнику мати власну повну копію репозиторію, з якою можна працювати незалежно від інших.
+
+**2. Правильна відповідь: Make changes and experiment with the codebase without affecting other developers' work.**
+Git гілки створюються для ізоляції змін і експериментів від основної кодової бази та роботи інших розробників.
+
+**3. Правильна відповідь: Downloads and merges the latest changes from the remote repository into your local repository.**
+Команда `git pull` завантажує та об'єднує останні зміни з віддаленого репозиторію в локальний репозиторій.
+
+
+# 2.3 Exercise - Set up your Azure DevOps environment
+
+In this unit, you'll ensure that your Microsoft Azure DevOps organization is set up to complete the rest of this module.
+
+To do this, you'll:
+
+* Set up an Azure DevOps project for this module.
+* Move the work item for this module on Azure Boards to the Doing column.
+* Ensure that your project is set up locally so that you can push changes to the pipeline.
+
+## Get the Azure DevOps project
+
+Here, you'll ensure that your Azure DevOps organization is set up to complete the rest of this module. You do this by running a template that creates a project for you in Azure DevOps.
+
+The modules in this learning path form a progression, where you follow the Tailspin web team through their DevOps journey. For learning purposes, each module has an associated Azure DevOps project.
+
+### Run the template
+
+Run a template that sets up your Azure DevOps organization.
+
+1. Get and run the ADOGenerator project in Visual Studio or the IDE of your choice.
+
+2. When prompted to **Enter the template number from the list of templates**, enter **23** for **Implement a code workflow in your build pipeline using Git and GitHub**, then press Enter.
+
+3. Choose your authentication method. You can set up and use a Personal Access Token (PAT) or use device login.
+
+   **Note:** If you set up a PAT, make sure to authorize the necessary scopes. For this module, you can use Full access, but in a real-world situation, you should ensure you grant only the necessary scopes.
+
+4. Enter your Azure DevOps organization name, then press Enter.
+
+5. If prompted, enter your Azure DevOps PAT, then press Enter.
+
+6. Enter a project name such as **Space Game - web - Workflow**, then press Enter.
+
+7. Once your project is created, go to your Azure DevOps organization in your browser (at `https://dev.azure.com/<your-organization-name>/`) and select the project.
+
+**Important:** The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. Be sure to perform the cleanup steps even if you don't complete this module.
+
+### Fork the repository
+
+If you haven't already, fork the mslearn-tailspin-spacegame-web repository.
+
+1. On GitHub, go to the **mslearn-tailspin-spacegame-web** repository.
+
+2. Select **Fork** at the top-right of the screen.
+
+3. Choose your GitHub account as the Owner, then select **Create fork**.
+
+### Set your project's visibility
+
+Initially, your fork of the Space Game repository on GitHub is set to public while the project created by the Azure DevOps template is set to private. A public repository on GitHub can be accessed by anyone, while a private repository is only accessible to you and the people you choose to share it with. Similarly, on Azure DevOps, public projects provide read-only access to non-authenticated users, while private projects require users to be granted access and authenticated to access the services.
+
+At the moment, it is not necessary to modify any of these settings for the purposes of this module. However, for your personal projects, you must determine the visibility and access you wish to grant to others. For instance, if your project is open source, you may choose to make both your GitHub repository and your Azure DevOps project public. If your project is proprietary, you would typically make both your GitHub repository and your Azure DevOps project private.
+
+Later on, you may find the following resources helpful in determining which option is best for your project:
+
+* Use private and public projects
+* Change project visibility to public or private
+* Setting repository visibility
+
+## Move the work item to Doing
+
+In this section, you'll assign yourself a work item that relates to this module on Azure Boards. You'll also move the work item to the **Doing** state. In practice, you and your team would create work items at the start of each sprint or work iteration.
+
+Assigning work in this way gives you a checklist from which to work. It gives others on your team visibility into what you're working on and how much work is left. It also helps the team enforce work in process (WIP) limits so that the team doesn't take on too much work at one time.
+
+Recall that the team settled on these seven top issues:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/build-all-tasks.png)
+
+**Note:** Within an Azure DevOps organization, work items are numbered sequentially. In your project, the number that's assigned to each work item might not match what you see here.
+
+Here, you'll move the second item, **Create a Git-based workflow**, to the **Doing** column and assign yourself to the work item.
+
+Recall that **Create a Git-based workflow** relates to moving to a code workflow that enables better collaboration among team members.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/3-work-item-details.png)
+
+To set up the work item:
+
+1. In Azure DevOps, select **Boards** in the left pane, then select **Boards**.
+
+  ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-boards-menu.png)
+
+2. In the **Create a Git-based workflow** work item, select the **To Do** down arrow, and then assign the work item to yourself.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-boards-down-chevron.png)
+
+4. Drag the work item from the **To Do** column to the **Doing** column.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/3-azure-boards-wi2-doing.png)
+
+At the end of this module, after you've completed the task, you'll move the item to the **Done** column.
+
+## Set up the project locally
+
+Here, you load the Space Game project in Visual Studio Code, configure Git, clone your repository locally, and set the upstream remote so that you can download the starter code.
+
+**Note:** If you're already set up with the mslearn-tailspin-spacegame-web project locally, you can move to the next section.
+
+### Open the integrated terminal
+
+Visual Studio Code comes with an integrated terminal, so you can edit files and work from the command line all in one place.
+
+1. Start Visual Studio Code.
+
+2. On the **View** menu, select **Terminal**.
+
+3. In the dropdown list, select **bash**. If you're familiar with another Unix shell that you prefer to use, such as Zsh, select that shell instead.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/vscode-terminal-bash.png)
+
+The terminal window lets you choose any shell that's installed on your system, like Bash, Zsh, and PowerShell.
+
+Here you'll use Bash. Git for Windows provides Git Bash, which makes it easy to run Git commands.
+
+**Note:** On Windows, if you don't see Git Bash listed as an option, make sure you've installed Git, and then restart Visual Studio Code.
+
+4. Run the `cd` command to navigate to the directory you want to work from, like your home directory (`~`). You can choose a different directory if you want.
+
+   ```bash
+   cd ~
+   ```
+
+### Configure Git
+
+If you're new to Git and GitHub, you first need to run a few commands to associate your identity with Git and authenticate with GitHub.
+
+**Set up Git** explains the process in greater detail.
+
+At a minimum, you'll need to complete the following steps. Run these commands from the integrated terminal:
+
+1. Set your username.
+2. Set your commit email address.
+3. Cache your GitHub password.
+
+**Note:** If you're already using two-factor authentication with GitHub, create a personal access token and use your token in place of your password when prompted later.
+
+Treat your access token like you would a password. Keep it in a safe place.
+
+### Set up your project in Visual Studio Code
+
+In this part, you clone your fork locally so that you can make changes and build out your pipeline configuration.
+
+**Note:** If you receive any errors about filenames being too long when you clone your repository, try cloning the repository in a folder that doesn't have a long name or is deeply nested.
+
+#### Clone your fork locally
+
+You now have a copy of the Space Game web project in your GitHub account. Now you'll download, or clone, a copy to your computer so you can work with it.
+
+A clone, just like a fork, is a copy of a repository. When you clone a repository, you can make changes, verify they work as you expect, and then upload those changes back to GitHub. You can also synchronize your local copy with changes other authenticated users have made to GitHub's copy of your repository.
+
+To clone the Space Game web project to your computer:
+
+1. Go to your fork of the Space Game web project (mslearn-tailspin-spacegame-web) on GitHub.
+
+2. Select **Code**. Then, from the **HTTPS** tab, select the button next to the URL that's shown to copy the URL to your clipboard.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/github-clone-button.png)
+
+4. In Visual Studio Code, go to the terminal window.
+
+5. In the terminal, move to the directory you want to work from, like your home directory (`~`). You can choose a different directory if you want.
+
+   ```bash
+   cd ~
+   ```
+
+6. Run the `git clone` command. Replace the URL that's shown here with the contents of your clipboard:
+
+   ```bash
+   git clone https://github.com/your-name/mslearn-tailspin-spacegame-web.git
+   ```
+
+7. Move to the mslearn-tailspin-spacegame-web directory. This is the root directory of your repository.
+
+   ```bash
+   cd mslearn-tailspin-spacegame-web
+   ```
+
+#### Set the upstream remote
+
+A remote is a Git repository where team members collaborate (like a repository on GitHub). Here you list your remotes and add a remote that points to Microsoft's copy of the repository so that you can get the latest sample code.
+
+1. Run this `git remote` command to list your remotes:
+
+   ```bash
+   git remote -v
+   ```
+
+   You see that you have both fetch (download) and push (upload) access to your repository:
+
+   ```
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (fetch)
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (push)
+   ```
+
+   Origin specifies your repository on GitHub. When you fork code from another repository, it's common to name the original remote (the one you forked from) as upstream.
+
+2. Run this `git remote add` command to create a remote named upstream that points to the Microsoft repository:
+
+   ```bash
+   git remote add upstream https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git
+   ```
+
+3. Run `git remote` a second time to see the changes:
+
+   ```bash
+   git remote -v
+   ```
+
+   You see that you still have both fetch (download) and push (upload) access to your repository. You also now have fetch and push access to the Microsoft repository:
+
+   ```
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (fetch)
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (push)
+   upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git (fetch)
+   upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git (push)
+   ```
+
+#### Open the project in the file explorer
+
+In Visual Studio Code, your terminal window points to the root directory of the Space Game web project. To view its structure and work with files, from the file explorer, you'll now open the project.
+
+The easiest way to open the project is to reopen Visual Studio Code in the current directory. To do so, run the following command from the integrated terminal:
+
+```bash
+code -r .
+```
+
+You see the directory and file tree in the file explorer.
+
+Reopen the integrated terminal. The terminal places you at the root of your web project.
+
+If the `code` command fails, you need to add Visual Studio Code to your system PATH. To do so:
+
+1. In Visual Studio Code, select **F1** or select **View > Command Palette** to access the command palette.
+2. In the command palette, enter **Shell Command: Install 'code' command in PATH**.
+3. Repeat the previous procedure to open the project in the file explorer.
+
+You're now set up to work with the Space Game source code and your Azure Pipelines configuration from your local development environment.
+
