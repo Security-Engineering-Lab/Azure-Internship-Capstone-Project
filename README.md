@@ -791,3 +791,51 @@ This capstone project transforms standard application monitoring into a robust s
 
 
 
+
+- Anomalous Behavior Detection for SOC: Advanced Monitoring Techniques with UEBA, https://medium.com/@esrakyhn/anomalous-behavior-detection-for-soc-advanced-monitoring-techniques-with-ueba-aa47d4ca647d
+- AI-Based Threat Hunting, https://medium.com/@esrakyhn/ai-based-threat-hunting-9150633cb30e
+- Example Alert Rules in Wazuh, https://medium.com/@esrakyhn/example-alert-rules-in-wazuh-bfdc027020f9
+- CI/CD Pipeline Security: DevSecOps Best Practices for 2025, https://medium.com/@rizqimulkisrc/ci-cd-pipeline-security-devsecops-best-practices-for-2025-6cc1946f3f13
+- From Recon to Report: Automate Your Pentesting Workflow With Python, https://medium.com/the-first-digit/from-recon-to-report-automate-your-pentesting-workflow-with-python-fe0721ff66c9
+- How to Implement a Zero Trust Architecture in Your Network, https://medium.com/infosecmatrix/how-to-implement-a-zero-trust-architecture-in-your-network-6cba1ff54845
+- How to Build a Scalable Network Security Architecture for Enterprises, https://medium.com/infosecmatrix/how-to-build-a-scalable-network-security-architecture-for-enterprises-ac21d52fc469
+- Top 20 Automation Scripts for Ethical Hackers and Security Analysts, https://medium.com/the-first-digit/top-20-automation-scripts-for-ethical-hackers-and-security-analysts-1f5a0954d481
+- Anomalous Behavior Detection for SOC: Advanced Monitoring Techniques with UEBA, https://medium.com/@esrakyhn/anomalous-behavior-detection-for-soc-advanced-monitoring-techniques-with-ueba-aa47d4ca647d
+- PentestGPT: The Future of Automated Penetration Testing with AI, https://medium.com/@Ekenejoseph/pentestgpt-the-future-of-automated-penetration-testing-with-ai-256799a378ae
+- Kali GPT: The Future of AI-Driven Cybersecurity Tools in Kali Linux, https://medium.com/@Ekenejoseph/kali-gpt-the-future-of-ai-driven-cybersecurity-tools-in-kali-linux-544824b878ea
+- Detect Vulnerabilities With Nuclei AI, https://medium.com/@loyalonlytoday/detect-bugs-with-nuclei-ai-59105992e798
+
+
+
+#  Bug bounty
+- Find your bug bounty target hidden directories, https://medium.com/@loyalonlytoday/find-your-bug-bounty-target-hidden-directories-f132f70bafe1
+- A Hacker's Notebook: Real Techniques from the World of Bug Bounty (2025 Edition), https://medium.com/@verylazytech/a-hackers-notebook-real-techniques-from-the-world-of-bug-bounty-2025-edition-b7272595e681
+- New Bug Bounty Platform for AI/ML, https://medium.com/meetcyber/huntr-bug-bounty-platform-for-ai-ml-c0e4413a7bec
+- BI.ZONE Bug Bounty Platform, https://medium.com/@abhirupkonwar04/bi-zone-bug-bounty-platform-c1c3a6619696
+-  
+
+# OSINT
+- Analyze any website with this awesome Osint tool, https://medium.com/the-first-digit/analyze-any-website-with-this-awesome-osint-tool-c11901629cc6
+- Phone Number Investigation Tools For OSINT Investigators, https://medium.com/@loyalonlytoday/phone-number-investigation-tools-for-osint-investigators-52571c4d82bc
+- A list of datasets for OSINT Investigators, https://medium.com/@loyalonlytoday/a-list-of-datasets-for-osint-investigators-8521490a7f5e
+- Telegram bots for OSINT, https://medium.com/the-first-digit/telegram-bots-for-osint-fd74575e8ff3
+- Find the digital footprints of a person, https://medium.com/the-first-digit/find-the-digital-footprints-of-a-person-bcb30b11dd40
+- AI Detection Tools For OSINT Investigators, https://medium.com/@loyalonlytoday/ai-detection-tools-for-osint-investigators-7f08d46c196b
+- Free Social Media Intelligence(SOCMINT) Tools, https://medium.com/@loyalonlytoday/free-social-media-intelligence-socmint-tools-5c695ed644ec
+- How to Find Info on Anyone Online (Even Without Hacking!), https://medium.com/@hartarto/how-to-find-info-on-anyone-online-even-without-hacking-e46623de7154
+- A list of Paste sites for OSINT investigators, https://medium.com/@loyalonlytoday/a-list-of-paste-sites-for-osint-investigators-dc8cb7465067
+- OSINT Data Analysis: Pyvis and Networkx, https://medium.com/@CyberRaya/osint-data-analysis-pyvis-and-networkx-24b00544e212
+- X-OSINT: All in One OSINT tool, https://medium.com/the-first-digit/x-osint-all-in-one-osint-tool-9ef483d1d017
+
+
+# LLM
+- LLM Prompt Ideas for Red Teamers, https://medium.com/system-weakness/llm-prompt-ideas-for-red-teamers-4cf7837a3511
+- ScrapeGraphAI: Automate Web Scraping With LLM, https://medium.com/@CyberRaya/scrapegraphai-automate-web-scraping-with-llm-1b8751130edd
+
+
+
+# AI
+
+- Building a Team of AI Agents in n8n, https://medium.com/towards-artificial-intelligence/building-a-team-of-ai-agents-in-n8n-a3b988500dd2
+- n8n: The Future of Workflow Automation, https://medium.com/towards-artificial-intelligence/n8n-the-future-of-workflow-automation-3b6da1e6506b
+- 
