@@ -2389,3 +2389,417 @@ In this section, you submit a pull request just as you did previously.
 
 12. Select **Delete branch** to delete the **feature/home-page-text** branch from GitHub.
 
+
+
+
+# 2.6 Exercise - Add a build badge
+
+It's important for team members to know the build status. An easy way to quickly determine the build status is to add a build badge to the **README.md** file on GitHub. Let's check in on the team to see how it's done.
+
+Andy is at his desk sifting through his emails. He's answering the third email that's related to the build status for the Space Game website.
+
+**Andy:** There has to be some way to automate a status message. We have the pipeline, so we should be able to put a status somewhere. Maybe Mara knows how we can do it.
+
+Andy finds Mara talking with Amita in the break room.
+
+**Andy:** Hi, Amita. Mind if I borrow Mara for a second?
+
+**Amita:** I have to get to a meeting anyway. Borrow away.
+
+**Mara:** Hi Andy. What's up?
+
+**Andy:** I really like the changes we've made to our build pipeline by using Azure Pipelines, and Git is a great version-control system. I was wondering, is there a way to let people know the build status?
+
+**Mara:** Yes, actually. We can use a build badge.
+
+## What is a build badge?
+
+A badge is part of Microsoft Azure Pipelines. It has methods you can use to add an SVG image that shows the status of the build on your GitHub repository.
+
+Most GitHub repositories include a file named **README.md**, which is a Markdown file that includes essential details and documentation about your project. GitHub renders this file on your project's home page.
+
+Here's an example build badge:
+
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/6-final-build-badge.png)
+
+For this exercise, you make your build badge visible to everyone. This might not be a good idea for your private projects, because your build information will be made available to the public.
+
+To check that your build badge is visible:
+
+1. In Azure DevOps, navigate to your organization.
+
+2. Select **Organization settings** from the bottom corner.
+
+3. Under **Pipelines**, select **Settings**.
+
+4. Turn off **Disable anonymous access to badges**.
+
+ ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/6-devops-disable-anonymous-badge-access.png)
+
+You need to make a similar change to your project:
+
+1. Go to your project.
+2. Navigate to **Project settings** from the bottom corner.
+3. Under **Pipelines**, select **Settings**.
+4. Turn off **Disable anonymous access to badges**.
+
+## Add the build badge
+
+Up until now, you created Git branches locally to make changes to the Space Game project. You can also propose changes directly through GitHub. In this section, you do that to set up your status badge.
+
+1. In Azure DevOps, in the left pane, select **Pipelines**, then select your pipeline.
+
+2. Select the ellipsis (**...**) in the upper right, then select **Status badge**.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/6-pipeline-options-menu.png)
+
+4. Under **Sample Markdown**, select the **Copy** button to copy the Markdown code to the clipboard.
+
+5. In GitHub, go to your project.
+
+6. Make sure you're on the **main** branch. In the files area, open the **README.md** file.
+
+7. Select **Edit this file** (the pencil icon) to open the file in the editor.
+
+8. At the top of the page, add a blank line, and then paste the contents of the clipboard.
+
+9. Select the **Preview** tab to see your proposed changes.
+
+   GitHub renders the Markdown file and shows you the build badge.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/6-github-preview-changes.png)
+
+## Commit your changes to main
+
+In this section, you commit your changes to the **main** branch on GitHub.
+
+1. Select **Commit changes**.
+
+2. In the **Commit message** area, specify a commit message, such as "Add build badge".
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/6-github-commit-changes.png)
+
+4. Leave the **Commit directly to the main branch** option selected, then select **Commit changes** to commit your changes to the **main** branch.
+
+Your badge is displayed on the **README.md** page.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/6-final-build-badge.png)
+
+This process is a more basic way to merge code into GitHub. Instead of committing directly, you could have created a pull request with your changes for others to review.
+
+In practice, you'd switch to the **main** branch and pull the latest changes from GitHub the next time you need to add a feature or address a bug.
+
+**Andy:** Mara, you just made a change directly to main. Why didn't you use the flow you taught me? You know, with the feature branches.
+
+**Mara:** We could've done that. But sometimes when people are changing only the README file or other documentation files, they commit to main right then. Plus, you and I were able to verify the work together before we merged the change.
+
+But this brings up a good point. If we can all just commit to main when we want to, we could be letting problems in the code slip into our main branch.
+
+**Andy:** I've been meaning to talk to you about that.
+
+Andy and Mara continue this conversation while walking back to their offices.
+
+
+# 2.7 Exercise - Track your build history
+
+An easy way to track important events in your Microsoft Azure DevOps project is to create a dashboard. A dashboard allows team members and observers to understand and track build trends at a glance.
+
+In this unit, you'll set up a dashboard and add widgets to track your build history.
+
+Andy is putting together a report of the progress the team is making. He's in the middle of searching through all the build reports and pull requests to try to get the big picture when Mara walks in.
+
+**Mara:** Hi Andy, I have a question on a feature I'm working on. Do you have a minute?
+
+**Andy:** Sure! I could use a break. There has to be an easier way to sum up the builds and see whether there are patterns of failure.
+
+**Mara:** Actually, there's an easier way. We can set up a dashboard.
+
+**Andy:** So I can have a summary of the information I need in one place? I'm all ears.
+
+## What's the dashboard?
+
+The dashboard is a customizable area in Azure DevOps where you can add widgets and extensions to help you visualize areas of your DevOps solution. For example, you can add a widget to:
+
+* Show the history of your builds over time.
+* Give you a *burn down* view of the work in progress.
+* Show you the current pull requests.
+
+## Add a build history widget to the dashboard
+
+1. In Azure DevOps, select **Overview**, then select **Dashboards**.
+
+2. Select **Add a widget**.
+
+3. In the **Add widget** pane, search for **Build History**.
+
+4. Drag the **Build History** tile to the canvas.
+
+5. Select the **Gear** icon to configure the widget.
+   1. Keep the **Build History** title.
+   2. In the **Pipeline** drop-down list, select your pipeline.
+   3. Keep **All branches** selected.
+
+6. Select **Save**.
+
+7. Select **Done Editing**.
+
+   The **Build History** widget is displayed on the dashboard.
+
+8. Hover over each build to view the build number, when the build was completed, and the elapsed build time.
+
+   Each build succeeded, so the bars on the widget are all green. If the build had failed, it would appear in red.
+
+9. Select one of the bars to drill down into that build.
+
+To display more widgets, select the **Extension Gallery** link at the bottom of the **Add Widget** pane.
+
+
+
+# 2.8 Exercise - Add a rule to require a review
+
+
+In this unit, you'll set up a rule on GitHub that requires a reviewer to approve changes before they can be merged into the main branch. As a bonus, you'll also fix the typing error on the Space Game website's home page.
+
+Currently, the team allows anyone who makes a pull request to merge the code into the main branch. Because no review is required, it's possible for incorrect or unstable code to find its way in.
+
+Andy decides that he wants to add a check to the pull request in the form of another pair of eyes. He wants to set up GitHub to require someone other than the pull request author to review the code before it's merged. Let's see how to do this.
+
+Andy heads off to find Mara and spots her at her desk working away, her head bobbing to the music in her earbuds.
+
+**Andy:** Mara, I've been meaning to talk to you about something.
+
+Mara looks up.
+
+**Mara:** What can I help you with?
+
+**Andy:** Several small mistakes are making it through the build. Just today, a typing error showed up on the home page. Amita is spending too much time on these things. We need to stop them before they make it to the main branch. We need another pair of eyes on the code before the pull request is approved.
+
+**Mara:** I can set that up. In GitHub, there's a way to make sure that no pull request is merged before someone else reviews and approves it.
+
+## Set up approvals
+
+In this section, you'll set up a rule on GitHub that requires at least one reviewer to approve a pull request before it can be merged into the main branch. You'll then verify that the rule works by pushing up a fix to the typing error that Mara made earlier.
+
+### Add the rule
+
+1. In GitHub, go to your Space Game project repository.
+2. Select the **Settings** tab near the top of the page.
+3. On the left menu, select **Branches**.
+4. Make sure that **main** is selected as your default branch.
+5. Select **Add classic branch protection rule**.
+6. Under **Branch name pattern**, enter **main**.
+7. Select the **Require a pull request before merging** check box.
+8. Select the **Require approvals** check box.
+9. Keep the **Required approving reviews** value at **1**.
+10. Select **Create**.
+11. Select **Save changes**.
+
+**Note:** At the bottom of the list of choices is an option named **Include Administrators**. This option requires repository administrators to follow the rule. You don't set that, because you're an administrator of your repository and there isn't another reviewer. In this unit, for learning purposes, you review and approve your own pull requests.
+
+### Submit the fix
+
+In this section, you submit a fix to the typing error on the home page. Remember that the word "official" is mistyped as "oficial."
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/5-web-site-revised-text.png)
+
+1. In Visual Studio Code, go to the terminal.
+
+2. To check out the **main** branch, run **git checkout**:
+
+   ```bash
+   git checkout main
+   ```
+
+3. To pull down the latest changes to the **main** branch from GitHub, run **git pull**:
+
+   ```bash
+   git pull origin main
+   ```
+
+   You can see that two files are updated:
+
+   - **README.md**: Contains the Markdown code for displaying the build badge.
+   - **Index.cshtml**: Contains the updated home page text, which includes the typing error.
+
+4. To fix the error, create and check out a branch:
+
+   ```bash
+   git checkout -B bugfix/home-page-typo
+   ```
+
+5. In File Explorer, open **Index.cshtml**.
+
+6. Locate the error:
+
+   ```html
+   <p>Welcome to the oficial Space Game site!</p>
+   ```
+
+7. Change the line to correct the error:
+
+   ```html
+   <p>Welcome to the official Space Game site!</p>
+   ```
+
+8. Save the file.
+
+9. In the terminal, stage and commit the change:
+
+   ```bash
+   git status
+   git add Tailspin.SpaceGame.Web/Views/Home/Index.cshtml
+   git commit -m "Fix typing error on the home page"
+   ```
+
+   In practice, you'd ordinarily build and run the site locally to verify the change. In this unit, for the sake of brevity, let's skip that step.
+
+10. Push the branch to GitHub.
+
+    ```bash
+    git push origin bugfix/home-page-typo
+    ```
+
+### Test the rule
+
+1. In GitHub, locate and select the **bugfix/home-page-typo** branch.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/8-github-recent-branch.png)
+
+3. To start your pull request, select **Contribute** and then **Open pull request**.
+
+4. Set your forked repository as the base repository.
+
+    ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/8-github-review-required.png)
+
+6. Select **Create pull request**.
+
+   You can see that a human review is required before you can merge the change.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/8-github-review-required.png)
+
+   In practice, you'd assign a team member to review your change. In this unit, you can merge your own pull request for learning purposes.
+
+8. Select the **Merge without waiting for requirements to be met (bypass branch protections)** check box, and then select **Merge pull request**.
+
+9. Select **Confirm merge**.
+
+   Your change is merged.
+
+10. To delete the **bugfix/home-page-typo** branch, select **Delete branch**.
+
+
+# 2.9 Exercise - Clean up your Azure DevOps environment
+
+You're all done with the tasks for this module. In this unit, you'll move the work item to the **Done** state on Azure Boards and clean up your Azure DevOps environment.
+
+**Important**
+
+This page contains important cleanup instructions. Cleaning up your resources helps ensure that you don't run out of free build minutes. Be sure to perform the cleanup if you ran the template earlier in this module.
+
+## Move the work item to Done
+
+In this section, you move the work item that you previously assigned to yourself, **Create a Git-based workflow**, to the **Done** column.
+
+In practice, the definition of "Done" often means that working software is in the hands of your users. In this unit, for learning purposes, you'll mark this work as complete because you and the Tailspin team have started an improved code workflow that uses Git and GitHub.
+
+At the end of each sprint, or work iteration, you and your team might hold a retrospective meeting in which you share the work you completed, what went well in the sprint, and what could be improved.
+
+To complete the work item:
+
+1. In Microsoft Azure DevOps, select **Boards** on the left menu, then select **Boards**.
+2. Drag the **Create a Git-based workflow** work item from the **Doing** column to the **Done** column.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/9-azure-boards-wi2-done.png)
+
+## Disable the pipeline or delete your project
+
+Each module in this learning path provides a template that you can run to create a clean environment for the duration of the module.
+
+Running multiple templates creates multiple Microsoft Azure Pipelines projects, each pointing to the same GitHub repository. This action can cause multiple pipelines to run each time you push a change to your GitHub repository. This action, in turn, can cause you to run out of free build minutes on our hosted agents. Therefore, it's important to disable or delete your pipeline before you move on to the next module.
+
+Choose either of the next two options.
+
+### Option 1: Disable the pipeline
+
+This option disables the pipeline so that it doesn't process further build requests. You can reenable the build pipeline later if you want to. Choose this option if you want to keep your DevOps project and your build pipeline for future reference.
+
+To disable the pipeline:
+
+1. In Azure Pipelines, navigate to your pipeline.
+2. Select the ellipsis (**...**), then select **Settings**:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-settings-button.png)
+
+4. Under **Processing of new run requests**, select **Disabled**, and then select **Save**.
+
+Your pipeline will no longer process build requests.
+
+### Option 2: Delete the Azure DevOps project and GitHub repository
+
+This option deletes your Azure DevOps project, including what's on Azure Boards and your build pipeline, and your GitHub repository. In future modules, you'll be able to run another template that brings up a new project in a state where this one leaves off. Choose this option if you don't need your DevOps project for future reference.
+
+To delete the project:
+
+1. In Azure DevOps, go to your project. Earlier, we recommended that you name this project *Space Game - web - Workflow*.
+2. Select **Project settings** in the lower-left corner.
+3. In the **Project details** area, scroll to the bottom and select **Delete**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-delete-project.png)
+   
+5. In the window that appears, enter the project name and select **Delete** a second time.
+
+Your project is now deleted.
+
+To delete the repository:
+
+1. In GitHub, go to your repository, `https://github.com/username/mslearn-tailspin-spacegame-web`.
+2. Select the **Settings** tab, then select **General** in the left menu.
+3. Scroll down and select **Delete this repository**.
+4. Select **I want to delete this repository**.
+5. Select **I have read and understand these effects**.
+6. Type the repository name, then select **Delete this repository**.
+
+
+
+# 2.10 Summary
+
+In this module, you learned how to collaborate with others by using Git and GitHub.
+
+Andy and Mara are well on their way to implementing a system that will allow them to better collaborate as a team and help ensure that only quality code is merged to the `main` branch.
+
+A build badge and dashboard widgets help the team and others understand the latest build state and track the build history over time.
+
+Although Andy and Mara are the primary code contributors, setting up a rule on GitHub to require a review is a good way to enforce a disciplined code review practice. Even minor errors can cause a build to break. As an example, you watched a typing error make its way through the build and into the hands of the QA team.
+
+## Learn more
+
+### Explore tools that simplify the Git and GitHub workflow
+
+In this module, you made basic changes to the *Space Game* website. In practice, your changes will likely be much more complex. Although you can do everything you need from the command line, there are many tools you can use to simplify the workflow. Here are two that we recommend:
+
+* **Visual Studio Code** includes Git support in-the-box. Here are resources where you can learn more:
+   * Using Git source control in VS Code
+   * Working with GitHub in VS Code
+* **GitHub Desktop** is another great way to branch, commit, and visually compare and commit your changes.
+
+### Learn more about Git
+
+Although you can learn Git with just a few commands, full mastery will let you perform more complex types of merges and understand the history of your code base.
+
+**git-scm.com** and the book **Pro Git** are two excellent resources for learning more about Git.
+
+### Define your workflow
+
+The workflow you used in this module is a standard way to get started. Your team can refine it to suit your needs. You'll find many resources and perspectives on the web from various teams with varying needs.
+
+**Understanding the GitHub flow** introduces an approach that's similar to what you saw in this module, and it includes tips that you can apply to your own workflow.
+
+**A successful Git branching model** proposes a more advanced branching and merging strategy.
+
+**How to Split Pull Requests** describes how to split large pull requests into smaller ones to help others more easily understand your changes.
+
+**How to Write a Git Commit Message** teaches you how to be a better collaborator by writing effective commit messages.
+
+**Specify events that trigger pipelines** explains how triggers enable you to control which files or Git branches cause a build to occur.
+
