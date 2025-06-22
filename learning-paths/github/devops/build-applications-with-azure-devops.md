@@ -2180,11 +2180,12 @@ In development mode, the Space Game website is configured to run on port 5000.
 
    You should see this:
 
-   ![Screenshot of the Space Game website running in a web browser.]
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/3-space-game-top.png)
+
 
    You can interact with the page, including the leaderboard. When you select a player's name, you see details about that player.
 
-2. When you're finished, return to the terminal window, and select **Ctrl+C** to stop the running application.
+3. When you're finished, return to the terminal window, and select **Ctrl+C** to stop the running application.
 
 ## Create a feature branch
 
@@ -2238,9 +2239,9 @@ Like before, the **feature/home-page-text** is based on the **main** branch.
 
    You can see that the home page contains the updated text.
 
-   ![Screenshot of the Space Game website with updated text. The text contains a spelling error.]
+    ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/5-web-site-revised-text.png)
 
-7. When you're finished, return to the terminal window, and then press **Ctrl+C** to stop the running application.
+8. When you're finished, return to the terminal window, and then press **Ctrl+C** to stop the running application.
 
 ## Commit and push your branch
 
@@ -2274,7 +2275,7 @@ Here you'll stage your changes to **Index.cshtml**, commit the change to your br
 
    Just as before, you can locate your branch on GitHub from the branch drop-down box.
 
-   ![Screenshot of GitHub showing the new branch.]
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/5-github-recently-pushed.png)
 
 ## Watch Azure Pipelines build the application
 
@@ -2364,27 +2365,27 @@ In this section, you submit a pull request just as you did previously.
 
 5. Ensure that the **base** drop-down list specifies your repository and not the Microsoft repository.
 
-   ![Screenshot of GitHub confirming that the branch can be merged.]
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/implement-code-workflow/media/5-github-set-base.png)
 
    **Important:** Again, this step is important because you can't merge your changes into the Microsoft repository.
 
    When you work directly with your own repository, and not a fork, your **main** branch is selected by default.
 
-6. Enter a title and a description for your pull request.
+7. Enter a title and a description for your pull request.
    * **Title**: *Improve the text at the top of the home page*
    * **Description**: *Received the latest home page text from the product team.*
 
-7. To complete your pull request, select **Create pull request**.
+8. To complete your pull request, select **Create pull request**.
 
    This step doesn't merge any code. It tells others that you have changes that you're proposing to merge.
 
    The pull request window is displayed. As before, a pull request triggers Azure Pipelines to build your application by default.
 
-8. Optionally, select the **Details** link or go to your project on Azure DevOps and watch the pipeline run.
+9. Optionally, select the **Details** link or go to your project on Azure DevOps and watch the pipeline run.
 
-9. When the build is finished, go back to your pull request on GitHub.
+10. When the build is finished, go back to your pull request on GitHub.
 
-10. Select **Merge pull request**, and then select **Confirm merge**.
+11. Select **Merge pull request**, and then select **Confirm merge**.
 
-11. Select **Delete branch** to delete the **feature/home-page-text** branch from GitHub.
+12. Select **Delete branch** to delete the **feature/home-page-text** branch from GitHub.
 
