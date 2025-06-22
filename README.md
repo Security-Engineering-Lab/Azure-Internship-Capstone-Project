@@ -791,6 +791,12 @@ This capstone project transforms standard application monitoring into a robust s
 
 
 
+# Cybersecurity Roles
+
+- These Cybersecurity Roles Are the Future: How to Thrive in the Age of AI, https://medium.com/aws-in-plain-english/these-cybersecurity-roles-are-the-future-how-to-thrive-in-the-age-of-ai-94b39a75b788
+- CERTIFICATIONS THAT ARE REQUIRED IN CYBERSECURITY, https://medium.com/devsecops-ai/certifications-that-are-required-in-cybersecurity-ac987d3eed70
+
+  
 
 - Anomalous Behavior Detection for SOC: Advanced Monitoring Techniques with UEBA, https://medium.com/@esrakyhn/anomalous-behavior-detection-for-soc-advanced-monitoring-techniques-with-ueba-aa47d4ca647d
 - AI-Based Threat Hunting, https://medium.com/@esrakyhn/ai-based-threat-hunting-9150633cb30e
@@ -838,4 +844,31 @@ This capstone project transforms standard application monitoring into a robust s
 
 - Building a Team of AI Agents in n8n, https://medium.com/towards-artificial-intelligence/building-a-team-of-ai-agents-in-n8n-a3b988500dd2
 - n8n: The Future of Workflow Automation, https://medium.com/towards-artificial-intelligence/n8n-the-future-of-workflow-automation-3b6da1e6506b
+- BlueTeamGPT: The AI Defender Every Security Team Needs, https://medium.com/@Ekenejoseph/blueteamgpt-the-ai-defender-every-security-team-needs-77389b061f10
+
+
+# Azure Sentinel
+- MSTICPy v1.0.0 and Jupyter Notebooks for CyberSec, https://medium.com/@msticpy/msticpy-v1-0-0-and-jupyter-notebooks-in-azure-sentinel-an-update-ac2f6df61f9e
+- Writing a Data Provider for MSTICPy, https://medium.com/@msticpy/writing-a-data-provider-for-msticpy-a7c237775c6
+- msticpy 0.9.0 — Pivot Functions, https://medium.com/@msticpy/msticpy-0-9-0-pivot-functions-2be851ae2001
+- Azure Sentinel Notebooks, https://github.com/Azure/Azure-Sentinel-Notebooks
+- Unlock the Power of Azure’s Sentinel: The Ultimate Guard for Your Digital Fortress!, https://medium.com/data-analytics-magazine/unlock-the-power-of-azures-sentinel-the-ultimate-guard-for-your-digital-fortress-d20cf4a45964
+- Microsoft Azure Sentinel 101: Linux Command Line Logging and Auditing Activity for Threats or Compromise using Snoopy, https://medium.com/@truvis.thornton/microsoft-azure-sentinel-101-linux-command-line-logging-and-auditing-activity-for-threats-or-34f0c6a5c522
+- Microsoft Azure Sentinel 101: Timechart with week/month over week/month overlay — find changes in log ingestion, https://medium.com/@truvis.thornton/microsoft-azure-sentinel-101-timechart-with-week-month-over-week-month-overlay-find-changes-in-e25405fc973f
+- Microsoft Azure Sentinel 101: Forwarding OpnSense logs to LogStash and parsing with Geo IP info before sending to Azure Sentinel, https://medium.com/@truvis.thornton/microsoft-azure-sentinel-101-forwarding-opnsense-logs-to-logstash-and-parsing-with-geo-ip-info-7a516c69eef2
+- Microsoft Azure Sentinel 101: Log Source, Data Table & End Point Monitoring — Be alerted when a source goes down or stops responding, https://medium.com/@truvis.thornton/microsoft-azure-sentinel-101-log-source-dataable-end-point-monitoring-be-alerted-when-a-1ff4fae77892
+
+
+# DevSecOps
+
+- 10 Shell Scripts to Automate DevSecOps Workflows, https://medium.com/devsecops-ai/10-shell-scripts-to-automate-devsecops-workflows-a3bbd716775d
 - 
+
+# SOC 
+
+- Build Your Own AI SOC — Part 1: Why the Future of Cyber Defense Is Automated, https://medium.com/@corytat/build-your-own-ai-soc-part-1-why-the-future-of-cyber-defense-is-automated-054340393077
+- Build Your Own AI SOC — Part 2, https://medium.com/@corytat/build-your-own-ai-soc-part-2-7edf9a84282f
+- Build Your Own AI SOC — Part 3 Phishing Detection With Gmail, VirusTotal, and GPT, https://medium.com/devsecops-ai/build-your-own-ai-soc-part-3-phishing-detection-with-gmail-virustotal-and-gpt-7ed4d4a8b3b2
+- Build Your Own AI SOC — Final Post: What You’ve Built and Where to Go Next, https://medium.com/@corytat/build-your-own-ai-soc-final-post-what-youve-built-and-where-to-go-next-5526183318ac
+
+
