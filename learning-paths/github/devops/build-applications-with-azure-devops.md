@@ -2803,3 +2803,18 @@ The workflow you used in this module is a standard way to get started. Your team
 
 **Specify events that trigger pipelines** explains how triggers enable you to control which files or Git branches cause a build to occur.
 
+
+
+
+# 3 Run quality tests in your build pipeline by using Azure Pipelines
+
+Set up automated testing in your pipeline to improve code quality.
+
+# Learning objectives
+After completing this module, you'll be able to:
+- Explain the benefits of automated testing and the kinds of testing you can use.
+- Run unit tests locally and then in Azure Pipelines.
+- Add dashboard widgets to visualize test runs over time.
+- Perform code coverage testing to see how much of your code is covered by unit tests.
+- Fix and verify test failures in your build pipeline.
+
