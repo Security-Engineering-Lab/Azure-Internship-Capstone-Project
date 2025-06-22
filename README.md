@@ -851,6 +851,8 @@ This capstone project transforms standard application monitoring into a robust s
 - MSTICPy v1.0.0 and Jupyter Notebooks for CyberSec, https://medium.com/@msticpy/msticpy-v1-0-0-and-jupyter-notebooks-in-azure-sentinel-an-update-ac2f6df61f9e
 - Writing a Data Provider for MSTICPy, https://medium.com/@msticpy/writing-a-data-provider-for-msticpy-a7c237775c6
 - msticpy 0.9.0 — Pivot Functions, https://medium.com/@msticpy/msticpy-0-9-0-pivot-functions-2be851ae2001
+- MSTICPy 0.8.8 Release, https://medium.com/@msticpy/msticpy-0-8-8-release-5e8fe28a77d6
+- MSTICpy 0.7.0/1 Release, https://medium.com/@msticpy/msticpy-0-7-0-1-release-758c5cbbf06d
 - Azure Sentinel Notebooks, https://github.com/Azure/Azure-Sentinel-Notebooks
 - Unlock the Power of Azure’s Sentinel: The Ultimate Guard for Your Digital Fortress!, https://medium.com/data-analytics-magazine/unlock-the-power-of-azures-sentinel-the-ultimate-guard-for-your-digital-fortress-d20cf4a45964
 - Microsoft Azure Sentinel 101: Linux Command Line Logging and Auditing Activity for Threats or Compromise using Snoopy, https://medium.com/@truvis.thornton/microsoft-azure-sentinel-101-linux-command-line-logging-and-auditing-activity-for-threats-or-34f0c6a5c522
