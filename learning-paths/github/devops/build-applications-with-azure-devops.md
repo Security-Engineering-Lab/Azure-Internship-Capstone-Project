@@ -5971,3 +5971,755 @@ If the `code` command fails, you need to add Visual Studio Code to your system P
 
 You're now set up to work with the Space Game source code and your Azure Pipelines configuration from your local development environment.
 
+
+
+# 5.4 **Exercise - Create a build agent that runs on Azure**
+
+In this unit, you'll use a virtual machine that runs on Microsoft Azure to configure a build agent that you can use in Microsoft Azure Pipelines. We provide a virtual machine that you can use for the duration of this module.
+
+In this unit, you will:
+
+* Create an Ubuntu virtual machine on Azure to serve as your build agent.
+* Create an agent pool in Microsoft Azure DevOps.
+* Create an access token to authenticate your agent with Azure DevOps.
+* Configure your agent with the software that's required to build the Space Game website.
+* Configure your agent to connect to Azure DevOps so that it can receive build jobs.
+* Verify that the agent is connected to Azure DevOps and ready to receive build jobs.
+
+There are many ways to create a virtual machine on Azure. In this unit, you'll create an Ubuntu virtual machine by using an interactive terminal called Cloud Shell.
+
+To configure your VM, you have several choices:
+
+* For a Linux VM, you can connect directly over SSH and interactively configure your system.
+* You can automate the deployment by using an ARM template, Bicep, or other automated provisioning tool.
+* If you need to deploy many build agents, you can create a VM image that has all the software pre-installed.
+
+Configuring a system interactively is a good way to get started, because it helps you understand the process and what's needed. To simplify the process, connect to your Ubuntu VM over SSH and run shell scripts to set up your build agent.
+
+> **Note**
+> 
+> If you're unfamiliar with connecting to or configuring Linux systems, just follow along. You can apply the same concepts to Windows build agents.
+
+## **Create a Linux virtual machine**
+
+In this section, you create a VM that's running Ubuntu 20.04, which will serve as your build agent. The VM isn't yet set up to be a build agent or have any of the tools that are required to build the Space Game web application. You'll set that up shortly.
+
+### **Bring up Cloud Shell through the Azure portal**
+
+> **Important**
+> 
+> To complete the exercises in this module, you need your own Azure subscription.
+
+1. Go to the [Azure portal](https://portal.azure.com) and sign in.
+
+2. From the menu, select **Cloud Shell**. When prompted, select the **Bash** experience.
+
+*A screenshot of the Azure portal showing the location of the Cloud Shell menu item.*
+
+> **Note**
+> 
+> Cloud Shell requires an Azure storage resource to persist any files that you create in the Cloud Shell. When you first open the Cloud Shell, you're prompted to create a resource group, storage account, and Azure Files share. This setup is automatically used for all future Cloud Shell sessions.
+
+### **Select an Azure region**
+
+A region is one or more Azure datacenters within a geographic location. East US, West US, and North Europe are examples of regions. Every Azure resource, including an Azure VM, is assigned a region.
+
+To make commands easier to run, start by selecting a default region. After you specify the default region, later commands use that region unless you specify a different region.
+
+1. From the Cloud Shell, to list the regions that are available from your Azure subscription, run the following `az account list-locations` command:
+
+```bash
+az account list-locations \
+  --query "[].{Name: name, DisplayName: displayName}" \
+  --output table
+```
+
+2. From the **Name** column in the output, select a region that's close to you. For example, choose **eastasia** or **westus2**.
+
+3. Run `az configure` to set your default region. Replace `<REGION>` with the name of the region you selected:
+
+```bash
+az configure --defaults location=<REGION>
+```
+
+This example sets **westus2** as the default region:
+
+```bash
+az configure --defaults location=westus2
+```
+
+### **Create a resource group**
+
+Create a resource group to contain the resources used in this training module.
+
+To create a resource group that's named **tailspin-space-game-rg**, run the following `az group create` command:
+
+```bash
+az group create --name tailspin-space-game-rg
+```
+
+### **Create the VM**
+
+To create your VM, run the following `az vm create` command:
+
+```bash
+az vm create \
+    --name MyLinuxAgent \
+    --resource-group tailspin-space-game-rg \
+    --image canonical:ubuntu-24_04-lts:server:latest \
+    --size Standard_DS2_v2 \
+    --admin-username azureuser \
+    --generate-ssh-keys
+```
+
+Your VM will take a few minutes to come up.
+
+**Standard_DS2_v2** specifies the VM's size. A VM's size defines its processor speed, amount of memory, initial amount of storage, and expected network bandwidth. This is the same size that's provided by Microsoft-hosted agents. In practice, you can choose a size that provides more computing power or additional capabilities, such as graphics processing.
+
+The `--resource-group` argument specifies the resource group that holds all the things that we need to create. A resource group allows you to administer all the VMs, disks, network interfaces, and other elements that make up our solution as a unit.
+
+## **Create the agent pool**
+
+Recall that an agent pool organizes build agents. In this section, you'll create the agent pool in Azure DevOps. Later, you'll specify the name of the agent pool when you configure your agent so that it can register itself to the correct pool.
+
+1. In Azure DevOps, go to the **Space Game - web - Agent** project.
+
+2. Select **Project settings**.
+
+3. Under **Pipelines**, select **Agent pools**.
+
+*A screenshot of the project settings in Azure DevOps showing the location of the Agent pools menu item.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/host-build-agent/media/4-project-settings-agent-pools.png)
+
+
+4. Select **Add pool**.
+
+5. In the **Add pool** window:
+
+   * Under **Pool to link**, select **New**.
+   * Under **Pool type**, select **Self-hosted**.
+   * Under **Name**, enter **MyAgentPool**.
+
+In practice, you'd choose a more descriptive name for your pool.
+
+6. Select **Create**. The new agent pool appears in the list.
+
+## **Create a personal access token**
+
+For your build agent to register itself with Azure DevOps, you need a way for it to authenticate itself.
+
+To do that, you can create a personal access token. A personal access token—or PAT—is an alternative to a password. You can use the PAT to authenticate with services such as Azure DevOps.
+
+> **Important**
+> 
+> As you would with a password, be sure to keep your access token in a safe place. In this section, you'll store your access token as an environment variable so that it doesn't appear in your shell script.
+
+1. In Azure DevOps, open your profile settings, and then select **Personal access tokens**.
+
+*A screenshot of Azure DevOps showing the location of the Personal access tokens menu item.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/host-build-agent/media/4-personal-access-token.png)
+
+2. Select **New Token**.
+
+3. Enter a name for your token, such as **Build agent**.
+
+4. Under **Scopes**, select the **Show all scopes** link at the bottom.
+
+5. Look for **Agent Pools**, then select **Read & manage**.
+
+6. Select **Create**.
+
+7. Copy the token to a safe place.
+
+Shortly, you'll use your token to enable your build agent to authenticate access to Azure Pipelines.
+
+## **Connect to your VM**
+
+In this section, you'll connect to your Linux VM over SSH so that you can configure it.
+
+Recall that you can't interactively sign in to a Microsoft-hosted agent. Because a private build agent is your own, you can sign in to and configure it however you'd like.
+
+The ability to connect to your build agent lets you configure it with the tools you need to build your software. It also allows you to troubleshoot issues as you build out your pipeline configuration.
+
+1. To get your VM's IP address, run `az vm show` in Cloud Shell:
+
+```bash
+IPADDRESS=$(az vm show \
+  --name MyLinuxAgent \
+  --resource-group tailspin-space-game-rg \
+  --show-details \
+  --query [publicIps] \
+  --output tsv)
+```
+
+This command stores the IP address in a Bash variable named **IPADDRESS**.
+
+2. Print the VM's IP address to the console:
+
+```bash
+echo $IPADDRESS
+```
+
+3. Create an SSH connection to your VM. In place of `$IPADDRESS`, enter the IP address you received in the previous step. At the prompt, enter **yes** to continue connecting.
+
+```bash
+ssh azureuser@$IPADDRESS
+```
+
+You're now connected to your VM over SSH.
+
+This command works because you provided the `--generate-ssh-keys` option when you ran `az vm create` earlier. This option creates an SSH key pair, which enables you to sign in to the VM.
+
+## **Install build tools on your VM**
+
+In this section, you'll configure your VM with the tools that are required to build the Space Game website.
+
+Recall that your existing build process uses these tools:
+
+* .NET SDK, which is used to build the application
+* Node.js, which is used to perform build tasks
+* npm, the package manager for Node.js
+* gulp, a Node.js package that's used to minify JavaScript and CSS files
+
+These are the primary tools that the build process requires. To install them, you'll download and run a shell script from GitHub.
+
+> **Note**
+> 
+> The build process uses other tools, such as node-sass, to convert Sass (.scss) files to CSS (.css) files. However, Node.js installs these tools when the build runs.
+
+Let's start by updating the Ubuntu package manager, named apt. This action fetches the latest information from the package repositories and is ordinarily the first thing you do when you set up a new Ubuntu system.
+
+1. In your SSH connection, update the apt package manager cache:
+
+```bash
+sudo apt-get update
+```
+
+`sudo` runs the command with administrator, or root, privileges.
+
+2. To download a shell script named `build-tools.sh` from GitHub, run the following `curl` command:
+
+```bash
+curl https://raw.githubusercontent.com/MicrosoftDocs/mslearn-tailspin-spacegame-web/main/.agent-tools/build-tools.sh > build-tools.sh
+```
+
+3. Print the script to the terminal so that you can examine its contents:
+
+```bash
+cat build-tools.sh
+```
+
+The following result is displayed:
+
+```bash
+#!/bin/bash
+set -e
+
+# Select a default .NET version if one is not specified
+if [ -z "$DOTNET_VERSION" ]; then
+  DOTNET_VERSION=6.0.300
+fi
+
+# Add the Node.js PPA so that we can install the latest version
+curl -sL https://deb.nodesource.com/setup_16.x | bash -
+
+# Install Node.js and jq
+apt-get install -y nodejs
+
+apt-get install -y jq
+
+# Install gulp
+npm install -g gulp
+
+# Change ownership of the .npm directory to the sudo (non-root) user
+chown -R $SUDO_USER ~/.npm
+
+# Install .NET as the sudo (non-root) user
+sudo -i -u $SUDO_USER bash << EOF
+curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -c LTS -v $DOTNET_VERSION
+EOF
+```
+
+The script installs Node.js, npm, gulp, and .NET Core.
+
+By setting the `DOTNET_VERSION` environment variable, you can specify the .NET version to install. If you don't set this variable, the script installs the version that your existing build configuration uses. For learning purposes, you don't set this variable. You allow the script to use the default version.
+
+4. Make the script executable, then run the script:
+
+```bash
+chmod u+x build-tools.sh
+sudo ./build-tools.sh
+```
+
+The script takes a few minutes to run.
+
+In practice, you could now run commands to verify that each software component was successfully installed.
+
+## **Install agent software on your VM**
+
+Now it's time to install the agent software on your VM. This software enables the VM to act as a build agent and receive build jobs from Azure Pipelines.
+
+The registration process checks for installed software before it registers the agent with Azure Pipelines. Therefore, it's important to set up the agent after you install all other software. In practice, you can register the agent a second time if you need to install additional software.
+
+The [documentation](https://docs.microsoft.com/azure/devops/pipelines/agents/v2-linux) explains how to manually set up self-hosted Linux agents as well as macOS and Windows agents. You run a shell script to configure your agent in much the same way you set up build tools in the preceding section.
+
+> **Important**
+> 
+> The script that you run here is for learning purposes. In practice, you should first understand how each command in the scripts you build affects the overall system. At the end of the module, we'll point to documentation that more completely describes your options.
+
+1. To download a shell script named `build-agent.sh` from GitHub, run the following `curl` command:
+
+```bash
+curl https://raw.githubusercontent.com/MicrosoftDocs/mslearn-tailspin-spacegame-web/main/.agent-tools/build-agent.sh > build-agent.sh
+```
+
+2. Print the script to the terminal so that you can examine its contents:
+
+```bash
+cat build-agent.sh
+```
+
+The following result is displayed:
+
+```bash
+#!/bin/bash
+set -e
+
+# Select a default agent version if one is not specified
+if [ -z "$AZP_AGENT_VERSION" ]; then
+  AZP_AGENT_VERSION=2.187.2
+fi
+
+# Verify Azure Pipelines token is set
+if [ -z "$AZP_TOKEN" ]; then
+  echo 1>&2 "error: missing AZP_TOKEN environment variable"
+  exit 1
+fi
+
+# Verify Azure DevOps URL is set
+if [ -z "$AZP_URL" ]; then
+  echo 1>&2 "error: missing AZP_URL environment variable"
+  exit 1
+fi
+
+# If a working directory was specified, create that directory
+if [ -n "$AZP_WORK" ]; then
+  mkdir -p "$AZP_WORK"
+fi
+
+# Create the Downloads directory under the user's home directory
+if [ -n "$HOME/Downloads" ]; then
+  mkdir -p "$HOME/Downloads"
+fi
+
+# Download the agent package
+curl https://vstsagentpackage.azureedge.net/agent/$AZP_AGENT_VERSION/vsts-agent-linux-x64-$AZP_AGENT_VERSION.tar.gz > $HOME/Downloads/vsts-agent-linux-x64-$AZP_AGENT_VERSION.tar.gz
+
+# Create the working directory for the agent service to run jobs under
+if [ -n "$AZP_WORK" ]; then
+  mkdir -p "$AZP_WORK"
+fi
+
+# Create a working directory to extract the agent package to
+mkdir -p $HOME/azp/agent
+
+# Move to the working directory
+cd $HOME/azp/agent
+
+# Extract the agent package to the working directory
+tar zxvf $HOME/Downloads/vsts-agent-linux-x64-$AZP_AGENT_VERSION.tar.gz
+
+# Install the agent software
+./bin/installdependencies.sh
+
+# Configure the agent as the sudo (non-root) user
+chown $SUDO_USER $HOME/azp/agent
+sudo -u $SUDO_USER ./config.sh --unattended \
+  --agent "${AZP_AGENT_NAME:-$(hostname)}" \
+  --url "$AZP_URL" \
+  --auth PAT \
+  --token "$AZP_TOKEN" \
+  --pool "${AZP_POOL:-Default}" \
+  --work "${AZP_WORK:-_work}" \
+  --replace \
+  --acceptTeeEula
+
+# Install and start the agent service
+./svc.sh install
+./svc.sh start
+```
+
+You don't need to understand how each line works, but here's a brief summary of what this script does:
+
+1. It downloads the agent package as a .tar.gz file and extracts its contents.
+2. In the extracted files, the script:
+   * Runs a shell script named `installdependencies.sh` to install the agent software.
+   * Runs a shell script named `config.sh` to configure the agent and register the agent with Azure Pipelines.
+   * Runs a shell script named `svc.sh` to install and start the agent service.
+
+The script uses environment variables to enable you to provide details about your Azure DevOps organization. Here's a summary:
+
+| Bash variable | Description | Default |
+|---------------|-------------|---------|
+| AZP_AGENT_VERSION | The version of the agent software to install | The version we last used to test this module |
+| AZP_URL | The URL of your Azure DevOps organization | (None) |
+| AZP_TOKEN | Your personal access token | (None) |
+| AZP_AGENT_NAME | Your agent's name as it appears in Azure DevOps | The system's hostname |
+| AZP_POOL | The name of your agent pool | Default |
+| AZP_WORK | The working directory for the agent to perform build tasks | _work |
+
+If the script doesn't provide a default value for a variable that's not set, the script prints an error message and immediately exits.
+
+In the steps that follow, set these environment variables:
+
+* AZP_AGENT_VERSION
+* AZP_URL
+* AZP_TOKEN
+* AZP_AGENT_NAME
+* AZP_POOL
+
+For now, we recommend that you leave the other variables unset.
+
+3. Set the `AZP_AGENT_NAME` environment variable to specify your agent's name. We recommend **MyLinuxAgent**.
+
+```bash
+export AZP_AGENT_NAME=MyLinuxAgent
+```
+
+4. Set the `AZP_URL` environment variable to specify the URL to your Azure DevOps organization.
+
+Replace `<organization>` with yours. You can get the name from the browser tab that displays Azure DevOps.
+
+```bash
+export AZP_URL=https://dev.azure.com/organization
+```
+
+5. Set the `AZP_TOKEN` environment variable to specify your personal access token (the long token value that you copied earlier in this unit).
+
+Replace `<token>` with your token.
+
+```bash
+export AZP_TOKEN=token
+```
+
+6. Set the `AZP_POOL` environment variable to specify the name of your agent pool. Earlier, you created a pool named **MyAgentPool**.
+
+```bash
+export AZP_POOL=MyAgentPool
+```
+
+7. Set the `AZP_AGENT_VERSION` environment variable to specify the latest version of the agent.
+
+```bash
+export AZP_AGENT_VERSION=$(curl -s https://api.github.com/repos/microsoft/azure-pipelines-agent/releases | jq -r '.[0].tag_name' | cut -d "v" -f 2)
+```
+
+A YAML pipeline on a Linux machine must be using the latest version of the agent, even if it's pre-release. The agent software is constantly updated, so you curl the version information from the GitHub repo. The command uses `jq` to read the latest version from the JSON string that's returned.
+
+8. Print the agent version to the console. Optionally, check to make sure this is the latest version.
+
+```bash
+echo $AZP_AGENT_VERSION
+```
+
+9. Make the script executable, then run it:
+
+```bash
+chmod u+x build-agent.sh
+sudo -E ./build-agent.sh
+```
+
+`sudo` enables the script to run as the root user. The `-E` argument preserves the current environment variables, including the ones you set, so that they're available to the script.
+
+As the script runs, you can see the agent connect to Azure DevOps, see it added to the agent pool, and see the agent connection be tested.
+
+## **Verify that the agent is running**
+
+You've successfully installed the build tools and the agent software on your VM. As a verification step, go to Azure DevOps and see your agent in the agent pool.
+
+1. In Azure DevOps, go to the **Space Game - web - Agent** project.
+
+2. Select **Project settings**.
+
+3. Under **Pipelines**, select **Agent pools**.
+
+4. Select **MyAgentPool**.
+
+5. Select the **Agents** tab.
+
+You can see that your agent is online and ready to accept build jobs.
+
+*A screenshot of Azure DevOps showing the status of the private agent. The agent shows as online, idle, and enabled.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/host-build-agent/media/4-project-settings-agent-details.png)
+
+> **Tip**
+> 
+> If your build agent shows as **Offline**, try waiting a few moments and then refreshing the page.
+
+6. Select your agent, **MyLinuxAgent**.
+
+7. Select the **Capabilities** tab.
+
+During setup, the configuration process scanned your build agent for tool capabilities. You see that **npm** is listed as one of them. Recall that your original build configuration specified that npm must be installed on the agent.
+
+*A screenshot of Azure DevOps showing a few of the agent's capabilities. The npm capability is highlighted.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/host-build-agent/media/4-project-settings-agent-capabilities.png)
+
+When you specify which agent pool to use, you can include any of these entries in your `demands` section. Including them ensures that Azure Pipelines chooses a build agent that has the software you need to build your application. It also enables you to create agent pools with various software configurations. Azure Pipelines will select the correct configuration based on your requirements.
+
+
+
+# 5.5 **Exercise - Build the application using your agent**
+
+Now that your build agent is running and ready to receive build jobs, let's see it in action. In this unit, you'll modify a basic build configuration that we provide to build the Space Game website by using your agent and not the Microsoft-hosted agent.
+
+> **Note**
+> 
+> Run the following steps immediately after performing the steps in the previous module **Create a build agent that runs on Azure**.
+
+At the end of this unit, as an optional step, you can remove the agent pool from your Microsoft Azure DevOps organization.
+
+## **Fetch the branch from GitHub**
+
+In this section, you'll fetch the build-agent branch from GitHub and check out, or switch to, that branch.
+
+This branch contains the Space Game project that you worked with in previous modules and an Azure Pipelines configuration to start with.
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. To download a branch named build-agent from the Microsoft repository and switch to that branch, run the following `git fetch` and `git checkout` commands:
+
+```bash
+git fetch upstream build-agent
+git checkout -B build-agent upstream/build-agent
+```
+
+Recall that `upstream` refers to the Microsoft GitHub repository. Your project's Git configuration understands the upstream remote, because you set up that relationship when you forked the project from the Microsoft repository and cloned it locally.
+
+Shortly, you'll push this branch up to your GitHub repository, known as `origin`.
+
+3. Optionally, in Visual Studio Code, open the azure-pipelines.yml file and familiarize yourself with the initial configuration.
+
+The configuration resembles the basic one that you created in the **Create a build pipeline with Azure Pipelines** module. It builds only the application's release configuration.
+
+## **Modify the build configuration**
+
+In this section, you'll modify the build configuration to switch from using a Microsoft-hosted agent to using the agent from your build pool.
+
+1. In Visual Studio Code, open the azure-pipelines.yml file, then look for the `pool` section.
+
+```yml
+pool:
+  vmImage: 'ubuntu-20.04'
+  demands:
+  - npm
+```
+
+2. Modify the `pool` section as shown here:
+
+```yml
+pool:
+  name: 'MyAgentPool'
+  demands:
+  - npm
+```
+
+This version uses `name` to specify your agent pool, **MyAgentPool**. It maintains the `demands` section to specify that the build agent must have npm, the Node.js package manager, installed.
+
+3. In the integrated terminal, add azure-pipelines.yml to the index, commit the changes, and push the branch up to GitHub.
+
+```bash
+git add azure-pipelines.yml
+git commit -m "Use private agent pool"
+git push origin build-agent
+```
+
+## **Watch Azure Pipelines use your build agent**
+
+Watch the build run in the pipeline by using your build agent.
+
+1. In Azure DevOps, go to the **Space Game - web - Agent** project.
+
+2. On the project page or in the left pane, select **Pipelines**.
+
+3. Select your pipeline from **Recently run pipelines**, and choose the most recent run (that was started when you updated the pipeline to use the MyAgentPool pool).
+
+4. Choose **Job** and trace the run through each of the steps.
+
+From the **Initialize job** task, you see that the build uses your build agent.
+
+*A screenshot of Azure Pipelines running the build. The Initialize job task shows that it's running the build on the private agent named MyLinxuAgent.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/host-build-agent/media/5-build-results-private-pool.png)
+
+## **Optional: Remove your build pool**
+
+For future reference, you can keep the build pool configuration in your Azure DevOps organization, but keep in mind that the VM that hosts the agent will no longer be available to you after you perform the cleanup steps at the end of this module.
+
+In fact, Azure DevOps will detect that the agent is offline. Azure Pipelines will check for an available agent the next time a build is queued by using the MyAgentPool pool.
+
+*A screenshot of the agent pool in Azure DevOps showing that the build agent is offline.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/host-build-agent/media/5-agent-pools-offline-agent.png)
+
+As an optional step, you can remove the build pool configuration from Azure DevOps. Here's how:
+
+1. In Azure DevOps, go to the **Space Game - web - Agent** project.
+
+2. Select **Project settings**.
+
+3. Under **Pipelines**, select **Agent pools**.
+
+*A screenshot of the project settings in Azure DevOps showing the location of the Agent pools menu item.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/host-build-agent/media/4-project-settings-agent-pools.png)
+
+4. Under **MyAgentPool**, select the trash can icon, then select **Delete**.
+
+*A screenshot of Azure DevOps showing the location of where to remove the agent from the agent pool.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/host-build-agent/media/5-agent-pools-delete-agent.png)
+
+
+
+
+# 5.6 **Exercise - Clean up your Azure DevOps environment**
+
+You're all done with the tasks for this module. In this unit, we'll help you clean up your Microsoft Azure DevOps environment.
+
+## **Important**
+
+This page contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. Be sure to perform the cleanup steps if you ran the template earlier in this module.
+
+## **Clean up Azure resources**
+
+Here, you'll delete your Azure VM. The easiest way to delete resources is to delete their parent resource group. When you delete a resource group, you delete all resources in that group.
+
+In the **Create a release pipeline with Azure Pipelines** module, you managed Azure resources through the Azure portal. Here, you'll tear down your deployment by using the Azure CLI through Azure Cloud Shell. The steps are similar to the steps that you used when you created the resources.
+
+To clean up your resource group:
+
+1. Go to the [Azure portal](https://portal.azure.com), and sign in.
+
+2. From the menu bar, select **Cloud Shell**. When prompted, select the **Bash** experience.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-portal-menu-cloud-shell.png)
+
+3. To delete the resource group that you used, `tailspin-space-game-rg`, run the following `az group delete` command:
+
+```bash
+az group delete --name tailspin-space-game-rg
+```
+
+When prompted, to confirm the operation, enter `y`.
+
+> **Note**
+> 
+> If you're still signed in to SSH in Cloud Shell window from the previous step, run the `exit` command to exit SSH, then run the `az group delete` command.
+
+4. As an optional step, after the previous command finishes, run the following `az group list` command:
+
+```bash
+az group list --output table
+```
+
+You should see that the resource group `tailspin-space-game-rg` no longer exists.
+
+## **Disable the pipeline or delete your project**
+
+Each module in this learning path provides a template that you can run to create a clean environment for the duration of the module.
+
+Running multiple templates creates multiple Azure Pipelines projects, each pointing to the same GitHub repository. This action can cause multiple pipelines to run each time you push a change to your GitHub repository. This action, in turn, can cause you to run out of free build minutes on your hosted agents. Therefore, it's important to disable or delete your pipeline before you move on to the next module.
+
+Choose either of the next two options.
+
+### **Option 1: Disable the pipeline**
+
+This option disables the pipeline so that it doesn't process further build requests. You can reenable the build pipeline later if you want to. Choose this option if you want to keep your DevOps project and your build pipeline for future reference.
+
+To disable the pipeline:
+
+1. In Azure Pipelines, go to your pipeline.
+
+2. From the **More actions** menu (**...**), select **Settings**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-settings-button.png)
+
+4. Under **Processing of new run requests**, select **Disabled**, then select **Save**.
+
+Your pipeline will no longer process build requests.
+
+### **Option 2: Delete the Azure DevOps project**
+
+This option deletes your Azure DevOps project, including what's on Azure Boards and your build pipeline. In future modules, you'll be able to run another template that brings up a new project in a state where this one leaves off. Choose this option if you don't need your DevOps project for future reference.
+
+To delete the project:
+
+1. In Azure DevOps, go to your project. Earlier, we recommended that you name this project **Space Game - web - Agent**.
+
+2. Select **Project settings** in the lower-left corner of the Azure DevOps page.
+
+3. In the **Project details** area, scroll down and select **Delete**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-delete-project.png)
+
+4. In the window that appears, enter the project name, then select **Delete** a second time.
+
+Your project is now deleted.
+
+
+# 5.7 **Summary**
+
+
+In this module, you set up your own private build agent by using a virtual machine that runs on Microsoft Azure.
+
+Although a Microsoft-hosted agent often does everything you need, there are times when you might consider using your own build agent.
+
+There are a few factors to consider when you decide to use a Microsoft-hosted agent rather than use your own. These factors include how much compute power and disk space you need and how much time is required for your builds to run.
+
+When you configure a private build agent, it's yours to configure however you want. As a tradeoff, you also need to keep your system updated with the latest security patches and build tools.
+
+## **Learning path summary**
+
+Congratulations. You've completed the final module in the *Build applications with Azure DevOps* learning path. In this learning path, you accomplished a lot, including:
+
+* Setting up a project in Azure Pipelines and publishing build artifacts to the pipeline.
+* Implementing a code workflow for the team members that uses Git and GitHub.
+* Running automated tests, such as unit and code coverage tests, when the pipeline runs.
+* Managing your own packages in the pipeline and connecting them to your applications.
+* Using your own build agents when Microsoft-hosted agents don't meet your needs.
+
+The focus of this learning path is on building applications and receiving build artifacts that you can hand off to your QA or operations teams.
+
+## **Learn more**
+
+For more self-paced, hands-on learning around Azure DevOps, check out [Azure DevOps Labs](https://azuredevopslabs.com/).
+
+To learn more about build agents and agent pools, see the following articles:
+
+* [Azure Pipelines agents](https://docs.microsoft.com/azure/devops/pipelines/agents/agents)
+* [Agent pools](https://docs.microsoft.com/azure/devops/pipelines/agents/pools-queues)
+* [Self-hosted Linux agents](https://docs.microsoft.com/azure/devops/pipelines/agents/v2-linux)
+* [Self-hosted macOS agents](https://docs.microsoft.com/azure/devops/pipelines/agents/v2-osx)
+* [Self-hosted Windows agents](https://docs.microsoft.com/azure/devops/pipelines/agents/v2-windows)
+* [Container jobs](https://docs.microsoft.com/azure/devops/pipelines/process/container-phases)
+* [Pool (YAML schema)](https://docs.microsoft.com/azure/devops/pipelines/yaml-schema/pool)
+* [Build on multiple platforms](https://docs.microsoft.com/azure/devops/pipelines/get-started-multiplatform)
+
+### **Configure release pipelines**
+
+To learn how to configure release pipelines that continuously build, test, and deploy your applications, go to [Deploy applications with Azure DevOps](https://docs.microsoft.com/learn/paths/deploy-applications-with-azure-devops/).
+
+### **Create your own VM images**
+
+If you're interested in creating your own VM images for use with Azure Pipelines, check out the [azure-pipelines-image-generation](https://github.com/actions/virtual-environments) project on GitHub.
+
+### **Practice running VMs on Azure**
+
+For more hands-on practice working with virtual machines on Azure, check out the [Administer infrastructure resources in Azure](https://docs.microsoft.com/learn/paths/administer-infrastructure-resources-in-azure/) learning path.
+
+We also mentioned how you can use Bicep to automate the process of creating build agents. To learn more about Bicep, see [Fundamentals of Bicep](https://docs.microsoft.com/learn/paths/fundamentals-bicep/).
