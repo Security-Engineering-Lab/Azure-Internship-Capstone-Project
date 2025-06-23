@@ -3235,3 +3235,994 @@ If the `code` command fails, you need to add Visual Studio Code to your system P
 3. Repeat the previous procedure to open the project in the file explorer.
 
 You're now set up to work with the Space Game source code and your Azure Pipelines configuration from your local development environment.
+
+
+# 3.4 Exercise - Add unit tests to your application
+
+In this unit, we'll add unit tests to the automated build that we created with Microsoft Azure Pipelines. Regression bugs are creeping into your team's code and breaking the leaderboard's filtering functionality. Specifically, the wrong game mode keeps appearing.
+
+The following image illustrates the problem. When a user selects "Milky Way" to show only scores from that game map, they get results from other game maps, such as Andromeda.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/4-leaderboard-bug.png)
+
+The team wants to catch the error before it reaches the testers. Unit tests are a great way to automatically test for regression bugs.
+
+Adding the unit tests at this point in the process will give the team a head start as they improve the Space Game web app. The application uses a document database to store high scores and player profiles. Right now, it uses local test data. Later, they plan to connect the app to a live database.
+
+Many unit test frameworks are available for C# applications. We'll use **NUnit** because it's popular with the community.
+
+Here's the unit test you're working with:
+
+```csharp
+[TestCase("Milky Way")]
+[TestCase("Andromeda")]
+[TestCase("Pinwheel")]
+[TestCase("NGC 1300")]
+[TestCase("Messier 82")]
+public void FetchOnlyRequestedGameRegion(string gameRegion)
+{
+    const int PAGE = 0; // take the first page of results
+    const int MAX_RESULTS = 10; // sample up to 10 results
+
+    // Form the query predicate.
+    // This expression selects all scores for the provided game region.
+    Expression<Func<Score, bool>> queryPredicate = score => (score.GameRegion == gameRegion);
+
+    // Fetch the scores.
+    Task<IEnumerable<Score>> scoresTask = _scoreRepository.GetItemsAsync(
+        queryPredicate, // the predicate defined above
+        score => 1, // we don't care about the order
+        PAGE,
+        MAX_RESULTS
+    );
+    IEnumerable<Score> scores = scoresTask.Result;
+
+    // Verify that each score's game region matches the provided game region.
+    Assert.That(scores, Is.All.Matches<Score>(score => score.GameRegion == gameRegion));
+}
+```
+
+You can filter the leaderboard by any combination of game type and game map.
+
+This test queries the leaderboard for high scores and verifies that each result matches the provided game map.
+
+In an NUnit test method, `TestCase` provides inline data to use to test that method. Here, NUnit calls the `FetchOnlyRequestedGameRegion` unit test method, as follows:
+
+```csharp
+FetchOnlyRequestedGameRegion("Milky Way");
+FetchOnlyRequestedGameRegion("Andromeda");
+FetchOnlyRequestedGameRegion("Pinwheel");
+FetchOnlyRequestedGameRegion("NGC 1300");
+FetchOnlyRequestedGameRegion("Messier 82");
+```
+
+Notice the call to the `Assert.That` method at the end of the test. An assertion is a condition or statement that you declare to be true. If the condition turns out to be false, that could indicate a bug in your code. NUnit runs each test method using the inline data you specify and records the result as a passing or failing test.
+
+Many unit test frameworks provide verification methods that resemble natural language. These methods help make tests easy to read and help you map the tests to the application's requirements.
+
+Consider the assertion made in this example:
+
+```csharp
+Assert.That(scores, Is.All.Matches<Score>(score => score.GameRegion == gameRegion));
+```
+
+You might read this line as:
+
+*Assert that the game region of each returned score matches the provided game region.*
+
+Here's the process to follow:
+
+1. Fetch a branch from the GitHub repository that contains the unit tests.
+2. Run the tests locally to verify that they pass.
+3. Add tasks to your pipeline configuration to run the tests and collect the results.
+4. Push the branch to your GitHub repository.
+5. Watch your Azure Pipelines project automatically build the application and run the tests.
+
+## Fetch the branch from GitHub
+
+Here, you'll fetch the `unit-tests` branch from GitHub and check out, or switch to, that branch.
+
+This branch contains the Space Game project that you worked with in the previous modules and an Azure Pipelines configuration to start with.
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. Run the following git commands to fetch a branch named `unit-tests` from the Microsoft repository, and then switch to that branch.
+
+```bash
+git fetch upstream unit-tests
+git checkout -B unit-tests upstream/unit-tests
+```
+
+The format of this command enables you to get starter code from the Microsoft GitHub repository, known as `upstream`. Shortly, you'll push this branch to your GitHub repository, known as `origin`.
+
+3. As an optional step, open the `azure-pipelines.yml` file in Visual Studio Code and familiarize yourself with the initial configuration. The configuration resembles the basic one you created in the **Create a build pipeline with Azure Pipelines** module. It builds only the application's Release configuration.
+
+## Run the tests locally
+
+It's a good idea to run all tests locally before you submit any tests to the pipeline. You'll do that here.
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. Run `dotnet build` to build each project in the solution.
+
+```bash
+dotnet build --configuration Release
+```
+
+3. Run the following `dotnet test` command to run the unit tests:
+
+```bash
+dotnet test --configuration Release --no-build
+```
+
+The `--no-build` flag specifies not to build the project before running it. You don't need to build the project because you built it in the previous step.
+
+You should see that all five tests pass.
+
+```
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     5, Skipped:     0, Total:     5, Duration: 57 ms
+```
+
+In this example, the tests took less than one second to run.
+
+Notice that there were five total tests. Although we defined just one test method, `FetchOnlyRequestedGameRegion`, that test is run five times, once for each game map as specified in the `TestCase` inline data.
+
+4. Run the tests a second time. This time, provide the `--logger` option to write the results to a log file.
+
+```bash
+dotnet test Tailspin.SpaceGame.Web.Tests --configuration Release --no-build --logger trx
+```
+
+You see from the output that a TRX file is created in the `TestResults` directory.
+
+A TRX file is an XML document that contains the results of a test run. It's a popular format for test results because Visual Studio and other tools can help you visualize the results.
+
+Later, you'll see how Azure Pipelines can help you visualize and track your test results as they run through the pipeline.
+
+> **Note**
+> 
+> TRX files are not meant to be included in source control. A `.gitignore` file allows you to specify which temporary and other files you want Git to ignore. The project's `.gitignore` file is already set up to ignore anything in the `TestResults` directory.
+
+5. As an optional step, in Visual Studio Code, open the `DocumentDBRepository_GetItemsAsyncShould.cs` file from the `Tailspin.SpaceGame.Web.Tests` folder and examine the test code. Even if you're not interested in building .NET apps specifically, you might find the test code useful because it resembles code you might see in other unit test frameworks.
+
+## Add tasks to your pipeline configuration
+
+Here, you'll configure the build pipeline to run your unit tests and collect the results.
+
+1. In Visual Studio Code, modify `azure-pipelines.yml` as follows:
+
+```yaml
+trigger:
+- '*'
+
+pool:
+  vmImage: 'ubuntu-20.04'
+  demands:
+  - npm
+
+variables:
+  buildConfiguration: 'Release'
+  wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+  dotnetSdkVersion: '6.x'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+  inputs:
+    version: '$(dotnetSdkVersion)'
+
+- task: Npm@1
+  displayName: 'Run npm install'
+  inputs:
+    verbose: false
+
+- script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
+  displayName: 'Compile Sass assets'
+
+- task: gulp@1
+  displayName: 'Run gulp tasks'
+
+- script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+  displayName: 'Write build info'
+  workingDirectory: $(wwwrootDir)
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore project dependencies'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build the project - $(buildConfiguration)'
+  inputs:
+    command: 'build'
+    arguments: '--no-restore --configuration $(buildConfiguration)'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run unit tests - $(buildConfiguration)'
+  inputs:
+    command: 'test'
+    arguments: '--no-build --configuration $(buildConfiguration)'
+    publishTestResults: true
+    projects: '**/*.Tests.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish the project - $(buildConfiguration)'
+  inputs:
+    command: 'publish'
+    projects: '**/*.csproj'
+    publishWebProjects: false
+    arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  condition: succeeded()
+```
+
+This version introduces this `DotNetCoreCLI@2` build task.
+
+```yaml
+- task: DotNetCoreCLI@2
+  displayName: 'Run unit tests - $(buildConfiguration)'
+  inputs:
+    command: 'test'
+    arguments: '--no-build --configuration $(buildConfiguration)'
+    publishTestResults: true
+    projects: '**/*.Tests.csproj'
+```
+
+This build task runs the `dotnet test` command.
+
+Notice that this task doesn't specify the `--logger trx` argument that you used when you ran the tests manually. The `publishTestResults` argument adds that for you. This argument tells the pipeline to generate the TRX file to a temporary directory, accessible through the `$(Agent.TempDirectory)` built-in variable. It also publishes the task results to the pipeline.
+
+The `projects` argument specifies all C# projects that match `"**/*.Tests.csproj."` The `"**"` part matches all directories, and the `"*.Tests.csproj"` part matches all projects whose file name ends with `".Tests.csproj."` The `unit-tests` branch contains just one unit test project, `Tailspin.SpaceGame.Web.Tests.csproj`. By specifying a pattern, you can run more test projects without the need to modify your build configuration.
+
+## Push the branch to GitHub
+
+Here, you'll push your changes to GitHub and see the pipeline run. Recall that you're currently on the `unit-tests` branch.
+
+1. In the integrated terminal, add `azure-pipelines.yml` to the index, commit the changes, and push the branch up to GitHub.
+
+```bash
+git add azure-pipelines.yml
+git commit -m "Run and publish unit tests"
+git push origin unit-tests
+```
+
+## Watch Azure Pipelines run the tests
+
+Here you see the tests run in the pipeline and then visualize the results from Microsoft Azure Test Plans. Azure Test Plans provides all the tools you need to successfully test your applications. You can create and run manual test plans, generate automated tests, and collect feedback from stakeholders.
+
+1. In Azure Pipelines, trace the build through each of the steps.
+
+You see that the **Run unit tests - Release** task runs the unit tests just as you did manually from the command line.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/4-pipeline-task.png)
+
+2. Navigate back to the pipeline summary.
+
+3. Move to the **Tests** tab.
+
+You see a summary of the test run. All five tests have passed.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/4-test-tab-summary.png)
+
+4. In Azure DevOps, select **Test Plans**, and then select **Runs**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/4-test-plans-runs.png)
+
+You see the most recent test runs, including the one you just ran.
+
+5. Double-click the most recent test run.
+
+You see a summary of the results.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/4-test-run-results.png)
+
+In this example, all five tests have passed. If any tests failed, you can go to the build task to get more details.
+
+You can also download the TRX file to examine it through Visual Studio or another visualization tool.
+
+Although you only added one test, it's a good start and it fixes the immediate problem. Now, the team has a place to add more tests and run them as they improve their process.
+
+## Merge your branch into main
+
+In a real-world scenario, if you were happy with the results, you might merge the `unit-tests` branch to `main`, but for brevity, we'll skip that process for now.
+
+
+
+# 3.5 Exercise - Add a testing widget to your dashboard
+
+
+In this unit, you'll add a widget to your dashboard to help visualize your test runs over time.
+
+## Add the widget to the dashboard
+
+1. In your Azure DevOps project, select **Overview**, and then select **Dashboards**.
+
+   > **Note**
+   > 
+   > If you ran the template to create the Azure DevOps project, you won't see the dashboard widgets you set up in previous modules.
+
+2. Select **Add a widget**.
+
+3. In the **Add Widget** pane, search for **Test Results Trend**.
+
+4. Drag **Test Results Trend** to the canvas.
+
+5. Select the **Gear** icon to configure the widget.
+   a. Under **Build pipeline**, select your pipeline.
+   b. Keep the other default settings.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/5-test-results-trend-widget.png)
+
+6. Select **Save**.
+
+7. Select **Done Editing**.
+
+Although the widget displays only one test run, you now have a way to visualize and track test runs over time. Here's an example that shows a few successful test runs.
+
+If you begin to see test failures, you can select a point on the graph to navigate directly to that build.
+
+
+# 3.6 Exercise - Perform code coverage testing
+
+
+Much like the tool you use for unit testing, the tool you use for code coverage depends on the programming language and application framework.
+
+When you target .NET applications to run on Linux, **coverlet** is a popular option. Coverlet is a cross-platform, code-coverage library for .NET.
+
+## How is code coverage done in .NET?
+
+The way you collect code coverage depends on what programming language and frameworks you're using, and what code coverage tools are available.
+
+In our Tailspin scenario, we find that:
+
+- Visual Studio on Windows provides a way to perform code coverage.
+- However, because we're building on Linux, we can use **coverlet**, a cross-platform code coverage library for .NET.
+- The unit test project requires the **coverlet.msbuild** NuGet package.
+- Code coverage results are written to an XML file so that they can be processed by another tool. Azure Pipelines supports **Cobertura** and **JaCoCo** coverage result formats.
+- For this module, we're using **Cobertura**.
+- To convert Cobertura coverage results to a format that's human-readable, we can use a tool called **ReportGenerator**.
+- ReportGenerator provides many formats, including HTML. The HTML formats create detailed reports for each class in a .NET project.
+- Specifically, there's an HTML format called **HtmlInline_AzurePipelines**, which provides a visual appearance that matches Azure Pipelines.
+
+## How can I manage .NET tools?
+
+A .NET tool such as ReportGenerator is a special NuGet package that contains a console application. You can manage a .NET tool as a global tool or as a local tool.
+
+A **global tool** is installed in a centralized location and can be called from any directory. One version of a global tool is used for all directories on the machine.
+
+A **local tool** is a more isolated copy of a .NET tool that's scoped to a specific directory. Scope enables different directories to contain different versions of the same tool.
+
+You use a manifest file to manage local tools for a given directory. This file is in JSON format and is typically named **dotnet-tools.json**. A manifest file allows you to describe the specific tool versions that you need to build or run your application.
+
+When you include the manifest file in source control and your application sources, developers and build systems can run the `dotnet tool restore` command to install all of the tools listed in the manifest file. When you need a newer version of a local tool, you simply update the version in the manifest file.
+
+To keep things more isolated, you'll work with local tools in this module. You'll create a tool manifest that includes the ReportGenerator Tool. You'll also modify your build pipeline to install the ReportGenerator Tool to convert code coverage results to a human-readable format.
+
+## Run code coverage locally
+
+Before you write any pipeline code, you can try things manually to verify the process.
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. Run the following `dotnet new` command to create a local tool manifest file.
+
+```bash
+dotnet new tool-manifest
+```
+
+The command creates a file named `.config/dotnet-tools.json`.
+
+3. Run the following `dotnet tool install` command to install ReportGenerator:
+
+```bash
+dotnet tool install dotnet-reportgenerator-globaltool
+```
+
+This command installs the latest version of ReportGenerator and adds an entry to the tool manifest file.
+
+4. Run the following `dotnet add package` command to add the **coverlet.msbuild** package to the `Tailspin.SpaceGame.Web.Tests` project:
+
+```bash
+dotnet add Tailspin.SpaceGame.Web.Tests package coverlet.msbuild
+```
+
+5. Run the following `dotnet test` command to run your unit tests and collect code coverage:
+
+> **Note**
+> 
+> If you're using the PowerShell terminal in Visual Studio, the line continuation character is a backtick (`), so use that character in place of the backslash character (\) for multi-line commands.
+
+```bash
+dotnet test --no-build \
+  --configuration Release \
+  /p:CollectCoverage=true \
+  /p:CoverletOutputFormat=cobertura \
+  /p:CoverletOutput=./TestResults/Coverage/
+```
+
+If the command fails, try running it as follows:
+
+```bash
+MSYS2_ARG_CONV_EXCL="*" dotnet test --no-build \
+  --configuration Release \
+  /p:CollectCoverage=true \
+  /p:CoverletOutputFormat=cobertura \
+  /p:CoverletOutput=./TestResults/Coverage/
+```
+
+This command resembles the one you ran previously. The `/p:` flags tell coverlet which code coverage format to use and where to place the results.
+
+6. Run the following `dotnet tool run` command to use ReportGenerator to convert the Cobertura file to HTML:
+
+```bash
+dotnet tool run reportgenerator \
+  -reports:./Tailspin.SpaceGame.Web.Tests/TestResults/Coverage/coverage.cobertura.xml \
+  -targetdir:./CodeCoverage \
+  -reporttypes:HtmlInline_AzurePipelines
+```
+
+Many HTML files will appear in the **CodeCoverage** folder at the root of the project.
+
+7. In Visual Studio Code, expand the **CodeCoverage** folder, right-click **index.htm**, and then select **Reveal in File Explorer** (**Reveal in Finder** on macOS or **Open Containing Folder** on Linux).
+
+8. In Windows Explorer (Finder on macOS), double-click **index.htm** to open it in a web browser.
+
+You'll see the coverage report summary.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/6-coverage-report-summary.png)
+
+9. Scroll to the bottom of the page to see a coverage breakdown by class type.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/6-coverage-class-summary.png)
+
+10. Select the link to **TailSpin.SpaceGame.Web.LocalDocumentDBRepository<T>** to view further details.
+
+Notice that the **GetItemsAsync** method is covered by unit tests, but the **CountItemsAsync** method has no coverage.
+
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/6-coverage-class-details.png)
+
+This makes sense, because the `FetchOnlyRequestedGameRegion` test method calls the `GetItemsAsync` method, but doesn't call the `CountItemsAsync` method. (To review the test code, look at the **DocumentDBRepository_GetItemsAsyncShould.cs** file.)
+
+## Create a branch
+
+Now that you can build a code coverage report locally, you're ready to add tasks to your build pipeline, which performs the same tasks.
+
+In this section, you'll create a branch named **code-coverage**, based on the **unit-tests** branch, to hold your work. In practice, you'd ordinarily create this branch from the **main** branch.
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. In the terminal, run the following `git checkout` command to create a branch named **code-coverage**:
+
+```bash
+git checkout -B code-coverage
+```
+
+## Add build tasks
+
+In this section, you'll add tasks that measure code coverage to your build pipeline.
+
+1. In Visual Studio Code, modify `azure-pipelines.yml` as follows:
+
+```yaml
+trigger:
+- '*'
+
+pool:
+  vmImage: 'ubuntu-20.04'
+  demands:
+  - npm
+
+variables:
+  buildConfiguration: 'Release'
+  wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+  dotnetSdkVersion: '6.x'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+  inputs:
+    version: '$(dotnetSdkVersion)'
+
+- task: Npm@1
+  displayName: 'Run npm install'
+  inputs:
+    verbose: false
+
+- script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
+  displayName: 'Compile Sass assets'
+
+- task: gulp@1
+  displayName: 'Run gulp tasks'
+
+- script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+  displayName: 'Write build info'
+  workingDirectory: $(wwwrootDir)
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore project dependencies'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build the project - $(buildConfiguration)'
+  inputs:
+    command: 'build'
+    arguments: '--no-restore --configuration $(buildConfiguration)'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Install .NET tools from local manifest'
+  inputs:
+    command: custom
+    custom: tool
+    arguments: 'restore'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run unit tests - $(buildConfiguration)'
+  inputs:
+    command: 'test'
+    arguments: '--no-build --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+    publishTestResults: true
+    projects: '**/*.Tests.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Create code coverage report'
+  inputs:
+    command: custom
+    custom: tool
+    arguments: 'run reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage report'
+  inputs:
+    codeCoverageTool: 'cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish the project - $(buildConfiguration)'
+  inputs:
+    command: 'publish'
+    projects: '**/*.csproj'
+    publishWebProjects: false
+    arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  condition: succeeded()
+```
+
+This version builds upon your existing configuration. Here's a summary of what's new:
+
+| Azure Pipelines task | Display name | Description |
+|---|---|---|
+| DotNetCoreCLI@2 | Install .NET tools from local manifest | Installs tools listed in the manifest file, dotnet-tools.json |
+| DotNetCoreCLI@2 | Run unit tests - $(buildConfiguration) | Runs unit tests and also collects code coverage in Cobertura format |
+| DotNetCoreCLI@2 | Create code coverage report | Converts Cobertura output to HTML |
+| PublishCodeCoverageResults@1 | Publish code coverage report | Publishes the report to the pipeline |
+
+## Commit your changes and push the branch to GitHub
+
+Here you push your changes to GitHub and see the pipeline run. Recall that you're currently in the **code-coverage** branch.
+
+Although not required, here you'll add and commit each file separately so that each change is associated with a descriptive commit message.
+
+1. In Visual Studio Code, go to the terminal.
+
+2. Add and commit the **Tailspin.SpaceGame.Web.Tests.csproj** file, which now contains a reference to the **coverlet.msbuild** package:
+
+```bash
+git add Tailspin.SpaceGame.Web.Tests/Tailspin.SpaceGame.Web.Tests.csproj
+git commit -m "Add coverlet.msbuild package"
+```
+
+3. Add and commit the tool manifest file, **dotnet-tools.json**:
+
+```bash
+git add .config/dotnet-tools.json
+git commit -m "Add code coverage"
+```
+
+4. Add and commit **azure-pipelines.yml**, which contains your updated build configuration:
+
+```bash
+git add azure-pipelines.yml
+git commit -m "Add code coverage"
+```
+
+5. Push the **code-coverage** branch to GitHub.
+
+```bash
+git push origin code-coverage
+```
+
+## Watch Azure Pipelines run the tests
+
+Here, you'll see the tests run in the pipeline and then visualize the results from Azure Test Plans.
+
+1. In Azure Pipelines, trace the build through each of the steps.
+
+2. When the build finishes, go back to the **Summary** page and select the **Code Coverage** tab.
+
+You view the same results that you did when you ran the tests locally.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/6-coverage-report-pipeline.png)
+
+3. As an optional step, you can explore the results from Azure Pipelines.
+
+## Add the dashboard widget
+
+In the previous section, you added the **Test Results Trend** widget to your dashboard, which lets others quickly review test result trends over time.
+
+Here, you'll add a second widget that summarizes code coverage.
+
+1. In a new browser tab, go to [marketplace.visualstudio.com](https://marketplace.visualstudio.com).
+
+2. On the **Azure DevOps** tab, search for **code coverage**.
+
+3. Select **Code Coverage Widgets** (published by Shane Davis).
+
+4. Select **Get it free**.
+
+5. In the drop-down list, select your Azure DevOps organization.
+
+6. Select **Install**.
+
+7. Go back to Azure DevOps.
+
+8. Go to **Overview > Dashboards**.
+
+9. Select **Edit**.
+
+10. Search for **Code Coverage**, and then select **Code Coverage**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/6-add-code-coverage-widget.png)
+
+11. Drag **Code Coverage** to the canvas.
+
+12. Select the **Gear** icon to configure the widget.
+
+13. Keep all the default settings, except for:
+    - **Width**: Enter **2**
+    - **Build definition**: Select your pipeline
+    - **Coverage measurement**: select **Lines**
+
+14. Select **Save**.
+
+15. Select **Done Editing**.
+
+The widget shows the percentage of code your unit tests cover.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/6-dashboard-widget.png)
+
+You now have code coverage set up in your pipeline. Although your existing code coverage is low, you have a baseline that you can improve over time.
+
+Later, you can configure coverlet to check to see whether your tests provide a minimum threshold of coverage. Your threshold might be 30 percent, 50 percent, or 80 percent coverage, depending on your requirements. The build will fail if your tests cover less than this amount.
+
+## Remove code coverage files
+
+Recall that when you ran Reportgenerator earlier, many HTML files appeared in the **CodeCoverage** folder at the root of the project.
+
+These HTML files aren't intended to be included in source control, and you no longer need them. Although the project's `.gitignore` file is already set up to ignore anything in the **CodeCoverage** directory, it's a good idea to delete these files so that they're not added to your Git repository in future modules.
+
+1. In Visual Studio Code, go to the terminal window, and then, in your project's root directory, run this command:
+
+```bash
+rm -rf CodeCoverage/
+```
+
+
+
+# 3.7 Exercise - Fix a failed test
+
+At this point, you have a way to run unit tests as changes move through the build pipeline. You also have a way to measure the amount of code that's covered by your tests.
+
+It's always a good idea to run your tests locally before you submit changes to the pipeline. But what happens when someone forgets and submits a change that breaks the build?
+
+In this unit, you'll fix a broken build that's caused by a failing unit test. Here, you will:
+
+1. Get starter code from GitHub.
+2. Add code coverage tools to your project.
+3. Push the code up to your repository.
+4. Watch the pipeline automatically run and the unit tests fail.
+5. Reproduce the failure locally.
+6. Analyze and fix the failure.
+7. Push up a fix and watch the build succeed.
+
+## Review the new unit test
+
+The team's latest feature involves the leaderboard. We need to get the number of scores from the database, so we can write a unit test to verify the `IDocumentDBRepository<T>.GetItemsAsync` method.
+
+Here's what the test looks like. You don't need to add any code yet.
+
+```csharp
+[TestCase(0, ExpectedResult=0)]
+[TestCase(1, ExpectedResult=1)]
+[TestCase(10, ExpectedResult=10)]
+public int ReturnRequestedCount(int count)
+{
+    const int PAGE = 0; // take the first page of results
+
+    // Fetch the scores.
+    Task<IEnumerable<Score>> scoresTask = _scoreRepository.GetItemsAsync(
+        score => true, // return all scores
+        score => 1, // we don't care about the order
+        PAGE,
+        count // fetch this number of results
+    );
+    IEnumerable<Score> scores = scoresTask.Result;
+
+    // Verify that we received the specified number of items.
+    return scores.Count();
+}
+```
+
+Recall that in an NUnit test, `TestCase` provides inline data to use to test that method. NUnit calls the `ReturnRequestedCount` unit test method like this:
+
+```csharp
+ReturnRequestedCount(0);
+ReturnRequestedCount(1);
+ReturnRequestedCount(10);
+```
+
+This test also uses the `ExpectedResult` property to simplify the test code and help make its intention clear. NUnit automatically compares the return value against the value of this property, removing the need to explicitly call the assertion.
+
+We'll choose a few values that represent typical queries. We'll also include 0 to cover that edge case.
+
+## Fetch the branch from GitHub
+
+As you did earlier, fetch the `failed-test` branch from GitHub and check out (or switch to) that branch.
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. Run the following `git fetch` and `git checkout` commands to download a branch named `failed-test` from the Microsoft repository and switch to that branch:
+
+```bash
+git fetch upstream failed-test
+git checkout -B failed-test upstream/failed-test
+```
+
+We named the branch `failed-test` for learning purposes. In practice, you'd name a branch after its purpose or feature.
+
+3. Run these commands to create a local tool manifest file, install the ReportGenerator tool, and add the `coverlet.msbuild` package to your tests project:
+
+```bash
+dotnet new tool-manifest
+dotnet tool install dotnet-reportgenerator-globaltool
+dotnet add Tailspin.SpaceGame.Web.Tests package coverlet.msbuild
+```
+
+You need this step because the `failed-test` branch doesn't contain the work you added to the `unit-tests` branch.
+
+4. Add your test project file and your tool manifest file to the staging index and commit your changes.
+
+```bash
+git add Tailspin.SpaceGame.Web.Tests/Tailspin.SpaceGame.Web.Tests.csproj
+git add .config/dotnet-tools.json
+git commit -m "Configure code coverage tests"
+```
+
+5. Run the following `git push` command to upload the `failed-test` branch to your GitHub repository:
+
+```bash
+git push origin failed-test
+```
+
+## See the test failure in the pipeline
+
+Let's say that you were in a hurry and pushed up your work without running the tests one final time. Luckily, the pipeline can help you catch issues early when there are unit tests. You can see that here.
+
+1. In Azure Pipelines, trace the build as it runs through the pipeline.
+
+2. Expand the **Run unit tests - Release** task as it runs.
+
+You see that the `ReturnRequestedCount` test method fails.
+
+![A screenshot of Azure Pipelines dashboard showing output log of an assertion failure on the unit test, expecting 10 but was 9.](azure-pipelines-test-failure.png)
+
+The test passes when the input value is 0, but it fails when the input value is 1 or 10.
+
+The build is published to the pipeline only when the previous task succeeds. Here, the build wasn't published because the unit tests failed. This prevents others from accidentally obtaining a broken build.
+
+In practice, you won't always manually trace the build as it runs. Here are a few ways you might discover the failure:
+
+**An email notification from Azure DevOps**
+
+You can configure Azure DevOps to send you an email notification when the build is complete. The subject line starts with "[Build failed]" when the build fails.
+
+![A screenshot of a portion of a build failed email notification.](build-failed-email.png)
+
+**Azure Test Plans**
+
+In Azure DevOps, select **Test Plans**, and then select **Runs**. You see the recent test runs, including the one that just ran. Select the latest completed test. You see that two of the eight tests failed.
+
+![A screenshot of Azure DevOps test run outcome showing two of eight failed tests as a ring chart.](test-plans-failure.png)
+
+**The dashboard**
+
+In Azure DevOps, select **Overview**, and then select **Dashboards**. You see the failure appear in the **Test Results Trend** widget. The **Code Coverage** widget is blank, which indicates that code coverage wasn't run.
+
+![A screenshot of Azure DevOps dashboard trend chart widget showing two failed test in the last test run.](dashboard-test-failure.png)
+
+**The build badge**
+
+Although the `failed-test` branch doesn't include the build badge in the README.md file, here's what you would see on GitHub when the build fails:
+
+![A screenshot of Azure Pipelines build badge on GitHub indicating a failure.](github-build-badge-failure.png)
+
+## Analyze the test failure
+
+When unit tests fail, you ordinarily have two choices, depending on the nature of the failure:
+
+1. If the test reveals a defect in the code, fix the code and rerun the tests.
+2. If the functionality changes, adjust the test to match the new requirements.
+
+### Reproduce the failure locally
+
+In this section, you'll reproduce the failure locally.
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. In the terminal, run this `dotnet build` command to build the application:
+
+```bash
+dotnet build --configuration Release
+```
+
+3. In the terminal, run this `dotnet test` command to run the unit tests:
+
+```bash
+dotnet test --no-build --configuration Release
+```
+
+You should see the same errors that you saw in the pipeline. Here's part of the output:
+
+```
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+  Failed ReturnRequestedCount(1) [33 ms]
+  Error Message:
+     Expected: 1
+  But was:  0
+
+  Stack Trace:
+     at NUnit.Framework.Internal.Commands.TestMethodCommand.Execute(TestExecutionContext context)
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.<>c__DisplayClass1_0.<Execute>b__0()
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+
+  Failed ReturnRequestedCount(10) [1 ms]
+  Error Message:
+     Expected: 10
+  But was:  9
+
+  Stack Trace:
+     at NUnit.Framework.Internal.Commands.TestMethodCommand.Execute(TestExecutionContext context)
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.<>c__DisplayClass1_0.<Execute>b__0()
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+
+
+Failed!  - Failed:     2, Passed:     6, Skipped:     0, Total:     8, Duration: 98 ms
+```
+
+### Find the cause of the error
+
+You notice that each failed test produces a result that's off by one. For example, when 10 is expected, the test returns 9.
+
+Take a look at the source code for the method that's being tested, `LocalDocumentDBRepository<T>.GetItemsAsync`. You should see this:
+
+```csharp
+public Task<IEnumerable<T>> GetItemsAsync(
+    Func<T, bool> queryPredicate,
+    Func<T, int> orderDescendingPredicate,
+    int page = 1, int pageSize = 10
+)
+{
+    var result = _items
+        .Where(queryPredicate) // filter
+        .OrderByDescending(orderDescendingPredicate) // sort
+        .Skip(page * pageSize) // find page
+        .Take(pageSize - 1); // take items
+
+    return Task<IEnumerable<T>>.FromResult(result);
+}
+```
+
+In this scenario, you could check GitHub to see if the file was recently changed.
+
+![A screenshot of GitHub showing a file diff where a minus one operation was added.](github-file-diff.png)
+
+You suspect that `pageSize - 1` is returning one fewer result and that this should be just `pageSize`. In our scenario, this is an error you made when you pushed work without testing, but in a real-world scenario, you could check with the developer who changed the file on GitHub to determine the reason for the change.
+
+> **Tip**
+> 
+> Discussion and collaboration can also happen on GitHub. You can comment on a pull request or open an issue.
+
+## Fix the error
+
+In this section, you'll fix the error by changing the code back to its original state and running the tests to verify the fix.
+
+1. In Visual Studio Code, open **Tailspin.SpaceGame.Web/LocalDocumentDBRepository.cs** from the file explorer.
+
+2. Modify the `GetItemsAsync` method as shown here:
+
+```csharp
+public Task<IEnumerable<T>> GetItemsAsync(
+    Func<T, bool> queryPredicate,
+    Func<T, int> orderDescendingPredicate,
+    int page = 1, int pageSize = 10
+)
+{
+    var result = _items
+        .Where(queryPredicate) // filter
+        .OrderByDescending(orderDescendingPredicate) // sort
+        .Skip(page * pageSize) // find page
+        .Take(pageSize); // take items
+
+    return Task<IEnumerable<T>>.FromResult(result);
+}
+```
+
+This version changes `pageSize - 1` to `pageSize`.
+
+3. Save the file.
+
+4. In the integrated terminal, build the application.
+
+```bash
+dotnet build --configuration Release
+```
+
+You should see that the build succeeds.
+
+In practice, you might run the app and briefly try it out. For learning purposes, we'll skip that for now.
+
+5. In the terminal, run the unit tests.
+
+```bash
+dotnet test --no-build --configuration Release
+```
+
+You see that the tests pass.
+
+```
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     8, Skipped:     0, Total:     8, Duration: 69 ms
+```
+
+6. In the integrated terminal, add each modified file to the index, commit the changes, and push the branch up to GitHub.
+
+```bash
+git add .
+git commit -m "Return correct number of items"
+git push origin failed-test
+```
+
+> **Tip**
+> 
+> The dot (.) in this `git add` example is a wildcard character. It matches all unstaged files in the current directory and all subdirectories.
+> 
+> Before you use this wildcard character, it's a good practice to run `git status` before you commit to ensure that you're staging the files you intend to stage.
+
+7. Return to Azure Pipelines. Watch the change move through the pipeline. The tests pass, and the overall build succeeds.
+
+8. Optionally, to verify the test results, you can select the **Tests** and **Code Coverage** tabs when the build completes.
+
+You can also check out the dashboard to view the updated results trend.
+
+![A screenshot of Azure DevOps dashboard trend chart widget showing a return to all tests passing.](dashboard-tests-fixed.png)
+
+Great! You've fixed the build. Next, you'll learn how to clean up your Azure DevOps environment.
+
+
