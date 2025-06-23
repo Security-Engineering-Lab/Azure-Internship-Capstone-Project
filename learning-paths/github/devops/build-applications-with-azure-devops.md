@@ -4028,7 +4028,7 @@ Let's say that you were in a hurry and pushed up your work without running the t
 
 You see that the `ReturnRequestedCount` test method fails.
 
-![A screenshot of Azure Pipelines dashboard showing output log of an assertion failure on the unit test, expecting 10 but was 9.](azure-pipelines-test-failure.png)
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/7-pipeline-test-failure.png)
 
 The test passes when the input value is 0, but it fails when the input value is 1 or 10.
 
@@ -4040,25 +4040,26 @@ In practice, you won't always manually trace the build as it runs. Here are a fe
 
 You can configure Azure DevOps to send you an email notification when the build is complete. The subject line starts with "[Build failed]" when the build fails.
 
-![A screenshot of a portion of a build failed email notification.](build-failed-email.png)
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/7-email-notification.png)
 
 **Azure Test Plans**
 
 In Azure DevOps, select **Test Plans**, and then select **Runs**. You see the recent test runs, including the one that just ran. Select the latest completed test. You see that two of the eight tests failed.
 
-![A screenshot of Azure DevOps test run outcome showing two of eight failed tests as a ring chart.](test-plans-failure.png)
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/7-test-run-outcome.png)
 
 **The dashboard**
 
 In Azure DevOps, select **Overview**, and then select **Dashboards**. You see the failure appear in the **Test Results Trend** widget. The **Code Coverage** widget is blank, which indicates that code coverage wasn't run.
 
-![A screenshot of Azure DevOps dashboard trend chart widget showing two failed test in the last test run.](dashboard-test-failure.png)
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/7-dashboard-failed-test.png)
+
 
 **The build badge**
 
 Although the `failed-test` branch doesn't include the build badge in the README.md file, here's what you would see on GitHub when the build fails:
 
-![A screenshot of Azure Pipelines build badge on GitHub indicating a failure.](github-build-badge-failure.png)
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/7-badge-failed.png)
 
 ## Analyze the test failure
 
@@ -4139,7 +4140,7 @@ public Task<IEnumerable<T>> GetItemsAsync(
 
 In this scenario, you could check GitHub to see if the file was recently changed.
 
-![A screenshot of GitHub showing a file diff where a minus one operation was added.](github-file-diff.png)
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/7-github-diff.png)
 
 You suspect that `pageSize - 1` is returning one fewer result and that this should be just `pageSize`. In our scenario, this is an error you made when you pushed work without testing, but in a real-world scenario, you could check with the developer who changed the file on GitHub to determine the reason for the change.
 
@@ -4221,7 +4222,7 @@ git push origin failed-test
 
 You can also check out the dashboard to view the updated results trend.
 
-![A screenshot of Azure DevOps dashboard trend chart widget showing a return to all tests passing.](dashboard-tests-fixed.png)
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-quality-tests-build-pipeline/media/7-dashboard-passing-test.png)
 
 Great! You've fixed the build. Next, you'll learn how to clean up your Azure DevOps environment.
 
