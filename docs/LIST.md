@@ -55,6 +55,15 @@
 - BlueTeamGPT: The AI Defender Every Security Team Needs, https://medium.com/@Ekenejoseph/blueteamgpt-the-ai-defender-every-security-team-needs-77389b061f10
 
 
+# Azure
+
+- Azure Infrastructure Design: Complete Guide to Building Scalable Cloud Architecture from Scratch, https://medium.com/@sridharcloud/azure-infrastructure-design-complete-guide-to-building-scalable-cloud-architecture-from-scratch-da32e8df540a
+- Automating Azure Deployments with Bicep and Azure Pipelines, https://medium.com/@sridharcloud/automating-azure-deployments-with-bicep-and-azure-pipelines-6e7fa4c47db2
+- Mastering Azure Network Architecture: Scenarios, Labs, Code & Real Resources, https://medium.com/@DynamoDevOps/mastering-azure-network-architecture-scenarios-labs-code-real-resources-7d756007a5eb
+- 🔍 Azure API Management (APIM) — A Conceptual Deep Dive with Real Examples, https://medium.com/@joshiabhi777/azure-api-management-apim-a-conceptual-deep-dive-with-real-examples-daec51cf9a9a
+- 📊 Azure Application Insights : A Real-World Deep Dive for .NET Developers, https://medium.com/@joshiabhi777/azure-application-insights-a-real-world-deep-dive-for-net-developers-dc687447763
+- 
+
 # Azure Sentinel
 - MSTICPy v1.0.0 and Jupyter Notebooks for CyberSec, https://medium.com/@msticpy/msticpy-v1-0-0-and-jupyter-notebooks-in-azure-sentinel-an-update-ac2f6df61f9e
 - Writing a Data Provider for MSTICPy, https://medium.com/@msticpy/writing-a-data-provider-for-msticpy-a7c237775c6
@@ -69,10 +78,33 @@
 - Microsoft Azure Sentinel 101: Log Source, Data Table & End Point Monitoring — Be alerted when a source goes down or stops responding, https://medium.com/@truvis.thornton/microsoft-azure-sentinel-101-log-source-dataable-end-point-monitoring-be-alerted-when-a-1ff4fae77892
 
 
+
+# DevOps
+- DevOps — Part 1: What is DevOps? A Beginner’s Guide with Real-World Examples, https://medium.com/@kdeepak99/what-is-devops-a-beginners-guide-with-real-world-examples-172cd7377b49
+- 
+
 # DevSecOps
 
 - 10 Shell Scripts to Automate DevSecOps Workflows, https://medium.com/devsecops-ai/10-shell-scripts-to-automate-devsecops-workflows-a3bbd716775d
-- 
+- DevSecOps: Part 1, https://medium.com/@blogs4devs/devsecops-part-1-541ed83fa58e
+- DevSecOps – Part 1: 🔐DevSecOps in Action — Implementing Shift Left Security in CI/CD, https://medium.com/@kdeepak99/part-1-devsecops-in-action-implementing-shift-left-security-in-ci-cd-8746e9e0fe63
+- DevSecOps – Part 2: 🔐Secrets Scanning and SBOM Generation in CI/CD Pipelines, https://medium.com/@kdeepak99/part-2-secrets-scanning-and-sbom-generation-in-ci-cd-pipelines-75a9537b369c
+- DevSecOps – Part 3: 🛡️Runtime Security with Falco and Policy Enforcement Using OPA/Gatekeeper, https://medium.com/@kdeepak99/%EF%B8%8F-part-3-runtime-security-with-falco-and-policy-enforcement-using-opa-gatekeeper-df78c79cfb34
+- DevSecOps – Part 4: 🔄 GitOps Security with ArgoCD, OPA Gatekeeper & Falco, https://medium.com/@kdeepak99/part-4-gitops-security-with-argocd-opa-gatekeeper-falco-700b605a17a4
+- DevSecOps – DevSecOps – Part 5: 🚨Falco Alerting and Auto-Remediation in Kubernetes, https://medium.com/@kdeepak99/part-5-falco-alerting-and-auto-remediation-in-kubernetes-fac9b8df1847
+- DevSecOps – Part 6:🧩 Full-Stack DevSecOps Demo Project — CI/CD, GitOps & Runtime Security, https://medium.com/@kdeepak99/part-6-full-stack-devsecops-demo-project-ci-cd-gitops-runtime-security-2f6dd97590b6
+- DevOps — Part 6: GitOps with ArgoCD — Declarative Kubernetes Deployments, https://medium.com/@kdeepak99/part-6-gitops-with-argocd-declarative-kubernetes-deployments-08fe96c737a2
+- DevSecOps – Part 7: ☁️Deploy the Full DevSecOps Stack with Terraform and Infrastructure as Code, https://medium.com/@kdeepak99/part-7-%EF%B8%8Fdeploy-the-full-devsecops-stack-with-terraform-and-infrastructure-as-code-7381e021bd7c
+- Adv DevSecOps – Part 5: 📊CI/CD Observability with OpenTelemetry — Trace from Build to Kubernetes, https://medium.com/@kdeepak99/part-5-ci-cd-observability-with-opentelemetry-trace-from-build-to-kubernetes-2c9141e83539
+- DevOps Interview Secrets: What I Learned After Interviewing 300+ Engineers, https://medium.com/towards-aws/devops-interview-secrets-what-i-learned-after-interviewing-300-engineers-cd335d7d08ea
+
+
+# Terraform 
+
+- Terraform Secrets Every Senior Engineer Must Know: Advanced Best Practices, https://medium.com/towards-aws/terraform-secrets-every-senior-engineer-must-know-advanced-best-practices-a72179458dff
+- Why ‘Infrastructure from Code’(IAC) is Replacing Terraform (The IaC Shift Nobody Saw Coming), https://medium.com/aws-in-plain-english/why-infrastructure-from-code-iac-is-replacing-terraform-the-iac-shift-nobody-saw-coming-c29a8dc9283f
+
+
 
 # SOC 
 
