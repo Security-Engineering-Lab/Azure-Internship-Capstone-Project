@@ -5165,4 +5165,809 @@ You see the resulting package, **Tailspin.SpaceGame.Web.Models**, in Azure Artif
 Use this version number in the next unit.
 
 
+# 4.7 **Exercise - Reference the package from the application**
+
+In this unit, you get the new Tailspin.SpaceGame.Web code that has the model classes removed. Instead of referencing the models directly, the code references them from the package you created in the previous unit.
+
+Here's a list of the steps:
+
+* Get the new code from a branch of the original Tailspin.SpaceGame.Web repository.
+* Reference the new Models package, version 1.0.0.
+* To look for this package in your Azure Artifacts feed, change the build pipeline.
+* Watch the pipeline successfully build the app.
+
+## **Fetch the branch from GitHub**
+
+Fetch the models-package branch from GitHub and check out, or switch to, that branch.
+
+This branch contains the Space Game project you worked with in the previous modules, but the Models directory has been removed.
+
+1. Switch to your copy of Visual Studio Code that shows the Tailspin.SpaceGame.Web project.
+
+2. From the terminal, to fetch a branch named models-package from the Microsoft repository, run the following git commands. Then, switch to that branch.
+
+```bash
+git fetch upstream models-package
+git checkout -B models-package upstream/models-package
+```
+
+The format of these commands allows you to get starter code from the Microsoft repository on GitHub, known as upstream. Shortly, you'll push this branch up to your GitHub repository, known as origin.
+
+3. As an optional step, verify that the Models directory no longer exists in the file explorer. Instead, you should have Controllers, Views, and other directories.
+
+## **Reference the Models package**
+
+1. Open the Tailspin.SpaceGame.Web.csproj file and add the following ItemGroup:
+
+```xml
+<ItemGroup>
+  <PackageReference Include="Tailspin.SpaceGame.Web.Models" Version="1.0.0" />
+</ItemGroup>
+```
+
+Be sure to place the ItemGroup inside the Project node. Your file should resemble this example:
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ProjectGuid>{A0C4E31E-AC75-4F39-9F59-0AA19D9B8F46}</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tailspin.SpaceGame.Web.Models" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\avatars\" />
+  </ItemGroup>
+</Project>
+```
+
+2. Modify the version, 1.0.0, to include the prerelease prefix that was generated during the build process. Here's an example:
+
+```xml
+<PackageReference Include="Tailspin.SpaceGame.Web.Models" Version="1.0.0-CI-20200610-165738" />
+```
+
+This entry references the Tailspin.SpaceGame.Web.Models package that you created in Azure Artifacts. Notice the version number, 1.0.0, plus the prerelease suffix. This value matches the initial version that you published to Azure Artifacts in the previous unit.
+
+3. Save the file.
+
+> **Note**
+> 
+> When you save the file, Visual Studio Code might ask you to restore dependencies. Select the **Restore** button to restore the dependencies.
+
+## **Modify the pipeline configuration**
+
+The models-package branch provides an initial azure-pipelines.yml file. Here, you modify the pipeline configuration to pull the Tailspin.SpaceGame.Web.Models package from Azure Artifacts.
+
+1. From Visual Studio Code, open azure-pipelines.yml.
+
+2. Modify azure-pipelines.yml as shown here:
+
+```yml
+trigger:
+- '*'
+
+pool:
+  vmImage: 'ubuntu-20.04'
+  demands:
+  - npm
+
+variables:
+  buildConfiguration: 'Release'
+  wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+  dotnetSdkVersion: '6.x'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+  inputs:
+    version: '$(dotnetSdkVersion)'
+
+- task: NuGetToolInstaller@0
+  inputs:
+    versionSpec: '5.9.1'
+
+- task: Npm@1
+  displayName: 'Run npm install'
+  inputs:
+    verbose: false
+
+- script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
+  displayName: 'Compile Sass assets'
+
+- task: gulp@1
+  displayName: 'Run gulp tasks'
+
+- script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+  displayName: 'Write build info'
+  workingDirectory: $(wwwrootDir)
+
+- task: NuGetCommand@2
+  displayName: 'Restore project dependencies'
+  inputs:
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+    feedsToUse: 'select'
+    vstsFeed: '$(System.TeamProject)/Tailspin.SpaceGame.Web.Models'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build the project - $(buildConfiguration)'
+  inputs:
+    command: 'build'
+    arguments: '--no-restore --configuration $(buildConfiguration)'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish the project - $(buildConfiguration)'
+  inputs:
+    command: 'publish'
+    projects: '**/*.csproj'
+    publishWebProjects: false
+    arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  condition: succeeded()
+```
+
+The highlighted code shows where the pipeline restores dependencies, and looks in your Azure Artifacts feed for the dependencies that might be there.
+
+3. Stage, commit, and push your changes to GitHub.
+
+```bash
+git add .
+git commit -m "Add reference to Models package"
+git push origin models-package
+```
+
+4. Go to Azure Pipelines and watch the build run. The build picks up your Models package from Azure Artifacts and builds the project successfully.
+
+
+# 4.8 **Exercise - Push a change to your package**
+
+At this point, you have two pipelines. One publishes the Models package to Azure Artifacts. The other one is for the Space Game web app. The build configuration for the web app references the Models package so that it can access the model classes.
+
+Here, you practice updating the Models package and consuming that change from the web app.
+
+To do that, start by adding a property to one of the model classes and then bump the package version. Then, submit the change to GitHub so that the pipeline can build the package and publish it to Azure Artifacts.
+
+Then update the web app to reference the newer version number of the Models package so that it can use the added property.
+
+## **Create a branch**
+
+Start by creating a branch that holds your work. Create a branch named add-game-style, which is based off the main branch.
+
+At this point, you have two copies of Visual Studio Code open, one for the Tailspin.SpaceGame.Web.Models project and one for the Space Game web app project, Tailspin.SpaceGame.Web. Work from the copy for the Tailspin.SpaceGame.Web.Models project.
+
+1. From Visual Studio Code, open the integrated terminal.
+
+2. To create a branch named add-game-style, run the following git checkout command in the terminal.
+
+```bash
+git checkout -B add-game-style
+```
+
+## **Add a property to the Models package**
+
+Add a property named Score to one of the model classes, which provides the game style, or difficulty, with which the score is associated.
+
+Work from the copy of Visual Studio Code for the Tailspin.SpaceGame.Web.Models project.
+
+1. From Visual Studio Code, open Tailspin.SpaceGame.Web.Models/Models/Score.cs. Add the following highlighted property to the list of properties already there.
+
+```csharp
+using System.Text.Json.Serialization;
+
+namespace TailSpin.SpaceGame.Web.Models
+{
+    public class Score : Model
+    {
+        // The ID of the player profile associated with this score.
+        [JsonPropertyName("profileId")]
+        public string ProfileId { get; set; }
+
+        // The score value.
+        [JsonPropertyName("score")]
+        public int HighScore { get; set; }
+
+        // The game mode the score is associated with.
+        [JsonPropertyName("gameMode")]
+        public string GameMode { get; set; }
+
+        // The game region (map) the score is associated with.
+        [JsonPropertyName("gameRegion")]
+        public string GameRegion { get; set; }
+
+        // The game style (difficulty) the score is associated with.
+        [JsonPropertyName("gameStyle")]
+        public string GameStyle { get; set; }
+    }
+}
+```
+
+> **Note**
+> 
+> You're making a change to a file in the project to demonstrate where you bump up the version number. However, don't update the web app to use the new property.
+
+2. Save the file.
+
+3. To verify your work, build the project:
+
+```bash
+dotnet build --configuration Release
+```
+
+In practice, you might perform more verification steps, such as running tests or testing the new package with an app that uses it.
+
+## **Build and publish the package**
+
+Now that you added the new property to the Score class and verified the project builds successfully, you can update the package version. You can then push your change to GitHub so that Azure Pipelines can build and publish the updated package.
+
+1. Open azure-pipelines.yml, change the minorVersion from 0 to 1, and save the file.
+
+```yml
+minorVersion: '1'
+```
+
+Here, you bump the version from 1.0.0 to 1.1.0 to make the change clear. In practice, you'd follow the versioning scheme for the kind of package you're working with.
+
+For example, according to Semantic Versioning, bumping the minor version to 1 (1.1.0) tells others that the package is backward compatible with apps that use version 1.0.0 of that package. The ones who use the package might then modify their app to make use of new features.
+
+Popular open-source projects provide documentation in the form of a changelog that explains the changes made in each version and how to migrate from one major version to the next.
+
+2. Stage, commit, and push your changes:
+
+```bash
+git add .
+git commit -m "Add GameStyle property"
+git push origin add-game-style
+```
+
+3. From Microsoft Azure Pipelines, go to the Tailspin.SpaceGame.Web.Models project, and watch the build run.
+
+4. Open the **Artifacts** tab and note the new version. Don't worry; your old version is still there for any projects that still reference it.
+
+*A screenshot of the package in Azure Artifacts, showing version 1.1 of the package.*
+
+As you did previously, write down the new version for the next unit.
+
+## **Reference the new version of the Models package**
+
+Now, change the Tailspin.SpaceGame.Web project to use the new version of the Tailspin.SpaceGame.Web.Models package.
+
+Here, work from the copy of Visual Studio Code for the Space Game web app project, Tailspin.SpaceGame.Web.
+
+1. From Visual Studio Code, open Tailspin.SpaceGame.Web.csproj, and change PackageReference to the version number of the Tailspin.SpaceGame.Web.Models package you created in Azure Artifacts. Then, save the file.
+
+Here's an example:
+
+```xml
+<PackageReference Include="Tailspin.SpaceGame.Web.Models" Version="1.1.0-CI-20210528-202436" />
+```
+
+If Visual Studio Code asks you to restore packages, you can safely ignore that message. For brevity, we don't build the web app locally.
+
+2. From the terminal, stage, commit, and push the changes.
+
+```bash
+git add .
+git commit -m "Bump Models package to 1.1.0"
+git push origin models-package
+```
+
+3. From Azure Pipelines, go to the mslearn-tailspin-spacegame-web project, and watch the build run.
+
+You see from the build output that it gets the latest dependency, builds the app, and publishes the artifact for the web app.
+
+
+
+# 4.9 **Exercise - Clean up your Azure DevOps environment**
+
+You're all done with the tasks for this module. Here, you move the work item to the **Done** state on Azure Boards and clean up your Microsoft Azure DevOps environment.
+
+## **Important**
+
+This page contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. Be sure to perform the cleanup steps if you ran the template earlier in this module.
+
+## **Move the work item to Done**
+
+Move the work item you assigned to yourself earlier in this module, "Move model data to its own package," to the **Done** column.
+
+In practice, the definition of "Done" often means having working software in the hands of your users. Here, for learning purposes, mark this work as complete because you set up a build pipeline that publishes NuGet packages to Azure Artifacts.
+
+At the end of each sprint, or work iteration, you and your team might hold a retrospective meeting. You share the work you completed, what went well in the sprint, and what could be improved.
+
+To complete the work item:
+
+1. From Azure DevOps, go to **Boards**, and from the menu, select **Boards**.
+2. Move the **Move model data to its own package** work item from the **Doing** column to the **Done** column.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-build-dependencies/media/8-azure-boards-wi6-done.png)
+
+## **Disable the pipeline or delete your project**
+
+Each module in this learning path provides a template you can run to create a clean environment during the module.
+
+Running multiple templates gives you multiple Azure Pipelines projects, each pointing to the same GitHub repository. This approach can trigger multiple pipelines to run each time you push a change to your GitHub repository, which can cause you to run out of free build minutes on our hosted agents. Therefore, it's important that you disable or delete your pipeline before moving on to the next module.
+
+Choose one of the following options.
+
+### **Option 1: Disable the pipeline**
+
+This option disables the pipeline so that it doesn't process further build requests. You can re-enable the build pipeline later if you want to. Select this option if you want to keep your Azure DevOps project and your build pipeline for future reference.
+
+To disable the pipeline:
+
+1. In Azure Pipelines, navigate to your pipeline.
+2. From the dropdown, select **Settings**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-settings-button.png)
+
+3. Under **Processing of new run requests**, select **Disabled**, and then select **Save**.
+
+Your pipeline no longer processes build requests.
+
+4. Repeat the process for the second pipeline.
+
+### **Option 2: Delete the Azure DevOps project**
+
+This option deletes your Azure DevOps project, including what's on Azure Boards and your build pipeline. In future modules, you can run another template that creates a new project in a state where this one leaves off. Select this option if you don't need your Azure DevOps project for future reference.
+
+To delete the project:
+
+1. From Azure DevOps, go to your project. Earlier, we recommended that you name this project **Space Game - web - Dependencies**.
+2. Select **Project settings** in the lower-left corner.
+3. From the **Project details** area, scroll to the bottom, and select **Delete**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-delete-project.png)
+
+
+4. From the window that appears, enter the project name and select **Delete** a second time.
+
+Your project is now deleted.
+
+
+# 4.10 **Summary**
+
+The team has really come a long way. They know how to use Azure Pipelines and Azure Artifacts to create packages and store them in a place where other teams in the company can use them. Azure DevOps is all about sharing and collaboration. Creating reusable code and making it available to others is a great way to foster those values.
+
+Most modern apps have dependencies that need to be managed during the build process. There are many package repositories from which to choose when you're looking for packages to use, or when you're deciding where to store your packages. You can also host your own repository or use a file share.
+
+Sharing code between and among teams helps to reduce development time, because you're not writing the same code more than once. It also reduces testing time, because only one codebase needs to be tested. Any improvements made to the shared code benefit everyone who uses it.
+
+## **Learn more**
+
+Deciding where to host your package depends on many factors. For example:
+
+* Will it be public or private?
+* Does the host have the features you need?
+* Will you need to authenticate access to the package?
+* Are there reasons it needs to be hosted on-premises?
+
+You might need to consider the package's language and the process for accessing it. Here are some resources to check out when you're deciding where to host your packages:
+
+* [Azure Artifacts overview](https://docs.microsoft.com/azure/devops/artifacts/overview)
+* [NuGet](https://www.nuget.org/)
+* [NPM](https://www.npmjs.com/)
+* [Maven](https://maven.apache.org/)
+* [Docker](https://www.docker.com/)
+
+To learn more about how to configure secure access to package feeds, see [Manage permissions](https://docs.microsoft.com/azure/devops/artifacts/feeds/feed-permissions).
+
+
+
+# 5 Host your own build agent in Azure Pipelines
+
+Learn how to use your own build agent when Microsoft-hosted agents don't meet your needs.
+
+#### Learning objectives
+After completing this module, you'll be able to:
+- Choose when to use Microsoft-hosted build agents and when to host your own.
+- Describe the options you have when you're managing your own build agents.
+- Bring up and configure your own agent to work with Azure Pipelines.
+- Connect your agent to a pipeline and build your application.
+#### Prerequisites
+- An Azure DevOps organization
+- An Azure subscription
+- Visual Studio Code
+- .NET 8.0 SDK
+- Git
+- A GitHub account
+
+
+
+# 5.1 **Introduction**
+
+In this module, you'll set up your own build agent running on a Microsoft Azure virtual machine.
+
+Imagine you work for a company called Tailspin Toys, and your team is developing an application called *Space Game*. Up until now, you used a Microsoft-hosted agent that runs Ubuntu to build the *Space Game* web application. Most of the time, a Microsoft-hosted agent can do everything you need.
+
+However, you occasionally need additional processing power, disk space, or time to build your applications. In this module, you'll learn how to set up your own build agent, which can run either in the cloud or on-premises.
+
+## **Learning objectives**
+
+After completing this module, you'll be able to:
+
+* Choose when to use Microsoft-hosted build agents and when to host your own.
+* Describe the options you have when you're managing your own build agents.
+* Bring up and configure your own agent to work with Azure Pipelines.
+* Connect your agent to a pipeline and build your application.
+
+## **Prerequisites**
+
+The modules in this learning path form a progression.
+
+To follow the progression from the beginning, be sure to first complete the **Get started with Azure DevOps** learning path.
+
+We also recommend you start at the beginning of this learning path, **Build applications with Azure DevOps**.
+
+If you want to go through just this module, you need to set up a development environment on your Windows, macOS, or Linux system. You need:
+
+* An Azure DevOps organization
+* An Azure subscription
+* A GitHub account
+* Visual Studio Code
+* .NET 8.0 SDK
+* Git
+
+You can get started with Azure DevOps for free.
+
+This environment lets you complete the exercises in this and future modules. You can also use it to apply your new skills to your own projects.
+
+> **Note**
+> 
+> Azure Pipelines support a vast array of **languages and application types**. In this module, you'll be working with a .NET application but you can apply the patterns you learn here to your own projects that use your favorite programming languages and frameworks.
+
+
+# 5.2 **Choose a Microsoft-hosted or self-hosted build agent**
+
+
+In this unit, you'll learn about some of the factors to consider when you're choosing a build agent. You'll learn about some of the benefits and limitations of using a Microsoft-hosted agent, and what's involved when you set up your own private build agent.
+
+## **What are build agents and agent pools?**
+
+A build agent is a system that performs build tasks. Think of it as a dedicated server that runs your build process.
+
+Imagine that you have an Azure Pipelines project that receives build requests many times per day, or perhaps you have multiple projects that can each use the same type of build agent. You can organize build agents into agent pools to help ensure that there's a server ready to process each build request.
+
+When a build is triggered, Azure Pipelines selects an available build agent from the pool. If all agents are busy, the process waits for one to become available.
+
+When you use a Microsoft-hosted agent, you specify the VM image to use from the pool. Here's an example from your existing build configuration that uses an Ubuntu 20.04 build agent:
+
+```yml
+pool:
+  vmImage: 'ubuntu-20.04'
+  demands:
+  - npm
+```
+
+When you use a Microsoft-hosted agent, you use `vmImage` to specify which type of system you need. Microsoft provides many types of VM images, including ones that run Windows, macOS, and various flavors of Linux.
+
+The `demands` section specifies which software or capabilities you require the build machine to have.
+
+When you use a build agent from your own pool, also known as a private pool, you specify the name of your pool. Here's an example:
+
+```yml
+pool:
+  name: 'MyAgentPool'
+  demands:
+  - npm
+```
+
+When you don't require a `demands` section, you can shorten the syntax like this:
+
+```yml
+pool: 'MyAgentPool'
+```
+
+You'll create a build agent and add it to a pool later in this module.
+
+## **What kind of agents can I use?**
+
+When you're choosing a build agent, there are two factors to consider:
+
+* The operating system on which you want to build
+* Whether you can use a Microsoft-hosted agent or you need to provide your own agent
+
+Azure Pipelines supports these operating systems:
+
+* Windows
+* macOS
+* Linux
+
+The build agent you choose depends mainly on what tools you use to build your code. For example, if you use Xcode to build your applications, you might choose a macOS agent. If you need Visual Studio, you'd likely choose a Windows agent.
+
+Your existing build configuration uses a Microsoft-hosted agent. Hosted agents run on infrastructure that Microsoft provides for you.
+
+A private agent uses infrastructure that you provide. Your agent can be a system that runs in the cloud or in your datacenter. Either system works, as long as the agent meets your requirements and can connect to Azure Pipelines. In this module, you'll use a VM that runs on Azure, which we provide.
+
+## **When should I use my own build agent?**
+
+For many build tasks, a Microsoft-hosted agent does everything you need. It's the easiest way to get started.
+
+Microsoft takes care of all the security and other operating system updates for you. All you need to do is define the build configuration that you want to run.
+
+Hosted agents also contain software for building many common types of applications. You can add any other software you need during the build process.
+
+Microsoft-hosted agents have a few limitations, which include:
+
+* **Build duration:** A build job can run for up to six hours.
+* **Disk space:** Hosted agents provide a fixed amount of storage for your sources and your build outputs. This may not be enough storage.
+* **CPU, memory, and network:** Hosted agents run on Microsoft Azure general purpose VMs. Standard_DS2_v2 describes the CPU, memory, and network characteristics you can expect.
+* **Interactivity:** You can't sign in to a hosted agent.
+* **File shares:** You can't drop build artifacts to Universal Naming Convention (UNC) file shares.
+
+Although hosted agents are relatively easy to set up, there are some benefits to using your own build agents, keeping aside the limitations we just described.
+
+For example, when you use hosted agents, you're sharing infrastructure with other Azure DevOps users. Although it ordinarily takes just seconds to start your build, it can take longer depending on the load on the Microsoft system.
+
+Also, when you use hosted agents, you get a clean system with each build. When you bring your own build agent, you can decide whether to perform a clean build each time or perform an incremental build. With an incremental build, you build upon existing build tools and compiled code. An incremental build can take less time to complete, because the system already has many of the build tools and dependent components installed.
+
+As a tradeoff, because the build infrastructure is yours, it's your responsibility to ensure that your build agents contain the latest software and security patches.
+
+## **How do you set up a private build agent?**
+
+A private build agent contains the software that's required to build your applications. It also contains agent software, which enables the system to connect to Azure Pipelines and receive build jobs.
+
+When you set up a private agent, you provide the infrastructure on which the builds run. This gives you flexibility in how you bring up and maintain your agents.
+
+For example, you can:
+
+**Set up the build agent manually:** You bring up the system, sign in, and interactively install your build tools and the agent software.
+
+**Automate the process:** You bring up the system and run a script or tool to install your build tools and the agent software. You can configure the agent after the system comes online or during the provisioning process.
+
+For example, when you run build agents on Azure, you can use an Azure Resource Manager template (ARM template) or Bicep to bring up the system and configure it to act as a build agent, all in one step. Terraform by HashiCorp is another way to automate the process. Terraform works with many types of infrastructure, including Azure.
+
+**Create an image:** You create an image—or snapshot—of a configured environment. You then use the image to create as many identical systems as you need in your pool.
+
+Manual configuration is a good way to get started, because it allows you to understand the process. It's also the fastest way to get set up when you need just one build agent.
+
+Automation is useful when you need many build agents, or you need to bring up and tear down build infrastructure on a regular basis. You can move from a manual process to an automated process when you need multiple agents.
+
+Images are a form of automation. They can help save time, because all the software is preconfigured. As a tradeoff, you might need to periodically rebuild your images to incorporate the latest OS patches and build tools. Packer by HashiCorp is a popular tool for creating images.
+
+For your Space Game scenario, you decide to use a private build agent.
+
+## **Check your knowledge**
+
+### **1. Let's say you're building a video game. The build process takes two hours to run and uses 18 GB to 20 GB of disk space to compile the game assets. What kind of build agent might you use?**
+
+❌ A Microsoft-hosted agent
+
+✅ **A self-hosted agent**
+
+### **2. Let's say you're building an application that runs on macOS, Linux, and Windows. How might you build the app for each platform you target?**
+
+✅ **Create a build pipeline for each platform.**
+
+✅ **Configure one pipeline to build on each platform.**
+
+❌ Build for one platform and trust that the results run on all platforms.
+
+### **3. A self-hosted build agent:**
+
+❌ Must run on Azure.
+
+✅ **Can run anywhere, including Azure, another cloud, or on-premises.**
+
+❌ Must run on Linux. Use a Microsoft-hosted agent to build Windows applications.
+
+
+
+# 5.3 **Exercise - Set up your Azure DevOps environment**
+
+In this unit, you'll ensure that your Microsoft Azure DevOps organization is set up to complete the rest of this module.
+
+To do this, you'll:
+
+* Set up an Azure DevOps project for this module.
+* Make sure your project is set up locally so that you can push changes to the pipeline.
+
+## **Get the Azure DevOps project**
+
+Here, you'll make sure that your Azure DevOps organization is set up to complete the rest of this module by running a template that creates a project for you in Azure DevOps.
+
+The modules in this learning path form a progression, where you follow the Tailspin web team through their DevOps journey. For learning purposes, each module has an associated Azure DevOps project.
+
+### **Run the template**
+
+Run a template that sets up your Azure DevOps organization.
+
+1. Get and run the ADOGenerator project in Visual Studio or the IDE of your choice.
+
+2. When prompted to **Enter the template number from the list of templates**, enter **28** for **Host your own build agent in Azure Pipelines**, then press Enter.
+
+3. Choose your authentication method. You can set up and use a Personal Access Token (PAT) or use device login.
+
+> **Note**
+> 
+> If you set up a PAT, make sure to authorize the necessary scopes. For this module, you can use Full access, but in a real-world situation, you should ensure you grant only the necessary scopes.
+
+4. Enter your Azure DevOps organization name, then press Enter.
+
+5. If prompted, enter your Azure DevOps PAT, then press Enter.
+
+6. Enter a project name such as **Space Game - web - Agent**, then press Enter.
+
+Once your project is created, go to your Azure DevOps organization in your browser (at https://dev.azure.com/<your-organization-name>/) and select the project.
+
+### **Fork the repository**
+
+If you haven't already, create a fork of the mslearn-tailspin-spacegame-web repository.
+
+1. On GitHub, go to the [mslearn-tailspin-spacegame-web](https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web) repository.
+
+2. Select **Fork** at the top-right of the screen.
+
+3. Choose your GitHub account as the Owner, then select **Create fork**.
+
+> **Important**
+> 
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. Be sure to perform the cleanup steps even if you don't complete this module.
+
+## **Set up the project locally**
+
+Here, you load the Space Game project in Visual Studio Code, configure Git, clone your repository locally, and set the upstream remote so that you can download the starter code.
+
+> **Note**
+> 
+> If you're already set up with the mslearn-tailspin-spacegame-web project locally, you can move to the next section.
+
+### **Open the integrated terminal**
+
+Visual Studio Code comes with an integrated terminal, so you can edit files and work from the command line all in one place.
+
+1. Start Visual Studio Code.
+
+2. On the **View** menu, select **Terminal**.
+
+3. In the dropdown list, select **bash**. If you're familiar with another Unix shell that you prefer to use, such as Zsh, select that shell instead.
+
+*A screenshot of Visual Studio Code showing the location of the Bash shell.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/vscode-terminal-bash.png)
+
+The terminal window lets you choose any shell that's installed on your system, like Bash, Zsh, and PowerShell.
+
+Here you'll use Bash. Git for Windows provides Git Bash, which makes it easy to run Git commands.
+
+> **Note**
+> 
+> On Windows, if you don't see Git Bash listed as an option, make sure you've installed Git, and then restart Visual Studio Code.
+
+4. Run the `cd` command to navigate to the directory you want to work from, like your home directory (`~`). You can choose a different directory if you want.
+
+```bash
+cd ~
+```
+
+### **Configure Git**
+
+If you're new to Git and GitHub, you first need to run a few commands to associate your identity with Git and authenticate with GitHub.
+
+[Set up Git](https://docs.github.com/get-started/quickstart/set-up-git) explains the process in greater detail.
+
+At a minimum, you'll need to complete the following steps. Run these commands from the integrated terminal:
+
+* Set your username.
+* Set your commit email address.
+* Cache your GitHub password.
+
+> **Note**
+> 
+> If you're already using two-factor authentication with GitHub, create a personal access token and use your token in place of your password when prompted later.
+> 
+> Treat your access token like you would a password. Keep it in a safe place.
+
+### **Set up your project in Visual Studio Code**
+
+In this part, you clone your fork locally so that you can make changes and build out your pipeline configuration.
+
+> **Note**
+> 
+> If you receive any errors about filenames being too long when you clone your repository, try cloning the repository in a folder that doesn't have a long name or is deeply nested.
+
+### **Clone your fork locally**
+
+You now have a copy of the Space Game web project in your GitHub account. Now you'll download, or clone, a copy to your computer so you can work with it.
+
+A clone, just like a fork, is a copy of a repository. When you clone a repository, you can make changes, verify they work as you expect, and then upload those changes back to GitHub. You can also synchronize your local copy with changes other authenticated users have made to GitHub's copy of your repository.
+
+To clone the Space Game web project to your computer:
+
+1. Go to your fork of the Space Game web project (mslearn-tailspin-spacegame-web) on GitHub.
+
+2. Select **Code**. Then, from the **HTTPS** tab, select the button next to the URL that's shown to copy the URL to your clipboard.
+
+*Locating the URL and copy button from the GitHub repository.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/github-clone-button.png)
+
+3. In Visual Studio Code, go to the terminal window.
+
+4. In the terminal, move to the directory you want to work from, like your home directory (`~`). You can choose a different directory if you want.
+
+```bash
+cd ~
+```
+
+5. Run the `git clone` command. Replace the URL that's shown here with the contents of your clipboard:
+
+```bash
+git clone https://github.com/your-name/mslearn-tailspin-spacegame-web.git
+```
+
+6. Move to the mslearn-tailspin-spacegame-web directory. This is the root directory of your repository.
+
+```bash
+cd mslearn-tailspin-spacegame-web
+```
+
+### **Set the upstream remote**
+
+A remote is a Git repository where team members collaborate (like a repository on GitHub). Here you list your remotes and add a remote that points to Microsoft's copy of the repository so that you can get the latest sample code.
+
+1. Run this `git remote` command to list your remotes:
+
+```bash
+git remote -v
+```
+
+You see that you have both fetch (download) and push (upload) access to your repository:
+
+```
+origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (fetch)
+origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (push)
+```
+
+Origin specifies your repository on GitHub. When you fork code from another repository, it's common to name the original remote (the one you forked from) as upstream.
+
+2. Run this `git remote add` command to create a remote named upstream that points to the Microsoft repository:
+
+```bash
+git remote add upstream https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git
+```
+
+3. Run `git remote` a second time to see the changes:
+
+```bash
+git remote -v
+```
+
+You see that you still have both fetch (download) and push (upload) access to your repository. You also now have fetch and push access to the Microsoft repository:
+
+```
+origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (fetch)
+origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (push)
+upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git (fetch)
+upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git (push)
+```
+
+### **Open the project in the file explorer**
+
+In Visual Studio Code, your terminal window points to the root directory of the Space Game web project. To view its structure and work with files, from the file explorer, you'll now open the project.
+
+The easiest way to open the project is to reopen Visual Studio Code in the current directory. To do so, run the following command from the integrated terminal:
+
+```bash
+code -r .
+```
+
+You see the directory and file tree in the file explorer.
+
+Reopen the integrated terminal. The terminal places you at the root of your web project.
+
+If the `code` command fails, you need to add Visual Studio Code to your system PATH. To do so:
+
+1. In Visual Studio Code, select **F1** or select **View > Command Palette** to access the command palette.
+2. In the command palette, enter **Shell Command: Install 'code' command in PATH**.
+3. Repeat the previous procedure to open the project in the file explorer.
+
+You're now set up to work with the Space Game source code and your Azure Pipelines configuration from your local development environment.
 
