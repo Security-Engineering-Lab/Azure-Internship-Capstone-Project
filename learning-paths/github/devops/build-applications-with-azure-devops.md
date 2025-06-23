@@ -4227,3 +4227,752 @@ You can also check out the dashboard to view the updated results trend.
 Great! You've fixed the build. Next, you'll learn how to clean up your Azure DevOps environment.
 
 
+
+# 3.8 **Exercise - Clean up your Azure DevOps environment**
+
+You're all done with the tasks for this module. You can now move the work item to the **Done** state on Microsoft Azure Boards and clean up your Microsoft Azure DevOps environment.
+
+## **Important**
+This page contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. Be sure to perform the cleanup steps if you ran the template earlier in this module.
+
+## **Disable the pipeline or delete your project**
+
+Each module in this learning path provides a template that you can run to create a clean environment for the duration of the module.
+
+Running multiple templates gives you multiple Azure Pipelines projects, each pointing to the same GitHub repository. This can trigger multiple pipelines to run each time you push a change to your GitHub repository, which can cause you to run out of free build minutes on our hosted agents. Therefore, it's important that you disable or delete your pipeline before you move on to the next module.
+
+Choose one of the following options.
+
+### **Option 1: Disable the pipeline**
+
+This option disables the pipeline so that it doesn't process further build requests. You can reenable the build pipeline later if you want to. Choose this option if you want to keep your Azure DevOps project and your build pipeline for future reference.
+
+**To disable the pipeline:**
+
+1. In Azure Pipelines, navigate to your pipeline.
+2. From the drop-down menu, select **Settings**:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-settings-button.png)
+
+3. Under **Processing of new run requests**, select **Disabled**, then select **Save**.
+
+Your pipeline will no longer process build requests.
+
+### **Option 2: Delete the Azure DevOps project**
+
+This option deletes your Azure DevOps project, including what's on Azure Boards and your build pipeline. In future modules, you'll be able to run another template that brings up a new project in a state where this one leaves off. Choose this option to delete your Azure DevOps project if you don't need it for future reference.
+
+**To delete the project:**
+
+1. In Azure DevOps, go to your project. Earlier, we recommended that you name this project **Space Game - web - Tests**.
+2. Select **Project settings** in the lower-left corner of the Azure DevOps page.
+3. In the **Project details** area, scroll down, and then select **Delete**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-delete-project.png)
+
+4. In the window that appears, enter the project name, and then select **Delete** a second time.
+
+Your project is now deleted.
+
+
+# 3.9 **Summary**
+
+Great work. In this module, you added unit tests and code coverage to the build pipeline. You set up dashboard widgets so that others can easily track your improvements. You also fixed a build break before it could reach anyone else.
+
+Defining build tasks locally first helps you understand and verify the process before you add build tasks to your pipeline.
+
+Remember, the process you followed was specific to .NET applications. The tools and tasks that you use depend on the programming language and frameworks that you use to build your applications.
+
+## **Learn more**
+
+In this module, you used the `DotNetCoreCLI@2` task to run unit tests through the `dotnet test` command. If you use Visual Studio to run your tests, you can use the Visual Studio Test task in your build pipeline.
+
+If you're interested in unit testing .NET applications, here are some more resources:
+
+* [Unit test your code](https://docs.microsoft.com/en-us/visualstudio/test/unit-test-your-code)
+* [Unit testing C# with NUnit and .NET Core](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-nunit)
+* [Build, test, and deploy .NET Core apps](https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core)
+
+Here's more information about how to analyze your test results:
+
+* [Configure the Test Results Trend (Advanced) widget](https://docs.microsoft.com/en-us/azure/devops/report/dashboards/configure-test-results-trend)
+* [Analyze test results](https://docs.microsoft.com/en-us/azure/devops/pipelines/test/review-continuous-test-results-after-build)
+
+
+
+
+# 4 Manage build dependencies with Azure Artifacts
+
+Manage your application and the packages it uses across build Pipelines.
+
+#### Learning objectives
+After completing this module, you'll be able to:
+- Create and share packages that multiple applications can use.
+- Create a build pipeline for your package and publish your package to Azure Artifacts.
+- Connect an application to your package and build the application in Azure Pipelines.
+- Push changes to your package and update your application to use them.
+
+
+
+
+# 4.1 **Introduction**
+
+
+In this module, you create a build pipeline that produces a package that multiple apps can use.
+
+It's likely that you used open-source or other partner components in your software. Using components that are popular in the community and have already been built and tested is often the fastest way to get things done.
+
+You might also have your own app code that you can move into a library or package so that others can use it. This code might be an open-source project, or software that only your team can access.
+
+There are many ways to build and host your packages. The right solution depends both on the kinds of programming languages and frameworks you use and who you want to access your packages. Here, you continue your work with the Tailspin web team by creating a NuGet package for .NET that Azure Artifacts hosts.
+
+After you complete this module, you'll be able to:
+
+* Create and share packages that multiple applications can use.
+* Create a build pipeline for your package and publish your package to Azure Artifacts.
+* Connect an application to your package and build the application in Azure Pipelines.
+* Push changes to your package and update your application to use them.
+
+## **Prerequisites**
+
+The modules in this learning path form a progression.
+
+To follow the progression from the beginning, first complete the **Get started with Azure DevOps** learning path.
+
+We also recommend you start at the beginning of this learning path, **Build applications with Azure DevOps**.
+
+If you want to go through just this module, you need to set up a development environment on your Windows, macOS, or Linux system. You need:
+
+* An Azure DevOps organization with access to parallel jobs. If your organization does not have access to parallel jobs, you can request parallel jobs for free for public or private projects using [this form](https://aka.ms/azpipelines-parallelism-request). Your request takes 2-3 business days.
+* An Azure subscription
+* A GitHub account
+* Visual Studio Code with the Azure Pipelines for VS Code extension.
+* .NET 8.0 SDK
+* Git
+
+You can get started with Azure DevOps for free.
+
+This environment lets you complete the exercises in this and future modules. You can also use it to apply your new skills to your own projects.
+
+> **Note**
+> 
+> Azure Pipelines support a vast array of **languages and application types**. In this module, you'll be working with a .NET application but you can apply the patterns you learn here to your own projects that use your favorite programming languages and frameworks.
+
+## **Meet the team**
+
+You met the *Space Game* web team at Tailspin Toys in previous modules. As a refresher, here's who you work with in this module.
+
+**Andy** is the development lead.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/andy.png)
+
+**Amita** is in QA.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/amita.png)
+
+**Tim** is in operations.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/tim.png)
+
+**Mara** just joined as a developer and reports to Andy.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/mara.png)
+
+
+Mara has prior experience with DevOps, and is helping the team adopt a more streamlined process by using Azure DevOps.
+
+
+
+# 4.2 **Plan build dependencies for your pipeline**
+
+In this unit, you learn about packaging code to make it easier to share. You discover why you should make packages, the kinds of packages you can create, where you can host the packages, and how you can access them when they're hosted. You also learn about package versioning.
+
+Codebases are always growing larger and more complex. It's unusual for a team to write all the code that their app uses. Instead, the team includes existing code written by other developers. There can be many of these packages, or dependencies, in an app. It's important to actively manage dependencies to be able to maintain them properly and make sure they meet security requirements.
+
+Check in and see how the team is doing. Andy called the team together to talk about a potential change to their code that would help out another team.
+
+## **Team meeting**
+
+**Andy:** Hi everyone. I was chatting with the team that's working on the back end system for Space Game. They could use the models we use for the website in a back-end app they plan to write.
+
+**Amita:** What do you mean by models?
+
+**Andy:** As you know, the Space Game website is an ASP.NET Core application. It uses the Model-View-Controller—or MVC—pattern to separate data from how that data is displayed in the user interface. I was thinking we could create a package that contains our model classes so that any app can use them.
+
+**Amita:** What exactly is the goal?
+
+**Andy:** Both of our teams will share the same database. The game sends the database high scores; we read these scores to display on the leaderboard.
+
+**Amita:** That makes sense. How will we create this package?
+
+**Andy:** That's why I wanted to chat with you. We have a few options, and I'm looking for ideas.
+
+**Tim:** I'd love to help, but first I have some questions. I'm new to this and I want to understand how it all works.
+
+## **What is a package?**
+
+A package contains reusable code that other developers can use in their own projects, even though they didn't write it.
+
+For compiled languages, a package typically contains the compiled binary code, such as .dll files in .NET or .class files in Java. For languages that are interpreted instead of compiled, such as JavaScript or Python, a package might include source code.
+
+Either way, packages are typically compressed to ZIP or a similar format. Package systems often define a unique file extension, such as .nupkg or .jar, to make the package's use clear. Compression can help reduce download time and also produce a single file to simplify management.
+
+Packages also often contain one or more files that provide metadata, or information about the package. This metadata might describe what the package does, specify its license terms, the author's contact information, and the package version.
+
+## **Why should I build a package?**
+
+There are advantages to building a package as opposed to duplicating the code.
+
+One reason to create a package instead of duplicating code is to prevent drift. When code is duplicated, each copy can quickly diverge to satisfy the requirements of a particular app. It becomes difficult to migrate changes from one copy to the others. In other words, you lose the ability to improve the code in ways that benefit everyone.
+
+Packages also group related functionality into one reusable component. Depending on the programming language, a package can provide apps with access to certain types and functions, while restricting access to their implementation details.
+
+Another reason to build a package is to provide a consistent way to build and test the functionality of that package. When code is duplicated, each app might build and test that code in different ways. One set of tests might include checks from which another set could benefit.
+
+One tradeoff is that you have another codebase to test and maintain with a package. You must also be careful when adding features. Generally speaking, a package should contain features that benefit many kinds of apps. For example, Json.NET is a popular NuGet package for .NET that allows you to work with JSON files. Json.NET is open source, so the community can propose improvements and report issues.
+
+When multiple apps can benefit from the same code, the advantages far outweigh the disadvantages. You have just one codebase, just one set of tests, and just one build process to manage.
+
+## **How can I identify dependencies?**
+
+If the goal is to reorganize your code into separate components, you need to identify those pieces of your app that can be removed, packaged to be made reusable, stored in a central location, and versioned. You might even want to replace your own code with partner components that are either open source or that you license.
+
+There are many ways to identify the potential dependencies in your codebase. These approaches include scanning your code for patterns of reuse, and analyzing the architecture of your solution. Here are some ways to identify dependencies:
+
+**Duplicate code.**
+
+If certain pieces of code appear in several places, that's a good indication that you can reuse the code. Centralize these duplicate pieces of code and repackage them appropriately.
+
+**High cohesion and low coupling.**
+
+A second approach is to look for code elements that have a high cohesion to each other and low coupling with other parts of the code. In essence, high cohesion means keeping parts of a codebase that are related to each other in a single place. Low coupling, at the same time, is about separating unrelated parts of the code base as much as possible.
+
+**Individual lifecycle.**
+
+Look for parts of the code that have a similar lifecycle that you can deploy and release individually. If a separate team can maintain this code, it's a good indication you can package it as a component outside of the solution.
+
+**Stable parts.**
+
+Some parts of your codebase might be stable and change infrequently. Check your code repository to find code with a low change frequency.
+
+**Independent code and components.**
+
+Whenever code and components are independent and unrelated to other parts of the system, you can potentially isolate them into separate dependencies.
+
+You can use various tools to assist you in scanning and examining your codebase. Examples range from tools that scan for duplicate code and draw solution dependency graphs to tools that can compute metrics for coupling and cohesion.
+
+## **What kinds of packages are there?**
+
+Each programming language or framework provides its own way to build packages. Popular package systems provide documentation about how the process works.
+
+You might already be familiar with these popular package systems:
+
+* **NuGet:** packages .NET libraries
+* **NPM:** packages JavaScript libraries
+* **Maven:** packages Java libraries
+* **Docker:** packages software in isolated units called containers
+
+## **Where are packages hosted?**
+
+You can host packages on your own network, or you can use a hosting service. A hosting service is often called a package repository or package registry. Many of these services provide free hosting for open-source projects.
+
+Here are some popular hosting services for the package types we just described:
+
+### **NuGet Gallery**
+
+NuGet packages are used for .NET code artifacts. These artifacts include .NET assemblies and related files, tooling and, sometimes, metadata. NuGet defines the way packages are created, stored, and consumed. A NuGet package is essentially a compressed folder structure with files in the ZIP format and has the .nupkg extension.
+
+### **NPM**
+
+An NPM package is used for JavaScript. An NPM package is a file or folder that contains JavaScript files and a package.json file that describes the metadata of the package. For node.js, the package usually contains one or more modules that can be loaded after the package is consumed.
+
+### **Maven Central Repository**
+
+Maven is used for Java-based projects. Each package has a Project Object Model file that describes the metadata of the project, and is the basic unit for defining a package and working with it.
+
+### **Docker Hub**
+
+Docker packages are called images, and contain complete, self-contained deployments. Most commonly, a Docker image represents a software component that can be hosted and run by itself, without any dependencies on other images. Docker images are layered and might be dependent on other images.
+
+A package feed refers to your package repository server. This server can be on the internet or behind your firewall on your network. For example, you can host your own NuGet feeds by using hosting products such as Azure Artifacts and MyGet. You can also host packages on a file share.
+
+When you host packages behind the firewall, you can include feeds to your own packages. You can also cache packages that you trust on your network when your systems can't connect to the internet.
+
+## **What elements make up a good dependency management strategy?**
+
+A good dependency management strategy depends on these three elements:
+
+**Standardization.**
+
+Standardize how you declare and resolve dependencies helps your automated release process remain repeatable and predictable.
+
+**Packaging formats and sources.**
+
+Each dependency should be packaged using the applicable format and stored in a central location.
+
+**Versioning.**
+
+You need to keep track of the changes that occur over time in dependencies just as you do with your own code. This means that dependencies should be versioned.
+
+## **Who can access packages?**
+
+Many package feeds provide unrestricted access to packages. For example, you can download Json.NET from nuget.org, without the need to sign in or authenticate.
+
+Other package feeds require authentication. You can authenticate access to feeds in a few ways. For example, some feeds require a username and password. Other feeds require an access token, which is typically a long series of characters that identifies who you are and to what resources you have access. You can set access tokens to expire after a given period.
+
+## **How are packages versioned?**
+
+The versioning scheme depends on the packaging system you use.
+
+For example, NuGet packages use Semantic Versioning.
+
+Semantic Versioning is a popular versioning scheme. Here's the format:
+
+**Major.Minor.Patch[-Suffix]**
+
+Here's what each of these parameters means:
+
+* A new **Major** version introduces breaking changes. Apps typically need to update how they use the package to work with a new major version.
+* A new **Minor** version introduces new features, but is backward-compatible with earlier versions.
+* A new **Patch** introduces backward-compatible bug fixes, but not new features.
+* The **-Suffix** part is optional and identifies the package as a prerelease version. For example, 1.0.0-beta1 might identify the package as the first beta prerelease build for the 1.0.0 release.
+
+When you reference a package, you do so by version number.
+
+Here's an example of installing a package by using PowerShell and a specific version number:
+
+```powershell
+Install-Package Newtonsoft.Json -Version 13.0.1
+```
+
+## **What happens when the package changes?**
+
+When you reference a package from your app, you typically pin, or specify, the version of that package you want to use.
+
+Many frameworks let you specify allowable ranges of package versions to install. Some also allow you to specify wildcards, which we call a floating version.
+
+For example, in NuGet, version "1.0" means the first version that's equal to or greater than 1.0. "[1.0]" specifies to install version 1.0 only, and not a newer version.
+
+Here are a few other examples:
+
+| This notation: | Selects: |
+|---------------|----------|
+| (1.0,) | The first version that's greater than 1. |
+| [1.0,2.0] | The first version that's greater than or equal to 1.0, and less than or equal to 2.0 |
+| (1.0,2.0) | The first version that's greater than 1.0 and less than 2.0 |
+| [1.0,2.0) | The first version that's greater than or equal to 1.0, and less than 2.0 |
+
+As each maintainer releases a new package version, you can evaluate what's changed and test your app against it. When you're ready, you can update the package's version number in your configuration and submit the change to your build pipeline.
+
+Here's an example of how you might include the Newtonsoft.Json package in your C# application's project (.csproj) file. This example specifies version 13.0.1 of that package:
+
+```xml
+<ItemGroup>
+  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+</ItemGroup>
+```
+
+## **Check your knowledge**
+
+### **1. What is a package?**
+
+**✅ Reusable code that other developers can use in their own projects.**
+
+❌ A Git construct for moving a repository.
+
+❌ A preview version of your library.
+
+### **2. Say you've built a package that you want to share publicly. What's the easiest way to do that?**
+
+**✅ A public hosting service, such as NuGet.**
+
+❌ On a public network file share.
+
+❌ Behind your firewall.
+
+---
+
+## **Відповіді на запитання:**
+
+**Запитання 1:** Що таке пакет?
+**Правильна відповідь:** Багаторазовий код, який інші розробники можуть використовувати у своїх власних проектах.
+
+**Запитання 2:** Припустимо, ви створили пакет, яким хочете поділитися публічно. Який найпростіший спосіб це зробити?
+**Правильна відповідь:** Публічний хостинг-сервіс, такий як NuGet.
+
+
+
+# 4.3 **What is Azure Artifacts?**
+
+In this unit, you get an overview about how you can use Azure Artifacts to securely create and manage packages that your apps can consume.
+
+Check back in with the team as they decide whether Azure Artifacts is the appropriate way to host their .NET package.
+
+**Mara:** It seems to me that it would make sense for us to host the new Models package in Azure Artifacts. We're all part of the Microsoft Azure DevOps organization already, so authentication would be easier than trying to set it up on a different package manager.
+
+**Andy:** I looked into that before the meeting and it seems straightforward to me. I agree with Mara.
+
+**Amita:** What's Azure Artifacts?
+
+**Andy:** Azure Artifacts is a repository in your Azure DevOps organization where you can manage the dependencies for your codebase. Azure Artifacts can store your artifacts and your binaries. It provides a container, called a feed, for groups of dependencies. Developers who have access to the feed can easily consume or publish packages.
+
+## **How do I create a package and use it in the pipeline?**
+
+**Tim:** So, if I'm understanding right, the app code uses packages from NuGet already. We're going to create our own package and host it in Azure Artifacts. Can you draw out the pieces and how they'll work together? I'm having a hard time picturing the whole process.
+
+**Andy:** Sure. Let's go over the process of creating a package and using it in our Azure DevOps pipeline.
+
+Andy moves to the whiteboard.
+
+*Illustration of a whiteboard diagram showing the steps to create and use a package.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-build-dependencies/media/2-azure-artifacts-whiteboard.png)
+
+### **Create the package**
+
+First, create a project in Azure Artifacts. We can create a project from Azure DevOps.
+
+Then, create a pipeline in Azure Pipelines that connects to the GitHub repo for the package code. The pipeline builds the code, packages it, and pushes the package to Azure Artifacts.
+
+You need to update the app that consumes this package to point to the Azure Artifacts feed that we created.
+
+After that, update the pipeline that creates our app. The update allows us to use our Azure Artifacts feed to pull the new package dependency and build as normal.
+
+### **Update the package**
+
+**Tim:** What if someone updates the package?
+
+**Andy:** When you update the package with a new feature or bug fix and run tests to make sure it works correctly, bump up the version number of the package. Then, commit the change. The package pipeline sees the commit and creates a new artifact in Azure Artifacts with the new version number. Don't worry, the old package with the lower version number is still there for apps that depend on that version. This is why you don't typically unlist a package.
+
+Our app might want to use this newer version of the package. In that case, we update the app to reference the newer version and run the tests locally to make sure this new version works with our app. When we're satisfied that everything works, we submit the app change to the pipeline. It builds with the new version of the package dependency.
+
+**Amita:** This sounds like a good plan, and it will help the other team too. It will also keep the code from drifting, as you put it. That will help QA as well.
+
+## **Include a versioning strategy in your build pipeline**
+
+When you use a build pipeline, packages need versions before they can be consumed and tested. However, only after you test the package can you know its quality. Because package versions should never be changed, it becomes challenging to choose a certain version beforehand.
+
+Azure Artifacts associates a quality level with each package in its feeds, and distinguishes between prerelease and release versions. Azure Artifacts offers different views on the list of packages and their versions, which separate them based on their quality level. This approach works well with semantic versioning, which is useful for predicting the intent of a particular version. Azure Artifacts also uses a descriptor to include more metadata from the Azure Artifacts feed. A common use for views is to share package versions that have been tested, validated, or deployed, but hold back packages still under development and not ready for public consumption.
+
+Feeds in Azure Artifacts have three different views by default. These views are added at the moment a new feed is created. The three views are:
+
+* **Release:** The @release view contains all packages that are considered official releases.
+* **Prerelease:** The @prerelease view contains all packages that have a label in their version number.
+* **Local:** The @local view contains all release and prerelease packages and the packages downloaded from upstream sources.
+
+You can use views to help package-feed consumers to filter between released and unreleased versions of packages. Views allow a consumer to make a conscious decision to choose from released packages, or opt in to prereleases of a certain quality level.
+
+## **Package security in Azure Artifacts**
+
+Ensuring the security of your packages is as important as ensuring the security of the rest of your code. One aspect of package security is securing access to the package feeds. A feed, in Azure Artifacts, is where you store packages. Setting permissions on the feed allows you to share your packages with as many or as few people as your scenario requires.
+
+### **Feed permissions**
+
+Feeds have four levels of access: Owners, Contributors, Collaborators, and Readers. Each level of access has a certain set of permissions. For example, Owners can add any type of identity—individuals, teams, and groups—to any access level. By default, the Project Collection Build Service is a Collaborator and your project team is a Reader.
+
+### **Configure the pipeline to access security and license ratings**
+
+There are several tools available from third parties to help you assess the security and license rating of the software packages you use.
+
+Some of these tools scan the packages as they're included in the build or CD pipeline. During the build process, the tool scans the packages and gives instantaneous feedback. During the CD process, the tool uses the build artifacts and performs scans. Two examples of such tools are Mend Bolt and Black Duck. With Azure DevOps, you use build tasks to incorporate scanning into your pipeline.
+
+
+
+# 4.4 **Exercise - Set up your Azure DevOps environment**
+
+
+In this unit, you ensure that your Microsoft Azure DevOps organization is set up to complete the rest of this module.
+
+To do this configuration, you:
+
+* Set up an Azure DevOps project for this module.
+* On Azure Boards, move the work item for this module to the Doing column.
+* Make sure your project is set up locally so that you can push changes to the pipeline.
+
+## **Get the Azure DevOps project**
+
+Here, you make sure that your Azure DevOps organization is set up to complete the rest of this module. You do this set up by running a template that creates a project for you in Azure DevOps.
+
+The modules in this learning path form a progression, where you follow the Tailspin web team through their DevOps journey. For learning purposes, each module has an associated Azure DevOps project.
+
+### **Run the template**
+
+Run a template that sets up your Azure DevOps organization.
+
+1. Get and run the ADOGenerator project in Visual Studio or the IDE of your choice.
+
+2. When prompted to **Enter the template number from the list of templates**, enter **27** for **Manage build dependencies with Azure Artifacts**, then press Enter.
+
+3. Choose your authentication method. You can set up and use a Personal Access Token (PAT) or use device sign-in.
+
+> **Note**
+> 
+> If you set up a PAT, make sure to authorize the necessary scopes. For this module, you can use Full access, but in a real-world situation, you should ensure you grant only the necessary scopes.
+
+4. Enter your Azure DevOps organization name, then press Enter.
+
+5. If prompted, enter your Azure DevOps PAT, then press Enter.
+
+6. Enter a project name such as **Space Game - web - Dependencies**, then press Enter.
+
+After you create your project, go to your Azure DevOps organization in your browser at https://dev.azure.com/<your-organization-name>/ and select the project.
+
+### **Fork the repository**
+
+If you haven't already, create a fork of the mslearn-tailspin-spacegame-web repository.
+
+1. On GitHub, go to the [mslearn-tailspin-spacegame-web](https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web) repository.
+
+2. Select **Fork** at the top-right of the screen.
+
+3. Choose your GitHub account as the Owner, then select **Create fork**.
+
+> **Important**
+> 
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. Be sure to perform the cleanup steps even if you don't complete this module.
+
+### **Set your project's visibility**
+
+Initially, your fork of the Space Game repository on GitHub is set to public while the project created by the Azure DevOps template is set to private. A public repository on GitHub can be accessed by anyone, while a private repository is only accessible to you and the people you choose to share it with. Similarly, on Azure DevOps, public projects provide read-only access to non-authenticated users, while private projects require users to be granted access and authenticated to access the services.
+
+At the moment, it is not necessary to modify any of these settings for the purposes of this module. However, for your personal projects, you must determine the visibility and access you wish to grant to others. For instance, if your project is open source, you may choose to make both your GitHub repository and your Azure DevOps project public. If your project is proprietary, you would typically make both your GitHub repository and your Azure DevOps project private.
+
+Later on, you may find the following resources helpful in determining which option is best for your project:
+
+* [Use private and public projects](https://docs.microsoft.com/azure/devops/organizations/public/about-public-projects)
+* [Change project visibility to public or private](https://docs.microsoft.com/azure/devops/organizations/public/make-project-public)
+* [Setting repository visibility](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility)
+
+## **Move the work item to Doing**
+
+In this section, you assign a work item to yourself that relates to this module on Azure Boards. You also move the work item to the **Doing** state. In practice, you and your team would create work items at the start of each sprint, or work iteration.
+
+Assigning work in this way gives you a checklist from which to work. It gives others on your team visibility into what you're working on and how much work is left. It also helps the team enforce work-in-progress limits so that the team doesn't take on too much work at one time.
+
+Recall that the team settled on these seven top issues:
+
+*A screenshot of Azure Boards showing a backlog of issues.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/build-all-tasks.png)
+
+> **Note**
+> 
+> Within an Azure DevOps organization, work items are numbered sequentially. In your project, the number assigned to each work item might not match what you see here.
+
+Here, you move the sixth item, **Move model data to its own package** to the **Doing** column, and assign yourself to the work item.
+
+Recall that **Move model data to its own package** relates to moving reusable code to its own NuGet package, so that package can be shared among multiple apps.
+
+*A screenshot of Azure Boards showing work item details for the Move model data to its own package issue.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-build-dependencies/media/3-work-item-details.png)
+
+To set up the work item:
+
+1. From Azure DevOps, go to **Boards**, and select **Boards** from the menu.
+
+*A screenshot of Azure DevOps showing the location of the Boards menu.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-boards-menu.png)
+
+2. From the **Move model data to its own package** work item, select the down arrow at the bottom of the card, then assign the work item to yourself.
+
+*A screenshot of Azure Boards showing the location of the down arrow.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-boards-down-chevron.png)
+
+3. Move the work item from the **To Do** to the **Doing** column.
+
+*A screenshot of Azure Boards, showing the card in the Doing column.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-build-dependencies/media/3-azure-boards-wi6-doing.png)
+
+At the end of this module, after you complete the task, you move the card to the **Done** column.
+
+## **Set up the project locally**
+
+Here, you load the Space Game project in Visual Studio Code, configure Git, clone your repository locally, and set the upstream remote so that you can download the starter code.
+
+> **Note**
+> 
+> If you're already set up with the mslearn-tailspin-spacegame-web project locally, you can move to the next section.
+
+### **Open the integrated terminal**
+
+Visual Studio Code comes with an integrated terminal, so you can edit files and work from the command line all in one place.
+
+1. Start Visual Studio Code.
+
+2. On the **View** menu, select **Terminal**.
+
+3. In the dropdown list, select **bash**. If you're familiar with another Unix shell that you prefer to use, such as Zsh, select that shell instead.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/vscode-terminal-bash.png)
+
+*A screenshot of Visual Studio Code showing the location of the Bash shell.*
+
+The terminal window lets you choose any shell that's installed on your system, like Bash, Zsh, and PowerShell.
+
+Here you'll use Bash. Git for Windows provides Git Bash, which makes it easy to run Git commands.
+
+> **Note**
+> 
+> On Windows, if you don't see Git Bash listed as an option, make sure you've installed Git, and then restart Visual Studio Code.
+
+4. Run the `cd` command to navigate to the directory you want to work from, like your home directory (`~`). You can choose a different directory if you want.
+
+```bash
+cd ~
+```
+
+### **Configure Git**
+
+If you're new to Git and GitHub, you first need to run a few commands to associate your identity with Git and authenticate with GitHub.
+
+[Set up Git](https://docs.github.com/get-started/quickstart/set-up-git) explains the process in greater detail.
+
+At a minimum, you'll need to complete the following steps. Run these commands from the integrated terminal:
+
+* Set your username.
+* Set your commit email address.
+* Cache your GitHub password.
+
+> **Note**
+> 
+> If you're already using two-factor authentication with GitHub, create a personal access token and use your token in place of your password when prompted later.
+> 
+> Treat your access token like you would a password. Keep it in a safe place.
+
+### **Set up your project in Visual Studio Code**
+
+In this part, you clone your fork locally so that you can make changes and build out your pipeline configuration.
+
+> **Note**
+> 
+> If you receive any errors about filenames being too long when you clone your repository, try cloning the repository in a folder that doesn't have a long name or is deeply nested.
+
+### **Clone your fork locally**
+
+You now have a copy of the Space Game web project in your GitHub account. Now you'll download, or clone, a copy to your computer so you can work with it.
+
+A clone, just like a fork, is a copy of a repository. When you clone a repository, you can make changes, verify they work as you expect, and then upload those changes back to GitHub. You can also synchronize your local copy with changes other authenticated users have made to GitHub's copy of your repository.
+
+To clone the Space Game web project to your computer:
+
+1. Go to your fork of the Space Game web project (mslearn-tailspin-spacegame-web) on GitHub.
+
+2. Select **Code**. Then, from the **HTTPS** tab, select the button next to the URL that's shown to copy the URL to your clipboard.
+
+*Locating the URL and copy button from the GitHub repository.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/github-clone-button.png)
+
+3. In Visual Studio Code, go to the terminal window.
+
+4. In the terminal, move to the directory you want to work from, like your home directory (`~`). You can choose a different directory if you want.
+
+```bash
+cd ~
+```
+
+5. Run the `git clone` command. Replace the URL that's shown here with the contents of your clipboard:
+
+```bash
+git clone https://github.com/your-name/mslearn-tailspin-spacegame-web.git
+```
+
+6. Move to the mslearn-tailspin-spacegame-web directory. This is the root directory of your repository.
+
+```bash
+cd mslearn-tailspin-spacegame-web
+```
+
+### **Set the upstream remote**
+
+A remote is a Git repository where team members collaborate (like a repository on GitHub). Here you list your remotes and add a remote that points to Microsoft's copy of the repository so that you can get the latest sample code.
+
+1. Run this `git remote` command to list your remotes:
+
+```bash
+git remote -v
+```
+
+You see that you have both fetch (download) and push (upload) access to your repository:
+
+```
+origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (fetch)
+origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (push)
+```
+
+Origin specifies your repository on GitHub. When you fork code from another repository, it's common to name the original remote (the one you forked from) as upstream.
+
+2. Run this `git remote add` command to create a remote named upstream that points to the Microsoft repository:
+
+```bash
+git remote add upstream https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git
+```
+
+3. Run `git remote` a second time to see the changes:
+
+```bash
+git remote -v
+```
+
+You see that you still have both fetch (download) and push (upload) access to your repository. You also now have fetch and push access to the Microsoft repository:
+
+```
+origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (fetch)
+origin  https://github.com/username/mslearn-tailspin-spacegame-web.git (push)
+upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git (fetch)
+upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web.git (push)
+```
+
+### **Open the project in the file explorer**
+
+In Visual Studio Code, your terminal window points to the root directory of the Space Game web project. To view its structure and work with files, from the file explorer, you'll now open the project.
+
+The easiest way to open the project is to reopen Visual Studio Code in the current directory. To do so, run the following command from the integrated terminal:
+
+```bash
+code -r .
+```
+
+You see the directory and file tree in the file explorer.
+
+Reopen the integrated terminal. The terminal places you at the root of your web project.
+
+If the `code` command fails, you need to add Visual Studio Code to your system PATH. To do so:
+
+1. In Visual Studio Code, select **F1** or select **View > Command Palette** to access the command palette.
+2. In the command palette, enter **Shell Command: Install 'code' command in PATH**.
+3. Repeat the previous procedure to open the project in the file explorer.
+
+You're now set up to work with the Space Game source code and your Azure Pipelines configuration from your local development environment.
+
+
+
+# 4.5 **Exercise - Create a package feed in Azure Artifacts**
+
+
+In this unit, you set up Azure Artifacts and create a new feed. You use this feed later to store your new Models package and to consume the package in your app pipeline.
+
+## **Set up Azure Artifacts**
+
+1. From Azure DevOps, go to the **Artifacts** tab, and then select **+ Create feed**.
+
+   1. Name the feed *Tailspin.SpaceGame.Web.Models*.
+   2. Under **Visibility**, select **Members of (your organization name)**.
+   3. Under **Upstream sources**, unselect **Include packages from common public sources**.
+
+The other choice, to use public sources, is if you want to create an *upstream* from this feed, meaning you can access your packages and packages from public package managers like NuGet or npmjs from this feed.
+
+   4. Under **Scope**, leave the **Project** option selected.
+   5. Select **Create**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/manage-build-dependencies/media/4-setup-azure-artifacts-feed.png)
+
+2. Select **Connect to feed**.
+
+This option has a list of links, commands, and a credential provider you could use if you wanted to run this process locally by using Visual Studio.
+
+> **Note**
+> 
+> In practice, you'd connect your application to the feed so that you can pull down packages and include them when you build and run your application locally. For brevity, we skip this part.
+
+**Andy:** I've got Azure Artifacts set up. Now, we need to create a pipeline that creates the new package there.
