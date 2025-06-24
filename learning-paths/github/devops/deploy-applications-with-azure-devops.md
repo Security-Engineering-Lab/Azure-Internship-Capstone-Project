@@ -1175,3 +1175,1213 @@ Learn more about some of the topics mentioned in this module.
 * [Manage service connections](https://docs.microsoft.com/azure/devops/pipelines/library/service-endpoints)
 * [Pipeline reports](https://docs.microsoft.com/azure/devops/pipelines/reports/pipelinereport)
 
+
+
+# 2 Create a multistage pipeline by using Azure Pipelines
+
+Design and create a realistic release pipeline that promotes changes to various testing and staging environments.
+
+#### Learning objectives
+After completing this module, you'll be able to:
+- Identify the stages, or major divisions of the pipeline, that you need to implement a multistage pipeline.
+- Explain when to use conditions, triggers, and approvals to promote changes from one stage to the next.
+- Promote a build through these stages: Dev, Test, and Staging.
+#### Prerequisites
+- An Azure subscription
+- An Azure DevOps organization with access to parallel jobs
+- Visual Studio Code
+- .NET 8.0 SDK
+- Git
+- A GitHub account
+
+
+
+# 2.1 Introduction
+
+In **Create a release pipeline in Azure Pipelines**, you built a basic release pipeline. That pipeline has a *Build* stage that builds the artifact, and a *Deploy* stage that installs the web app on Azure App Service. Mara and Andy built this pipeline as a proof of concept that they showed to the rest of the team.
+
+An actual release pipeline has more stages. Each stage has its own set of tasks that can potentially take an artifact all the way to production.
+
+In this module, you join the Tailspin Toys web team as they design a realistic release pipeline that contains multiple stages. You also learn different ways to control how an artifact is promoted from one stage to the next.
+
+A good release-management workflow lets you release more frequently and more consistently. In practice, you want to define a process that maps to your team's needs. Here, you create a basic workflow. That means first designing the environments. The environments define the runtimes of each stage in the pipeline. Then, you deploy the *Space Game* web app to these stages: *Dev*, *Test*, and *Staging*. Each stage deploys the app to its own App Service instance.
+
+## Learning objectives
+
+After completing this module, you should able to:
+
+* Identify the *stages*, or major divisions of the pipeline, that you need to implement in a multistage pipeline.
+* Explain when to use conditions, triggers, and approvals to promote changes from one stage to the next.
+* Promote a build through these stages: *Dev*, *Test*, and *Staging*.
+
+## Prerequisites
+
+The modules in this learning path form a progression. To follow the progression from the beginning, be sure to first complete these learning paths:
+
+* Get started with Azure DevOps
+* Build applications with Azure DevOps
+
+We also recommend you start at the beginning of this learning path: **Deploy applications with Azure DevOps**.
+
+If you want to go through just this module, you need to set up a development environment on your Windows, macOS, or Linux system. You need:
+
+* An Azure DevOps organization with access to parallel jobs. If your organization does not have access to parallel jobs, you can request parallel jobs for free for public or private projects using [this form](https://aka.ms/azpipelines-parallelism-request). Your request takes 2-3 business days.
+* An Azure subscription
+* A GitHub account
+* Visual Studio Code with the Azure Pipelines for VS Code extension.
+* .NET 8.0 SDK
+* Git
+
+You can get started with Azure and Azure DevOps for free. You don't need an Azure subscription to work with Azure DevOps. But in this module, you use Azure DevOps to deploy to Azure resources that exist in your Azure subscription.
+
+Use this environment to complete the exercises in this and future modules. You can also use it to apply your new skills to your own projects.
+
+> **Note**
+> 
+> Azure Pipelines support a vast array of **languages and application types**. In this module, you'll be working with a .NET application but you can apply the patterns you learn here to your own projects that use your favorite programming languages and frameworks.
+
+## Meet the team
+
+You met the *Space Game* web team at Tailspin Toys in previous modules. As a refresher, here's who you work with in this module.
+
+![Andy](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/andy.png) **Andy** is the development lead.
+
+![Amita](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/amita.png) **Amita** is in QA.
+
+![Tim](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/tim.png) **Tim** is in operations.
+
+![Mara](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/mara.png) **Mara** just joined as a developer and reports to Andy.
+
+Mara has prior experience with DevOps. She's helping the team adopt a more automated process that uses Azure DevOps.
+
+
+
+# 2.2 Design the pipeline
+
+In this unit, you follow the Tailspin web team as they define their release pipeline for the Space Game website.
+
+When you plan a release pipeline, you usually begin by identifying the stages, or major divisions, of that pipeline. Each stage typically maps to an environment. For example, in the previous module, Andy and Mara's basic pipeline had a Deploy stage that mapped to an Azure App Service instance.
+
+In this module, you promote changes from one stage to the next. Within each stage, you deploy the Space Game website to the environment associated with that stage.
+
+After you define which stages you need, consider how changes are promoted from one stage to the next. Each stage can define the success criteria that must be met before the build can move to the next stage. Azure Pipelines provides several ways to help you control how and when changes move through the pipeline. As a whole, these approaches are used for release management.
+
+In this section, you:
+
+- Learn the differences between common pipeline stages, such as Build, Dev, Test, and Staging.
+- Understand how to use manual, scheduled, and continuous deployment triggers to control when an artifact moves to the next stage in the pipeline.
+- See how a release approval pauses the pipeline until an approver accepts or rejects the release.
+
+## The meeting
+
+The entire Tailspin web team is gathered together. In **Create a release pipeline in Azure Pipelines**, the team planned their tasks for the current sprint. Each task relates to building their release pipeline for the Space Game website.
+
+Recall that the team decided on these five tasks for their sprint:
+
+1. Create a multistage pipeline
+2. Connect the web app to a database
+3. Automate quality tests
+4. Automate performance tests
+5. Improve release cadence
+
+The team meets to talk about the first task, **Create a multistage pipeline**. After the team defines the pipeline, it can move from its basic proof of concept to a release pipeline that includes more stages, quality checks, and approvals.
+
+Amita and Tim are watching Andy and Mara demonstrate the release pipeline a second time. They see that the artifact is built and installed on App Service.
+
+## What pipeline stages do you need?
+
+When you want to implement a release pipeline, it's important to first identify which stages you need. The stages you choose depend on your requirements. Let's follow along with the team as they decide on their stages.
+
+**Tim:** OK, I understand the idea of an automated pipeline. I like how it's easy to deploy to Azure. But where do we go from this demo? We need something we can actually use for our releases.
+
+**Amita:** Right! We need to add other stages. For example, presently, we have no place for a testing stage.
+
+**Tim:** Plus, we need a stage where we can show new features to the management. I can't send anything to production without management approval.
+
+**Andy:** Absolutely! Now that it's up to speed on what a release pipeline does, how do we make this pipeline do what we need?
+
+**Mara:** Let's sketch out our requirements to help us plan our next steps. Let's start with what we have.
+
+Mara moves to the whiteboard and sketches the existing pipeline.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/2-build-deploy.png)
+
+**Mara:** The Build stage builds the source code and produces a package. In our case, that package is a .zip file. The Deploy stage installs the .zip file, which is the Space Game website, on an App Service instance. What's missing from our release pipeline?
+
+### Add the Dev stage
+
+**Andy:** I might be biased, but I think we need a Dev stage. This stage should be the first stop for the artifact after it's built. Developers can't always run the entire service from their local development environment. For example, an e-commerce system might require a website, product database, and payment system. We need a stage that includes everything the app needs.
+
+In our case, the Space Game website's leaderboard feature reads high scores from an external source. Right now, it reads fictitious scores from a file. Setting up a Dev stage would give us an environment where we can integrate the web app with a real database. That database might still hold fictitious scores, but it brings us one step closer to our final app.
+
+**Mara:** I like it. We won't integrate with a real database yet. But in a Dev stage, we can deploy to an environment where we can add a database.
+
+Mara updates her drawing on the whiteboard. She replaces "Deploy" with "Dev" to show the Dev stage.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/2-add-dev-stage.png)
+
+**Andy:** You bring up an interesting point. We build the app each time we push a change to GitHub. Does that mean each build is promoted to the Dev stage after it finishes?
+
+**Mara:** Building continuously gives us important feedback about our build and test health. But we want to promote to the Dev stage only when we merge code into some central branch: either main or some other release branch. I'll update the drawing to show that requirement.
+
+![Diagram that shows whiteboard illustrating build and dev stages. A condition promotes to the Dev stage only when changes happen on a release branch.](whiteboard-condition.png)
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/2-add-dev-stage-trigger.png)
+
+**Mara:** I think this promotion will be easy to accomplish. We can define a condition that promotes to the Dev stage only when changes happen on a release branch.
+
+## What are conditions?
+
+In Azure Pipelines, use a condition to run task or job based on the state of the pipeline. You worked with conditions in previous modules.
+
+Remember, some of the conditions that you can specify are:
+
+- Only when all previous dependent tasks have succeeded
+- Even if a previous dependency has failed, unless the run was canceled
+- Even if a previous dependency has failed, even if the run was canceled
+- Only when a previous dependency has failed
+- Some custom condition
+
+Here's a basic example:
+
+```yaml
+steps:
+  - script: echo Hello!
+    condition: always()
+```
+
+The `always()` condition causes this task to print "Hello!" unconditionally, even if previous tasks failed.
+
+This condition is used if you don't specify a condition:
+
+```yaml
+condition: succeeded()
+```
+
+The `succeeded()` built-in function checks whether the previous task succeeded. If the previous task fails, this task and later tasks that use the same condition are skipped.
+
+Here you want to build a condition that specifies:
+
+- The previous task succeeded.
+- The name of the current Git branch is release.
+
+To build this condition, you use the built-in `and()` function. This function checks whether each of its conditions is true. If any condition isn't true, the overall condition fails.
+
+To get the name of the current branch, you use the built-in `Build.SourceBranchName` variable. You can access variables within a condition in a few ways. Here you use the `variables[]` syntax.
+
+To test a variable's value, you can use the built-in `eq()` function. This function checks whether its arguments are equal.
+
+With that in mind, you apply this condition to run the Dev stage only when the current branch name is "release":
+
+```yaml
+condition: |
+  and
+  (
+    succeeded(),
+    eq(variables['Build.SourceBranchName'], 'release')
+  )
+```
+
+The first condition in the `and()` function checks whether the previous task succeeded. The second condition checks whether the current branch name equals release.
+
+In YAML, you use the pipe (`|`) syntax to define a string that spans multiple lines. You could define the condition on a single line, but we write it this way to make it more readable.
+
+> **Note**
+> 
+> In this module, we use the release branch as an example. You can combine conditions to define the behavior that you need. For example, you could build a condition that runs the stage only when the build is triggered by a pull request against the main branch.
+
+In the next unit, when you set up the Dev stage, you work with a more complete example.
+
+For a more complete description of conditions in Azure Pipelines, see [expressions documentation](https://docs.microsoft.com/azure/devops/pipelines/process/expressions).
+
+**Mara:** By using conditions, you can control which changes are promoted to which stages. We can produce a build artifact for any change to validate our build and confirm that it's healthy. When we're ready, we can merge those changes into a release branch and promote that build to the Dev stage.
+
+### Add the Test stage
+
+**Mara:** So far, we have the Build and Dev stages. What comes next?
+
+**Amita:** Can we add the Test stage next? That seems like the right place for me to test out the latest changes.
+
+Mara adds the Test stage to her drawing on the whiteboard.
+
+![Diagram that shows the whiteboard illustrating build, dev and test stages. The Test stage deploys the build to Azure App Service.](whiteboard-with-test.png)
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/2-add-test-stage.png)
+
+**Amita:** One concern I have is how often I need to test the app. An email notifies me whenever Mara or Andy makes a change. Changes happen throughout the day, and I never know when to jump in. I think I'd like to see a build once a day, maybe when I get in to the office. Can we do that?
+
+**Andy:** Sure. Why don't we deploy to Test during nonworking hours? Let's say we send you a build every day at 3 A.M.
+
+**Mara:** That sounds good. We can always manually trigger the process as well if we need to. For example, we can trigger it if we need you to verify an important bug fix right away.
+
+Mara updates her drawing to show that the build moves from the Dev stage to the Test stage at 3 A.M. each day.
+
+![Diagram that shows the whiteboard showing Build, Dev, and Test stages. The schedule promotes the change from Dev to Test at 3 A.M. each morning.](whiteboard-with-schedule.png)
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/2-add-test-stage-schedule.png)
+
+## What are triggers?
+
+**Amita:** I'm feeling better now that we know how one stage moves to another. But how do we control when a stage runs?
+
+**Mara:** In Azure Pipelines, we can use triggers. A trigger defines when a stage runs. Azure Pipelines provides a few types of triggers. Here are our choices:
+
+- Continuous integration (CI) trigger
+- Pull request (PR) trigger
+- Scheduled trigger
+- Build completion trigger
+
+CI and PR triggers let you control which branches participate in the overall process. For example, you want to build the project when a change is made in any branch. A scheduled trigger starts a deployment at a specific time. A build completion trigger runs a build when another build, such as one for a dependent component, completes successfully. It seems like we want a scheduled trigger.
+
+## What are scheduled triggers?
+
+A scheduled trigger uses cron syntax to cause a build to run on a defined schedule.
+
+On Unix and Linux systems, cron is a popular way to schedule jobs to run on a set time interval or at a specific time. In Azure Pipelines, scheduled triggers use the cron syntax to define when a stage runs.
+
+A cron expression includes fields that match certain time parameters. Here are the fields:
+
+```
+mm HH DD MM DW
+ \  \  \  \  \__ Days of week
+  \  \  \  \____ Months
+   \  \  \______ Days
+    \  \________ Hours
+     \__________ Minutes
+```
+
+For example, this cron expression describes "3 A.M. every day": `0 3 * * *`
+
+A cron expression can include special characters to specify a list of values or a range of values. In this example, the asterisk (*) matches all values for the Days, Months, and Days of week fields.
+
+Put another way, this cron expression reads as:
+
+- At minute 0,
+- At the third hour,
+- On any day of the month,
+- On any month,
+- On any day of the week,
+- Run the job
+
+To specify 3 A.M. only on days Monday through Friday, you would use this expression: `0 3 * * 1-5`
+
+> **Note**
+> 
+> The time zone for cron schedules is Coordinated Universal Time (UTC), so in this example, 3 A.M. refers to 3 A.M. in UTC. In practice, you might want to adjust the time in your cron schedule relative to UTC so that the pipeline runs at the expected time for you and your team.
+
+To set up a scheduled trigger in Azure Pipelines, you need a `schedules` section in your YAML file. Here's an example:
+
+```yaml
+schedules:
+- cron: '0 3 * * *'
+  displayName: 'Deploy every day at 3 A.M.'
+  branches:
+    include:
+    - release
+  always: false
+```
+
+In this `schedules` section:
+
+- `cron` specifies the cron expression.
+- `branches` specifies to deploy only from the release branch.
+- `always` specifies whether to run the deployment unconditionally (`true`), or only when the release branch has changed since the last run (`false`). Here, you specify `false` because you need to deploy only when the release branch has changed since the last run.
+
+The entire pipeline runs when Azure Pipelines executes a scheduled trigger. The pipeline also runs under other conditions, such as when you push a change to GitHub. To run a stage only in response to a scheduled trigger, you can use a condition that checks whether the reason for the build is a scheduled run.
+
+Here's an example:
+
+```yaml
+- stage: 'Test'
+  displayName: 'Deploy to the Test environment'
+  condition: and(succeeded(), eq(variables['Build.Reason'], 'Schedule'))
+```
+
+This stage, `Test`, runs only when the previous stage succeeds and the built-in `Build.Reason` pipeline variable equals `Schedule`.
+
+You see a more complete example later in this module.
+
+**Amita:** I like this. I don't even have to pick up the release manually and install it. It's ready for me.
+
+**Andy:** And remember, if we want to automate more later, we can. Nothing's written in stone. The pipeline evolves as we improve and learn.
+
+### Add the Staging stage
+
+**Tim:** It's my turn. I need a stage to run more stress tests. We also need a stage where we can demo to management to get their approval. For now, we can combine those two needs into a stage that we can call Staging.
+
+**Andy:** Well said, Tim. Having a staging, or preproduction environment is important. This staging environment is often the last stop before a feature or bug fix reaches our users.
+
+Mara adds Staging to her drawing on the whiteboard.
+
+![Diagram where the whiteboard is showing the Build, Dev, Test, and Staging stages. The Staging stage deploys the build to Azure App Service.](whiteboard-with-staging.png)
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/2-add-staging-stage.png)
+
+
+**Amita:** We use a scheduled trigger to promote changes from the Dev stage to the Test stage. But how do we promote changes from Test to Staging? Does that promotion also have to happen on a schedule?
+
+**Mara:** I think the best way to handle that would be a release approval. A release approval lets you manually promote a change from one stage to the next.
+
+**Amita:** That sounds like exactly what I need! A release approval would give me the time to test out the latest changes before we present the build to management. I can promote the build when I'm ready.
+
+Mara updates her drawing to show that the build moves from Test to Staging only when Amita approves it.
+
+![Diagram where the whiteboard shows the Build, Dev, Test, and Staging stages. Changes move from Test to Staging only after approval.](whiteboard-with-approval.png)
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/2-add-staging-stage-approval.png)
+
+**Tim:** I could also imagine us using release approvals to promote from Staging to Production after management signs off. I can never predict how long that takes. After they sign off, I can approve the release and promote it to production manually. But how do release approvals work?
+
+## What are release approvals?
+
+A release approval is a way to pause the pipeline until an approver accepts or rejects the release. To define your release workflow, you can combine approvals, conditions, and triggers.
+
+Recall that in **Create a release pipeline in Azure Pipelines**, you defined an environment in your pipeline configuration to represent your deployment environment. Here's an example from your existing pipeline:
+
+```yaml
+- stage: 'Deploy'
+  displayName: 'Deploy the web application'
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: dev
+    variables:
+    - group: Release
+```
+
+Your environment can include specific criteria for your release. The criteria can specify which pipelines can deploy to that environment and what human approvals are needed to promote the release from one stage to the next.
+
+Later in this module, you define the staging environment, and assign yourself as an approver to promote the Space Game web app from the Test stage to Staging.
+
+## Automate as little or as much as you need
+
+Azure Pipelines gives you the flexibility to automate some stages while manually controlling stages that aren't ready for automation.
+
+**Tim:** I like how we can define the criteria that promote changes from one stage to the next. But we defined some manual criteria in our pipeline. I thought DevOps was about automating everything.
+
+**Mara:** You raise a good point. DevOps is really about automating repetitive and error-prone tasks. Sometimes human intervention is necessary. For example, we get approval from management before we release new features. As we get more experience with our automated deployments, we can automate more of our manual steps to speed up the process. For example, we can automate more quality checks in the Test stage, so Amita doesn't have to approve each build.
+
+**Tim:** Sounds great. Let's go with this plan for now, and see how we can speed up the system later.
+
+**Amita:** Speaking of our plan, can we summarize our next steps?
+
+## The plan
+
+Let's review the Tailspin team's plan as they move toward next steps.
+
+**Mara:** Here's the release pipeline we want to build.
+
+Mara points to the whiteboard.
+
+![Diagram of the final whiteboard showing the Build, Dev, Test, and Staging stages.](whiteboard-final.png)
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/2-add-staging-stage-approval.png)
+
+**Mara:** To summarize, our steps are to:
+
+1. Produce a build artifact each time we push a change to GitHub. This step happens in the Build stage.
+2. Promote the build artifact to the Dev stage. This step happens automatically when the build stage succeeds and the change is on the release branch.
+3. Promote the build artifact to the Test stage each morning at 3 A.M. We use a scheduled trigger to promote the build artifact automatically.
+4. Promote the build artifact to Staging after Amita tests and approves the build. We use a release approval to promote the build artifact.
+5. After management approves the build, we can deploy the build artifact to a production environment.
+
+**Amita:** Is this going to be hard to do? It seems like a lot of work.
+
+**Mara:** I don't think it's too bad. Every stage is separate from every other stage. Stages are discrete. Each stage has its own set of tasks. For example, what happens in the Test stage stays in the Test stage.
+
+Every deployment stage in our pipeline also has its own environment. For example, when we deploy the app to Dev or Test, the environment is an App Service instance.
+
+Finally, we test only one release at a time. We never change releases in the middle of the pipeline. We use the same release in the Dev stage as in the Staging stage, and every release has its own version number. If the release breaks in one of the stages, we fix it and build it again with a new version number. That new release then goes through the pipeline from the very beginning.
+
+## A few words about quality
+
+You just saw the team design a pipeline that takes their app all the way from build to staging. The whole point of this pipeline isn't just to make their lives easier. It's to ensure the quality of the software they're delivering to their customers.
+
+How do you measure the quality of your release process? You can't measure it directly. What you can measure is how well your process works. If you're constantly changing the process, it might be an indication that there's something wrong. Releases that fail consistently at a particular point in the pipeline might also indicate that there's a problem with the release process.
+
+Do the releases always fail on a particular day or time? Do they always fail after you deploy to a particular environment? Look for these and other patterns to see if some aspects of the release process are dependent or related.
+
+A good way to keep track of your release process quality is to create visualizations of the quality of the releases. For example, add a dashboard widget that shows you the status of every release.
+
+When you want to measure the quality of a release itself, you can perform all kinds of checks within the pipeline. For example, you can execute different types of tests, such as load tests and UI tests while running your pipeline.
+
+Using a quality gate is also a great way to check the quality of your release. There are many different quality gates. For example, work item gates can verify the quality of your requirements process.
+
+You can also add more security and compliance checks. For example, do you comply with the four-eyes principle or do you have the proper traceability?
+
+As you progress through this learning path, you see many of these techniques put into practice.
+
+Lastly, when you design a quality release process, think about what kind of documentation or release notes that you need to provide to the user. Keeping your documentation current can be difficult. You might want to consider using a tool, such as the Azure DevOps Release Notes Generator, which is a function app that contains an HTTP-triggered function. By using Azure Blob Storage, it creates a Markdown file whenever a new release is created in Azure DevOps.
+
+---
+
+## Check your knowledge
+
+### 1. Your pipeline includes many tests and quality checks that take several minutes to finish. Which kind of trigger is best for running tests only on code that was peer reviewed?
+
+- [ ] A build completion trigger
+- [ ] A CI trigger or PR trigger
+- [ ] A scheduled trigger
+
+### 2. What's the best way to pause the pipeline until an approver signs off on a change?
+
+- [ ] Use a release approval.
+- [ ] Install a Marketplace extension that provides Azure Pipelines tasks that can pause the pipeline.
+- [ ] Ask your approver to look at the change. Then manually trigger the pipeline to run.
+
+### 3. You want to deploy your web app to the Test environment each time a build finishes. What's the easiest way to set up the process?
+
+- [ ] Use a scheduled trigger.
+- [ ] Watch for build notification emails and manually trigger your build when the other one finishes successfully.
+- [ ] Use a build completion trigger.
+
+---
+
+## Відповіді на запитання:
+
+**1. Your pipeline includes many tests and quality checks that take several minutes to finish. Which kind of trigger is best for running tests only on code that was peer reviewed?**
+✅ **A CI trigger or PR trigger**
+
+PR trigger найкраще підходить для запуску тестів тільки на код, який пройшов peer review, оскільки він активується при створенні або оновленні pull request.
+
+**2. What's the best way to pause the pipeline until an approver signs off on a change?**
+✅ **Use a release approval.**
+
+Release approval є найкращим способом призупинити pipeline до отримання схвалення від відповідальної особи.
+
+**3. You want to deploy your web app to the Test environment each time a build finishes. What's the easiest way to set up the process?**
+✅ **Use a build completion trigger.**
+
+Build completion trigger найлегше налаштувати для автоматичного розгортання у Test середовище після завершення кожної збірки.
+
+
+
+
+# 2.3 Exercise - Set up your Azure DevOps environment
+
+
+In this section, you make sure that your Azure DevOps organization is set up to complete the rest of this module. You also create the Azure App Service environments that you deploy to later.
+
+To accomplish these goals, you:
+
+- Add a user to ensure Azure DevOps can connect to your Azure subscription.
+- Set up an Azure DevOps project for this module.
+- On Azure Boards, move the work item for this module to the Doing column.
+- Make sure your project is set up locally so that you can push changes to the pipeline.
+- Create the Azure App Service environments by using the Azure CLI in Azure Cloud Shell.
+- Create pipeline variables that define the names of your App Service environments.
+- Create a service connection that enables Azure Pipelines to securely access your Azure subscription.
+
+## Add a user to Azure DevOps
+
+To complete this module, you need your own Azure subscription. You can get started with Azure for free.
+
+You don't need an Azure subscription to use Azure DevOps, but here you use Azure DevOps to deploy to Azure resources that exist in your Azure subscription. To simplify the process, use the same Microsoft account to sign in to both your Azure subscription and your Azure DevOps organization.
+
+If you use different Microsoft accounts to sign in to Azure and Azure DevOps, add a user to your DevOps organization under the Microsoft account that you use to sign in to Azure. For more information, see [Add users to your organization or project](https://docs.microsoft.com/azure/devops/organizations/accounts/add-organization-users). When you add the user, select the **Basic** access level.
+
+Next, sign out of Azure DevOps and sign in. Use the Microsoft account that you use to sign in to your Azure subscription.
+
+## Get the Azure DevOps project
+
+Here, you make sure that your Azure DevOps organization is set up to complete the rest of this module. To do so, you run a template that creates a project in Azure DevOps.
+
+The modules in this learning path form a progression. You follow the Tailspin web team through their DevOps journey. For learning purposes, each module has its own Azure DevOps project.
+
+### Run the template
+
+Run a template that sets up your Azure DevOps organization.
+
+1. Get and run the ADOGenerator project in Visual Studio or the IDE of your choice.
+
+2. When prompted to **Enter the template number from the list of templates**, enter **30** for **Create a multi-stage pipeline with Azure Pipelines**, then press **Enter**.
+
+3. Choose your authentication method. You can set up and use a Personal Access Token (PAT) or use device login.
+
+   > **Note**
+   > 
+   > If you set up a PAT, make sure to authorize the necessary scopes. For this module, you can use **Full access**, but in a real-world situation, you should ensure you grant only the necessary scopes.
+
+4. Enter your Azure DevOps organization name, then press **Enter**.
+
+5. If prompted, enter your Azure DevOps PAT, then press **Enter**.
+
+6. Enter a project name such as **Space Game - web - Multistage**, then press **Enter**.
+
+7. Once your project is created, go to your Azure DevOps organization in your browser (at `https://dev.azure.com/<your-organization-name>/`) and select the project.
+
+### Fork the repository
+
+If you haven't already, create a fork of the `mslearn-tailspin-spacegame-web-deploy` repository.
+
+1. On GitHub, go to the [mslearn-tailspin-spacegame-web-deploy](https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web-deploy) repository.
+
+2. Select **Fork** at the top-right of the screen.
+
+3. Choose your GitHub account as the **Owner**, then select **Create fork**.
+
+> **Important**
+> 
+> In this module, the **Clean up your Azure DevOps environment** page contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. Even if you don't complete this module, be sure to follow the cleanup steps.
+
+### Set your project's visibility
+
+Initially, your fork of the Space Game repository on GitHub is set to public while the project created by the Azure DevOps template is set to private. A public repository on GitHub can be accessed by anyone, while a private repository is only accessible to you and the people you choose to share it with. Similarly, on Azure DevOps, public projects provide read-only access to non-authenticated users, while private projects require users to be granted access and authenticated to access the services.
+
+At the moment, it is not necessary to modify any of these settings for the purposes of this module. However, for your personal projects, you must determine the visibility and access you wish to grant to others. For instance, if your project is open source, you may choose to make both your GitHub repository and your Azure DevOps project public. If your project is proprietary, you would typically make both your GitHub repository and your Azure DevOps project private.
+
+Later on, you may find the following resources helpful in determining which option is best for your project:
+
+- [Use private and public projects](https://docs.microsoft.com/azure/devops/organizations/projects/about-projects)
+- [Change project visibility to public or private](https://docs.microsoft.com/azure/devops/organizations/projects/make-project-public)
+- [Setting repository visibility](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility)
+
+## Move the work item to Doing
+
+Here, you assign a work item to yourself on Azure Boards. You also move the work item to the Doing state. In practice, you and your team would create work items at the start of each sprint or work iteration.
+
+This work assignment gives you a checklist from which to work. It gives other team members visibility into what you're working on and how much work is left. The work item also helps enforce work-in-progress (WIP) limits so that the team doesn't take on too much work at one time.
+
+Recall that the team settled on the following top issues for the current sprint.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/deploy-all-tasks.png)
+
+> **Note**
+> 
+> Within an Azure DevOps organization, work items are numbered sequentially. In your project, the number for each work item might not match what you see here.
+
+Here you move the first item, **Create a multistage pipeline**, to the Doing column. Then you assign yourself to the work item. **Create a multistage pipeline** relates to defining each stage of deploying the Space Game website.
+
+To set up the work item:
+
+1. From Azure DevOps, go to **Boards**. Then, from the menu, select **Boards**.
+
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-boards-menu.png)
+
+2. In the **Create a multistage pipeline** card, select the down arrow. Then, assign the work item to yourself.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-boards-down-chevron.png)
+
+3. Move the work item from the **To Do** column to the **Doing** column.
+
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/3-azure-boards-wi1-doing.png)
+
+At the end of this module, you'll move the card to the **Done** column, after you complete the task.
+
+## Set up the project locally
+
+Here you load the Space Game project in Visual Studio Code, configure Git, clone your repository locally, and set the upstream remote so that you can download starter code.
+
+> **Note**
+> 
+> If you're already set up with the `mslearn-tailspin-spacegame-web-deploy` project locally, you can move to the next section.
+
+### Open the integrated terminal
+
+Visual Studio Code comes with an integrated terminal. Here you both edit files and work from the command line.
+
+1. Start Visual Studio Code.
+
+2. On the **View** menu, select **Terminal**.
+
+3. In the dropdown list, select **Git Bash**. If you're familiar with another Unix shell that you prefer to use, select that shell instead.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/vscode-terminal-git-bash.png)
+
+In the terminal window, you can choose any shell that's installed on your system. For example, you can choose Git Bash, or PowerShell, or another shell.
+
+Here you'll use Git Bash, part of Git for Windows, which makes it easy to run Git commands.
+
+> **Note**
+> 
+> On Windows, if you don't see Git Bash listed as an option, make sure you've installed Git, and then restart Visual Studio Code.
+
+4. Run the `cd` command to go to the directory where you want to work. Choose your home directory (`~`) or a different directory if you want.
+
+```bash
+cd ~
+```
+
+### Configure Git
+
+If you're new to Git and GitHub, first run a few commands to associate your identity with Git and authenticate with GitHub. For more information, see [Set up Git](https://docs.github.com/get-started/quickstart/set-up-git).
+
+At a minimum, you need to complete the following steps. Run the commands from the integrated terminal.
+
+1. Set your username.
+2. Set your commit email address.
+3. Cache your GitHub password.
+
+> **Note**
+> 
+> If you already use two-factor authentication with GitHub, create a personal access token. When you're prompted, use your token in place of your password.
+> 
+> Treat your access token like a password. Keep it in a safe place.
+
+### Set up your project in Visual Studio Code
+
+In the **Build applications with Azure DevOps** learning path, you forked and then cloned a Git repository. The repository contains the source code for the Space Game website. Your fork was connected to your projects in Azure DevOps so that the build runs when you push changes to GitHub.
+
+> **Important**
+> 
+> In this learning path, we switch to a different Git repository, `mslearn-tailspin-spacegame-web-deploy`. When you ran the template to set up your Azure DevOps project, the process forked the repository automatically for you.
+
+In this part, you clone your fork locally so that you can change and build out your pipeline configuration.
+
+#### Clone your fork locally
+
+You now have a copy of the Space Game web project in your GitHub account. Now you'll download, or clone, a copy to your computer so you can work with it.
+
+A clone, just like a fork, is a copy of a repository. When you clone a repository, you can make changes, verify that they work as you expect, and then upload those changes to GitHub. You can also synchronize your local copy with changes that other authenticated users have made to the GitHub copy of your repository.
+
+To clone the Space Game web project to your computer:
+
+1. Go to your fork of the Space Game web project (`mslearn-tailspin-spacegame-web-deploy`) on GitHub.
+
+2. Select **Code**. Then, from the **HTTPS** tab, select the button next to the URL that's shown to copy the URL to your clipboard.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/github-clone-button.png)
+
+3. In Visual Studio Code, go to the terminal window.
+
+4. In the terminal, move to the directory where you want to work. Choose your home directory (`~`) or a different directory if you want.
+
+```bash
+cd ~
+```
+
+5. Run the `git clone` command. Replace the URL that's shown here with the contents of your clipboard:
+
+```bash
+git clone https://github.com/your-name/mslearn-tailspin-spacegame-web-deploy.git
+```
+
+6. Move to the `mslearn-tailspin-spacegame-web-deploy` directory. This is the root directory of your repository.
+
+```bash
+cd mslearn-tailspin-spacegame-web-deploy
+```
+
+#### Set the upstream remote
+
+A remote is a Git repository where team members collaborate (like a repository on GitHub). Here you list your remotes and add a remote that points to Microsoft's copy of the repository so that you can get the latest sample code.
+
+1. Run this `git remote` command to list your remotes:
+
+```bash
+git remote -v
+```
+
+You see that you have both fetch (download) and push (upload) access to your repository:
+
+```
+origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (push)
+```
+
+**Origin** specifies your repository on GitHub. When you fork code from another repository, the original remote (the one you forked from) is often named **upstream**.
+
+2. Run this `git remote add` command to create a remote named **upstream** that points to the Microsoft repository:
+
+```bash
+git remote add upstream https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web-deploy.git
+```
+
+3. Run `git remote` again to see the changes:
+
+```bash
+git remote -v
+```
+
+You see that you still have both fetch (download) access and push (upload) access to your repository. You also now have fetch access to the Microsoft repository:
+
+```
+origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (push)
+upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+```
+
+#### Open the project in the file explorer
+
+In Visual Studio Code, your terminal window points to the root directory of the Space Game web project. To view its structure and work with files, from the file explorer, you'll now open the project.
+
+The easiest way to open the project is to reopen Visual Studio Code in the current directory. To do so, run the following command from the integrated terminal:
+
+```bash
+code -r .
+```
+
+You see the directory and file tree in the file explorer.
+
+Reopen the integrated terminal. The terminal places you at the root of your web project.
+
+If the `code` command fails, you need to add Visual Studio Code to your system PATH. To do so:
+
+1. In Visual Studio Code, select **F1** or select **View > Command Palette** to access the command palette.
+2. In the command palette, enter **Shell Command: Install 'code' command in PATH**.
+3. Repeat the previous procedure to open the project in the file explorer.
+
+You're now set up to work with the Space Game source code and your Azure Pipelines configuration from your local development environment.
+
+## Create the Azure App Service environments
+
+Here, you create the environments that define the pipeline stages. You create one App Service instance for each stage: Dev, Test, and Staging.
+
+In **Create a release pipeline with Azure Pipelines**, you brought up App Service through the Azure portal. Although the portal is a great way to explore what's available on Azure or to do basic tasks, bringing up components such as App Service can be tedious.
+
+In this module, you use the Azure CLI to bring up three App Service instances. You can access the Azure CLI from a terminal or through Visual Studio Code. Here, you access the Azure CLI from Azure Cloud Shell. This browser-based shell experience is hosted in the cloud. In Cloud Shell, the Azure CLI is configured for use with your Azure subscription.
+
+> **Important**
+> 
+> To complete the exercises in this module, you need your own Azure subscription.
+
+### Bring up Cloud Shell through the Azure portal
+
+1. Go to the [Azure portal](https://portal.azure.com) and sign in.
+
+2. From the menu, select **Cloud Shell**. When prompted, select the **Bash** experience.
+
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-portal-menu-cloud-shell.png)
+
+> **Note**
+> 
+> Cloud Shell requires an Azure storage resource to persist any files that you create in the Cloud Shell. When you first open the Cloud Shell, you're prompted to create a resource group, storage account, and Azure Files share. This setup is automatically used for all future Cloud Shell sessions.
+
+### Select an Azure region
+
+A region is one or more Azure datacenters within a geographic location. East US, West US, and North Europe are examples of regions. Every Azure resource, including an App Service instance, is assigned a region.
+
+To make commands easier to run, start by selecting a default region. After you specify the default region, later commands use that region unless you specify a different region.
+
+1. From the Cloud Shell, to list the regions that are available from your Azure subscription, run the following `az account list-locations` command.
+
+```bash
+az account list-locations \
+  --query "[].{Name: name, DisplayName: displayName}" \
+  --output table
+```
+
+2. From the **Name** column in the output, select a region that's close to you. For example, choose `eastasia` or `westus2`.
+
+3. Run `az configure` to set your default region. Replace `<REGION>` with the name of the region you selected.
+
+```bash
+az configure --defaults location=<REGION>
+```
+
+This example sets `westus2` as the default region:
+
+```bash
+az configure --defaults location=westus2
+```
+
+### Create the App Service instances
+
+Here, you create the App Service instances for the three stages you deploy to: Dev, Test, and Staging. Here's a brief overview of the process you follow:
+
+1. Generate a random number that makes your web app's domain name unique.
+
+   This step is for learning purposes. In practice, you would choose a domain name that matches the name of your app or service.
+
+2. Create a resource group that contains all of your App Service instances.
+
+   For learning purposes, here you create one resource group that contains all of your App Service instances. In practice, you might create a separate resource group for each App Service instance so that you can better control the life cycle of each instance.
+
+3. Create an App Service plan.
+
+   An App Service plan defines the CPU, memory, and storage resources for your web app. Here, you use the **B1 Basic** plan. This plan is intended for apps that have low traffic requirements. The Standard and Premium plans are for production workloads. These plans run on dedicated virtual machine instances.
+
+4. For each of the Dev, Test, and Staging environments, create an App Service instance.
+
+5. Get the host name for each environment.
+
+6. Verify that each environment is running, and that the home page is accessible.
+
+> **Note**
+> 
+> For learning purposes, you use the default network settings here. These settings make your site accessible from the internet. In practice, you could configure an Azure virtual network that places your website in a network that's not internet routable, and that only you and your team can access. Later, you could reconfigure your network to make the website available to your users.
+
+To create your App Service instances, follow these steps:
+
+1. From the Cloud Shell, generate a random number that makes your web app's domain name unique.
+
+```bash
+webappsuffix=$RANDOM
+```
+
+2. To create a resource group named `tailspin-space-game-rg`, run the following `az group create` command.
+
+```bash
+az group create --name tailspin-space-game-rg
+```
+
+3. To create the App Service plan named `tailspin-space-game-asp`, run the following `az appservice plan create` command.
+
+```bash
+az appservice plan create \
+  --name tailspin-space-game-asp \
+  --resource-group tailspin-space-game-rg \
+  --sku B1 \
+  --is-linux
+```
+
+The `--sku` argument specifies the **B1** plan. This plan runs on the Basic tier. The `--is-linux` argument specifies to use Linux workers.
+
+> **Important**
+> 
+> If the B1 SKU isn't available in your Azure subscription, select a different plan, such as **S1** (Standard).
+
+4. To create the three App Service instances, one for each environment (Dev, Test, and Staging), run the following `az webapp create` commands.
+
+```bash
+az webapp create \
+  --name tailspin-space-game-web-dev-$webappsuffix \
+  --resource-group tailspin-space-game-rg \
+  --plan tailspin-space-game-asp \
+  --runtime "DOTNETCORE|8.0"
+
+az webapp create \
+  --name tailspin-space-game-web-test-$webappsuffix \
+  --resource-group tailspin-space-game-rg \
+  --plan tailspin-space-game-asp \
+  --runtime "DOTNETCORE|8.0"
+
+az webapp create \
+  --name tailspin-space-game-web-staging-$webappsuffix \
+  --resource-group tailspin-space-game-rg \
+  --plan tailspin-space-game-asp \
+  --runtime "DOTNETCORE|8.0"
+```
+
+For learning purposes, you apply the same App Service plan, **B1 Basic**, to each App Service instance here. In practice, you'd assign a plan that matches your expected workload.
+
+For example, for the environments that map to the Dev and Test stages, **B1 Basic** might be appropriate because you want only your team to access the environments.
+
+For the Staging environment, you'd select a plan that matches your production environment. That plan would likely provide greater CPU, memory, and storage resources. Under the plan, you can run performance tests, like load tests, in an environment that resembles your production environment. You can run the tests without affecting live traffic to your site.
+
+5. To list each App Service instance's host name and state, run the following `az webapp list` command.
+
+```bash
+az webapp list \
+  --resource-group tailspin-space-game-rg \
+  --query "[].{hostName: defaultHostName, state: state}" \
+  --output table
+```
+
+Note the host name for each running service. You need these host names later when you verify your work. Here's an example:
+
+```
+HostName                                                 State
+-------------------------------------------------------  -------
+tailspin-space-game-web-dev-21017.azurewebsites.net      Running
+tailspin-space-game-web-test-21017.azurewebsites.net     Running
+tailspin-space-game-web-staging-21017.azurewebsites.net  Running
+```
+
+6. As an optional step, go to one or more of the host names. Verify that they're running, and that the default home page appears.
+
+Here's what you see:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/app-service-default.png)
+
+> **Important**
+> 
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you're not charged for Azure resources after you complete this module. Be sure to perform the cleanup steps even if you don't complete this module.
+
+## Create pipeline variables in Azure Pipelines
+
+In **Create a release pipeline with Azure Pipelines**, you added a variable to your pipeline that stores the name of your web app in App Service. Here you do the same. But this time, you add one variable for each App Service instance that corresponds to a Dev, Test, or Staging stage in your pipeline.
+
+You could hard-code these names in your pipeline configuration, but if you define them as variables, your configuration is more reusable. Additionally, if the names of your App Service instances change, you can update the variables and trigger your pipeline without modifying your configuration.
+
+To add the variables:
+
+1. In Azure DevOps, go to your **Space Game - web - Multistage** project.
+
+2. Under **Pipelines**, select **Library**.
+
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-release-pipeline/media/5-pipelines-library.png)
+
+3. Select **+ Variable group**.
+
+4. Under **Properties**, enter **Release** for the variable group name.
+
+5. Under **Variables**, select **+ Add**.
+
+6. For the name of your variable, enter **WebAppNameDev**. For the value, enter the name of the App Service instance that corresponds to your Dev environment, such as `tailspin-space-game-web-dev-1234`.
+
+7. Repeat the previous two steps twice more to create variables for your Test and Staging environments. Here are examples:
+
+| Variable name | Example value |
+|---------------|---------------|
+| WebAppNameTest | tailspin-space-game-web-test-1234 |
+| WebAppNameStaging | tailspin-space-game-web-staging-1234 |
+
+Be sure to replace each example value with the App Service instance that corresponds to your environment.
+
+> **Important**
+> 
+> Set the name of the App Service instance, not its host name. In this example, you would enter `tailspin-space-game-web-dev-1234` and not `tailspin-space-game-web-dev-1234.azurewebsites.net`.
+
+8. Near the top of the page, select **Save** to save your variable in the pipeline.
+
+Your variable group resembles this one:
+
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/pipelines-environments.png)
+
+## Create the dev and test environments
+
+In **Create a release pipeline with Azure Pipelines**, you created an environment for the dev environment. Here, you repeat the process for both the dev and test environments. Later, you set up the staging environment, which includes more criteria.
+
+To create the dev and test environments:
+
+1. From Azure Pipelines, select **Environments**.
+
+![A screenshot of Azure Pipelines showing the location of the Environments menu option.](azure-pipelines-environments.png)
+
+2. To create the dev environment:
+   - Select **Create environment**.
+   - Under **Name**, enter **dev**.
+   - Leave the remaining fields at their default values.
+   - Select **Create**.
+
+3. To create the test environment:
+   - Return to the **Environments** page.
+   - Select **New environment**.
+   - Under **Name**, enter **test**.
+   - Select **Create**.
+
+## Create a service connection
+
+Here, you create a service connection that enables Azure Pipelines to access your Azure subscription. Azure Pipelines uses this service connection to deploy the website to App Service. You created a similar service connection in the previous module.
+
+> **Important**
+> 
+> Make sure that you're signed in to both the Azure portal and Azure DevOps under the same Microsoft account.
+
+1. In Azure DevOps, go to your **Space Game - web - Multistage** project.
+
+2. From the lower-left corner of the page, select **Project settings**.
+
+3. Under **Pipelines**, select **Service connections**.
+
+4. Select **Create service connection**, then select **Azure Resource Manager**, and then select **Next**.
+
+5. At the beginning of the page, select **App registration (automatic)**. Then, select **Next**.
+
+6. Fill in these fields:
+
+| Field | Value |
+|-------|-------|
+| Scope level | Subscription |
+| Subscription | Your Azure subscription |
+| Resource Group | tailspin-space-game-rg |
+| Service connection name | Resource Manager - Tailspin - Space Game |
+
+During the process, you might be prompted to sign in to your Microsoft account.
+
+7. Ensure that you select **Grant access permission to all pipelines**.
+
+8. Select **Save**.
+
+To verify that it can connect to your Azure subscription, Azure DevOps performs a test connection. If Azure DevOps can't connect, you have the chance to sign in a second time.
+
+
+# Exercise - 2.4 Promote to the Dev stage
+
+The team has a plan and is ready to begin implementing their release pipeline. Your Azure DevOps project is set up, and your Azure App Service instances are ready to receive build artifacts.
+
+At this point, remember that the team's pipeline has only two stages. The first stage produces the build artifact. The second stage deploys the Space Game web app to App Service. Here, you follow along with Andy and Mara as they modify the pipeline. They're going to deploy to the App Service environment that corresponds to the Dev stage.
+
+The Dev stage resembles the deployment stage that you made in the **Create a release pipeline in Azure Pipelines** module. There, you used a CI trigger to start the build process. Here you do the same.
+
+## Fetch the branch from GitHub
+
+Here, you fetch the `release` branch from GitHub. You also check out, or switch to, the branch.
+
+This branch serves as your release branch. It contains the Space Game project used in previous modules. It also contains an Azure Pipelines configuration to start with.
+
+To fetch and switch to the branch:
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. To fetch a branch named `release` from the Microsoft repository, and to switch to that branch, run the following git commands.
+
+```bash
+git fetch upstream release
+git checkout -B release upstream/release
+```
+
+The format of these commands enables you to get starter code from the Microsoft GitHub repository, known as `upstream`. Shortly, you're going to push this branch up to your GitHub repository, known as `origin`.
+
+3. As an optional step, from Visual Studio Code, open `azure-pipelines.yml`. Familiarize yourself with the initial configuration.
+
+The configuration resembles the basic one that you created in the **Create a release pipeline with Azure Pipelines** module. It builds only the app's release configuration. For learning purposes, this configuration doesn't run the quality or security checks that you set up in previous modules.
+
+> **Note**
+> 
+> A more robust configuration might specify the branches that participate in the build process. For example, to help verify code quality, you might run unit tests each time you push up a change on any branch. You might also deploy the application to an environment that performs more exhaustive testing. But you do this deployment only when you have a pull request, when you have a release candidate, or when you merge code to main.
+> 
+> For more information, see [Implement a code workflow in your build pipeline by using Git and GitHub](https://docs.microsoft.com/learn/modules/implement-code-workflow/) and [Build pipeline triggers](https://docs.microsoft.com/azure/devops/pipelines/build/triggers).
+
+## Promote changes to the Dev stage
+
+Here, you modify your pipeline configuration to promote the build to the Dev stage.
+
+1. In Visual Studio Code, modify `azure-pipelines.yml`.
+
+```yaml
+trigger:
+- '*'
+
+variables:
+  buildConfiguration: 'Release'
+  releaseBranchName: 'release'
+
+stages:
+- stage: 'Build'
+  displayName: 'Build the web application'
+  jobs: 
+  - job: 'Build'
+    displayName: 'Build job'
+    pool:
+      vmImage: 'ubuntu-20.04'
+      demands:
+      - npm
+
+    variables:
+      wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+      dotnetSdkVersion: '6.x'
+
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+      inputs:
+        version: '$(dotnetSdkVersion)'
+
+    - task: Npm@1
+      displayName: 'Run npm install'
+      inputs:
+        verbose: false
+
+    - script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
+      displayName: 'Compile Sass assets'
+
+    - task: gulp@1
+      displayName: 'Run gulp tasks'
+
+    - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+      displayName: 'Write build info'
+      workingDirectory: $(wwwrootDir)
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build the project - $(buildConfiguration)'
+      inputs:
+        command: 'build'
+        arguments: '--no-restore --configuration $(buildConfiguration)'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish the project - $(buildConfiguration)'
+      inputs:
+        command: 'publish'
+        projects: '**/*.csproj'
+        publishWebProjects: false
+        arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+        zipAfterPublish: true
+
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: drop
+
+- stage: 'Dev'
+  displayName: 'Deploy to the dev environment'
+  dependsOn: Build
+  condition: |
+    and
+    (
+      succeeded(),
+      eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
+    )
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: dev
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameDev)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+```
+
+This configuration resembles the one that you built in the previous module. There, you and the team built a proof of concept for continuous deployment. But note these differences, which are highlighted in the preceding code example:
+
+- This configuration defines variables at the beginning of the file. The variables are used throughout the pipeline. They define which configuration to build (Release). They also define the name of your release branch (release).
+- The Deploy stage from the proof of concept is now named Dev.
+- The Dev stage uses a condition that directs the system to run the stage only when the previous stage succeeds and the current branch is release. This setup ensures that release features are deployed only to the Dev environment.
+- The deployment step uses the `WebAppNameDev` variable to deploy to the App Service instance associated with the Dev environment.
+
+> **Note**
+> 
+> In practice, you might deploy from some other branch, such as main. You can include logic that allows changes to be promoted to the Dev stage from multiple branches, such as release and main.
+
+2. From the integrated terminal, add `azure-pipelines.yml` to the index. Commit the change, and push it up to GitHub.
+
+> **Tip**
+> 
+> Before you run these Git commands, save `azure-pipelines.yml`.
+
+```bash
+git add azure-pipelines.yml
+git commit -m "Deploy to the Dev stage"
+git push origin release
+```
+
+3. In Azure Pipelines, go to the build. As it runs, trace the build.
+
+4. After the build finishes, to return to the summary page, select the back button.
+
+![A screenshot of Azure Pipelines showing the completed stages.](azure-pipelines-dev-complete.png)
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/4-pipeline-dev-stage-summary.png)
+
+You see that the deployment finished successfully.
+
+5. From a web browser, go to the URL associated with the App Service instance for your Dev environment.
+
+If you still have the browser tab open, refresh the page. If you don't remember the URL, find it in the Azure portal, on the App Service details page.
+
+You see that the Space Game website is deployed to App Service, and is running.
+
+![A screenshot of a web browser showing the Space Game web site in the Dev environment.](space-game-dev-environment.png)
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/4-pipeline-dev-stage-summary.png)
+
+6. As an optional step, in Azure Pipelines, select **Environments**. Then, select the **dev** environment.
+
+Azure Pipelines records your deployment history. In the history, you can trace the environment's changes back to code commits and work items.
+
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/4-environment-dev.png)
