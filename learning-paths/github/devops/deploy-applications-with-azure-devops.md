@@ -2385,3 +2385,597 @@ Azure Pipelines records your deployment history. In the history, you can trace t
 
 
 ![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/4-environment-dev.png)
+
+
+
+# 2.5 Exercise - Promote to the Test stage
+
+Your release pipeline still has two stages, but they're now different than before. The stages are Build and Dev. Every change you push to GitHub triggers the Build stage to run. The Dev stage runs only when the change is in the release branch. Here, you add the Test stage to the pipeline.
+
+Recall that the team decided to use a scheduled trigger to promote the build from the Dev stage to the Test stage at 3 A.M. each morning. To set up the scheduled trigger:
+
+- Define the schedule in your build configuration.
+- Define the Test stage, which includes a condition that runs the stage only if the build reason is marked as Schedule.
+
+For learning purposes, here, you define the schedule but allow the build to go directly from Dev to Test. This setup avoids the need to wait for the schedule to be triggered. After you complete this module, try experimenting with different cron expressions to run the Test stage only at the scheduled time.
+
+## Promote changes to the Test stage
+
+Here, you modify your pipeline configuration to deploy the build to the Test stage.
+
+1. In Visual Studio Code, modify `azure-pipelines.yml` as follows:
+
+```yaml
+trigger:
+- '*'
+
+variables:
+  buildConfiguration: 'Release'
+  releaseBranchName: 'release'
+
+schedules:
+- cron: '0 3 * * *'
+  displayName: 'Deploy every day at 3 A.M.'
+  branches:
+    include:
+    - release
+  always: false 
+
+stages:
+- stage: 'Build'
+  displayName: 'Build the web application'
+  jobs: 
+  - job: 'Build'
+    displayName: 'Build job'
+    pool:
+      vmImage: 'ubuntu-20.04'
+      demands:
+      - npm
+
+    variables:
+      wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+      dotnetSdkVersion: '6.x'
+
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+      inputs:
+        version: '$(dotnetSdkVersion)'
+
+    - task: Npm@1
+      displayName: 'Run npm install'
+      inputs:
+        verbose: false
+
+    - script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
+      displayName: 'Compile Sass assets'
+
+    - task: gulp@1
+      displayName: 'Run gulp tasks'
+
+    - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+      displayName: 'Write build info'
+      workingDirectory: $(wwwrootDir)
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build the project - $(buildConfiguration)'
+      inputs:
+        command: 'build'
+        arguments: '--no-restore --configuration $(buildConfiguration)'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish the project - $(buildConfiguration)'
+      inputs:
+        command: 'publish'
+        projects: '**/*.csproj'
+        publishWebProjects: false
+        arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+        zipAfterPublish: true
+
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: drop
+
+- stage: 'Dev'
+  displayName: 'Deploy to the dev environment'
+  dependsOn: Build
+  condition: |
+    and
+    (
+      succeeded(),
+      eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
+    )
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: dev
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameDev)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+
+- stage: 'Test'
+  displayName: 'Deploy to the test environment'
+  dependsOn: Dev
+  #condition: eq(variables['Build.Reason'], 'Schedule')
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: test
+    variables:
+    - group: 'Release'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameTest)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+```
+
+The `schedules` section defines one cron expression. You can define more than one expression in your configuration. The expression triggers the pipeline to run against the release branch at 3 A.M. each day. The `always` flag is set to `false` so that the pipeline runs only when the release branch contains changes from the prior run.
+
+The Test stage defines a condition that runs the stage only when the build reason equals `Schedule`. (The built-in variable `Build.Reason` defines the build reason.) If this condition is false, the stage is skipped, but the prior stages continue to run.
+
+> **Note**
+> 
+> This condition is shown for learning purposes. It's commented to enable the change to go from Dev to Test without waiting for the schedule to be triggered.
+
+2. From the integrated terminal, to the index, add `azure-pipelines.yml`. Then, commit the change, and push it up to GitHub.
+
+> **Tip**
+> 
+> Before you run these Git commands, save `azure-pipelines.yml`.
+
+```bash
+git add azure-pipelines.yml
+git commit -m "Deploy to the Test stage"
+git push origin release
+```
+
+3. In Azure Pipelines, go to the build. Trace the build as it runs.
+
+4. After the build finishes, to return to the summary page, select the back button.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/5-pipeline-test-stage-summary.png)
+
+You see that the deployment finished successfully.
+
+5. From a web browser, go to the URL associated with the App Service instance for your Test environment.
+
+If you still have the browser tab open, refresh the page. If you don't remember the URL, find it in the Azure portal, on the App Service details page.
+
+You see that the Space Game website is deployed to App Service, and it's running.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/5-app-service-test.png)
+
+6. As an optional step, in Azure Pipelines, select **Environments**. Then, select the **test** environment.
+
+Azure Pipelines records your deployment history. In the history, you can trace changes in the environment back to code commits and work items.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/5-environment-test.png)
+
+Andy and Mara add the Test stage to the pipeline. They show the results to Amita.
+
+**Amita:** I like that changes are built and deployed so that I can test them each morning. But I don't see how I can control when changes arrive at Staging.
+
+**Mara:** Yes, deploying through automation saves lots of time. Remember that we included only the scheduled trigger. Let's add a release approval for you when we set up the Staging environment for Tim. That way, changes move to Staging only when you're ready.
+
+
+
+# 2.6 Exercise - Promote to Staging
+
+Your release pipeline now has three stages: Build, Dev, and Test. You and the Tailspin team have one more stage to implement: Staging.
+
+In this part, you'll:
+
+- Create the staging environment in Azure Pipelines, and assign yourself as an approver.
+- Define the Staging stage, which runs only after an approver verifies the results of the Test stage.
+
+## Create the staging environment
+
+Here, you create an environment in Azure Pipelines for Staging. For learning purposes, you assign yourself as the approver. In practice, you would assign the users who are required to approve changes before those changes move to the next stage. For the Tailspin team, Amita approves changes so that they can be promoted from Test to Staging.
+
+Earlier in this module, you specified environment settings for both Dev and Test stages. Here's an example for the Dev stage.
+
+```yaml
+- stage: 'Deploy'
+  displayName: 'Deploy the web application'
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: dev
+    variables:
+    - group: Release
+```
+
+You can define an environment through Azure Pipelines that includes specific criteria for your release. This criteria can include the pipelines that are authorized to deploy to the environment. You can also specify the human approvals that are needed to promote the release from one stage to the next. Here, you specify those approvals.
+
+To create the staging environment:
+
+1. From Azure Pipelines, select **Environments**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/pipelines-environments.png)
+
+2. Select **New environment**.
+
+3. Under **Name**, enter **staging**.
+
+4. Leave the remaining fields at their default values.
+
+5. Select **Create**.
+
+6. On the staging environment page, select the **Approvals and checks** tab.
+
+7. Select **Approvals**.
+
+8. Under **Approvers**, select **Add users and groups**, and then select your account.
+
+9. Under **Instructions to approvers**, enter **Approve this change when it's ready for staging**.
+
+10. Select **Create**.
+
+## Promote changes to Staging
+
+Here you modify your pipeline configuration to deploy the build to the Staging stage.
+
+1. In Visual Studio Code, modify `azure-pipelines.yml` as follows:
+
+```yaml
+trigger:
+- '*'
+
+variables:
+  buildConfiguration: 'Release'
+  releaseBranchName: 'release'
+
+schedules:
+- cron: '0 3 * * *'
+  displayName: 'Deploy every day at 3 A.M.'
+  branches:
+    include:
+    - release
+  always: false 
+
+stages:
+- stage: 'Build'
+  displayName: 'Build the web application'
+  jobs: 
+  - job: 'Build'
+    displayName: 'Build job'
+    pool:
+      vmImage: 'ubuntu-20.04'
+      demands:
+      - npm
+
+    variables:
+      wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+      dotnetSdkVersion: '6.x'
+
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+      inputs:
+        version: '$(dotnetSdkVersion)'
+
+    - task: Npm@1
+      displayName: 'Run npm install'
+      inputs:
+        verbose: false
+
+    - script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
+      displayName: 'Compile Sass assets'
+
+    - task: gulp@1
+      displayName: 'Run gulp tasks'
+
+    - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+      displayName: 'Write build info'
+      workingDirectory: $(wwwrootDir)
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build the project - $(buildConfiguration)'
+      inputs:
+        command: 'build'
+        arguments: '--no-restore --configuration $(buildConfiguration)'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish the project - $(buildConfiguration)'
+      inputs:
+        command: 'publish'
+        projects: '**/*.csproj'
+        publishWebProjects: false
+        arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+        zipAfterPublish: true
+
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: drop
+
+- stage: 'Dev'
+  displayName: 'Deploy to the dev environment'
+  dependsOn: Build
+  condition: |
+    and
+    (
+      succeeded(),
+      eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
+    )
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: dev
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameDev)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+
+- stage: 'Test'
+  displayName: 'Deploy to the test environment'
+  dependsOn: Dev
+  #condition: eq(variables['Build.Reason'], 'Schedule')
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: test
+    variables:
+    - group: 'Release'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameTest)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+
+- stage: 'Staging'
+  displayName: 'Deploy to the staging environment'
+  dependsOn: Test
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: staging
+    variables:
+    - group: 'Release'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameStaging)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+```
+
+This code adds the Staging stage. The stage deploys to the staging environment, which includes a release approval.
+
+> **Tip**
+> 
+> You probably noticed that all three of your deployment stages follow similar steps. You can use templates to define common build tasks one time and reuse them multiple times. You already used this technique in the **Create a build pipeline with Azure Pipelines** module. For learning purposes, we repeat the steps in each stage.
+
+2. From the integrated terminal, add `azure-pipelines.yml` to the index. Next, commit the change and push it up to GitHub.
+
+> **Tip**
+> 
+> Before you run these Git commands, save `azure-pipelines.yml`.
+
+```bash
+git add azure-pipelines.yml
+git commit -m "Deploy to Staging"
+git push origin release
+```
+
+3. In Azure Pipelines, go to the build. Trace the build as it runs.
+
+4. When the build reaches Staging, you see that the pipeline waits for all checks to pass. In this case, there's one check - the manual release approval.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/7-pipeline-review.png)
+
+You can configure Azure DevOps to send you an email notification when the build requires approval. Here's an example:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/6-email-notification.png)
+
+5. Select **Review > Approve**.
+
+In practice, to verify that they meet your requirements, you would inspect the changes.
+
+6. After the build finishes, open a web browser. Go to the URL associated with the App Service instance for your staging environment.
+
+If you still have the browser tab open, refresh the page. If you don't remember the URL, find it in the Azure portal, on the App Service details page.
+
+You see that the Space Game website is deployed to App Service and is running.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/6-app-service-staging.png)
+
+7. As an optional step, in Azure Pipelines, select **Environments**. Next, select the **staging** environment.
+
+Azure Pipelines records your deployment history, which enables you to trace changes in the environment back to code commits and work items.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/6-environment-staging.png)
+
+The Tailspin team gathers to discuss their progress. Amita approves changes in the Test stage while the others watch.
+
+**Tim:** To tell you the truth, at first I was a little nervous about automated release pipelines. But I really like this now that I see it working. Each stage can have its own environment, associated tests, and approvers. The pipeline automates many things that we had to do manually. But we still have control where we need it.
+
+**Amita:** I could imagine us doing something similar to promote changes from Staging to Production. Speaking of, when do we add a production environment?
+
+**Andy:** Shortly. I think we still need to fill in a few pieces here first before we add that.
+
+
+# 2.7 Exercise - Clean up your Azure DevOps environment
+
+You're finished with the tasks for this module. In this unit, you clean up your Azure resources, move the work item to the Done state on Azure Boards, and clean up your Azure DevOps environment.
+
+> **Important**
+> 
+> This page contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. It also helps ensure that you're not charged for Azure resources after you complete this module.
+
+## Clean up Azure resources
+
+Here, you delete your Azure App Service instances. The easiest way to delete the instances is to delete their parent resource group. When you delete a resource group, you delete all resources in that group.
+
+In the **Create a release pipeline with Azure Pipelines** module, you managed Azure resources through the Azure portal. Here, you can tear down your deployment by using the Azure CLI through Azure Cloud Shell. The steps are similar to the steps that you used when you created the resources.
+
+To clean up your resource group:
+
+1. Go to the [Azure portal](https://portal.azure.com), and sign in.
+
+2. From the menu bar, select **Cloud Shell**. When prompted, select the **Bash** experience.
+
+![A screenshot of the Azure portal showing the location of the Cloud Shell menu item.](azure-portal-cloud-shell.png)
+
+3. To delete the resource group that you used, `tailspin-space-game-rg`, run the following `az group delete` command.
+
+```bash
+az group delete --name tailspin-space-game-rg
+```
+
+When prompted, to confirm the operation, enter `y`.
+
+4. As an optional step, after the previous command finishes, run the following `az group list` command.
+
+```bash
+az group list --output table
+```
+
+You see that the resource group `tailspin-space-game-rg` no longer exists.
+
+## Move the work item to Done
+
+Now, move the work item that you assigned to yourself earlier in this module. Move **Create a multistage pipeline** to the **Done** column.
+
+In practice, "Done" often means putting working software into the hands of your users. For learning purposes, here, you mark this work as done because you fulfilled the goal for the Tailspin team. They wanted to define a complete multistage pipeline to deliver new features.
+
+At the end of each sprint, or work iteration, you and your team can hold a retrospective meeting. In the meeting, share the work you completed, what went well, and what you can improve.
+
+To complete the work item:
+
+1. From Azure DevOps, go to **Boards**, and from the menu, select **Boards**.
+
+2. Move the **Create a multistage pipeline** work item, from the **Doing** column to the **Done** column.
+
+![A screenshot of Azure Boards, showing the card in the Done column.](azure-boards-done-column.png)
+
+## Disable the pipeline or delete your project
+
+Each module in this learning path provides a template. You can run the template to create a clean environment for the module.
+
+Running multiple templates gives you multiple Azure Pipelines projects. Each project points to the same GitHub repository. This setup can trigger multiple pipelines to run each time you push a change to your GitHub repository. The pipeline runs use up free build minutes on our hosted agents. To avoid losing those free build minutes, disable or delete your pipeline before you move to the next module.
+
+Select one of the following options.
+
+### Option 1: Disable the pipeline
+
+Disable the pipeline so that it doesn't process build requests. You can re-enable the build pipeline later if you want to. Select this option if you want to keep your DevOps project and your build pipeline for future reference.
+
+To disable the pipeline:
+
+1. In Azure Pipelines, go to your pipeline.
+
+2. From the dropdown, select **Settings**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-portal-menu-cloud-shell.png)
+
+3. Under **Processing of new run requests**, select **Disabled**, and then select **Save**.
+
+Now, your pipeline no longer processes build requests.
+
+### Option 2: Delete the Azure DevOps project
+
+Delete your Azure DevOps project, including the contents of Azure Boards and your build pipeline. In future modules, you can run another template that brings up a new project in a state where this project leaves off. Select this option if you don't need your DevOps project for future reference.
+
+To delete the project:
+
+1. In Azure DevOps, go to your project. Earlier, we recommended that you name this project **Space Game - web - Multistage**.
+
+2. Select **Project settings** in the lower-left corner of your Azure DevOps page.
+
+3. In the **Project details** area, scroll down and select **Delete**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-delete-project.png)
+
+4. In the window that appears, enter the project name. Select **Delete** again.
+
+Your project is now deleted.
+
+
+# Summary
+
+Nice job! Your pipeline is taking shape. You and the Tailspin team moved from a basic proof of concept to a realistic release pipeline. You can use this pipeline to build an artifact and test it before you give it to your users.
+
+In this module, you learned ways to control how changes move from one stage of a pipeline to the next. Let's review the pipeline you built in this module. This image shows your pipeline's overall shape:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-multi-stage-pipeline/media/2-add-staging-stage-approval.png)
+
+The *Dev*, *Test*, and *Staging* stages each deploy the build artifact to their own Azure App Service environment.
+
+* When a change is pushed to GitHub, a *trigger* causes the *Build* stage to run. The *Build* stage produces a build artifact as its output.
+* The *Dev* stage runs only when the change happens in the *release* branch. You use a *condition* to specify this requirement.
+* The *Test* stage runs at 3 A.M. each day. This stage runs only when the *release* branch contains changes since the last run. You use a *scheduled trigger* to specify when the *Test* stage runs.
+* The *Staging* stage runs only after you approve the changes in the *Test* stage. You add a *release approval* to the **staging** environment to pause the pipeline until you approve or reject the change.
+
+This pipeline satisfies the requirements of the Tailspin team. Your pipeline's shape and how changes flow through it depend on the needs of your team, and of the apps and services that you build.
+
+Although the team is improving their release cadence, there's room for more improvement. For example, Amita from QA must manually test and approve builds before the team can present new features to management. In the next module, you'll work with the Tailspin team to automate more testing so that changes can move through the pipeline even faster.
+
+## Learn more
+
+In this module, you worked with conditions, triggers, and approvals. To learn more, explore these resources.
+
+* [Conditions](https://docs.microsoft.com/azure/devops/pipelines/process/conditions)
+* [Build pipeline triggers](https://docs.microsoft.com/azure/devops/pipelines/build/triggers)
+* [Approvals and other checks](https://docs.microsoft.com/azure/devops/pipelines/process/approvals)
+
