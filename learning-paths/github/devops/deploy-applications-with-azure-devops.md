@@ -1004,3 +1004,174 @@ The Space Game website is successfully deployed to Azure App Service.
 Congratulations! You successfully deployed the Space Game website to Azure App Service by using Azure Pipelines.
 
 
+# 1.6 Exercise - Monitor the health of your pipeline
+
+
+In this exercise, you examine the analytics features that Azure Pipelines provide.
+
+Irwin asked the Tailspin team on how they can release faster. Building an automated release pipeline is a great step toward releasing quickly and reliably. As you release more often and more rapidly, it's important to understand the health and history of your releases. Looking at health trends regularly can help you diagnose potential problems before they become critical.
+
+Before we take a look at some of your pipeline's analytics, let's listen in on the Tailspin team at their morning meeting.
+
+## How can I track the health of my pipeline?
+
+It's the following morning. At the team meeting, Andy and Mara have finished demonstrating the build and release pipeline that they set up.
+
+**Amita:** This is fantastic! The build pipeline was a great start, but I still had to manually install the build artifact in my lab so I could test it. If I can get these releases to my test environment on a regular schedule, I can move new features through QA much faster.
+
+**Mara:** Exactly! And remember, we can always expand our release pipeline to include more stages. The goal is to create a complete deployment workflow.
+
+**Tim:** A staging environment would be great. I could do more stress testing before we present new features to management for final approval.
+
+The team is excited to see what the new pipeline can do. They all start talking at the same time.
+
+**Andy:** I'm excited too. But let's focus on one step at a time. Yes, I think we can make all of these changes and more, but this is just a proof of concept. We'll work on expanding it over time.
+
+**Amita:** So how do we track the health of our release pipelines?
+
+**Andy:** Remember the dashboard we created to monitor the build health? We can set up the same kind of system for our releases.
+
+**Tim:** Irwin will like that.
+
+**Andy:** Let's hold off on building a release dashboard until we have a complete release workflow. For now, let's look at some of the built-in analytics that Azure Pipelines provides.
+
+The team gathers around Andy's laptop.
+
+## What information does pipeline analytics provide?
+
+Every pipeline provides reports that include metrics, trends, and insights. These reports can help you improve the efficiency of your pipeline.
+
+Reports include:
+
+- The overall pass rate of your pipeline.
+- The pass rate of any tests in your pipeline.
+- The average duration of your pipeline runs; including the build tasks, which take the most time to complete.
+
+Here's a sample report that shows the pipeline failures, test failures, and pipeline duration.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-release-pipeline/media/6-analyticstab.png)
+
+You can filter the results to focus on a specific time period or on the overall activity of a GitHub branch. Azure DevOps also provides this information as an OData feed. Use this feed to publish reports and notifications to systems such as Power BI, Microsoft Teams, or Slack. You can learn more about analytics feeds at the end of this module.
+
+## Explore your pipeline's analytics
+
+1. In Azure DevOps, select **Pipelines**, then select your pipeline.
+
+2. Select the **Analytics** tab.
+
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-release-pipeline/media/6-pipeline-analytics-overview.png)
+
+3. Review the pass rates and average duration of your pipeline runs.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-release-pipeline/media/6-pipeline-analytics-overview.png)
+
+4. Under **Pipeline pass rate**, select **View full report** to view the detailed report.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-release-pipeline/media/6-pipeline-failure-report.png)
+
+**Amita:** That's the information I want, but I don't see much data yet.
+
+**Andy:** That's right. We'll collect more data as we perform more runs over time. We'll use this data to gain insights and learn how we can make it more efficient.
+
+**Mara:** I see that the npm install task takes the longest to complete. Perhaps we can make it run faster by caching the npm packages.
+
+**Andy:** That's a great idea! We can investigate this further as we have more pipeline runs.
+
+
+
+# 1.7 Exercise - Clean up your environment
+
+Congratulations! You're all done with creating pipelines and resources. In this unit, you're going to clean up your Azure resources and Azure DevOps environment.
+
+## Clean up Azure resources
+
+1. Navigate to [Azure portal](https://portal.azure.com).
+
+2. Select **Resource groups** from the left panel.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-settings-button.png)
+
+4. Select your resource group (**tailspin-space-game-rg**).
+
+5. Select **Delete resource group**.
+
+6. Type your resource group name in the text box, and then select **Delete**.
+
+7. Select **Delete** again to confirm deletion.
+
+## Disable pipeline or delete project
+
+Each module in this learning path provides a template you can run to create a clean environment. When you run multiple templates, you will create multiple projects each pointing to the same GitHub repository. This setup can trigger multiple pipelines to run every time you push a change to your GitHub repository consuming free build minutes on our hosted agents. That's why it's important to disable or delete your pipeline before you move on to the next module in this learning path.
+
+### Option 1: Disable your pipeline
+
+Choose this option if you want to keep your project and your build pipeline for future reference. You can re-enable your pipeline later if you need to.
+
+1. In your Azure DevOps project, select **Pipelines** and then select your pipeline.
+
+2. Select the ellipsis button at the far right, and then select **Settings**.
+
+3. Select **Disabled**, and then select **Save**. Your pipeline will no longer process new run requests.
+
+### Option 2: Delete your project
+
+Choose this option if you don't need your DevOps project for future reference. This will delete your Azure DevOps project.
+
+1. Navigate to your Azure DevOps project.
+
+2. Select **Project settings** in the lower-left corner.
+
+3. Under **Overview**, scroll down to the bottom of the page and then select **Delete**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-delete-project.png)
+
+4. Type your project name in the text box, and then select **Delete**.
+
+
+
+# 1.9 Summary
+
+Great work! You've successfully deployed the *Space Game* website to Azure App Service by using Azure Pipelines. Continuous delivery helps you release reliable software updates to your customers as rapidly as the business demands. Your customers can have the latest features and fixes as soon as you're ready to release them. By using the analytics provided by Azure Pipelines, your team can pinpoint hot spots and areas for improvement.
+
+Setting up Azure Pipelines to publish the *Space Game* website to App Service is a great first step for the team, but this accomplishment is just the beginning. In the modules that follow, you'll help the team expand their release pipeline to include additional stages and tests. Each improvement will give the team more confidence in the quality of their releases.
+
+## Learn more
+
+Here are some additional resources to learn more about Azure resources, App Service, and many other topics.
+
+### Choose the right compute option for your app
+
+In this module, you deployed a website to App Service. You can use Azure Pipelines to deploy to just about any kind of environment, including a virtual machine or containerized environment.
+
+The [Describe Azure compute services](https://docs.microsoft.com/learn/modules/azure-compute-fundamentals/) module goes into further detail about the kinds of compute options Azure provides.
+
+The [Deploy a website to Azure with Azure App Service](https://docs.microsoft.com/learn/paths/deploy-a-website-with-azure-app-service/) learning path is also a great resource to learn more about Azure App Service.
+
+### Deploy to your preferred environment
+
+After you choose where to deploy your applications, learn how to use Azure Pipelines to deploy to that specific environment:
+
+* [Deploy to App Service using Azure Pipelines](https://docs.microsoft.com/azure/devops/pipelines/targets/webapp)
+* [Deploy apps to a Linux virtual machine](https://docs.microsoft.com/azure/devops/pipelines/apps/cd/deploy-linuxvm-deploygroups)
+* [Deploy apps to a Windows virtual machine](https://docs.microsoft.com/azure/devops/pipelines/apps/cd/deploy-webdeploy-iis-deploygroups)
+* [Build and deploy to Azure Kubernetes Service with Azure Pipelines](https://docs.microsoft.com/azure/aks/devops-pipeline)
+
+### Integrate with other CI/CD tools
+
+Learn how you can use Azure Pipelines with Jenkins and ServiceNow.
+
+* [Continuously deploy from a Jenkins build](https://docs.microsoft.com/azure/devops/pipelines/release/integrate-jenkins)
+* [Integrate with ServiceNow change management](https://docs.microsoft.com/azure/devops/pipelines/release/approvals/servicenow)
+
+### Go deeper
+
+Learn more about some of the topics mentioned in this module.
+
+* [When should you right-click publish?](https://docs.microsoft.com/aspnet/core/host-and-deploy/visual-studio-publish-profiles)
+* [Specify jobs in your pipeline](https://docs.microsoft.com/azure/devops/pipelines/process/phases)
+* [Deployment jobs](https://docs.microsoft.com/azure/devops/pipelines/process/deployment-jobs)
+* [Create and target an environment](https://docs.microsoft.com/azure/devops/pipelines/process/environments)
+* [Manage service connections](https://docs.microsoft.com/azure/devops/pipelines/library/service-endpoints)
+* [Pipeline reports](https://docs.microsoft.com/azure/devops/pipelines/reports/pipelinereport)
+
