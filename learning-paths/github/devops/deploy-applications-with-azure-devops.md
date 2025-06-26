@@ -2952,7 +2952,7 @@ To delete the project:
 Your project is now deleted.
 
 
-# Summary
+# 2.8 Summary
 
 Nice job! Your pipeline is taking shape. You and the Tailspin team moved from a basic proof of concept to a realistic release pipeline. You can use this pipeline to build an artifact and test it before you give it to your users.
 
@@ -2978,4 +2978,839 @@ In this module, you worked with conditions, triggers, and approvals. To learn mo
 * [Conditions](https://docs.microsoft.com/azure/devops/pipelines/process/conditions)
 * [Build pipeline triggers](https://docs.microsoft.com/azure/devops/pipelines/build/triggers)
 * [Approvals and other checks](https://docs.microsoft.com/azure/devops/pipelines/process/approvals)
+
+
+
+
+
+# 3 Run functional tests in Azure Pipelines
+
+Run Selenium UI tests, a form of functional testing, in Azure Pipelines.
+#### Learning objectives
+After completing this module, you'll be able to:
+- Define the role of functional tests and identify some popular kinds of tests you can run.
+- Map manual testing steps to automated test cases.
+- Run automated UI tests locally and in the pipeline by using Selenium.
+#### Prerequisites
+- An Azure subscription
+- An Azure DevOps organization with access to Microsoft-hosted parallel jobs. Check your parallel jobs and request a free grant.
+- Visual Studio Code
+- .NET 8.0 SDK
+- Git
+- A GitHub account
+
+
+
+# 3.1 **Introduction**
+
+In this module, you'll add functional tests to the pipeline. These tests verify an application's behavior.
+
+In the **Create a multistage pipeline by using Azure Pipelines** module, you helped the Tailspin Toys web team design and build a multistage release pipeline. The team uses the pipeline to move changes through a series of stages. Changes move through the *Dev* stage, the *Test* stage, and finally the *Staging* stage, which resembles a production environment.
+
+The stages that you and the team defined provide the overall shape of the pipeline, but you can add more to each stage. For example, in the *Test* stage, Amita still tests the web application manually as she always has. When she's satisfied, she manually promotes the application to *Staging*. In *Staging*, management reviews the new features and decides whether to make the release publicly available.
+
+In the **Run quality tests in your build pipeline using Azure Pipelines** module, you incorporated unit and code coverage tests into the build process. These tests help avoid regression bugs and ensure that the code meets the company's standards for quality and style. But what kinds of tests can you run after a service is operational and deployed to an environment?
+
+## **Learning objectives**
+
+After completing this module, you'll be able to:
+
+* Define the role of functional tests and identify some popular kinds of tests you can run.
+* Map manual testing steps to automated test cases.
+* Run automated UI tests locally and in the pipeline using Selenium.
+
+## **Prerequisites**
+
+The modules in this learning path form a progression. To follow the progression from the beginning, complete these learning paths first:
+
+* **Get started with Azure DevOps**
+* **Build applications with Azure DevOps**
+
+We also recommend that you start at the beginning of the **Deploy applications with Azure DevOps** learning path.
+
+If you want to go through just this module, you need to set up a development environment on your Windows, macOS, or Linux system. You need these assets:
+
+* An Azure subscription
+* An Azure DevOps organization with access to parallel jobs. If your organization does not have access to parallel jobs, you can request parallel jobs for free for public or private projects using [this form](https://aka.ms/azpipelines-parallelism-request). Your request takes 2-3 business days.
+* A GitHub account
+* Visual Studio Code
+* .NET 8.0 SDK
+* Git
+
+You can get started with Azure and Azure DevOps for free. You don't need an Azure subscription to work with Azure DevOps, but here you'll use Azure DevOps to deploy to resources that exist in your Azure subscription.
+
+This environment lets you complete the exercises in this module and future modules. You can also use it to apply your new skills to your own projects.
+
+> **Note**
+> 
+> Azure Pipelines support a vast array of **languages and application types**. In this module, you'll be working with a .NET application but you can apply the patterns you learn here to your own projects that use your favorite programming languages and frameworks.
+
+## **Meet the team**
+
+You met the *Space Game* web team at Tailspin Toys in previous modules. As a refresher, here's who you'll work with in this module.
+
+**Andy** is the development lead.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/andy.png)
+
+**Amita** is in QA.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/amita.png)
+
+**Tim** is in operations.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/tim.png)
+
+**Mara** just joined as a developer and reports to Andy.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/mara.png) 
+Mara has prior experience with DevOps. She's helping the team adopt a more automated process that uses Azure DevOps.
+
+
+
+
+
+# 3.2 **What is functional testing?**
+
+In this section, you join the Tailspin team as they define functional tests for their pipeline. Functional tests verify whether each function of the software does what it should.
+
+The team first defines what a functional test covers. They explore some types of functional tests. Then they decide on the first test to add to their pipeline.
+
+## **Weekly meeting**
+
+The team is having their weekly meeting. Andy is demonstrating the release pipeline. The team watches a successful build move through the pipeline, from one stage to another. Finally, the web app is promoted to Staging.
+
+**Amita:** I'm so happy with the pipeline. It makes my life much easier. For one thing, I automatically get a release deployed to the test environment. That means I don't have to manually download and install build artifacts on my test servers. That's a significant time saver.
+
+Also, the unit tests that Mara and Andy wrote eliminate all the regression bugs before I get the release. That removes a major source of frustration. I don't spend time finding and documenting regression bugs.
+
+But I'm worried that all of my testing is still manual. The process is slow, and we can't show anything to management until I finish. It's hard because testing is important. Testing ensures that the users get the right experience. But the pressure is on to deliver faster.
+
+**Andy:** I'm sure we can help you. What kind of tests take up most of your time?
+
+**Amita:** I think the UI tests do. I have to click through every step to make sure I get the correct result, and I have to do that for every browser we support. It's very time-consuming. And as the website grows in complexity, UI testing won't be practical in the long run.
+
+**Mara:** UI tests are considered to be functional tests.
+
+**Tim:** As opposed to what, nonfunctional tests?
+
+**Mara:** Exactly. And nonfunctional tests are something that you in particular, care about.
+
+**Tim:** Okay, I'm confused.
+
+## **What are functional and nonfunctional tests?**
+
+**Mara:** Functional tests verify that each function of the software does what it should. How the software implements each function isn't important in these tests. What's important is that the software behaves correctly. You provide input and check that the output is what you expect. That's how Amita tests the UI. For example, if she selects the top player on the leaderboard, she expects to see that player's profile.
+
+Nonfunctional tests check characteristics like performance and reliability. An example of a nonfunctional test is checking how many people can simultaneously sign up in to the app. Load testing is another example of a nonfunctional test. Those performance and reliability concerns are things you care about, Tim.
+
+**Tim:** They are, indeed. I need to think about this for a bit. I might want to add some automation to the pipeline too, but I'm not sure what I want to do. What kinds of automated tests can I run?
+
+**Mara:** For now, let's focus on functional testing. It's the kind of testing that Amita does, and it sounds like an area where we want to improve.
+
+## **What kinds of functional tests can I run?**
+
+There are many kinds of functional tests. They vary by the functionality that you need to test and the time or effort that they typically require to run.
+
+The following sections present some commonly used functional tests.
+
+### **Smoke testing**
+
+Smoke testing verifies the most basic functionality of your application or service. These tests are often run before more complete and exhaustive tests. Smoke tests should run quickly.
+
+For example, say you're developing a website. Your smoke test might use curl to verify that the site is reachable and that fetching the home page produces a 200 (OK) HTTP status. If fetching the home page produces another status code, such as 404 (Not Found) or 500 (Internal Server Error), you know that the website isn't working. You also know that there's no reason to run other tests. Instead, you diagnose the error, fix it, and restart your tests.
+
+### **Unit testing**
+
+You worked with unit tests in the **Run quality tests in your build pipeline using Azure Pipelines** module.
+
+In short, unit testing verifies the most fundamental components of your program or library, such as an individual function or method. You specify one or more inputs along with the expected results. The test runner performs each test and checks to see whether the actual results match the expected results.
+
+As an example, let's say you have a function that performs an arithmetic operation that includes division. You might specify a few values that you expect your users to enter. You also specify edge-case values such as 0 and -1. If you expect a certain input to produce an error or exception, you can verify that the function produces that error.
+
+The UI tests that you'll run later in this module are unit tests.
+
+### **Integration testing**
+
+Integration testing verifies that multiple software components work together to form a complete system. For example, an e-commerce system might include a website, a products database, and a payment system. You might write an integration test that adds items to the shopping cart and then purchases the items. The test verifies that the web application can connect to the products database and then fulfill the order.
+
+You can combine unit tests and integration tests to create a layered testing strategy. For example, you might run unit tests on each of your components before running the integration tests. If all unit tests pass, you can move on to the integration tests with greater confidence.
+
+### **Regression testing**
+
+A regression occurs when existing behavior either changes or breaks after you add or change a feature. Regression testing helps determine whether code, configuration, or other changes affect the software's overall behavior.
+
+Regression testing is important because a change in one component can affect the behavior of another component. For example, say you optimize a database for write performance. The read performance of that database, which is handled by another component, might unexpectedly drop. The drop in read performance is a regression.
+
+You can use various strategies to test for regression. These strategies typically vary by the number of tests you run to verify that a new feature or bug fix doesn't break existing functionality. However, when you automate the tests, regression testing might involve just running all unit tests and integration tests each time the software changes.
+
+### **Sanity testing**
+
+Sanity testing involves testing each major component of a piece of software to verify that the software appears to be working and can undergo more thorough testing. You can think of sanity tests as being less thorough than regression tests or unit tests, but sanity tests are broader than smoke tests.
+
+Although sanity testing can be automated, it's often done manually in response to a feature change or a bug fix. For example, a software tester who's validating a bug fix might also verify that other features are working by entering some typical values. If the software appears to be working as expected, it can then go through a more thorough test pass.
+
+### **User interface testing**
+
+User interface (UI) testing verifies the behavior of an application's user interface. UI tests help verify that the sequence, or order, of user interactions, leads to the expected result. These tests also help verify that input devices, such as the keyboard or mouse, affect the user interface properly. You can run UI tests to verify the behavior of a native Windows, macOS, or Linux application. Or you can use UI tests to verify that the UI behaves as expected across web browsers.
+
+A unit test or integration test might verify that the UI receives data correctly. But UI testing helps verify that the user interface displays correctly and that the result functions as expected for the user.
+
+For example, a UI test might verify that the correct animation appears in response to a button click. A second test might verify that the same animation appears correctly when the window is resized.
+
+In this module, you work with UI tests that are coded by hand. But you can also use a capture-and-replay system to automatically build your UI tests.
+
+### **Usability testing**
+
+Usability testing is a form of manual testing that verifies an application's behavior from the user's perspective. The team that builds the software typically does the usability testing.
+
+Whereas UI testing focuses on whether a feature behaves as expected, usability testing helps verify that the software is intuitive and meets the user's needs. In other words, usability testing helps verify whether the software is "usable."
+
+For example, say you have a website that includes a link to the user's profile. A UI test can verify that the link is present and that it brings up the user's profile when the link is selected. However, if humans can't easily locate this link, they might become frustrated when they try to access their profile.
+
+### **User acceptance testing**
+
+User acceptance testing (UAT), like usability testing, focuses on an application's behavior from the user's perspective. Unlike usability testing, UAT is typically done by real end users.
+
+Depending on the software, end users might be asked to complete specific tasks. Or they might be allowed to explore the software without following specific guidelines. For custom software, UAT typically happens directly with the client. For more general-purpose software, teams might run beta tests. In beta tests, users from different geographic regions or those with particular interests receive early access to the software.
+
+Feedback from testers can be direct or indirect. Direct feedback might come in the form of verbal comments. Indirect feedback can come in the form of measuring testers' body language, eye movements, or the time they take to complete certain tasks.
+
+We've already covered the importance of writing tests. But just to emphasize it, here's a short video where Abel Wang, Cloud Advocate at Microsoft, explains how to help ensure quality in your DevOps plan.
+
+**Ask Abel**
+
+[Video placeholder]
+
+## **What does the team choose?**
+
+**Tim:** All of these tests sound important. Which should we tackle first?
+
+**Andy:** We already have working unit tests. We're not yet ready to perform user acceptance testing. Based on what I hear, I think we should focus on UI testing. Right now, it's the slowest part of our process. Amita, do you agree?
+
+**Amita:** Yes, I do agree. We still have some time left in this meeting. Andy or Mara, do you want to help me plan an automated UI test?
+
+**Mara:** Absolutely. But let's get a few preliminaries out of the way. I'd like to discuss what tool we should use and how we'll run the tests.
+
+## **What tools can I use to write UI tests?**
+
+**Mara:** When it comes to writing UI tests, what are our options? I know there are many. Some tools are open source. Others offer paid commercial support. Here are a few options that come to mind:
+
+* **Windows Application Driver (WinAppDriver):** WinAppDriver helps you automate UI tests on Windows apps. These apps can be written in Universal Windows Platform (UWP) or Windows Forms (WinForms). We need a solution that works in a browser.
+* **Selenium:** Selenium is a portable open-source software-testing framework for web applications. It runs on most operating systems, and it supports all modern browsers. You can write Selenium tests in several programming languages, including C#. In fact, you can use NuGet packages that make it easy to run Selenium as NUnit tests. We already use NUnit for our unit tests.
+* **SpecFlow:** SpecFlow is for .NET projects. It's inspired by a tool called Cucumber. Both SpecFlow and Cucumber support behavior-driven development (BDD). BDD uses a natural-language parser called Gherkin to help both technical teams and nontechnical teams define business rules and requirements. You can combine either SpecFlow or Cucumber with Selenium to build UI tests.
+
+Andy looks at Amita.
+
+**Andy:** I know these options are new to you, so do you mind if we pick Selenium? I have some experience with it, and it supports languages I already know. Selenium also gives us automatic support for multiple browsers.
+
+**Amita:** Sure. It's better if one of us has some experience.
+
+## **How do I run functional tests in the pipeline?**
+
+In Azure Pipelines, you run functional tests just like you run any other process or test. Ask yourself:
+
+* In which stage will the tests run?
+* On what system will the tests run? Will they run on the agent or on the infrastructure that hosts the application?
+
+Let's join the team as they answer these questions.
+
+**Mara:** One thing I'm excited about is that now we can test in an environment that's like production, where the app is actually running. Functional tests like UI tests make sense in that context. We can run them in the Test stage of our pipeline.
+
+**Amita:** I agree. We can maintain the same workflow if we run automated UI tests in the same stage in which I run manual tests. Automated tests will save us time and enable me to focus on usability.
+
+**Tim:** Amita tests the website from her Windows laptop because that's how most of our users visit the site. But we build on Linux and then deploy Azure App Service on Linux. How do we handle that?
+
+**Mara:** Great question. We also have a choice about where we run the tests. We can run them:
+
+* **On the agent:** either a Microsoft agent or an agent that we host.
+* **On test infrastructure:** either on-premises or in the cloud.
+
+Our existing Test stage includes one job. That job deploys the website to App Service from a Linux agent. We can add a second job that runs the UI tests from a Windows agent. The Windows agent that's hosted by Microsoft is already set up to run Selenium tests.
+
+**Andy:** Again, let's stick with what we know. Let's use a Microsoft-hosted Windows agent. Later, we can run the same tests from agents that run macOS and Linux if we need additional test coverage.
+
+## **The plan**
+
+**Mara:** OK. Here's what we're going to do:
+
+* Run Selenium UI tests from a Microsoft-hosted Windows agent.
+* Have the tests fetch the web content from the app that's running on App Service, in the Test stage.
+* Run the tests on all the browsers that we support.
+
+**Andy:** I'll work with Amita on this one. Amita, let's meet tomorrow morning. I'd like to do a bit of research before we meet.
+
+**Amita:** Great! See you then.
+
+## **Create a functional test plan**
+
+We've seen the team decide on how they'll implement their first functional tests. If your team is just starting to incorporate functional tests into their pipeline (or even if you're already doing that), remember that you always need a plan.
+
+Many times, when someone asks team members about their performance testing plan, it's common for them to respond with a list of tools they're going to use. However, a list of tools isn't a plan. You must also work out how the testing environments will be configured. You need to determine the processes to use, and determine what success or failure looks like.
+
+Make sure your plan:
+
+* Takes the expectations of the business into account.
+* Takes the expectations of the target users into account.
+* Defines the metrics you'll use.
+* Defines the KPIs you'll use.
+
+Performance testing needs to be part of your planning, right from the start. If you use a story or Kanban board, you might consider having an area near it where you can plan out your testing strategy. As part of the iteration planning, you should highlight gaps in the testing strategy. It's also important to work out how you'll monitor performance once the application has been deployed, and not just measure performance before it's released.
+
+## **Check your knowledge**
+
+### **1. Your customer service team receives too many refund requests from customers who accidentally make purchases from your mobile application. Customers report that the Purchase button and Cancel button are too close together. Which kind of functional testing might help catch this sort of problem before it reaches your users?**
+
+❌ UI testing
+
+❌ Integration testing
+
+✅ **Usability testing**
+
+### **2. Your user experience (UX) team proposed some drastic changes to your website's home page. Which kind of functional testing can you use to ensure that each button on the page performs the correct function?**
+
+✅ **UI testing**
+
+❌ Integration testing
+
+❌ Unit testing
+
+### **3. Which kind of functional testing is typically performed by humans rather than through automation?**
+
+❌ Unit testing
+
+✅ **Usability testing**
+
+❌ Smoke testing
+
+---
+
+## **Відповіді на запитання:**
+
+**Запитання 1:** Usability testing - цей тип тестування допомагає виявити проблеми зручності використання, такі як розташування кнопок занадто близько одна до одної.
+
+**Запитання 2:** UI testing - перевіряє, чи функціонують кнопки правильно та чи виконують вони потрібні дії.
+
+**Запитання 3:** Usability testing - зазвичай виконується людьми для оцінки зручності та інтуїтивності інтерфейсу.
+
+
+
+
+# 3.3 **Exercise - Set up your Azure DevOps environment**
+
+In this section, you make sure that your Azure DevOps organization is set up to complete the rest of this module. You also create the Azure App Service environments that you'll deploy.
+
+To accomplish these tasks, you:
+
+* Add a user to ensure that Azure DevOps can connect to your Azure subscription.
+* Set up an Azure DevOps project for this module.
+* Move the work item for this module on Azure Boards to the Doing column.
+* Create the Azure App Service environments by using the Azure CLI in Azure Cloud Shell.
+* Create pipeline variables that define the names of your App Service environments.
+* Create a service connection that enables Azure Pipelines to access your Azure subscription securely.
+
+## **Add a user to Azure DevOps**
+
+To complete this module, you need your own Azure subscription. You can get started with Azure for free.
+
+Although you don't need an Azure subscription to work with Azure DevOps, you'll use Azure DevOps here to deploy to resources that exist in your Azure subscription. To simplify the process, sign in to both your Azure subscription and your Azure DevOps organization under the same Microsoft account.
+
+If you use different Microsoft accounts to sign in to Azure and Azure DevOps, add a user to your DevOps organization under the Microsoft account that you use to sign in to Azure. For more information, see [Add users to your organization or project](https://docs.microsoft.com/azure/devops/organizations/accounts/add-organization-users). When you add the user, choose the **Basic** access level.
+
+Then, sign out of Azure DevOps and sign in again under the Microsoft account that you use to sign in to your Azure subscription.
+
+## **Get the Azure DevOps project**
+
+Here, you make sure that your Azure DevOps organization is set up to complete the rest of this module. You accomplish this task by running a template that creates a project in Azure DevOps.
+
+The modules in this learning path form a progression as you follow the Tailspin web team through their DevOps journey. For learning purposes, each module has an associated Azure DevOps project.
+
+### **Run the template**
+
+Run a template that sets up your Azure DevOps organization.
+
+1. Get and run the ADOGenerator project in Visual Studio or the IDE of your choice.
+
+2. When prompted to **Enter the template number from the list of templates**, enter **32** for **Run functional tests in Azure Pipelines**, then press Enter.
+
+3. Choose your authentication method. You can set up and use a Personal Access Token (PAT) or use device login.
+
+> **Note**
+> 
+> If you set up a PAT, make sure to authorize the necessary scopes. For this module, you can use Full access, but in a real-world situation, you should ensure you grant only the necessary scopes.
+
+4. Enter your Azure DevOps organization name, then press Enter.
+
+5. If prompted, enter your Azure DevOps PAT, then press Enter.
+
+6. Enter a project name such as **Space Game - web - Functional tests**, then press Enter.
+
+Once your project is created, go to your Azure DevOps organization in your browser (at https://dev.azure.com/<your-organization-name>/) and select the project.
+
+### **Fork the repository**
+
+If you haven't already, create a fork of the mslearn-tailspin-spacegame-web-deploy repository.
+
+1. On GitHub, go to the [mslearn-tailspin-spacegame-web-deploy](https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web-deploy) repository.
+
+2. Select **Fork** at the top-right of the screen.
+
+3. Choose your GitHub account as the Owner, then select **Create fork**.
+
+> **Important**
+> 
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. Be sure to perform the cleanup steps even if you don't complete this module.
+
+### **Set your project's visibility**
+
+Initially, your fork of the Space Game repository on GitHub is set to public while the project created by the Azure DevOps template is set to private. A public repository on GitHub can be accessed by anyone, while a private repository is only accessible to you and the people you choose to share it with. Similarly, on Azure DevOps, public projects provide read-only access to non-authenticated users, while private projects require users to be granted access and authenticated to access the services.
+
+At the moment, it is not necessary to modify any of these settings for the purposes of this module. However, for your personal projects, you must determine the visibility and access you wish to grant to others. For instance, if your project is open source, you may choose to make both your GitHub repository and your Azure DevOps project public. If your project is proprietary, you would typically make both your GitHub repository and your Azure DevOps project private.
+
+Later on, you may find the following resources helpful in determining which option is best for your project:
+
+* [Use private and public projects](https://docs.microsoft.com/azure/devops/organizations/public/about-public-projects)
+* [Change project visibility to public or private](https://docs.microsoft.com/azure/devops/organizations/public/make-project-public)
+* [Setting repository visibility](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility)
+
+## **Move the work item to Doing**
+
+In this part, you assign yourself a work item in Azure Boards that relates to this module. You also move the work item to the **Doing** state. In practice, your team would create work items at the start of each sprint or work iteration.
+
+Assigning work in this way gives you a checklist from which to work. It gives your team visibility into what you're working on and how much work is left. It also helps the team enforce limits on work in progress (WIP) to avoid taking on too much work at one time.
+
+Recall that the team settled on these top issues for the current sprint:
+
+*A screenshot of Azure Boards, showing the tasks for this sprint.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/deploy-all-tasks.png)
+
+> **Note**
+> 
+> Within an Azure DevOps organization, work items are numbered sequentially. In your project, the number for each work item might not match what you see here.
+
+Here you move the third item, **Automate quality tests**, to the **Doing** column. Then you assign yourself to the work item. **Automate quality tests** relates to automating UI tests for the Space Game website.
+
+To set up the work item:
+
+1. From Azure DevOps, go to **Boards**, and then select **Boards** from the menu.
+
+*A screenshot of Azure DevOps showing the location of the Boards menu.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-boards-menu.png)
+
+2. On the **Automate quality tests** work item, select the down arrow at the bottom of the card, then assign the work item to yourself.
+
+*A screenshot of Azure Boards showing the location of the down arrow.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-boards-down-chevron.png)
+
+3. Move the work item from the **To Do** column to the **Doing** column.
+
+*A screenshot of Azure Boards, showing the card in the Doing column.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/3-azure-boards-wi3-doing.png)
+
+At the end of this module, after you complete the task, you'll move the card to the **Done** column.
+
+## **Set up the project locally**
+
+Here you load the Space Game project in Visual Studio Code, configure Git, clone your repository locally, and set the upstream remote so that you can download starter code.
+
+> **Note**
+> 
+> If you're already set up with the mslearn-tailspin-spacegame-web-deploy project locally, you can move to the next section.
+
+### **Open the integrated terminal**
+
+Visual Studio Code comes with an integrated terminal. Here you both edit files and work from the command line.
+
+1. Start Visual Studio Code.
+
+2. On the **View** menu, select **Terminal**.
+
+3. In the dropdown list, select **Git Bash**. If you're familiar with another Unix shell that you prefer to use, select that shell instead.
+
+*A screenshot of Visual Studio Code showing the location of the Git Bash shell.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/vscode-terminal-git-bash.png)
+
+In the terminal window, you can choose any shell that's installed on your system. For example, you can choose Git Bash, or PowerShell, or another shell.
+
+Here you'll use Git Bash, part of Git for Windows, which makes it easy to run Git commands.
+
+> **Note**
+> 
+> On Windows, if you don't see Git Bash listed as an option, make sure you've installed Git, and then restart Visual Studio Code.
+
+4. Run the `cd` command to go to the directory where you want to work. Choose your home directory (`~`) or a different directory if you want.
+
+```bash
+cd ~
+```
+
+### **Configure Git**
+
+If you're new to Git and GitHub, first run a few commands to associate your identity with Git and authenticate with GitHub. For more information, see [Set up Git](https://docs.github.com/get-started/quickstart/set-up-git).
+
+At a minimum, you need to complete the following steps. Run the commands from the integrated terminal.
+
+* Set your username.
+* Set your commit email address.
+* Cache your GitHub password.
+
+> **Note**
+> 
+> If you already use two-factor authentication with GitHub, create a personal access token. When you're prompted, use your token in place of your password.
+> 
+> Treat your access token like a password. Keep it in a safe place.
+
+### **Set up your project in Visual Studio Code**
+
+In the **Build applications with Azure DevOps** learning path, you forked and then cloned a Git repository. The repository contains the source code for the Space Game website. Your fork was connected to your projects in Azure DevOps so that the build runs when you push changes to GitHub.
+
+> **Important**
+> 
+> In this learning path, we switch to a different Git repository, **mslearn-tailspin-spacegame-web-deploy**. When you ran the template to set up your Azure DevOps project, the process forked the repository automatically for you.
+
+In this part, you clone your fork locally so that you can change and build out your pipeline configuration.
+
+### **Clone your fork locally**
+
+You now have a copy of the Space Game web project in your GitHub account. Now you'll download, or clone, a copy to your computer so you can work with it.
+
+A clone, just like a fork, is a copy of a repository. When you clone a repository, you can make changes, verify that they work as you expect, and then upload those changes to GitHub. You can also synchronize your local copy with changes that other authenticated users have made to the GitHub copy of your repository.
+
+To clone the Space Game web project to your computer:
+
+1. Go to your fork of the Space Game web project (**mslearn-tailspin-spacegame-web-deploy**) on GitHub.
+
+2. Select **Code**. Then, from the **HTTPS** tab, select the button next to the URL that's shown to copy the URL to your clipboard.
+
+*Screenshot that shows how to locate the URL and copy button from the GitHub repository.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/github-clone-button.png)
+
+3. In Visual Studio Code, go to the terminal window.
+
+4. In the terminal, move to the directory where you want to work. Choose your home directory (`~`) or a different directory if you want.
+
+```bash
+cd ~
+```
+
+5. Run the `git clone` command. Replace the URL that's shown here with the contents of your clipboard:
+
+```bash
+git clone https://github.com/your-name/mslearn-tailspin-spacegame-web-deploy.git
+```
+
+6. Move to the mslearn-tailspin-spacegame-web-deploy directory. This is the root directory of your repository.
+
+```bash
+cd mslearn-tailspin-spacegame-web-deploy
+```
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/app-service-default.png)
+
+### **Set the upstream remote**
+
+A remote is a Git repository where team members collaborate (like a repository on GitHub). Here you list your remotes and add a remote that points to Microsoft's copy of the repository so that you can get the latest sample code.
+
+1. Run this `git remote` command to list your remotes:
+
+```bash
+git remote -v
+```
+
+You see that you have both fetch (download) and push (upload) access to your repository:
+
+```
+origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (push)
+```
+
+Origin specifies your repository on GitHub. When you fork code from another repository, the original remote (the one you forked from) is often named upstream.
+
+2. Run this `git remote add` command to create a remote named upstream that points to the Microsoft repository:
+
+```bash
+git remote add upstream https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web-deploy.git
+```
+
+
+3. Run `git remote` again to see the changes:
+
+```bash
+git remote -v
+```
+
+You see that you still have both fetch (download) access and push (upload) access to your repository. You also now have fetch access to the Microsoft repository:
+
+```
+origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (push)
+upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+```
+
+### **Open the project in the file explorer**
+
+In Visual Studio Code, your terminal window points to the root directory of the Space Game web project. To view its structure and work with files, from the file explorer, you'll now open the project.
+
+The easiest way to open the project is to reopen Visual Studio Code in the current directory. To do so, run the following command from the integrated terminal:
+
+```bash
+code -r .
+```
+
+You see the directory and file tree in the file explorer.
+
+Reopen the integrated terminal. The terminal places you at the root of your web project.
+
+If the `code` command fails, you need to add Visual Studio Code to your system PATH. To do so:
+
+1. In Visual Studio Code, select **F1** or select **View > Command Palette** to access the command palette.
+2. In the command palette, enter **Shell Command: Install 'code' command in PATH**.
+3. Repeat the previous procedure to open the project in the file explorer.
+
+You're now set up to work with the Space Game source code and your Azure Pipelines configuration from your local development environment.
+
+## **Create the Azure App Service environments**
+
+Here, you create the environments that define the pipeline stages. You create one App Service instance that corresponds to each stage: Dev, Test, and Staging.
+
+In the **Create a multistage pipeline by using Azure Pipelines** module, you used the Azure CLI to create your App Service instances. Here you'll do the same.
+
+> **Important**
+> 
+> You need your own Azure subscription to complete the exercises in this module.
+
+### **Bring up Cloud Shell through the Azure portal**
+
+1. Go to the [Azure portal](https://portal.azure.com) and sign in.
+2. From the menu bar, select **Cloud Shell**. When you're prompted, select the **Bash** experience.
+
+### **Select an Azure region**
+
+Here, you specify the default region, or geographic location, where your Azure resources are to be created.
+
+1. From Cloud Shell, run the following `az account list-locations` command to list the regions that are available from your Azure subscription.
+
+```bash
+az account list-locations \
+  --query "[].{Name: name, DisplayName: displayName}" \
+  --output table
+```
+
+2. From the **Name** column in the output, choose a region that's close to you. For example, choose **eastasia** or **westus2**.
+
+3. Run `az configure` to set your default region. Replace `<REGION>` with the name of the region you chose.
+
+```bash
+az configure --defaults location=<REGION>
+```
+
+Here's an example that sets **westus2** as the default region:
+
+```bash
+az configure --defaults location=westus2
+```
+
+### **Create the App Service instances**
+
+Here, you create the App Service instances for the three stages you'll deploy to: Dev, Test, and Staging.
+
+> **Note**
+> 
+> For learning purposes, here, you use the default network settings. These settings make your site accessible from the internet. In practice, you could configure an Azure virtual network that places your website in a network that's not internet routable, and that's accessible only to you and your team. Later, when you're ready, you could reconfigure your network to make the website available to your users.
+
+1. From Cloud Shell, generate a random number that makes your web app's domain name unique.
+
+```bash
+webappsuffix=$RANDOM
+```
+
+2. Run the following `az group create` command to create a resource group that's named **tailspin-space-game-rg**.
+
+```bash
+az group create --name tailspin-space-game-rg
+```
+
+3. Run the following `az appservice plan create` command to create an App Service plan that's named **tailspin-space-game-asp**.
+
+```bash
+az appservice plan create \
+  --name tailspin-space-game-asp \
+  --resource-group tailspin-space-game-rg \
+  --sku B1 \
+  --is-linux
+```
+
+The `--sku` argument specifies the **B1** plan, which runs on the **Basic** tier. The `--is-linux` argument specifies to use Linux workers.
+
+> **Important**
+> 
+> If the B1 SKU isn't part of your Azure subscription, choose a different plan, such as S1 (Standard).
+
+4. Run the following `az webapp create` commands to create the three App Service instances, one for each of the Dev, Test, and Staging environments.
+
+```bash
+az webapp create \
+  --name tailspin-space-game-web-dev-$webappsuffix \
+  --resource-group tailspin-space-game-rg \
+  --plan tailspin-space-game-asp \
+  --runtime "DOTNETCORE|8.0"
+
+az webapp create \
+  --name tailspin-space-game-web-test-$webappsuffix \
+  --resource-group tailspin-space-game-rg \
+  --plan tailspin-space-game-asp \
+  --runtime "DOTNETCORE|8.0"
+
+az webapp create \
+  --name tailspin-space-game-web-staging-$webappsuffix \
+  --resource-group tailspin-space-game-rg \
+  --plan tailspin-space-game-asp \
+  --runtime "DOTNETCORE|8.0"
+```
+
+For learning purposes, you apply the same App Service plan (B1 Basic) to each App Service instance here. In practice, you'd assign a plan that matches your expected workload.
+
+5. Run the following `az webapp list` command to list the hostname and state of each App Service instance.
+
+```bash
+az webapp list \
+  --resource-group tailspin-space-game-rg \
+  --query "[].{hostName: defaultHostName, state: state}" \
+  --output table
+```
+
+Note the hostname for each running service. You'll need these hostnames later when you verify your work. Here's an example:
+
+```
+HostName                                                 State
+-------------------------------------------------------  -------
+tailspin-space-game-web-dev-21017.azurewebsites.net      Running
+tailspin-space-game-web-test-21017.azurewebsites.net     Running
+tailspin-space-game-web-staging-21017.azurewebsites.net  Running
+```
+
+6. As an optional step, copy and paste one or more of the names into your browser to verify that they're running and that the default home page appears.
+
+You should get a page similar to this one:
+
+*The default home page on Azure App Service.*
+
+> **Important**
+> 
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you're not charged for Azure resources after you complete this module. Be sure to perform the cleanup steps even if you don't complete this module.
+
+## **Create pipeline variables in Azure Pipelines**
+
+In the **Create a multistage pipeline by using Azure Pipelines**, you added one variable for each of the App Service instances, which correspond to the Dev, Test, and Staging stages in your pipeline. Here, you do the same.
+
+Each stage in your pipeline configuration uses these variables to identify which App Service instance to deploy to.
+
+To add the variables:
+
+1. In Azure DevOps, go to your **Space Game - web - Functional tests** project.
+
+2. Under **Pipelines**, select **Library**.
+
+*A screenshot of Azure Pipelines, showing the Library menu option.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-release-pipeline/media/5-pipelines-library.png)
+
+3. Select **+ Variable group**.
+
+4. Under **Properties**, for the variable group name, enter **Release**.
+
+5. Under **Variables**, select **+ Add**.
+
+6. For the name of your variable, enter **WebAppNameDev**. For its value, enter the name of the App Service instance that corresponds to your Dev environment, such as **tailspin-space-game-web-dev-1234**.
+
+7. Repeat steps 5 and 6 twice more to create variables for your Test and Staging environments, as shown in this table:
+
+| Variable name | Example value |
+|---------------|---------------|
+| WebAppNameTest | tailspin-space-game-web-test-1234 |
+| WebAppNameStaging | tailspin-space-game-web-staging-1234 |
+
+Be sure to replace each example value with the App Service instance that corresponds to your environment.
+
+> **Important**
+> 
+> Set the name of the App Service instance, not its host name. In this example, you would enter **tailspin-space-game-web-dev-1234** and not **tailspin-space-game-web-dev-1234.azurewebsites.net**.
+
+8. Near the top of the page, select **Save** to save your variable to the pipeline.
+
+Your variable group should resemble this one:
+
+*A screenshot of Azure Pipelines, showing the variable group. The group contains three variables.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/3-library-variable-group.png)
+
+## **Create the dev, test, and staging environments**
+
+In **Create a multistage pipeline by using Azure Pipelines**, you created environments for the dev, test, and staging environments. Here, you repeat the process. This time, however, you omit additional criteria such as the requirement for human approval to promote changes from one stage to the next.
+
+To create the dev, test, and staging environments:
+
+1. From Azure Pipelines, select **Environments**.
+
+*A screenshot of Azure Pipelines showing the location of the Environments menu option.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/pipelines-environments.png)
+
+2. To create the dev environment:
+   * Select **Create environment**.
+   * Under **Name**, enter **dev**.
+   * Leave the remaining fields at their default values.
+   * Select **Create**.
+
+3. To create the test environment:
+   * Return to the **Environments** page.
+   * Select **New environment**.
+   * Under **Name**, enter **test**.
+   * Select **Create**.
+
+4. To create the staging environment:
+   * Return to the **Environments** page.
+   * Select **New environment**.
+   * Under **Name**, enter **staging**.
+   * Select **Create**.
+
+## **Create a service connection**
+
+Here, you create a service connection that enables Azure Pipelines to access your Azure subscription. Azure Pipelines uses this service connection to deploy the website to App Service. You created a similar service connection in the previous module.
+
+> **Important**
+> 
+> Make sure that you're signed in to both the Azure portal and Azure DevOps under the same Microsoft account.
+
+1. In Azure DevOps, go to your **Space Game - web - Functional tests** project.
+
+2. From the bottom corner of the page, select **Project settings**.
+
+3. Under **Pipelines**, select **Service connections**.
+
+4. Select **Create service connection**, then choose **Azure Resource Manager**, then select **Next**.
+
+5. Near the top of the page, **App registration (automatic)**.
+
+6. Fill in these fields:
+
+| Field | Value |
+|-------|-------|
+| **Scope level** | Subscription |
+| **Subscription** | Your Azure subscription |
+| **Resource Group** | tailspin-space-game-rg |
+| **Service connection name** | Resource Manager - Tailspin - Space Game |
+
+During the process, you might be prompted to sign in to your Microsoft account.
+
+7. Ensure that **Grant access permission to all pipelines** is selected.
+
+8. Select **Save**.
+
+Azure DevOps performs a test connection to verify that it can connect to your Azure subscription. If Azure DevOps can't connect, you have the chance to sign in a second time.
+
+
+
 
