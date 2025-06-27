@@ -4320,8 +4320,8 @@ The NuGet package for Chrome and Firefox installs driver software under the bin 
 
 5. On macOS, you might need to update your system policy to allow **msedgedriver** to run. To do so, in Visual Studio Code, run the following **spctl** command from the terminal:
 
-   **Bash**
-   ```
+ 
+   ```Bash
    spctl --add Tailspin.SpaceGame.Web.UITests/bin/Release/net6.0/msedgedriver
    ```
 
@@ -4346,13 +4346,12 @@ From Visual Studio Code, go to the terminal. Then run these commands. Replace th
 **Windows**  
 **macOS**
 
-**Bash**
-```
+```Bash
 driverDir="C:\Users\user\mslearn-tailspin-spacegame-web-deploy\Tailspin.SpaceGame.Web.UITests\bin\Release\net6.0"
 ```
 
-**Bash**
-```
+
+```Bash
 export ChromeWebDriver=$driverDir
 export EdgeWebDriver=$driverDir
 export GeckoWebDriver=$driverDir
@@ -4390,15 +4389,15 @@ To run the tests locally:
 
 4. Switch back to the terminal window where you set the environment variables in the previous step, and ensure that you're in your project's root directory. Here's an example:
 
-   **Bash**
-   ```
+
+   ```Bash
    cd ~/mslearn-tailspin-spacegame-web-deploy
    ```
 
 5. Export the **SITE_URL** environment variable. Use the locally running link that you got from the previous step.
 
-   **Bash**
-   ```
+
+   ```Bash
    export SITE_URL="http://localhost:5000"
    ```
 
@@ -4406,8 +4405,8 @@ To run the tests locally:
 
 6. Run the UI tests.
 
-   **Bash**
-   ```
+
+   ```Bash
    dotnet test --configuration Release Tailspin.SpaceGame.Web.UITests
    ```
 
