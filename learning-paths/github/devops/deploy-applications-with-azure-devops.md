@@ -4288,8 +4288,6 @@ public void ClickLinkById_ShouldDisplayModalById(string linkId, string modalId)
 **Amita:** I do see that. With some practice, I think I can add my own tests. When can we see these tests running in our pipeline?
 
 **Andy:** Before we push changes through the pipeline, let's first verify that the code compiles and runs locally. We'll commit and push changes to GitHub and see them move through the pipeline only after we verify that everything works. Let's run the tests locally now.
-```
-
 
 
 
