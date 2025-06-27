@@ -3856,6 +3856,8 @@ Amita selects the Download game button. The modal window appears.
 
 *Screenshot of a browser showing the Download game modal window on the Space Game website.*
 
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/4-website-download-game-modal.png)
+
 **Andy:** Great. What modal windows do you check next?
 
 **Amita:** Next I check the four game screens. After that, I select the top player on the leaderboard. I verify that the player's profile appears.
@@ -3864,9 +3866,13 @@ Amita selects each of the four thumbnail images to show the example game screens
 
 *Screenshot of a browser showing the game screen modal window on the Space Game website.*
 
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/4-website-game-screens.png)
+
 Next Amita selects the top player on the leaderboard. The player's profile appears.
 
 *Screenshot of a browser showing the leaderboard modal window on the Space Game website.*
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/4-website-leaderboard.png)
 
 **Amita:** That covers the modal window tests. I run these tests on Windows because that's what most players use to visit our site. I run the tests on Chrome, and when I have time I also run them on Firefox and Microsoft Edge.
 
@@ -3914,6 +3920,9 @@ Let's start by getting the **id** attribute for the Download game button.
 
 *Screenshot of a browser showing the developer tools window and a selected HTML element.*
 
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/4-website-inspect-button.png)
+
+
 5. Select the **Download game** button. Then repeat steps 2 and 3 to get the **id** attribute for the modal window that appears.
 
 6. Repeat the process for the four game screens and the top player on the leaderboard.
@@ -3952,6 +3961,735 @@ Here's what Amita's table looks like:
 
 ---
 
-**Next unit:** Write the UI tests
 
+
+
+# 3.5 Write the UI tests
+
+
+In this section, you help Andy and Amita write Selenium tests that verify the UI behaviors that Amita described.
+
+Amita normally runs tests on Chrome, Firefox, and Microsoft Edge. Here, you do the same. The Microsoft-hosted agent that you use is preconfigured to work with each of these browsers.
+
+## Fetch the branch from GitHub
+
+In this section, you fetch the selenium branch from GitHub. You then check out, or switch to, that branch. The contents of the branch will help you follow along with the tests that Andy and Amita write.
+
+This branch contains the Space Game project that you worked with in previous modules. It also contains an Azure Pipelines configuration to start with.
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. To download a branch named selenium from the Microsoft repository, switch to that branch, and run the following git fetch and git checkout commands:
+
+   **Bash**
+
+   ```
+   git fetch upstream selenium
+   git checkout -B selenium upstream/selenium
+   ```
+
+   > **Tip**
+   > 
+   > If you followed along with Amita's manual test in the previous unit, you may have run these commands already. If you already ran them in the previous unit, you can still run them again now.
+
+   Recall that upstream refers to the Microsoft GitHub repository. Your project's Git configuration understands the upstream remote because you set up that relationship. You set it up when you forked the project from the Microsoft repository and cloned it locally.
+
+   Shortly, you'll push this branch up to your GitHub repository, known as origin.
+
+3. Optionally, in Visual Studio Code, open the azure-pipelines.yml file. Familiarize yourself with the initial configuration.
+
+   The configuration resembles the ones that you created in the previous modules in this learning path. It builds only the application's Release configuration. For brevity, it also omits the triggers, manual approvals, and tests that you set up in previous modules.
+
+   > **Note**
+   > 
+   > A more robust configuration might specify the branches that participate in the build process. For example, to help verify code quality, you might run unit tests each time you push up a change on any branch. You might also deploy the application to an environment that performs more exhaustive testing. But you do this deployment only when you have a pull request, when you have a release candidate, or when you merge code to main.
+   > 
+   > For more information, see Implement a code workflow in your build pipeline by using Git and GitHub and Build pipeline triggers.
+
+## Write the unit test code
+
+Amita is excited to learn to write code that controls the web browser.
+
+She and Andy work together to write the Selenium tests. Andy has already set up an empty NUnit project. Throughout the process, they refer to the Selenium documentation, a few online tutorials, and the notes that they took when Amita did the tests manually. At the end of this module, you'll find more resources to help get you through the process.
+
+Let's review the process that Andy and Amita use to write their tests. You can follow along by opening HomePageTest.cs in the Tailspin.SpaceGame.Web.UITests directory in Visual Studio Code.
+
+### Define the HomePageTest class
+
+**Andy:** The first thing we need to do is define our test class. We can choose to follow one of several naming conventions. Let's call our class HomePageTest. In this class, we'll put all of our tests that relate to the home page.
+
+Andy adds this code to HomePageTest.cs:
+
+```cs
+public class HomePageTest
+{
+}
+```
+
+**Andy:** We need to mark this class as public so that it's available to the NUnit framework.
+
+### Add the IWebDriver member variable
+
+**Andy:** Next, we need an IWebDriver member variable. IWebDriver is the programming interface that you use to launch a web browser and interact with webpage content.
+
+**Amita:** I've heard of interfaces in programming. Can you tell me more?
+
+**Andy:** Think of an interface as a specification or blueprint for how a component should behave. An interface provides the methods, or behaviors, of that component. But the interface doesn't provide any of the underlying details. You or someone else would create one or more concrete classes that implement that interface. Selenium provides the concrete classes that we need.
+
+This diagram shows the IWebDriver interface and a few of the classes that implement this interface:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/5-selenium-webdriver.png)
+
+
+The diagram shows three of the methods that IWebDriver provides: Navigate, FindElement, and Close.
+
+The three classes shown here—ChromeDriver, FirefoxDriver, and EdgeDriver—each implement IWebDriver and its methods. There are other classes, such as SafariDriver, that also implement IWebDriver. Each driver class can control the web browser that it represents.
+
+Andy adds a member variable named driver to the HomePageTest class, like this code:
+
+```cs
+public class HomePageTest
+{
+    private IWebDriver driver;
+}
+```
+
+### Define the test fixtures
+
+**Andy:** We want to run the entire set of tests on Chrome, Firefox, and Edge. In NUnit, we can use test fixtures to run the entire set of tests multiple times, one time for each browser that we want to test on.
+
+In NUnit, you use the TestFixture attribute to define your test fixtures. Andy adds these three test fixtures to the HomePageTest class:
+
+```cs
+[TestFixture("Chrome")]
+[TestFixture("Firefox")]
+[TestFixture("Edge")]
+public class HomePageTest
+{
+    private IWebDriver driver;
+}
+```
+
+**Andy:** Next, we need to define a constructor for our test class. The constructor is called when NUnit creates an instance of this class. As its argument, the constructor takes the string that we attached to our test fixtures. Here's what the code looks like:
+
+```cs
+[TestFixture("Chrome")]
+[TestFixture("Firefox")]
+[TestFixture("Edge")]
+public class HomePageTest
+{
+    private string browser;
+    private IWebDriver driver;
+
+    public HomePageTest(string browser)
+    {
+        this.browser = browser;
+    }
+}
+```
+
+**Andy:** We added the browser member variable so that we can use the current browser name in our setup code. Let's write the setup code next.
+
+### Define the Setup method
+
+**Andy:** Next, we need to assign our IWebDriver member variable to a class instance that implements this interface for the browser we're testing on. The ChromeDriver, FirefoxDriver, and EdgeDriver classes implement this interface for Chrome, Firefox, and Edge, respectively.
+
+Let's create a method named Setup that sets the driver variable. We use the OneTimeSetUp attribute to tell NUnit to run this method one time per test fixture.
+
+```cs
+[OneTimeSetUp]
+public void Setup()
+{
+}
+```
+
+In the Setup method, we can use a switch statement to assign the driver member variable to the appropriate concrete implementation based on the browser name. Let's add that code now.
+
+```cs
+// Create the driver for the current browser.
+switch(browser)
+{
+    case "Chrome":
+    driver = new ChromeDriver(
+        Environment.GetEnvironmentVariable("ChromeWebDriver")
+    );
+    break;
+    case "Firefox":
+    driver = new FirefoxDriver(
+        Environment.GetEnvironmentVariable("GeckoWebDriver")
+    );
+    break;
+    case "Edge":
+    driver = new EdgeDriver(
+        Environment.GetEnvironmentVariable("EdgeWebDriver"),
+        new EdgeOptions
+        {
+            UseChromium = true
+        }
+    );
+    break;
+    default:
+    throw new ArgumentException($"'{browser}': Unknown browser");
+}
+```
+
+The constructor for each driver class takes an optional path to the driver software Selenium needs to control the web browser. Later, we'll discuss the role of the environment variables shown here.
+
+In this example, the EdgeDriver constructor also requires additional options to specify that we want to use the Chromium version of Edge.
+
+### Define the helper methods
+
+**Andy:** I know we'll need to repeat two actions throughout the tests:
+
+- Finding elements on the page, such as the links that we click and the modal windows that we expect to appear
+- Clicking elements on the page, such as the links that reveal the modal windows and the button that closes each modal
+
+Let's write two helper methods, one for each action. We'll start with the method that finds an element on the page.
+
+#### Write the FindElement helper method
+
+When you locate an element on the page, it's typically in response to some other event, such as the page loading or the user entering information. Selenium provides the WebDriverWait class, which allows you to wait for a condition to be true. If the condition isn't true within the given time period, WebDriverWait throws an exception or error. We can use the WebDriverWait class to wait for a given element to be displayed and to be ready to receive user input.
+
+To locate an element on the page, use the By class. The By class provides methods that let you find an element by its name, by its CSS class name, by its HTML tag, or in our case, by its id attribute.
+
+Andy and Amita code up the FindElement helper method. It looks like this code:
+
+```cs
+private IWebElement FindElement(By locator, IWebElement parent = null, int timeoutSeconds = 10)
+{
+    // WebDriverWait enables us to wait for the specified condition to be true
+    // within a given time period.
+    return new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutSeconds))
+        .Until(c => {
+            IWebElement element = null;
+            // If a parent was provided, find its child element.
+            if (parent != null)
+            {
+                element = parent.FindElement(locator);
+            }
+            // Otherwise, locate the element from the root of the DOM.
+            else
+            {
+                element = driver.FindElement(locator);
+            }
+            // Return true after the element is displayed and is able to receive user input.
+            return (element != null && element.Displayed && element.Enabled) ? element : null;
+        });
+}
+```
+
+#### Write the ClickElement helper method
+
+**Andy:** Next, let's write a helper method that clicks links. Selenium provides a few ways to write that method. One of them is the IJavaScriptExecutor interface. With it, we can programmatically click links by using JavaScript. This approach works well because it can click links without first scrolling them into view.
+
+ChromeDriver, FirefoxDriver, and EdgeDriver each implement IJavaScriptExecutor. We need to cast the driver to this interface and then call ExecuteScript to run the JavaScript click() method on the underlying HTML object.
+
+Andy and Amita code up the ClickElement helper method. It looks like this code:
+
+```cs
+private void ClickElement(IWebElement element)
+{
+    // We expect the driver to implement IJavaScriptExecutor.
+    // IJavaScriptExecutor enables us to execute JavaScript code during the tests.
+    IJavaScriptExecutor js = driver as IJavaScriptExecutor;
+
+    // Through JavaScript, run the click() method on the underlying HTML object.
+    js.ExecuteScript("arguments[0].click();", element);
+}
+```
+
+**Amita:** I like the idea of adding these helper methods. They seem general enough to use in almost any test. We can add more helper methods later as we need them.
+
+### Define the test method
+
+**Andy:** Now, we're ready to define the test method. Based on the manual tests that we ran earlier, let's call this method ClickLinkById_ShouldDisplayModalById. It's a good practice to give test methods descriptive names that define precisely what the test accomplishes. Here, we want to select a link defined by its id attribute. Then we want to verify that the proper modal window appears, also by using its id attribute.
+
+Andy adds starter code for the test method:
+
+```cs
+public void ClickLinkById_ShouldDisplayModalById(string linkId, string modalId)
+{
+}
+```
+
+**Andy:** Before we add more code, let's define what this test should do.
+
+**Amita:** I can handle this part. We want to:
+
+1. Locate the link by its id attribute and select the link.
+2. Locate the resulting modal.
+3. Close the modal.
+4. Verify that the modal was displayed successfully.
+
+**Andy:** Great. We'll also need to handle a few other things. For example, we need to ignore the test if the driver couldn't be loaded, and we need to close the modal only if the modal was successfully displayed.
+
+After refilling their coffee mugs, Andy and Amita add code to their test method. They use the helper methods that they wrote to locate page elements and click links and buttons. Here's the result:
+
+```cs
+public void ClickLinkById_ShouldDisplayModalById(string linkId, string modalId)
+{
+    // Skip the test if the driver could not be loaded.
+    // This happens when the underlying browser is not installed.
+    if (driver == null)
+    {
+        Assert.Ignore();
+        return;
+    }
+
+    // Locate the link by its ID and then click the link.
+    ClickElement(FindElement(By.Id(linkId)));
+
+    // Locate the resulting modal.
+    IWebElement modal = FindElement(By.Id(modalId));
+
+    // Record whether the modal was successfully displayed.
+    bool modalWasDisplayed = (modal != null && modal.Displayed);
+
+    // Close the modal if it was displayed.
+    if (modalWasDisplayed)
+    {
+        // Click the close button that's part of the modal.
+        ClickElement(FindElement(By.ClassName("close"), modal));
+
+        // Wait for the modal to close and for the main page to again be clickable.
+        FindElement(By.TagName("body"));
+    }
+
+    // Assert that the modal was displayed successfully.
+    // If it wasn't, this test will be recorded as failed.
+    Assert.That(modalWasDisplayed, Is.True);
+}
+```
+
+**Amita:** The coding looks great so far, but how do we connect this test to the id attributes that we collected earlier?
+
+**Andy:** Great question. We'll handle that next.
+
+### Define test case data
+
+**Andy:** In NUnit, you can provide data to your tests in a few ways. Here, we use the TestCase attribute. This attribute takes arguments that it later passes back to the test method when it runs. We can have multiple TestCase attributes that each test a different feature of our app. Each TestCase attribute produces a test case that's included in the report that appears at the end of a pipeline run.
+
+Andy adds these TestCase attributes to the test method. These attributes describe the Download game button, one of the game screens, and the top player on the leaderboard. Each attribute specifies two id attributes: one for the link to select and one for the corresponding modal window.
+
+```cs
+// Download game
+[TestCase("download-btn", "pretend-modal")]
+// Screen image
+[TestCase("screen-01", "screen-modal")]
+// // Top player on the leaderboard
+[TestCase("profile-1", "profile-modal-1")]
+public void ClickLinkById_ShouldDisplayModalById(string linkId, string modalId)
+{
+
+...
+```
+
+**Andy:** For each TestCase attribute, the first parameter is the id attribute for the link to select. The second parameter is the id attribute for the modal window that we expect to appear. You can see how these parameters correspond to the two-string arguments in our test method.
+
+**Amita:** I do see that. With some practice, I think I can add my own tests. When can we see these tests running in our pipeline?
+
+**Andy:** Before we push changes through the pipeline, let's first verify that the code compiles and runs locally. We'll commit and push changes to GitHub and see them move through the pipeline only after we verify that everything works. Let's run the tests locally now.
+```
+
+
+
+
+# 3.6 Exercise - Run the UI tests locally and in the pipeline
+
+Before Andy and Amita run their tests in the pipeline, they want to verify that their new UI tests do what they should. In this section, you'll follow along by running the Selenium UI tests first locally and then in the pipeline.
+
+Writing automated tests is an iterative process, just like writing any other type of code. For your own apps, you'll likely need to try a few approaches, refer to reference documentation and example code, and fix build errors.
+
+## Optional: Install the Selenium driver for Microsoft Edge
+
+Follow this section if you want to see the tests run locally on Microsoft Edge.
+
+The NuGet package for Chrome and Firefox installs driver software under the bin directory, alongside the compiled test code. For Edge, you need to manually install the driver. To do so:
+
+1. Install Microsoft Edge.
+
+2. Open Edge and navigate to **edge://settings/help**. Note the version number. Here's an example:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/6-edge-version.png)
+
+3. Navigate to the Microsoft Edge Driver downloads page and download the driver that matches the Edge version number. Here's an example:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/6-edge-driver-install.png)
+
+4. Extract the .zip file to the **bin/Release/net6.0** directory under your project's **Tailspin.SpaceGame.Web.UITests** directory. Create these directories if they don't exist.
+
+5. On macOS, you might need to update your system policy to allow **msedgedriver** to run. To do so, in Visual Studio Code, run the following **spctl** command from the terminal:
+
+   **Bash**
+   ```
+   spctl --add Tailspin.SpaceGame.Web.UITests/bin/Release/net6.0/msedgedriver
+   ```
+
+## Export environment variables
+
+Later in this module, you'll run Selenium tests on Windows Server 2019. The documentation lists the software that's preinstalled for you.
+
+The section **Selenium Web Drivers** lists the Selenium driver versions that are available for Chrome, Firefox, and Edge. Here's an example:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/6-readme-selenium-drivers.png)
+
+For each driver, you have the environment variable that maps to the location of that driver. For example, **ChromeWebDriver** maps to the location of the Chrome driver.
+
+The unit tests code is already set up to read these environment variables. These variables tell Selenium where to find the driver executable files. To run the unit tests locally, you need to export these same environment variables.
+
+From Visual Studio Code, go to the terminal. Then run these commands. Replace the path shown with the full path to your **mslearn-tailspin-spacegame-web-deploy** project.
+
+> **Important**
+> 
+> Make sure to run these commands and set the environment variables in the same terminal window that you use to run the tests.
+
+**Windows**  
+**macOS**
+
+**Bash**
+```
+driverDir="C:\Users\user\mslearn-tailspin-spacegame-web-deploy\Tailspin.SpaceGame.Web.UITests\bin\Release\net6.0"
+```
+
+**Bash**
+```
+export ChromeWebDriver=$driverDir
+export EdgeWebDriver=$driverDir
+export GeckoWebDriver=$driverDir
+```
+
+## Run the UI tests locally
+
+The Setup method in **HomePageTest.cs** navigates to the Space Game home page after it sets the driver member variable.
+
+Although you could hard-code the site URL, here we read the URL from an environment variable named **SITE_URL**. This way, you can run the tests multiple times against different URLs.
+
+```cs
+// Navigate to the site.
+// The site name is stored in the SITE_URL environment variable to make 
+// the tests more flexible.
+string url = Environment.GetEnvironmentVariable("SITE_URL");
+driver.Navigate().GoToUrl(url + "/");
+```
+
+Because you haven't yet deployed the Space Game website to your App Service environment, you'll use the site that Microsoft hosts to run the tests locally.
+
+To run the tests locally:
+
+1. In Visual Studio Code, go to the integrated terminal and open a new terminal window.
+
+2. Run the following commands in the new terminal window.
+
+   **.NET CLI**
+   ```
+   dotnet build --configuration Release
+   dotnet run --configuration Release --no-build --project Tailspin.SpaceGame.Web
+   ```
+
+3. Make a note of the local website link; in this example, it's **http://localhost:5000**.
+
+4. Switch back to the terminal window where you set the environment variables in the previous step, and ensure that you're in your project's root directory. Here's an example:
+
+   **Bash**
+   ```
+   cd ~/mslearn-tailspin-spacegame-web-deploy
+   ```
+
+5. Export the **SITE_URL** environment variable. Use the locally running link that you got from the previous step.
+
+   **Bash**
+   ```
+   export SITE_URL="http://localhost:5000"
+   ```
+
+   This variable points to the Space Game website that Microsoft hosts.
+
+6. Run the UI tests.
+
+   **Bash**
+   ```
+   dotnet test --configuration Release Tailspin.SpaceGame.Web.UITests
+   ```
+
+   This code runs the tests that are located in the **Tailspin.SpaceGame.Web.UITests** project.
+
+   As the tests run, one or more browsers appear. Selenium controls each browser and follows the test steps that you defined.
+
+   > **Note**
+   > 
+   > Don't worry if all three browsers don't appear. For example, you won't see the tests run on Chrome if you don't have Chrome installed or have an incompatible version. Seeing just one browser will help give you confidence that your tests are working. In practice, in your local development environment, you might want to set up all browsers that you want to test against. This setup will allow you to verify that your tests behave as expected in each configuration before you run your tests in the pipeline.
+
+7. From the terminal, trace the output of each test. Also note the test-run summary at the end.
+
+   This example shows that out of nine tests, all nine tests succeeded and zero tests were skipped:
+
+   **Output**
+   ```
+   Passed!  - Failed:     0, Passed:     9, Skipped:     0, Total:     9, Duration: 5 s 
+   ```
+
+## Add the SITE_URL variable to Azure Pipelines
+
+Earlier, you set the **SITE_URL** environment variable locally so that your tests know where to point each browser. You can add this variable to Azure Pipelines. The process is similar to how you added variables for your App Service instances. When the agent runs, this variable is automatically exported to the agent as an environment variable.
+
+Let's add the pipeline variable now, before you update your pipeline configuration. To do so:
+
+1. In Azure DevOps, go to your **Space Game - web - Functional tests** project.
+
+2. Under **Pipelines**, select **Library**.
+
+3. Select the **Release** variable group.
+
+4. Under **Variables**, select **+ Add**.
+
+5. For the name of your variable, enter **SITE_URL**. As its value, enter the URL of the App Service instance that corresponds to your test environment, such as **http://tailspin-space-game-web-test-10529.azurewebsites.net**.
+
+6. Near the top of the page, select **Save** to save your variable to the pipeline.
+
+Your variable group should resemble this one:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/6-library-variable-group.png)
+
+## Modify the pipeline configuration
+
+In this section, you modify the pipeline configuration to run your Selenium UI tests during the Test stage.
+
+In Visual Studio Code, open the **azure-pipelines.yml** file. Then modify the file like this:
+
+> **Tip**
+> 
+> This file contains a few changes, so we recommend that you replace the entire file with what you see here.
+
+```yml
+trigger:
+- '*'
+
+variables:
+  buildConfiguration: 'Release'
+  dotnetSdkVersion: '8.x'
+
+stages:
+- stage: 'Build'
+  displayName: 'Build the web application'
+  jobs: 
+  - job: 'Build'
+    displayName: 'Build job'
+    pool:
+      vmImage: 'ubuntu-20.04'
+      demands:
+      - npm
+
+    variables:
+      wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+      dotnetSdkVersion: '8.x'
+
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+      inputs:
+        version: '$(dotnetSdkVersion)'
+
+    - task: Npm@1
+      displayName: 'Run npm install'
+      inputs:
+        verbose: false
+
+    - script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
+      displayName: 'Compile Sass assets'
+
+    - task: gulp@1
+      displayName: 'Run gulp tasks'
+
+    - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+      displayName: 'Write build info'
+      workingDirectory: $(wwwrootDir)
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build the project - $(buildConfiguration)'
+      inputs:
+        command: 'build'
+        arguments: '--no-restore --configuration $(buildConfiguration)'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish the project - $(buildConfiguration)'
+      inputs:
+        command: 'publish'
+        projects: '$(System.DefaultWorkingDirectory)/**/Tailspin.SpaceGame.Web.csproj' 
+        publishWebProjects: false
+        arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+        zipAfterPublish: true
+
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: drop
+
+- stage: 'Dev'
+  displayName: 'Deploy to the dev environment'
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: dev
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameDev)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+
+- stage: 'Test'
+  displayName: 'Deploy to the test environment'
+  dependsOn: Dev
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: test
+    variables:
+    - group: 'Release'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameTest)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+  - job: RunUITests
+    dependsOn: Deploy
+    displayName: 'Run UI tests'
+    pool:
+      vmImage: 'windows-2019'
+    variables:
+    - group: 'Release'
+    steps: 
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+      inputs:
+        version: '$(dotnetSdkVersion)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build the project - $(buildConfiguration)'
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration)'
+        projects: '$(System.DefaultWorkingDirectory)/**/*UITests.csproj'
+    - task: DotNetCoreCLI@2
+      displayName: 'Run unit tests - $(buildConfiguration)'
+      inputs:
+        command: 'test'
+        arguments: '--no-build --configuration $(buildConfiguration)'
+        publishTestResults: true
+        projects: '$(System.DefaultWorkingDirectory)/**/*UITests.csproj'
+
+- stage: 'Staging'
+  displayName: 'Deploy to the staging environment'
+  dependsOn: Test
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: staging
+    variables:
+    - group: 'Release'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameStaging)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+```
+
+The file includes these three changes:
+
+1. The **dotnetSdkVersion** variable is moved to the top of the file so that multiple stages can access it. Here the Build stage and Test stage require this version of .NET Core.
+
+2. The Build stage publishes only the Space Game website package as the build artifact. Previously, you published the artifacts like this:
+
+   ```yml
+   - task: DotNetCoreCLI@2
+     displayName: 'Publish the project - $(buildConfiguration)'
+     inputs:
+       command: 'publish'
+       projects: '**/*.csproj'
+       publishWebProjects: false
+       arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+       zipAfterPublish: true
+   ```
+
+   This task generates two build artifacts: the Space Game website package and the compiled UI tests. We build the UI tests during the Build stage to ensure that they'll compile during the Test stage, but we don't need to publish the compiled test code. We build it again during the Test stage when the tests run.
+
+3. The Test stage includes a second job that builds and runs the tests. This job resembles the one that you used in the **Run quality tests in your build pipeline by using Azure Pipelines** module. In that module, you ran NUnit tests that verified the leaderboard's filtering functionality.
+
+Recall that a deployment job is a special type of job that plays an important role in your deployment stages. The second job is a normal job that runs the Selenium tests on a Windows Server 2019 agent. Although we use a Linux agent to build the application, here we use a Windows agent to run the UI tests. We use a Windows agent because Amita runs manual tests on Windows, and that's what most customers use.
+
+The **RunUITests** job depends on the **Deploy** job to ensure that the jobs run in the correct order. You'll deploy the website to App Service before you run the UI tests. If you don't specify this dependency, jobs within the stage can run in any order or run in parallel.
+
+In the integrated terminal, add **azure-pipelines.yml** to the index, commit the changes, and push the branch up to GitHub.
+
+**Bash**
+```
+git add azure-pipelines.yml
+git commit -m "Run Selenium UI tests"
+git push origin selenium
+```
+
+## Watch Azure Pipelines run the tests
+
+Here, you watch the pipeline run. The pipeline runs the Selenium UI tests during the Test stage.
+
+1. In Azure Pipelines, go to the build and trace it as it runs.
+
+   During the build, you see the automated tests run after the website is deployed.
+
+  ![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/6-stages-test-running.png)
+
+3. After the build finishes, go to the summary page.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/6-stages-complete.png)
+
+   You note that the deployment and the UI tests finished successfully.
+
+5. Near the top of the page, note the summary.
+
+   You note that the build artifact for the Space Game website is published just like always. Also note the **Tests and coverage** section, which shows that the Selenium tests have passed.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-build-summary-tests.png)
+
+7. Select the test summary to see the full report.
+
+   The report shows that all nine tests have passed. These tests include three tests across three browsers.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/run-functional-tests-azure-pipelines/media/6-test-summary.png)
+
+If any test fails, you get detailed results of the failure. From there, you can investigate the source of the failure, fix it locally, and then push up the necessary changes to make the tests pass in the pipeline.
+
+**Amita:** This automation is exciting! I now have UI tests that I can run in the pipeline. The tests will really save us time in the long run. I also have a pattern to follow to add more tests. Best of all, the UI tests give us added confidence in our code quality.
+
+**Andy:** All true. Remember, tests that you repeatedly run manually are good candidates for automation. Good luck adding more. If you get stuck or need a code reviewer, you know where to find me.
+```
 
