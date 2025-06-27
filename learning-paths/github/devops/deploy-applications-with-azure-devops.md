@@ -5102,7 +5102,7 @@ Visual Studio Code comes with an integrated terminal. Here you both edit files a
 
 3. In the dropdown list, select **Git Bash**. If you're familiar with another Unix shell that you prefer to use, select that shell instead.
 
-   ![A screenshot of Visual Studio Code showing the location of the Git Bash shell.](screenshot-git-bash.png)
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/vscode-terminal-git-bash.png)
 
    In the terminal window, you can choose any shell that's installed on your system. For example, you can choose Git Bash, or PowerShell, or another shell.
 
@@ -5112,7 +5112,7 @@ Visual Studio Code comes with an integrated terminal. Here you both edit files a
    > 
    > On Windows, if you don't see Git Bash listed as an option, make sure you've installed Git, and then restart Visual Studio Code.
 
-4. Run the **cd** command to go to the directory where you want to work. Choose your home directory (~) or a different directory if you want.
+5. Run the **cd** command to go to the directory where you want to work. Choose your home directory (~) or a different directory if you want.
 
    **Bash**
    ```
@@ -5157,25 +5157,25 @@ To clone the Space Game web project to your computer:
 
 2. Select **Code**. Then, from the **HTTPS** tab, select the button next to the URL that's shown to copy the URL to your clipboard.
 
-   ![Screenshot that shows how to locate the URL and copy button from the GitHub repository.](screenshot-clone-url.png)
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/github-clone-button.png)
 
-3. In Visual Studio Code, go to the terminal window.
+4. In Visual Studio Code, go to the terminal window.
 
-4. In the terminal, move to the directory where you want to work. Choose your home directory (~) or a different directory if you want.
+5. In the terminal, move to the directory where you want to work. Choose your home directory (~) or a different directory if you want.
 
    **Bash**
    ```
    cd ~
    ```
 
-5. Run the **git clone** command. Replace the URL that's shown here with the contents of your clipboard:
+6. Run the **git clone** command. Replace the URL that's shown here with the contents of your clipboard:
 
    **Bash**
    ```
    git clone https://github.com/your-name/mslearn-tailspin-spacegame-web-deploy.git
    ```
 
-6. Move to the **mslearn-tailspin-spacegame-web-deploy** directory. This is the root directory of your repository.
+7. Move to the **mslearn-tailspin-spacegame-web-deploy** directory. This is the root directory of your repository.
 
    **Bash**
    ```
@@ -5382,7 +5382,7 @@ Here, you'll create the App Service instances for the three stages to which you'
 
    You see this page:
 
-   ![Screenshot of the default home page on Azure App Service.](screenshot-default-page.png)
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/app-service-default.png)
 
 > **Important**
 > 
@@ -5400,17 +5400,17 @@ To add the variables:
 
 2. Under **Pipelines**, select **Library**.
 
-   ![Screenshot of Azure Pipelines, showing the Library menu option.](screenshot-library.png)
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/create-release-pipeline/media/5-pipelines-library.png)
 
-3. Select **+ Variable group**.
+4. Select **+ Variable group**.
 
-4. For the variable group name, under **Properties**, enter **Release**.
+5. For the variable group name, under **Properties**, enter **Release**.
 
-5. Under **Variables**, select **+ Add**.
+6. Under **Variables**, select **+ Add**.
 
-6. For the name of your variable, enter **WebAppNameDev**. For its value, enter the name of the App Service instance that corresponds to your Dev environment, such as **tailspin-space-game-web-dev-1234**.
+7. For the name of your variable, enter **WebAppNameDev**. For its value, enter the name of the App Service instance that corresponds to your Dev environment, such as **tailspin-space-game-web-dev-1234**.
 
-7. Repeat steps 5 and 6 twice more to create variables for your Test and Staging environments, as shown in this table:
+8. Repeat steps 5 and 6 twice more to create variables for your Test and Staging environments, as shown in this table:
 
    | Variable name | Example value |
    |---------------|---------------|
@@ -5423,11 +5423,11 @@ To add the variables:
    > 
    > Make sure that you set the name of the App Service instance, not its host name. In this example, you would enter **tailspin-space-game-web-dev-1234** and not **tailspin-space-game-web-dev-1234.azurewebsites.net**.
 
-8. To save your variable to the pipeline, select **Save** near the top of the page.
+9. To save your variable to the pipeline, select **Save** near the top of the page.
 
 Your variable group resembles this one:
 
-![Screenshot of Azure Pipelines, showing the variable group. The group contains three variables.](screenshot-variable-group.png)
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-non-functional-tests-azure-pipelines/media/3-library-variable-group.png)
 
 ## Create the dev, test, and staging environments
 
@@ -5437,21 +5437,21 @@ To create the dev, test, and staging environments:
 
 1. From Azure Pipelines, select **Environments**.
 
-   ![Screenshot of Azure Pipelines showing the location of the Environments menu option.](screenshot-environments.png)
+      ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/pipelines-environments.png)
 
-2. To create the **dev** environment:
+3. To create the **dev** environment:
    - Select **Create environment**.
    - Under **Name**, enter **dev**.
    - Leave the remaining fields at their default values.
    - Select **Create**.
 
-3. To create the **test** environment:
+4. To create the **test** environment:
    - Return to the **Environments** page.
    - Select **New environment**.
    - Under **Name**, enter **test**.
    - Select **Create**.
 
-4. To create the **staging** environment:
+5. To create the **staging** environment:
    - Return to the **Environments** page.
    - Select **New environment**.
    - Under **Name**, enter **staging**.
@@ -5494,3 +5494,603 @@ Azure DevOps performs a test connection to verify that it can connect to your Az
 
 
 
+# 4.4  Plan load tests by using Apache JMeter
+
+In this section, you'll explore load testing and learn how to add load tests to the pipeline. The load tests use Apache JMeter to simulate multiple users who access the web app simultaneously. The tests fetch the web content from the app that runs on Azure App Service in the Staging environment.
+
+Tim starts by bringing up the Apache JMeter user interface on a laptop. He runs a basic test plan. Then Tim and Mara export the test plan to a file that can be run from the command line. Finally, they add tasks to Azure Pipelines to run the load tests during Staging.
+
+> **Note**
+> 
+> For brevity, you don't need to install Apache JMeter on your local computer. You can just read along.
+
+## Run load tests from Apache JMeter
+
+Apache JMeter is an open-source load-testing tool that analyzes and measures performance. The report it generates is an XML file.
+
+Azure Pipelines can read the Apache JMeter report and generate a graph. You don't need any special hardware to run these tests, so you can use a Microsoft-hosted agent to run them. In the Space Game scenario, you'd likely run these tests in Staging.
+
+### Create the test plan
+
+Here's what Apache JMeter looks like on a laptop running Linux:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-non-functional-tests-azure-pipelines/media/4-apache-jmeter-new.png)
+
+
+You'd create a new test plan file; for example, **LoadTest.jmx**. You'd then add a **Thread Group** to the file. Each simulated user runs on its own thread. A thread group controls the number of users and the number of each user's requests.
+
+The following example shows 10 simulated users (threads). Each user makes 10 request, so the system gets a total of 100 requests.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-non-functional-tests-azure-pipelines/media/4-apache-jmeter-thread-group.png)
+
+A **sampler** is a single request made by JMeter. JMeter can query servers over HTTP, FTP, TCP, and several other protocols. Samplers generate the results that are added to the report.
+
+Next, you'd add **Http Request Defaults** and an **Http Request** sampler to the thread group. You'd provide the hostname of the Space Game website that runs in the staging environment on Azure App Service.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-non-functional-tests-azure-pipelines/media/4-apache-jmeter-http-request.png)
+
+The preceding scenario creates a basic test plan.
+
+### Run the test plan
+
+JMeter enables you to run many kinds of tests. It's possible to run your test plan from the JMeter graphical user interface. For load tests, however, the JMeter documentation recommends that you run the test plan from the command line.
+
+You'd run the test plan by using this command:
+
+**Bash**
+```
+apache-jmeter-5.4.1/bin/./jmeter -n -t LoadTest.jmx -o Results.xml
+```
+
+The **-n** argument specifies to run JMeter in non-GUI mode. The **-t** argument specifies the test plan file, **LoadTest.jmx**. The **-o** argument specifies the report file, **Results.xml**.
+
+JMeter runs and produces the report file, **Results.xml**. This example of the file shows the first few results:
+
+**XML**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<httpSample t="180" it="0" lt="95" ct="35" ts="1569306009772" s="true" lb="HTTP Request" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" by="40871" sby="144" ng="1" na="1">
+  <java.net.URL>http://tailspin-space-game-web-staging-1234.azurewebsites.net/</java.net.URL>
+</httpSample>
+<httpSample t="174" it="0" lt="96" ct="38" ts="1569306009955" s="true" lb="HTTP Request" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" by="40869" sby="144" ng="1" na="1">
+  <java.net.URL>http://tailspin-space-game-web-staging-1234.azurewebsites.net/</java.net.URL>
+</httpSample>
+<httpSample t="160" it="0" lt="121" ct="35" ts="1569306010131" s="true" lb="HTTP Request" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" by="40879" sby="144" ng="2" na="2">
+  <java.net.URL>http://tailspin-space-game-web-staging-1234.azurewebsites.net/</java.net.URL>
+</httpSample>
+```
+
+Each sample produces a node in the report. The **t** attribute specifies the response time in milliseconds (ms). Here, you see three requests that took 180 ms, 174 ms, and 160 ms.
+
+The ideal request times should average less than one second. No more than 10 percent of requests should take more than one second. You can configure JMeter to report statistics such as the minimum, maximum, and average response times or the standard deviation. You could write a script to help provide this information.
+
+To visualize the test results, you need to provide them in a format that Azure Pipelines understands. Azure Pipelines can parse an XML file that contains test results, but the file needs to be in a supported format. Supported formats include CTest, JUnit (including PHPUnit), NUnit 2, NUnit 3, Visual Studio Test (TRX), and xUnit 2. You could write an XSLT file that converts the JMeter results to JUnit.
+
+## Transform the report to JUnit
+
+XSLT stands for XSL Transformations, or eXtensible Stylesheet Language Transformations. An XSLT file resembles an XML file, but it enables you to transform an XML document to another XML format.
+
+Recall our requirements for load tests:
+
+- The average request time should be less than one second.
+- No more than 10 percent of requests should take more than one second.
+
+Here's what an XSLT file that meets those requirements looks like:
+
+**XML**
+```xml
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:math="http://exslt.org/math">
+  <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+  <xsl:template match="/testResults">
+    <xsl:variable name="times" select="./httpSample/@t" />
+    <xsl:variable name="failures" select="./httpSample/assertionResult/failureMessage" />
+    <xsl:variable name="threshold" select="1000" />
+    <testsuite>
+      <xsl:attribute name="tests"><xsl:value-of select="count($times)" /></xsl:attribute>
+      <xsl:attribute name="failures"><xsl:value-of select="count($failures)" /></xsl:attribute> 
+      <testcase>
+          <xsl:variable name="avg-time" select="sum($times) div count($times)" />
+          <xsl:attribute name="name">Average Response Time</xsl:attribute>
+          <xsl:attribute name="time"><xsl:value-of select="format-number($avg-time div 1000,'#.##')"/></xsl:attribute>
+          <xsl:if test="$avg-time > $threshold">
+            <failure>Average response time of <xsl:value-of select="format-number($avg-time,'#.##')"/> exceeds <xsl:value-of select="$threshold"/> ms threshold.</failure>
+          </xsl:if> 
+      </testcase>
+      <testcase>
+          <xsl:variable name="exceeds-threshold" select="count($times[. > $threshold])" />
+          <xsl:attribute name="name">Max Response Time</xsl:attribute>
+          <xsl:attribute name="time"><xsl:value-of select="math:max($times) div 1000"/></xsl:attribute>
+          <xsl:if test="$exceeds-threshold > count($times) * 0.1">
+            <failure><xsl:value-of select="format-number($exceeds-threshold div count($times) * 100,'#.##')"/>% of requests exceed <xsl:value-of select="$threshold"/> ms threshold.</failure>
+          </xsl:if>
+      </testcase>
+    </testsuite>
+  </xsl:template>
+</xsl:stylesheet>
+```
+
+We won't delve into how XSL works here. But to summarize, this file first collects the following data from the JMeter output:
+
+- **Each HTTP request time.**
+
+  It collects this data by selecting the **t** attribute from each **httpSample** element. (**./httpSample/@t**)
+
+- **Each failure message.**
+
+  It collects this data by selecting all **failureMessage** nodes from the document. (**./httpSample/assertionResult/failureMessage**)
+
+The XSLT file also sets the threshold value to 1,000 ms. This response time is the maximum that we defined earlier.
+
+Given these variables, the XSLT file provides the total number of tests and the total number of failures. It then provides these two test cases:
+
+1. The average response time, and a failure if the average exceeds the threshold of 1,000 ms.
+2. The maximum response time, and a failure if more than 10 percent of requests exceed the threshold of 1,000 ms.
+
+The results of the XSLT match the JUnit format, which Azure Pipelines understands. You could name your XSLT file **JMeter2JUnit.xsl**.
+
+Next, you'd need an XSLT processor. In this example, we'll use **xsltproc**, which is a command-line tool for applying XSLT stylesheets to XML documents.
+
+You could install **xsltproc** as follows:
+
+**Bash**
+```
+sudo apt-get install xsltproc
+```
+
+Next, you'd run **xsltproc** to transform the JMeter report to JUnit:
+
+**Bash**
+```
+xsltproc JMeter2JUnit.xsl Results.xml > JUnit.xml
+```
+
+Here's the resulting JUnit file, **JUnit.xml**:
+
+**XML**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:math="http://exslt.org/math" tests="100" failures="0">
+  <testcase name="Average Response Time" time="0.17"/>
+  <testcase name="Max Response Time" time="0.373"/>
+</testsuite>
+```
+
+In this example, the average response time is 170 ms. The maximum response time is 373 ms. Neither test case generates a failure, because both times fall below the threshold of 1,000 ms.
+
+Shortly, you'll run these tests in the pipeline. You can think about **Results.xml**, the file that JMeter writes, as an intermediate file that's not published to the pipeline's test results. **JUnit.xml** is the final report file. This file gets published to the pipeline so that the team can visualize the results.
+
+
+# 4.5 Exercise - Run load tests in Azure Pipelines
+
+In this section, you'll run the test plan that you created in the release pipeline. The test plan uses Apache JMeter to run load tests.
+
+Here's how you run the tests:
+
+1. Fetch and check out a Git branch that implements the tests.
+2. Modify your pipeline to install JMeter, run the test plan, transform the results to JUnit, and publish the results to Azure Pipelines.
+3. Push your branch to GitHub, watch the tests run in Azure Pipelines, and then examine the results.
+
+## Fetch the branch from GitHub
+
+In this section, you'll fetch the **jmeter** branch from GitHub and check out, or switch to, that branch.
+
+This branch contains the Space Game project that you worked with in previous modules. It also contains an Azure Pipelines configuration to start with.
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. To download a branch named **jmeter** from the Microsoft repository and switch to that branch, run the following **git fetch** and **git checkout** commands:
+
+   **Bash**
+   ```
+   git fetch upstream jmeter
+   git checkout -B jmeter upstream/jmeter
+   ```
+
+   Recall that **upstream** refers to the Microsoft GitHub repository. Your project's Git configuration understands the upstream remote because you set up that relationship when you forked the project from the Microsoft repository and cloned it locally.
+
+   Shortly, you'll push this branch up to your GitHub repository, known as **origin**.
+
+3. Optionally, in Visual Studio Code, open the **azure-pipelines.yml** file. Review the initial configuration.
+
+   The configuration resembles the ones that you created in previous modules in this learning path. It builds only the application's Release configuration. For brevity, it omits the triggers, manual approvals, and tests that you set up in previous modules.
+
+   > **Note**
+   > 
+   > A more robust configuration might specify the branches that participate in the build process. For example, to help verify code quality, you might run unit tests each time you push up a change on any branch. You might also deploy the application to an environment that performs more exhaustive testing. But you do this deployment only when you have a pull request, when you have a release candidate, or when you merge code to main.
+   > 
+   > For more information, see **Implement a code workflow in your build pipeline by using Git and GitHub** and **Build pipeline triggers**.
+
+4. Optionally, in Visual Studio Code, you can check out the JMeter test plan file, **LoadTest.jmx**, and the XLST transform, **JMeter2JUnit.xsl**. The XLST file transforms the JMeter output to JUnit so that Azure Pipelines can visualize the results.
+
+## Add variables to Azure Pipelines
+
+The team's original test plan provides a hard-coded value for the hostname of the Space Game website that runs in the staging environment.
+
+To make the test plan more flexible, your version uses a JMeter property. Think of a property as a variable that you can set from the command line.
+
+Here's how the hostname variable is defined in JMeter:
+
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-non-functional-tests-azure-pipelines/media/5-jmeter-hostname-variable.png)
+
+Here's how the hostname variable uses the **__P** function to read the hostname variable.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-non-functional-tests-azure-pipelines/media/5-jmeter-httprequest-server-name.png)
+
+The corresponding test plan file, **LoadTest.jmx**, specifies this variable and uses it to set the hostname.
+
+When you run JMeter from the command line, you use the **-J** argument to set the hostname property. Here's an example:
+
+**Bash**
+```
+apache-jmeter-5.4.3/bin/./jmeter -n -t LoadTest.jmx -o Results.xml -Jhostname=tailspin-space-game-web-staging-1234.azurewebsites.net
+```
+
+Here, you set the **STAGING_HOSTNAME** variable in Azure Pipelines. This variable points to your site's hostname that runs on App Service in your staging environment. You also set the **jmeterVersion** to specify the version of JMeter to install.
+
+When the agent runs, these variables are automatically exported to the agent as environment variables, so your pipeline configuration can run JMeter this way:
+
+**Bash**
+```
+apache-jmeter-5.4.3/bin/./jmeter -n -t LoadTest.jmx -o Results.xml -Jhostname=$(STAGING_HOSTNAME)
+```
+
+Let's add the pipeline variables now, before you update your pipeline configuration. To do so:
+
+1. In Azure DevOps, go to your **Space Game - web - Nonfunctional tests** project.
+
+2. Under **Pipelines**, select **Library**.
+
+3. Select the **Release** variable group.
+
+4. Under **Variables**, select **+ Add**.
+
+5. For the name of your variable, enter **STAGING_HOSTNAME**. For its value, enter the URL of the App Service instance that corresponds to your staging environment, such as **tailspin-space-game-web-staging-1234.azurewebsites.net**.
+
+   > **Important**
+   > 
+   > Don't include the **http://** or **https://** protocol prefix in your value. JMeter provides the protocol when the tests run.
+
+6. Add a second variable named **jmeterVersion**. For its value, specify **5.4.3**.
+
+   > **Note**
+   > 
+   > This is the version of JMeter that we last used to test this module. To get the latest version, see **Download Apache JMeter**.
+
+7. To save your variable to the pipeline, select **Save** near the top of the page.
+
+Your variable group resembles the one shown in the following image:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/run-non-functional-tests-azure-pipelines/media/5-library-variable-group.png)
+
+## Modify the pipeline configuration
+
+In this section, you'll modify the pipeline to run your load tests during the Staging stage.
+
+In Visual Studio Code, open the **azure-pipelines.yml** file. Then modify the file as follows:
+
+> **Tip**
+> 
+> You can replace the entire file or just update the part that's highlighted.
+
+```yml
+trigger:
+- '*'
+
+variables:
+  buildConfiguration: 'Release'
+
+stages:
+- stage: 'Build'
+  displayName: 'Build the web application'
+  jobs:
+  - job: 'Build'
+    displayName: 'Build job'
+    pool:
+      vmImage: 'ubuntu-20.04'
+      demands:
+      - npm
+
+    variables:
+      wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+      dotnetSdkVersion: '6.x'
+
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+      inputs:
+        version: '$(dotnetSdkVersion)'
+
+    - task: Npm@1
+      displayName: 'Run npm install'
+      inputs:
+        verbose: false
+
+    - script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
+      displayName: 'Compile Sass assets'
+
+    - task: gulp@1
+      displayName: 'Run gulp tasks'
+
+    - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+      displayName: 'Write build info'
+      workingDirectory: $(wwwrootDir)
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build the project - $(buildConfiguration)'
+      inputs:
+        command: 'build'
+        arguments: '--no-restore --configuration $(buildConfiguration)'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish the project - $(buildConfiguration)'
+      inputs:
+        command: 'publish'
+        projects: '**/*.csproj'
+        publishWebProjects: false
+        arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+        zipAfterPublish: true
+
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: drop
+
+- stage: 'Dev'
+  displayName: 'Deploy to the dev environment'
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: dev
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameDev)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+
+- stage: 'Test'
+  displayName: 'Deploy to the test environment'
+  dependsOn: Dev
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: test
+    variables:
+    - group: 'Release'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameTest)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+
+- stage: 'Staging'
+  displayName: 'Deploy to the staging environment'
+  dependsOn: Test
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: staging
+    variables:
+    - group: 'Release'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameStaging)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+  - job: RunLoadTests
+    dependsOn: Deploy
+    displayName: 'Run load tests'
+    pool:
+      vmImage: 'ubuntu-20.04'
+    variables:
+    - group: Release
+    steps:
+    - script: |
+        wget -c archive.apache.org/dist/jmeter/binaries/apache-jmeter-$(jmeterVersion).tgz
+        tar -xzf apache-jmeter-$(jmeterVersion).tgz
+      displayName: 'Install Apache JMeter'
+    - script: apache-jmeter-$(jmeterVersion)/bin/./jmeter -n -t LoadTest.jmx -o Results.xml -Jhostname=$(STAGING_HOSTNAME)
+      displayName: 'Run Load tests'
+    - script: |
+        sudo apt-get update
+        sudo apt-get install xsltproc
+        xsltproc JMeter2JUnit.xsl Results.xml > JUnit.xml
+      displayName: 'Transform JMeter output to JUnit'
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: JUnit
+        testResultsFiles: JUnit.xml
+```
+
+Here's a summary of the changes:
+
+- The **RunLoadTests** job does load testing from a Linux agent.
+- The **RunLoadTests** job depends on the **Deploy** job to ensure that the jobs are run in the correct order. You need to deploy the website to App Service before you can run the load tests. If you don't specify this dependency, jobs within the stage can run in any order or run in parallel.
+- The first script task downloads and installs JMeter. The **jmeterVersion** pipeline variable specifies the version of JMeter to install.
+- The second script task runs JMeter. The **-J** argument sets the hostname property in JMeter by reading the **STAGING_HOSTNAME** variable from the pipeline.
+- The third script task installs **xsltproc**, an XSLT processor, and transforms the JMeter output to JUnit.
+- The **PublishTestResults@2** task publishes the resulting JUnit report, **JUnit.xml**, to the pipeline. Azure Pipelines can help you visualize the test results.
+
+In the integrated terminal, add **azure-pipelines.yml** to the index, commit the changes, and push the branch up to GitHub.
+
+**Bash**
+```
+git add azure-pipelines.yml
+git commit -m "Run load tests with Apache JMeter"
+git push origin jmeter
+```
+
+## Watch Azure Pipelines run the tests
+
+Here, you'll watch the pipeline run. You'll see the load tests run during Staging.
+
+1. In Azure Pipelines, go to the build and trace it as it runs.
+
+   During Staging, you see the load tests run after the website is deployed.
+
+2. After the build finishes, go to the summary page.
+
+  ![](https://learn.microsoft.com/en-us/training/azure-devops/run-non-functional-tests-azure-pipelines/media/5-stages-complete.png)
+
+   You see that the deployment and the load tests finished successfully.
+
+4. Near the top of the page, note the summary.
+
+   You see that the build artifact for the Space Game website is published just like always. Also note the **Tests and coverage** section, which shows that the load tests have passed.
+
+   ![A screenshot of Azure Pipelines, showing the test summary.](screenshot-test-summary.png)
+
+5. Select the test summary to see the full report.
+
+   The report shows that both tests have passed.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-build-summary-tests.png)
+
+   If any test were to fail, you'd see detailed results of the failure. From those results, you could investigate the source of the failure.
+
+   Recall that the XSLT file produces a JUnit file called **JUnit.xml**. The JUnit file answers these two questions:
+
+   - Is the average request time less than one second?
+   - Do fewer than 10 percent of requests take more than one second to complete?
+
+   The report proves that these requirements are met. To see more details, select the **Outcome** arrow in the report. Then make sure that only **Passed** is selected.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/run-non-functional-tests-azure-pipelines/media/5-tests-outcome-filter.png)
+
+   You see that the **Average Response Time** and **Max Response Time** test cases both succeeded.
+
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/run-non-functional-tests-azure-pipelines/media/5-tests-junit-details.png)
+
+> **Note**
+> 
+> You're using the B1 App Service plan, which runs on the Basic tier. This plan is intended for apps that have low traffic requirements, such as apps in a test environment. Because of this plan, the performance of your website might be less than you expect. In practice, you'd choose a plan for the staging environment that more closely matches your production environment. For example, the Standard and Premium plans are for production workloads. These run on dedicated virtual machine instances.
+
+
+# 4.6 Exercise - Clean up your Azure DevOps environment
+
+
+You're all done with the tasks for this module. Here, you'll clean up your Azure resources, move the work item to the **Done** state in Azure Boards, and clean up your Azure DevOps environment.
+
+> **Important**
+> 
+> This page contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. It also helps ensure that you're not charged for Azure resources after you complete this module.
+
+## Clean up Azure resources
+
+Here, you'll delete your Azure App Service instances. The easiest way to do that is to delete their parent resource group. Deleting a resource group deletes all resources in that group.
+
+To clean up your resource group:
+
+1. Go to the Azure portal and sign in.
+
+2. On the menu bar, select **Cloud Shell**. When you're prompted, select the **Bash** experience.
+
+3. Run the following `az group delete` command to delete the resource group that you used in this module, **tailspin-space-game-rg**:
+
+   **Azure CLI**
+   ```
+   az group delete --name tailspin-space-game-rg
+   ```
+
+   When you're prompted, enter **y** to confirm the operation.
+
+4. As an optional step, after the previous command finishes, run the following `az group list` command.
+
+   **Azure CLI**
+   ```
+   az group list --output table
+   ```
+
+   You'll see that the resource group **tailspin-space-game-rg** no longer exists.
+
+## Disable the pipeline or delete your project
+
+Each module in this learning path provides a template. You can run the template to create a clean environment for the duration of the module.
+
+Running multiple templates gives you multiple Azure Pipelines projects. Each project points to the same GitHub repository. This setup can trigger multiple pipelines to run each time you push a change to your GitHub repository, which can cause you to run out of free build minutes on our hosted agents, so it's important to disable or delete your pipeline before you move on to the next module.
+
+Choose one of the following options.
+
+### Option 1: Disable the pipeline
+
+Disable the pipeline so that it doesn't process further build requests. You can later reenable the build pipeline if you want to. Choose this option if you want to keep your DevOps project and your build pipeline for future reference.
+
+To disable the pipeline:
+
+1. In Azure Pipelines, navigate to your pipeline.
+
+2. From the drop-down menu, select **Settings**:
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-settings-button.png)
+
+4. Under **Processing of new run requests**, select **Disabled**, then select **Save**.
+
+Your pipeline will no longer process build requests.
+
+### Option 2: Delete the Azure DevOps project
+
+You can also delete your Azure DevOps project, including the contents of Azure Boards and your build pipeline. In future modules, you can run another template that brings up a new project in a state where this module leaves off. Choose this option if you don't need your DevOps project for future reference.
+
+To delete the project:
+
+1. In Azure DevOps, navigate to your project. Earlier, we recommended that you name this project **Space Game - web - Nonfunctional tests**.
+
+2. Select **Project settings** in the lower corner.
+
+3. At the bottom of the **Project details** area, select **Delete**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-delete-project.png)
+
+4. In the window that appears, enter the project name and select **Delete** again.
+
+Your project is now deleted.
+
+
+
+# 4.7 Summary
+
+Nice job! In this module, we defined a nonfunctional test as a test that checks characteristics like performance and reliability. Compare this type of test to a functional test, which verifies that a given function of the software does what it should. We also defined some popular kinds of nonfunctional tests, including load tests, stress tests, and penetration tests.
+
+You and your team chose one type of nonfunctional test to automate the load tests first. By using a few commands, you took a test plan that was created in Apache JMeter and ran it in the pipeline. Now with each code change, the team can track the performance of the site under a normal load. If performance begins to drop, you know which change caused it.
+
+Just as you did when you incorporated functional tests into your pipeline, focus on the types of nonfunctional tests that matter most. For example, if your team must adhere to certain compliance requirements, consider adding automated tests that provide a detailed status report.
+
+## Learn more
+If you're interested in performance testing in Apache JMeter, here are some resources to help you go further:
+
+- JMeter.Apache.org
+- Apache JMeter - User's manual: Best practices
