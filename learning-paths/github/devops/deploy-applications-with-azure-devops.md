@@ -3981,9 +3981,8 @@ This branch contains the Space Game project that you worked with in previous mod
 
 2. To download a branch named selenium from the Microsoft repository, switch to that branch, and run the following git fetch and git checkout commands:
 
-   **Bash**
 
-   ```
+   ```Bash
    git fetch upstream selenium
    git checkout -B selenium upstream/selenium
    ```
