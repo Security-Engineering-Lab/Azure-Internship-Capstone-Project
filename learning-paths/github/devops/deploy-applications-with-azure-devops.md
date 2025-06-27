@@ -4847,5 +4847,650 @@ The Test & Feedback extension enables exploratory testing techniques in Azure Te
 
 
 
+# 4 Run nonfunctional tests in Azure Pipelines
+
+Run automated load tests by using Apache JMeter, a form of nonfunctional testing, in Azure Pipelines.
+
+### Learning objectives
+After completing this module, you'll be able to:
+- Define the role of nonfunctional tests and explain how they compare to functional tests.
+- Identify some popular kinds of nonfunctional tests you can run.
+- Run automated load tests in the pipeline by using Apache JMeter.
+- Convert test results to a format that Azure Pipelines can visualize for you.
+
+
+# 4.1 Introduction
+
+
+In this module, you'll add nonfunctional tests to your pipeline. These tests check characteristics like performance and reliability.
+
+In **Run functional tests in Azure Pipelines**, you and the Tailspin Toys web team added UI tests to the pipeline. UI tests are a form of functional testing. Functional tests verify the functionality—or behavior—of software. In other words, functional tests verify that each function of the software does what it should.
+
+But what about the nonfunctional aspects of an application, such as performance and reliability? After your service is operational and deployed to an environment, how can you determine the application's performance under both realistic and heavy loads? Does your application expose any loopholes or weaknesses that might cause an information breach?
+
+In this module, you'll explore the types of nonfunctional tests you can run. You'll run load tests in your pipeline by using Apache JMeter.
+
+## Learning objectives
+
+After completing this module, you'll be able to:
+
+* Define the role of nonfunctional tests and explain how they compare to functional tests.
+* Identify some popular kinds of nonfunctional tests you can run.
+* Run automated load tests in the pipeline by using Apache JMeter.
+* Convert test results to a format that Azure Pipelines can visualize for you.
+
+## Prerequisites
+
+The modules in this learning path are part of a progression. To follow the progression from the beginning, be sure to first complete these learning paths:
+
+* Get started with Azure DevOps
+* Build applications with Azure DevOps
+
+We also recommend that you start at the beginning of the **Deploy applications with Azure DevOps** learning path.
+
+If you want to go through just this module, you need to set up a development environment on your Windows, macOS, or Linux system. You need the following resources:
+
+* An Azure DevOps organization with access to parallel jobs. If your organization does not have access to parallel jobs, you can request parallel jobs for free for public or private projects using [this form](https://aka.ms/azpipelines-parallelism-request). Your request will take 2-3 business days.
+* An Azure subscription
+* A GitHub account
+* Visual Studio Code
+* .NET 6.0 SDK
+* Git
+
+You can get started with Azure and Azure DevOps for free. You don't need an Azure subscription to work with Azure DevOps, but here you'll use Azure DevOps to deploy to resources that exist in your Azure subscription.
+
+The development environment lets you complete the exercises in this and future modules. You can also use it to apply your new skills to your own projects.
+
+> **Note**
+> 
+> Azure Pipelines support a vast array of **languages and application types**. In this module, you'll be working with a .NET application but you can apply the patterns you learn here to your own projects that use your favorite programming languages and frameworks.
+
+
+# 4.2 What is nonfunctional testing?
+
+In **Run functional tests in Azure Pipelines**, you added Selenium UI tests to the pipeline. UI tests are a form of functional testing. In this part, you explore the kinds of nonfunctional tests you can run in a pipeline.
+
+The team first defines nonfunctional tests. They talk about some types of these tests. Then they decide on a nonfunctional test to add to their pipeline.
+
+## How do nonfunctional tests compare to functional tests?
+
+In **Run functional tests in Azure Pipelines**, we defined functional tests and nonfunctional tests.
+
+In short, functional tests verify that each function of the software does what it should. In other words, functional tests verify an application's functionality.
+
+Nonfunctional tests check nonfunctional aspects of an application, such as performance and reliability. You can also run nonfunctional tests on systems that aren't apps, such as infrastructure components. One example of a nonfunctional test is determining how many people can simultaneously sign in to an application without causing a problem, such as slower response times.
+
+On the Space Game website as an example, a functional test might verify that the leaderboard appears correctly and that it shows the correct records when the user selects a filter. A nonfunctional test might verify that leaderboard filtering finishes in less than one second, even when many users connect to the website at the same time.
+
+Nonfunctional testing always tests something that's measurable. The goal is to improve the product. You might do that, for example, by improving how efficiently the application uses resources, or by improving response times when many customers use it simultaneously. Here are some of the questions that nonfunctional tests can answer:
+
+- How does the application perform under normal circumstances?
+- How does the application perform when many users sign in concurrently?
+- How secure is the application?
+
+## What kinds of nonfunctional tests can I run?
+
+There are many kinds of nonfunctional tests. Many of them fit in the broad categories of performance testing and security testing.
+
+### Performance testing
+
+The goal of performance testing is to improve an application's speed, scalability, and stability. Testing for speed determines how quickly an application responds. Testing for scalability determines the maximum user load an application can handle. Testing for stability determines whether the application remains stable under different loads. Two common types of performance tests are load tests and stress tests.
+
+#### Load testing
+
+Load tests determine an application's performance under realistic loads. For example, load tests can determine how well an application performs at the upper limit of its service-level agreement (SLA). Basically, load testing determines the application's behaviors when multiple users need it at the same time.
+
+Users aren't necessarily people. For example, a load test for printer software might send the application large amounts of data. A load test for a mail server might simulate thousands of concurrent users.
+
+Load testing is also a good way to uncover problems that exist only when the application is operating at its limits. That's when issues such as buffer overflow and memory leaks can surface.
+
+In this module, you'll use Apache JMeter to perform load tests. You'll use a set of simulated users that access the website simultaneously.
+
+#### Stress testing
+
+Stress tests determine an application's stability and robustness under heavy loads. The loads go beyond what's specified for the application. The stress tests determine whether the application will crash under these loads. If the application fails, the stress test checks to ensure that it fails gracefully. A graceful failure might, for example, issue an appropriate, informative error message.
+
+Scenarios in which applications must operate under abnormally heavy loads are common. For example, in case your video goes viral, you'll want to know how well the servers can handle the extra load. Another typical scenario is high traffic on shopping websites during holiday seasons.
+
+### Security testing
+
+Security testing ensures that applications are free from vulnerabilities, threats, and risks. Thorough security testing finds all the system's possible loopholes and weaknesses that might cause an information breach or a loss of revenue.
+
+There are many types of security testing. Two of them are penetration testing and compliance testing.
+
+#### Penetration testing
+
+Penetration testing, or pen testing, is a type of security testing that tests the insecure areas of the application. In particular, it tests for vulnerabilities that an attacker could exploit. An authorized, simulated cyber attack is usually a part of penetration testing.
+
+#### Compliance testing
+
+Compliance testing determines whether an application is compliant with some set of requirements, inside or outside the company. For example, healthcare organizations usually need to comply with HIPAA (Health Insurance Portability and Accountability Act of 1996), which provides data privacy and, security provisions for safeguarding medical information.
+
+An organization might also have its own security requirements. Software must be tested to make sure that it follows these requirements. For example, on Linux systems, the default user mask must be 027 or more restrictive. A security test needs to prove that this requirement is met.
+
+## The plan
+
+In the rest of this module, you'll set up your Azure DevOps environment, learn about planning load tests by using Apache JMeter, and run load tests in Azure Pipelines.
+
+## Check your knowledge
+
+**1. You recently connected your web app to a database. Database records appear when the page loads. You want to verify that database calls don't cause the page to take more than one second to load. Which kind of nonfunctional testing might you use?**
+
+- Load testing.
+- Stress testing.
+- Compliance testing.
+
+**2. Your website sells concert tickets for a local venue. The venue is hosting a multiple-day event that includes many popular performers. You're nervous that the site won't be able to handle the sudden surge in traffic. What kind of testing might help ease your mind?**
+
+- Load testing.
+- Stress testing.
+- Penetration testing.
+
+**3. You suspect that your website exposes a vulnerability that would allow a hacker to access sensitive data. Which kind of nonfunctional testing might you run to discover this vulnerability?**
+
+- Penetration testing.
+- Compliance testing.
+- Stress testing.
+
+
+## Відповіді на запитання:
+
+**1. Правильна відповідь: Load testing.**
+**Пояснення:** Load testing визначає продуктивність додатка під реалістичними навантаженнями та може перевірити, чи виконуються викликі бази даних у певному часовому обмеженні (менше однієї секунди).
+
+**2. Правильна відповідь: Stress testing.**
+**Пояснення:** Stress testing визначає стабільність та надійність додатка під важкими навантаженнями, які перевищують звичайні специфікації. Це ідеально підходить для тестування раптових сплесків трафіку.
+
+**3. Правильна відповідь: Penetration testing.**
+**Пояснення:** Penetration testing спеціально тестує небезпечні області додатка та шукає вразливості, які можуть бути використані зловмисниками для доступу до чутливих даних.
+
+
+
+
+# 4.3 Exercise - Set up your Azure DevOps environment
+
+In this section, you'll make sure that your Azure DevOps organization is set up to complete the rest of this module. You'll also create the Azure App Service environments to which you'll deploy.
+
+To set up your system, you'll:
+
+- Add a user to ensure that Azure DevOps can connect to your Azure subscription.
+- Set up an Azure DevOps project for this module.
+- On Azure Boards, move the work item for this module to the Doing column.
+- Create the Azure App Service environments by using the Azure CLI in Azure Cloud Shell.
+- Create pipeline variables that define the names of your App Service environments.
+- Create a service connection that enables Azure Pipelines to access your Azure subscription securely.
+
+## Add a user to Azure DevOps
+
+To complete this module, you need your own Azure subscription. You can get started with Azure for free.
+
+Although you don't need an Azure subscription to work with Azure DevOps, in this module you'll use Azure DevOps to deploy to resources that exist in your Azure subscription. To simplify the process, you should use the same Microsoft account to sign in to both your Azure subscription and your Azure DevOps organization.
+
+If you use different Microsoft accounts to sign in to Azure and Azure DevOps, add a user to your DevOps organization under the Microsoft account that you use to sign in to Azure. For more information, see **Add users to your organization or project**. When you add the user, choose the **Basic** access level.
+
+Then, sign out of Azure DevOps and sign in again under the Microsoft account that you use to sign in to your Azure subscription.
+
+## Get the Azure DevOps project
+
+Here, you'll make sure that your Azure DevOps organization is set up to complete the rest of this module. You'll start by running a template that creates your project in Azure DevOps.
+
+The modules in this learning path are part of a progression that follows the Tailspin web team through their DevOps journey. For learning purposes, each module has an associated Azure DevOps project.
+
+### Run the template
+
+Run a template that sets up your Azure DevOps organization.
+
+1. Get and run the **ADOGenerator** project in Visual Studio or the IDE of your choice.
+
+2. When prompted to **Enter the template number from the list of templates**, enter **33** for **Run non-functional tests in Azure Pipelines**, then press Enter.
+
+3. Choose your authentication method. You can set up and use a Personal Access Token (PAT) or use device login.
+
+   > **Note**
+   > 
+   > If you set up a PAT, make sure to authorize the necessary scopes. For this module, you can use **Full access**, but in a real-world situation, you should ensure you grant only the necessary scopes.
+
+4. Enter your Azure DevOps organization name, then press Enter.
+
+5. If prompted, enter your Azure DevOps PAT, then press Enter.
+
+6. Enter a project name such as **Space Game - web - Nonfunctional tests**, then press Enter.
+
+7. Once your project is created, go to your Azure DevOps organization in your browser (at https://dev.azure.com/<your-organization-name>/) and select the project.
+
+### Fork the repository
+
+If you haven't already, create a fork of the **mslearn-tailspin-spacegame-web-deploy** repository.
+
+1. On GitHub, go to the **mslearn-tailspin-spacegame-web-deploy** repository.
+
+2. Select **Fork** at the top-right of the screen.
+
+3. Choose your GitHub account as the **Owner**, then select **Create fork**.
+
+> **Important**
+> 
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. Be sure to perform the cleanup steps even if you don't complete this module.
+
+### Set your project's visibility
+
+Initially, your fork of the Space Game repository on GitHub is set to public while the project created by the Azure DevOps template is set to private. A public repository on GitHub can be accessed by anyone, while a private repository is only accessible to you and the people you choose to share it with. Similarly, on Azure DevOps, public projects provide read-only access to non-authenticated users, while private projects require users to be granted access and authenticated to access the services.
+
+At the moment, it is not necessary to modify any of these settings for the purposes of this module. However, for your personal projects, you must determine the visibility and access you wish to grant to others. For instance, if your project is open source, you may choose to make both your GitHub repository and your Azure DevOps project public. If your project is proprietary, you would typically make both your GitHub repository and your Azure DevOps project private.
+
+Later on, you may find the following resources helpful in determining which option is best for your project:
+
+- Use private and public projects
+- Change project visibility to public or private
+- Setting repository visibility
+
+## Set up the project locally
+
+Here you load the Space Game project in Visual Studio Code, configure Git, clone your repository locally, and set the upstream remote so that you can download starter code.
+
+> **Note**
+> 
+> If you're already set up with the **mslearn-tailspin-spacegame-web-deploy** project locally, you can move to the next section.
+
+### Open the integrated terminal
+
+Visual Studio Code comes with an integrated terminal. Here you both edit files and work from the command line.
+
+1. Start Visual Studio Code.
+
+2. On the **View** menu, select **Terminal**.
+
+3. In the dropdown list, select **Git Bash**. If you're familiar with another Unix shell that you prefer to use, select that shell instead.
+
+   ![A screenshot of Visual Studio Code showing the location of the Git Bash shell.](screenshot-git-bash.png)
+
+   In the terminal window, you can choose any shell that's installed on your system. For example, you can choose Git Bash, or PowerShell, or another shell.
+
+   Here you'll use Git Bash, part of Git for Windows, which makes it easy to run Git commands.
+
+   > **Note**
+   > 
+   > On Windows, if you don't see Git Bash listed as an option, make sure you've installed Git, and then restart Visual Studio Code.
+
+4. Run the **cd** command to go to the directory where you want to work. Choose your home directory (~) or a different directory if you want.
+
+   **Bash**
+   ```
+   cd ~
+   ```
+
+### Configure Git
+
+If you're new to Git and GitHub, first run a few commands to associate your identity with Git and authenticate with GitHub. For more information, see **Set up Git**.
+
+At a minimum, you need to complete the following steps. Run the commands from the integrated terminal.
+
+1. Set your username.
+2. Set your commit email address.
+3. Cache your GitHub password.
+
+> **Note**
+> 
+> If you already use two-factor authentication with GitHub, create a personal access token. When you're prompted, use your token in place of your password.
+> 
+> Treat your access token like a password. Keep it in a safe place.
+
+### Set up your project in Visual Studio Code
+
+In the **Build applications with Azure DevOps** learning path, you forked and then cloned a Git repository. The repository contains the source code for the Space Game website. Your fork was connected to your projects in Azure DevOps so that the build runs when you push changes to GitHub.
+
+> **Important**
+> 
+> In this learning path, we switch to a different Git repository, **mslearn-tailspin-spacegame-web-deploy**. When you ran the template to set up your Azure DevOps project, the process forked the repository automatically for you.
+
+In this part, you clone your fork locally so that you can change and build out your pipeline configuration.
+
+#### Clone your fork locally
+
+You now have a copy of the Space Game web project in your GitHub account. Now you'll download, or clone, a copy to your computer so you can work with it.
+
+A clone, just like a fork, is a copy of a repository. When you clone a repository, you can make changes, verify that they work as you expect, and then upload those changes to GitHub. You can also synchronize your local copy with changes that other authenticated users have made to the GitHub copy of your repository.
+
+To clone the Space Game web project to your computer:
+
+1. Go to your fork of the Space Game web project (**mslearn-tailspin-spacegame-web-deploy**) on GitHub.
+
+2. Select **Code**. Then, from the **HTTPS** tab, select the button next to the URL that's shown to copy the URL to your clipboard.
+
+   ![Screenshot that shows how to locate the URL and copy button from the GitHub repository.](screenshot-clone-url.png)
+
+3. In Visual Studio Code, go to the terminal window.
+
+4. In the terminal, move to the directory where you want to work. Choose your home directory (~) or a different directory if you want.
+
+   **Bash**
+   ```
+   cd ~
+   ```
+
+5. Run the **git clone** command. Replace the URL that's shown here with the contents of your clipboard:
+
+   **Bash**
+   ```
+   git clone https://github.com/your-name/mslearn-tailspin-spacegame-web-deploy.git
+   ```
+
+6. Move to the **mslearn-tailspin-spacegame-web-deploy** directory. This is the root directory of your repository.
+
+   **Bash**
+   ```
+   cd mslearn-tailspin-spacegame-web-deploy
+   ```
+
+#### Set the upstream remote
+
+A remote is a Git repository where team members collaborate (like a repository on GitHub). Here you list your remotes and add a remote that points to Microsoft's copy of the repository so that you can get the latest sample code.
+
+1. Run this **git remote** command to list your remotes:
+
+   **Bash**
+   ```
+   git remote -v
+   ```
+
+   You see that you have both fetch (download) and push (upload) access to your repository:
+
+   **Output**
+   ```
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (push)
+   ```
+
+   **Origin** specifies your repository on GitHub. When you fork code from another repository, the original remote (the one you forked from) is often named **upstream**.
+
+2. Run this **git remote add** command to create a remote named **upstream** that points to the Microsoft repository:
+
+   **Bash**
+   ```
+   git remote add upstream https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web-deploy.git
+   ```
+
+3. Run **git remote** again to see the changes:
+
+   **Bash**
+   ```
+   git remote -v
+   ```
+
+   You see that you still have both fetch (download) access and push (upload) access to your repository. You also now have fetch access to the Microsoft repository:
+
+   **Output**
+   ```
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (push)
+   upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+   ```
+
+#### Open the project in the file explorer
+
+In Visual Studio Code, your terminal window points to the root directory of the Space Game web project. To view its structure and work with files, from the file explorer, you'll now open the project.
+
+The easiest way to open the project is to reopen Visual Studio Code in the current directory. To do so, run the following command from the integrated terminal:
+
+**Bash**
+```
+code -r .
+```
+
+You see the directory and file tree in the file explorer.
+
+Reopen the integrated terminal. The terminal places you at the root of your web project.
+
+If the **code** command fails, you need to add Visual Studio Code to your system PATH. To do so:
+
+1. In Visual Studio Code, select **F1** or select **View > Command Palette** to access the command palette.
+2. In the command palette, enter **Shell Command: Install 'code' command in PATH**.
+3. Repeat the previous procedure to open the project in the file explorer.
+
+You're now set up to work with the Space Game source code and your Azure Pipelines configuration from your local development environment.
+
+## Create the Azure App Service environments
+
+Here, you'll create the environments that define the pipeline stages. You'll create one App Service instance that corresponds to each stage: Dev, Test, and Staging.
+
+In previous modules, you used the Azure CLI to create your App Service instances. Here, you'll do the same.
+
+> **Important**
+> 
+> Remember that you need your own Azure subscription to complete the exercises in this module.
+
+### Bring up Cloud Shell through the Azure portal
+
+1. Go to the Azure portal and sign in.
+2. On the menu bar, select **Cloud Shell**. When you're prompted, select the **Bash** experience.
+
+### Select an Azure region
+
+Here you specify the default region, or geographic location, where your Azure resources are to be created.
+
+1. In Cloud Shell, run the following **az account list-locations** command to list the regions that are available from your Azure subscription.
+
+   **Azure CLI**
+   ```
+   az account list-locations \
+     --query "[].{Name: name, DisplayName: displayName}" \
+     --output table
+   ```
+
+2. From the **Name** column in the output, choose a region that's close to you. For example, choose **eastasia** or **westus2**.
+
+3. Run **az configure** to set your default region. Replace **<REGION>** with the name of the region that you chose.
+
+   **Azure CLI**
+   ```
+   az configure --defaults location=<REGION>
+   ```
+
+   Here's an example that sets **westus2** as the default region:
+
+   **Azure CLI**
+   ```
+   az configure --defaults location=westus2
+   ```
+
+### Create the App Service instances
+
+Here, you'll create the App Service instances for the three stages to which you'll deploy: Dev, Test, and Staging.
+
+> **Note**
+> 
+> For learning purposes, use the default network settings. These settings make your site accessible from the internet. In practice, you could configure an Azure virtual network that places your website in a network that's not routable from the internet, and that's accessible to only your team. Later, when you're ready, you could reconfigure your network to make the website available to your users.
+
+1. In Cloud Shell, generate a random number that makes your web app's domain name unique.
+
+   **Bash**
+   ```
+   webappsuffix=$RANDOM
+   ```
+
+2. Run the following **az group create** command to create a resource group that's named **tailspin-space-game-rg**.
+
+   **Azure CLI**
+   ```
+   az group create --name tailspin-space-game-rg
+   ```
+
+3. Run the following **az appservice plan create** command to create an App Service plan that's named **tailspin-space-game-asp**.
+
+   **Azure CLI**
+   ```
+   az appservice plan create \
+     --name tailspin-space-game-asp \
+     --resource-group tailspin-space-game-rg \
+     --sku B1 \
+     --is-linux
+   ```
+
+   The **--sku** argument specifies the **B1** plan, which runs on the **Basic** tier. The **--is-linux** argument specifies to use Linux workers.
+
+   > **Important**
+   > 
+   > If the B1 SKU isn't available as part of your Azure subscription, choose a different plan, such as S1 (Standard).
+
+4. Run the following **az webapp create** commands to create the three App Service instances, one for each of the Dev, Test, and Staging environments.
+
+   **Azure CLI**
+   ```
+   az webapp create \
+     --name tailspin-space-game-web-dev-$webappsuffix \
+     --resource-group tailspin-space-game-rg \
+     --plan tailspin-space-game-asp \
+     --runtime "DOTNET|6.0"
+
+   az webapp create \
+     --name tailspin-space-game-web-test-$webappsuffix \
+     --resource-group tailspin-space-game-rg \
+     --plan tailspin-space-game-asp \
+     --runtime "DOTNET|6.0"
+
+   az webapp create \
+     --name tailspin-space-game-web-staging-$webappsuffix \
+     --resource-group tailspin-space-game-rg \
+     --plan tailspin-space-game-asp \
+     --runtime "DOTNET|6.0"
+   ```
+
+   For learning purposes, here, you apply the same App Service plan, **B1 Basic**, to each App Service instance. In practice, you'd assign a plan that matches your expected workload.
+
+5. Run the following **az webapp list** command to list the host name and state of each App Service instance.
+
+   **Azure CLI**
+   ```
+   az webapp list \
+     --resource-group tailspin-space-game-rg \
+     --query "[].{hostName: defaultHostName, state: state}" \
+     --output table
+   ```
+
+   Note the hostname for each running service. You'll need these host names later when you verify your work. Here's an example:
+
+   **Output**
+   ```
+   HostName                                                 State
+   -------------------------------------------------------  -------
+   tailspin-space-game-web-dev-21017.azurewebsites.net      Running
+   tailspin-space-game-web-test-21017.azurewebsites.net     Running
+   tailspin-space-game-web-staging-21017.azurewebsites.net  Running
+   ```
+
+6. As an optional step, go to one or more of the listed names to verify that they're running and that the default home page appears.
+
+   You see this page:
+
+   ![Screenshot of the default home page on Azure App Service.](screenshot-default-page.png)
+
+> **Important**
+> 
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you're not charged for Azure resources after you complete this module. Be sure to follow the cleanup steps even if you don't complete this module.
+
+## Create pipeline variables in Azure Pipelines
+
+In **Run functional tests in Azure Pipelines**, you added one variable for each of the App Service instances. The instances correspond to the Dev, Test, and Staging stages in your pipeline. Here, you'll follow the same pattern.
+
+Each stage in your pipeline configuration uses the variables to identify which App Service instance to deploy to.
+
+To add the variables:
+
+1. In Azure DevOps, go to your **Space Game - web - Nonfunctional tests** project.
+
+2. Under **Pipelines**, select **Library**.
+
+   ![Screenshot of Azure Pipelines, showing the Library menu option.](screenshot-library.png)
+
+3. Select **+ Variable group**.
+
+4. For the variable group name, under **Properties**, enter **Release**.
+
+5. Under **Variables**, select **+ Add**.
+
+6. For the name of your variable, enter **WebAppNameDev**. For its value, enter the name of the App Service instance that corresponds to your Dev environment, such as **tailspin-space-game-web-dev-1234**.
+
+7. Repeat steps 5 and 6 twice more to create variables for your Test and Staging environments, as shown in this table:
+
+   | Variable name | Example value |
+   |---------------|---------------|
+   | WebAppNameTest | tailspin-space-game-web-test-1234 |
+   | WebAppNameStaging | tailspin-space-game-web-staging-1234 |
+
+   Be sure to replace each example value with the App Service instance that corresponds to your environment.
+
+   > **Important**
+   > 
+   > Make sure that you set the name of the App Service instance, not its host name. In this example, you would enter **tailspin-space-game-web-dev-1234** and not **tailspin-space-game-web-dev-1234.azurewebsites.net**.
+
+8. To save your variable to the pipeline, select **Save** near the top of the page.
+
+Your variable group resembles this one:
+
+![Screenshot of Azure Pipelines, showing the variable group. The group contains three variables.](screenshot-variable-group.png)
+
+## Create the dev, test, and staging environments
+
+In **Run functional tests in Azure Pipelines**, you created environments for the dev, test, and staging environments. Here, you'll repeat the process.
+
+To create the dev, test, and staging environments:
+
+1. From Azure Pipelines, select **Environments**.
+
+   ![Screenshot of Azure Pipelines showing the location of the Environments menu option.](screenshot-environments.png)
+
+2. To create the **dev** environment:
+   - Select **Create environment**.
+   - Under **Name**, enter **dev**.
+   - Leave the remaining fields at their default values.
+   - Select **Create**.
+
+3. To create the **test** environment:
+   - Return to the **Environments** page.
+   - Select **New environment**.
+   - Under **Name**, enter **test**.
+   - Select **Create**.
+
+4. To create the **staging** environment:
+   - Return to the **Environments** page.
+   - Select **New environment**.
+   - Under **Name**, enter **staging**.
+   - Select **Create**.
+
+## Create a service connection
+
+Here, you'll create a service connection that enables Azure Pipelines to access your Azure subscription. Azure Pipelines uses this service connection to deploy the website to App Service. You created a similar service connection in the previous module.
+
+> **Important**
+> 
+> Make sure that you're signed in to both the Azure portal and Azure DevOps under the same Microsoft account.
+
+1. In Azure DevOps, go to your **Space Game - web - Nonfunctional tests** project.
+
+2. From the bottom corner of the page, select **Project settings**.
+
+3. Under **Pipelines**, select **Service connections**.
+
+4. Select **New service connection**, then choose **Azure Resource Manager**, then select **Next**.
+
+5. Near the top of the page, **Service principal (automatic)**. Then select **Next**.
+
+6. Fill in these fields:
+
+   | Field | Value |
+   |-------|-------|
+   | Scope level | Subscription |
+   | Subscription | Your Azure subscription |
+   | Resource Group | tailspin-space-game-rg |
+   | Service connection name | Resource Manager - Tailspin - Space Game |
+
+   During the process, you might be prompted to sign in to your Microsoft account.
+
+7. Ensure that **Grant access permission to all pipelines** is selected.
+
+8. Select **Save**.
+
+Azure DevOps performs a test connection to verify that it can connect to your Azure subscription. If Azure DevOps can't connect, you have the chance to sign in a second time.
+
 
 
