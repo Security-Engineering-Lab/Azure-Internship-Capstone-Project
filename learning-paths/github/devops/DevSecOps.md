@@ -1595,11 +1595,22 @@ Three IOC examples are:
 
 
 # Reference
+
+# AI in Security
+
+
+
+# Cloud Security
  - What is DevSecOps?, https://www.microsoft.com/en-us/security/business/security-101/what-is-devsecops
  - What is multicloud security?, https://www.microsoft.com/en-us/security/business/security-101/what-is-multicloud-security
- - What is cyber threat intelligence?, https://www.microsoft.com/en-us/security/business/security-101/what-is-cyber-threat-intelligence
- - What is a cyberattack?, https://www.microsoft.com/en-us/security/business/security-101/what-is-a-cyberattack
+
+ # Security 101
  - What is Cybersecurity?, https://www.microsoft.com/en-us/security/business/security-101/what-is-cybersecurity
+ - What is a cyberattack?, https://www.microsoft.com/en-us/security/business/security-101/what-is-a-cyberattack
+
+
+ 
+ - What is cyber threat intelligence?, https://www.microsoft.com/en-us/security/business/security-101/what-is-cyber-threat-intelligence
  - What is cyber threat hunting?, https://www.microsoft.com/en-us/security/business/security-101/what-is-cyber-threat-hunting
  - What are indicators of compromise (IOCs)?, https://www.microsoft.com/en-us/security/business/security-101/what-are-indicators-of-compromise-ioc
  - 
