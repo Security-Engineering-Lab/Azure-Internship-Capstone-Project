@@ -81,6 +81,14 @@
 
 # DevOps
 - DevOps — Part 1: What is DevOps? A Beginner’s Guide with Real-World Examples, https://medium.com/@kdeepak99/what-is-devops-a-beginners-guide-with-real-world-examples-172cd7377b49
+- [Part 1] DevSecOps Analytics, https://medium.com/@lahutsin/part-1-devsecops-analytics-41c560004da3
+- Advanced DevSecOps: Real-World Security for DevOps Engineers, https://www.udemy.com/course/advanced-devsecops-real-world-security-for-devops-engineers/?utm_source=adwords&utm_medium=udemyads&utm_campaign=Search_DSA_Beta_Prof_la.EN_cc.ROW-English&campaigntype=Search&portfolio=ROW-English&language=EN&product=Course&test=&audience=DSA&topic=&priority=Beta&utm_content=deal4584&utm_term=_._ag_162511579564_._ad_696197165424_._kw__._de_c_._dm__._pl__._ti_dsa-1677053911888_._li_9194581_._pd__._&matchtype=&gad_source=1&gad_campaignid=21168154305&gbraid=0AAAAADROdO3kiLz-lLIyhRUKFEGrgi3CO&gclid=Cj0KCQjwgvnCBhCqARIsADBLZoJLvVdcC38zJPHcWQSJWOag8raneTU81kAkL4xrNiy_WLoUJ8_UvVIaAjxpEALw_wcB&couponCode=PMNVD2525
+- DevSecOps and log analysis: improving application security, https://www.sumologic.com/blog/devsecops-log-analysis-app-security
+- The Role of DevSecOps in Ensuring Data Privacy and Security in Data Science Projects, https://opendatascience.com/the-role-of-devsecops-in-ensuring-data-privacy-and-security-in-data-science-projects/
+- DevSecOps. Enhancing security and agility with integrated DevSecOps practices, https://datahubanalytics.com/solutions/dev-sec-ops/
+- DevSecOps Pipeline Implementation for Data Analytics and Research Applications, https://www.linkedin.com/pulse/devsecops-pipeline-implementation-data-analytics-research-sachin-sahu-hty2c/
+- 
+
 - 
 
 # DevSecOps
