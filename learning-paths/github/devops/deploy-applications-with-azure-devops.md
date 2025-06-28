@@ -6336,7 +6336,7 @@ Another type of feature flag is a release flag. Imagine that after you complete 
 - Blue-green deployment
 - Dark launch
 - A/B testing
-```
+
 
 **Відповіді на запитання:**
 
@@ -6345,3 +6345,1352 @@ Another type of feature flag is a release flag. Imagine that after you complete 
 2. **Canary release or progressive-exposure deployment** - ідеально підходить для поступового розгортання ризикованих функцій серед раннього прийняття користувачів.
 
 3. **Dark launch** - дозволяє випустити функцію для невеликої випадкової вибірки користувачів, які не знають, що тестують нову функцію.
+
+
+
+# 5.3 Exercise - Set up your environment
+
+In this section, you make sure that your Azure DevOps organization is set up to complete the rest of this module. You also create the Azure App Service environments that you'll deploy to.
+
+To meet these objectives, you:
+
+- Add a user to ensure that Azure DevOps can connect to your Azure subscription.
+- Set up an Azure DevOps project for this module.
+- In Azure Boards, move the work item for this module to the Doing column.
+- Make sure that your project is set up locally so that you can push changes to the pipeline.
+- Create the Azure App Service environments by using the Azure CLI in Azure Cloud Shell.
+- Create pipeline variables that define the names of your App Service environments.
+- Create a service connection that enables Azure Pipelines to securely access your Azure subscription.
+- Perform an initial deployment.
+
+## Add a user to Azure DevOps
+
+To complete this module, you need your own Azure subscription. You can get started with Azure for free.
+
+Although you don't need an Azure subscription to work with Azure DevOps, here you'll use Azure DevOps to deploy to resources that exist in your Azure subscription. To simplify the process, use the same Microsoft account to sign in to both your Azure subscription and your Azure DevOps organization.
+
+If you use different Microsoft accounts to sign in to Azure and Azure DevOps, then add a user to your DevOps organization under the Microsoft account that you use to sign in to Azure. For more information, see **Add users to your organization or project**. When you add the user, choose the **Basic** access level.
+
+Then sign out of Azure DevOps and sign in again under the Microsoft account that you use to sign in to your Azure subscription.
+
+## Get the Azure DevOps project
+
+Here you make sure that your Azure DevOps organization is set up to complete the rest of this module. You set it up by running a template that creates a project in Azure DevOps.
+
+The modules in this learning path are part of a progression. You follow the Tailspin web team through their DevOps journey. For learning purposes, each module has an associated Azure DevOps project.
+
+### Run the template
+
+Run a template that sets up your Azure DevOps organization.
+
+1. Get and run the **ADOGenerator** project in Visual Studio or the IDE of your choice.
+
+2. When prompted to **Enter the template number from the list of templates**, enter **34** for **Manage release cadence in Azure Pipelines with deployment patterns**, then press Enter.
+
+3. Choose your authentication method. You can set up and use a Personal Access Token (PAT) or use device login.
+
+   > **Note**
+   > 
+   > If you set up a PAT, make sure to authorize the necessary scopes. For this module, you can use **Full access**, but in a real-world situation, you should ensure you grant only the necessary scopes.
+
+4. Enter your Azure DevOps organization name, then press Enter.
+
+5. If prompted, enter your Azure DevOps PAT, then press Enter.
+
+6. Enter a project name such as **Space Game - web - Deployment patterns**, then press Enter.
+
+7. Once your project is created, go to your Azure DevOps organization in your browser (at https://dev.azure.com/<your-organization-name>/) and select the project.
+
+### Fork the repository
+
+If you haven't already, create a fork of the **mslearn-tailspin-spacegame-web-deploy** repository.
+
+1. On GitHub, go to the **mslearn-tailspin-spacegame-web-deploy** repository.
+
+2. Select **Fork** at the top-right of the screen.
+
+3. Choose your GitHub account as the **Owner**, then select **Create fork**.
+
+> **Important**
+> 
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. Be sure to follow the cleanup steps even if you don't complete this module.
+
+### Set your project's visibility
+
+Initially, your fork of the Space Game repository on GitHub is set to public while the project created by the Azure DevOps template is set to private. A public repository on GitHub can be accessed by anyone, while a private repository is only accessible to you and the people you choose to share it with. Similarly, on Azure DevOps, public projects provide read-only access to non-authenticated users, while private projects require users to be granted access and authenticated to access the services.
+
+At the moment, it is not necessary to modify any of these settings for the purposes of this module. However, for your personal projects, you must determine the visibility and access you wish to grant to others. For instance, if your project is open source, you may choose to make both your GitHub repository and your Azure DevOps project public. If your project is proprietary, you would typically make both your GitHub repository and your Azure DevOps project private.
+
+Later on, you may find the following resources helpful in determining which option is best for your project:
+
+- Use private and public projects
+- Change project visibility to public or private
+- Setting repository visibility
+
+## Move the work item to Doing
+
+In this part, in Azure Boards you assign yourself a work item that relates to this module. You also move the work item to the **Doing** state. In practice, your team would create work items at the start of each sprint, or work iteration.
+
+Assigning work in this way gives you a checklist to work from. It gives your team visibility into what you're working on and how much work is left. It also helps the team enforce limits on work in progress (WIP) so that the team doesn't take on too much work at one time.
+
+Recall that the team settled on these top issues for the current sprint:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/deploy-all-tasks.png)
+
+> **Note**
+> 
+> Within an Azure DevOps organization, work items are numbered sequentially. In your project, the number for each work item might not match what you see here.
+
+Here you move the fifth item, **Improve release cadence**, to the **Doing** column. Then you assign yourself to the work item. **Improve release cadence** relates to choosing a deployment pattern that enables you to quickly release changes to your users.
+
+To set up the work item:
+
+1. In Azure DevOps, go to **Boards**, and then select **Boards** from the menu.
+
+     ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-boards-menu.png)
+
+3. At the bottom of the **Improve release cadence** work item, select the down arrow. Then assign the work item to yourself.
+
+     ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-boards-down-chevron.png)
+
+5. Move the work item from the **To Do** column to the **Doing** column.
+
+      ![](https://learn.microsoft.com/en-us/training/azure-devops/manage-release-cadence/media/3-azure-boards-wi5-doing.png)
+
+At the end of this module, you move the card to the **Done** column after you complete the task.
+
+## Set up the project locally
+
+Here you load the Space Game project in Visual Studio Code, configure Git, clone your repository locally, and set the upstream remote so that you can download starter code.
+
+> **Note**
+> 
+> If you're already set up with the **mslearn-tailspin-spacegame-web-deploy** project locally, you can move to the next section.
+
+### Open the integrated terminal
+
+Visual Studio Code comes with an integrated terminal. Here you both edit files and work from the command line.
+
+1. Start Visual Studio Code.
+
+2. On the **View** menu, select **Terminal**.
+
+3. In the dropdown list, select **Git Bash**. If you're familiar with another Unix shell that you prefer to use, select that shell instead.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/vscode-terminal-git-bash.png)
+
+   In the terminal window, you can choose any shell that's installed on your system. For example, you can choose Git Bash, or PowerShell, or another shell.
+
+   Here you'll use Git Bash, part of Git for Windows, which makes it easy to run Git commands.
+
+   > **Note**
+   > 
+   > On Windows, if you don't see Git Bash listed as an option, make sure you've installed Git, and then restart Visual Studio Code.
+
+5. Run the **cd** command to go to the directory where you want to work. Choose your home directory (~) or a different directory if you want.
+
+   **Bash**
+   ```
+   cd ~
+   ```
+
+### Configure Git
+
+If you're new to Git and GitHub, first run a few commands to associate your identity with Git and authenticate with GitHub. For more information, see **Set up Git**.
+
+At a minimum, you need to complete the following steps. Run the commands from the integrated terminal.
+
+1. Set your username.
+2. Set your commit email address.
+3. Cache your GitHub password.
+
+> **Note**
+> 
+> If you already use two-factor authentication with GitHub, create a personal access token. When you're prompted, use your token in place of your password.
+> 
+> Treat your access token like a password. Keep it in a safe place.
+
+### Set up your project in Visual Studio Code
+
+In the **Build applications with Azure DevOps** learning path, you forked and then cloned a Git repository. The repository contains the source code for the Space Game website. Your fork was connected to your projects in Azure DevOps so that the build runs when you push changes to GitHub.
+
+> **Important**
+> 
+> In this learning path, we switch to a different Git repository, **mslearn-tailspin-spacegame-web-deploy**. When you ran the template to set up your Azure DevOps project, the process forked the repository automatically for you.
+
+In this part, you clone your fork locally so that you can change and build out your pipeline configuration.
+
+#### Clone your fork locally
+
+You now have a copy of the Space Game web project in your GitHub account. Now you'll download, or clone, a copy to your computer so you can work with it.
+
+A clone, just like a fork, is a copy of a repository. When you clone a repository, you can make changes, verify that they work as you expect, and then upload those changes to GitHub. You can also synchronize your local copy with changes that other authenticated users have made to the GitHub copy of your repository.
+
+To clone the Space Game web project to your computer:
+
+1. Go to your fork of the Space Game web project (**mslearn-tailspin-spacegame-web-deploy**) on GitHub.
+
+2. Select **Code**. Then, from the **HTTPS** tab, select the button next to the URL that's shown to copy the URL to your clipboard.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/github-clone-button.png)
+
+4. In Visual Studio Code, go to the terminal window.
+
+5. In the terminal, move to the directory where you want to work. Choose your home directory (~) or a different directory if you want.
+
+   **Bash**
+   ```
+   cd ~
+   ```
+
+6. Run the **git clone** command. Replace the URL that's shown here with the contents of your clipboard:
+
+   **Bash**
+   ```
+   git clone https://github.com/your-name/mslearn-tailspin-spacegame-web-deploy.git
+   ```
+
+7. Move to the **mslearn-tailspin-spacegame-web-deploy** directory. This is the root directory of your repository.
+
+   **Bash**
+   ```
+   cd mslearn-tailspin-spacegame-web-deploy
+   ```
+
+#### Set the upstream remote
+
+A remote is a Git repository where team members collaborate (like a repository on GitHub). Here you list your remotes and add a remote that points to Microsoft's copy of the repository so that you can get the latest sample code.
+
+1. Run this **git remote** command to list your remotes:
+
+   **Bash**
+   ```
+   git remote -v
+   ```
+
+   You see that you have both fetch (download) and push (upload) access to your repository:
+
+   **Output**
+   ```
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (push)
+   ```
+
+   **Origin** specifies your repository on GitHub. When you fork code from another repository, the original remote (the one you forked from) is often named **upstream**.
+
+2. Run this **git remote add** command to create a remote named **upstream** that points to the Microsoft repository:
+
+   **Bash**
+   ```
+   git remote add upstream https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web-deploy.git
+   ```
+
+3. Run **git remote** again to see the changes:
+
+   **Bash**
+   ```
+   git remote -v
+   ```
+
+   You see that you still have both fetch (download) access and push (upload) access to your repository. You also now have fetch access to the Microsoft repository:
+
+   **Output**
+   ```
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+   origin  https://github.com/username/mslearn-tailspin-spacegame-web-deploy.git (push)
+   upstream        https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web-deploy.git (fetch)
+   ```
+
+#### Open the project in the file explorer
+
+In Visual Studio Code, your terminal window points to the root directory of the Space Game web project. To view its structure and work with files, from the file explorer, you'll now open the project.
+
+The easiest way to open the project is to reopen Visual Studio Code in the current directory. To do so, run the following command from the integrated terminal:
+
+**Bash**
+```
+code -r .
+```
+
+You see the directory and file tree in the file explorer.
+
+Reopen the integrated terminal. The terminal places you at the root of your web project.
+
+If the **code** command fails, you need to add Visual Studio Code to your system PATH. To do so:
+
+1. In Visual Studio Code, select **F1** or select **View > Command Palette** to access the command palette.
+2. In the command palette, enter **Shell Command: Install 'code' command in PATH**.
+3. Repeat the previous procedure to open the project in the file explorer.
+
+You're now set up to work with the Space Game source code and your Azure Pipelines configuration from your local development environment.
+
+## Create the Azure App Service environments
+
+Here you create the environments that define the pipeline stages. You create one App Service instance that corresponds to each stage: Dev, Test, and Staging.
+
+In previous modules, you used the Azure CLI to create your App Service instances. Here you'll do the same.
+
+> **Important**
+> 
+> You need your own Azure subscription to complete the exercises in this module.
+
+### Bring up Cloud Shell through the Azure portal
+
+1. Go to the Azure portal and sign in.
+2. On the menu, select **Cloud Shell**. When you're prompted, select the **Bash** experience.
+
+### Select an Azure region
+
+Here you specify the default region, or geographic location, where your Azure resources will be created.
+
+1. In Cloud Shell, run the following **az account list-locations** command to list the regions that are available from your Azure subscription.
+
+   **Azure CLI**
+   ```
+   az account list-locations \
+     --query "[].{Name: name, DisplayName: displayName}" \
+     --output table
+   ```
+
+2. From the **Name** column in the output, choose a region that's close to you. For example, choose **eastasia** or **westus2**.
+
+3. Run **az configure** to set your default region. Replace **<REGION>** with the name of the region that you chose.
+
+   **Azure CLI**
+   ```
+   az configure --defaults location=<REGION>
+   ```
+
+   This example sets **westus2** as the default region:
+
+   **Azure CLI**
+   ```
+   az configure --defaults location=westus2
+   ```
+
+### Create the App Service instances
+
+Here you create App Service instances for the three stages that you'll deploy to: Dev, Test, and Staging. You'll add a deployment slot to Staging later in this module.
+
+> **Note**
+> 
+> For learning purposes, here you use the default network settings. These settings make your site accessible from the internet. In practice, you could configure an Azure virtual network that places your website in a network that's not routable from the internet but that only your team can access. Later, when you're ready, you could reconfigure your network to make the website available to your users.
+
+1. In Cloud Shell, generate a random number that makes your web app's domain name unique:
+
+   **Bash**
+   ```
+   webappsuffix=$RANDOM
+   ```
+
+2. Run the following **az group create** command to create a resource group that's named **tailspin-space-game-rg**.
+
+   **Azure CLI**
+   ```
+   az group create --name tailspin-space-game-rg
+   ```
+
+3. Run the following commands to create two App Service plans.
+
+   **Azure CLI**
+   ```
+   az appservice plan create \
+     --name tailspin-space-game-test-asp \
+     --resource-group tailspin-space-game-rg \
+     --sku B1 \
+     --is-linux
+
+   az appservice plan create \
+     --name tailspin-space-game-prod-asp \
+     --resource-group tailspin-space-game-rg \
+     --sku P1V2 \
+     --is-linux
+   ```
+
+   > **Important**
+   > 
+   > If the B1 SKU isn't available as part of your Azure subscription, then choose a different plan, such as S1 (Standard).
+
+   Recall that an App Service plan defines the CPU, memory, and storage resources that are provided for your web app to run.
+
+   The first command specifies the **B1** plan. This plan runs on the **Basic** tier. The App Service environments use this plan for the Dev and Test stages. The B1 Basic plan is intended for apps that have low-traffic requirements, such as in a development or test environment.
+
+   The second command specifies the **P1V2** plan, which runs on the **Premium** tier. This plan is used for Staging. The Premium P1V2 plan is for production workloads. It runs on dedicated virtual machine instances.
+
+   The Basic plan tier offers no additional deployment slots. However, the Premium plan does. That's why you need the Premium plan for your Staging environment.
+
+4. Run the following **az webapp create** commands to create the three App Service instances, one for each of the Dev, Test, and Staging environments.
+
+   **Azure CLI**
+   ```
+   az webapp create \
+     --name tailspin-space-game-web-dev-$webappsuffix \
+     --resource-group tailspin-space-game-rg \
+     --plan tailspin-space-game-test-asp \
+     --runtime "DOTNET|6.0"
+
+   az webapp create \
+     --name tailspin-space-game-web-test-$webappsuffix \
+     --resource-group tailspin-space-game-rg \
+     --plan tailspin-space-game-test-asp \
+     --runtime "DOTNET|6.0"
+
+   az webapp create \
+     --name tailspin-space-game-web-staging-$webappsuffix \
+     --resource-group tailspin-space-game-rg \
+     --plan tailspin-space-game-prod-asp \
+     --runtime "DOTNET|6.0"
+   ```
+
+   Notice that here you apply the same App Service plan, **B1 Basic**, to the App Service instances for Dev and Test. You apply the App Service plan **Premium P1V2** to the App Service instance for Staging.
+
+5. Run the following **az webapp list** command to list the host name and state of each App Service instance.
+
+   **Azure CLI**
+   ```
+   az webapp list \
+     --resource-group tailspin-space-game-rg \
+     --query "[].{hostName: defaultHostName, state: state}" \
+     --output table
+   ```
+
+   Note the host name for each running service. You'll need these host names later when you verify your work. Here's an example of the host names:
+
+   **Output**
+   ```
+   HostName                                                 State
+   -------------------------------------------------------  -------
+   tailspin-space-game-web-dev-21017.azurewebsites.net      Running
+   tailspin-space-game-web-test-21017.azurewebsites.net     Running
+   tailspin-space-game-web-staging-21017.azurewebsites.net  Running
+   ```
+
+6. As an optional step, go to one or more of the names. Verify that they're running and that the default home page appears.
+
+   You see this page in each environment:
+
+    ![](https://learn.microsoft.com/en-us/training/azure-devops/manage-release-cadence/media/3-app-service-default-tailspin.png)
+
+> **Important**
+> 
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you're not charged for Azure resources after you complete this module. Be sure to perform the cleanup steps even if you don't complete this module.
+
+## Create pipeline variables in Azure Pipelines
+
+In **Create a multistage pipeline by using Azure Pipelines**, you added one variable for each of the App Service instances that correspond to the Dev, Test, and Staging stages in your pipeline. Here you do the same.
+
+Each stage in your pipeline configuration uses these variables to identify which App Service instance to deploy to.
+
+To add the variables:
+
+1. In Azure DevOps, go to your **Space Game - web - Deployment patterns** project.
+
+2. Under **Pipelines**, select **Library**.
+
+   
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/create-release-pipeline/media/5-pipelines-library.png)
+
+4. Select **+ Variable group**.
+
+5. Under **Properties**, for the variable group name, enter **Release**.
+
+6. Under **Variables**, select **+ Add**.
+
+7. For the name of your variable, enter **WebAppNameDev**. As its value, enter the name of the App Service instance that corresponds to your Dev environment, such as **tailspin-space-game-web-dev-1234**.
+
+8. Repeat steps 5 and 6 twice more to create variables for your Test and Staging environments, as shown in this table:
+
+   | Variable name | Example value |
+   |---------------|---------------|
+   | WebAppNameTest | tailspin-space-game-web-test-1234 |
+   | WebAppNameStaging | tailspin-space-game-web-staging-1234 |
+
+   Be sure to replace each example value with the App Service instance that corresponds to your environment.
+
+   > **Important**
+   > 
+   > Set the name of the App Service instance, not its host name. In this example, you would enter **tailspin-space-game-web-dev-1234** and not **tailspin-space-game-web-dev-1234.azurewebsites.net**.
+
+9. Near the top of the page, select **Save** to save your variable to the pipeline.
+
+Your variable group resembles this one:
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/create-release-pipeline/media/5-pipelines-library.png)
+
+## Create the dev, test, and staging environments
+
+In previous modules, you created environments for the dev, test, and staging environments. Here, you repeat the process.
+
+To create the dev, test, and staging environments:
+
+1. From Azure Pipelines, select **Environments**.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/pipelines-environments.png)
+
+3. To create the **dev** environment:
+   - Select **Create environment**.
+   - Under **Name**, enter **dev**.
+   - Leave the remaining fields at their default values.
+   - Select **Create**.
+
+4. To create the **test** environment:
+   - Return to the **Environments** page.
+   - Select **New environment**.
+   - Under **Name**, enter **test**.
+   - Select **Create**.
+
+5. To create the **staging** environment:
+   - Return to the **Environments** page.
+   - Select **New environment**.
+   - Under **Name**, enter **staging**.
+   - Select **Create**.
+
+## Create a service connection
+
+Here you create a service connection that enables Azure Pipelines to access your Azure subscription. Azure Pipelines uses this service connection to deploy the website to App Service. You created a similar service connection in the previous module.
+
+> **Important**
+> 
+> Make sure that you're signed in to both the Azure portal and Azure DevOps under the same Microsoft account.
+
+1. In Azure DevOps, go to your **Space Game - web - Deployment patterns** project.
+
+2. From the bottom corner of the page, select **Project settings**.
+
+3. Under **Pipelines**, select **Service connections**.
+
+4. Select **New service connection**, then choose **Azure Resource Manager**, then select **Next**.
+
+5. Near the top of the page, **Service principal (automatic)**. Then select **Next**.
+
+6. Fill in these fields:
+
+   | Field | Value |
+   |-------|-------|
+   | Scope level | Subscription |
+   | Subscription | Your Azure subscription |
+   | Resource Group | tailspin-space-game-rg |
+   | Service connection name | Resource Manager - Tailspin - Space Game |
+
+   During the process, you might be prompted to sign in to your Microsoft account.
+
+7. Ensure that **Grant access permission to all pipelines** is selected.
+
+8. Select **Save**.
+
+Azure DevOps performs a test connection to verify that it can connect to your Azure subscription. If Azure DevOps can't connect, you have the chance to sign in a second time.
+
+## Fetch the branch from GitHub
+
+Here you fetch the **blue-green** branch from GitHub. Then you check out, or switch to, that branch.
+
+This branch contains the Space Game project that you worked with in the previous modules and an Azure Pipelines configuration to start with.
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. Run the following **git** commands to fetch a branch named **blue-green** from the Microsoft repository and to switch to that branch.
+
+   **Bash**
+   ```
+   git fetch upstream blue-green
+   git checkout -B blue-green upstream/blue-green
+   ```
+
+   The format of these commands enables you to get starter code from the Microsoft GitHub repository, known as **upstream**. Shortly, you'll push this branch up to your GitHub repository, known as **origin**.
+
+3. As an optional step, open **azure-pipelines.yml** from Visual Studio Code. Familiarize yourself with the initial configuration.
+
+   The configuration resembles the ones that you created in the previous modules in this learning path. It builds only the application's Release configuration. For brevity, it omits the triggers, manual approvals, and tests that you set up in previous modules.
+
+   For learning purposes, this configuration promotes changes from any branch to Dev, Test, and Staging. A more robust approach might promote changes from only a release branch or main. You used this robust approach in the **Create a multistage pipeline by using Azure Pipelines** module.
+
+## Run the pipeline and see the deployed website
+
+Here you push the initial configuration to GitHub so that you're up to date with the team. Later, you'll add a slot to the Staging environment so that you can implement a blue-green deployment.
+
+1. In Visual Studio Code, open the integrated terminal.
+
+2. Run the following **git commit** command to add an empty entry to your commit history.
+
+   **Bash**
+   ```
+   git commit --allow-empty -m "Trigger the pipeline"
+   ```
+
+   This step is for learning purposes. It isn't typical. We provide starter code that you don't need to modify now. The **--allow-empty** flag ensures that the next step successfully pushes the branch to GitHub and triggers Azure Pipelines to run.
+
+   If you omitted this step, then the **git push** command that you run in the next step wouldn't take any action. So it wouldn't trigger Azure Pipelines to run.
+
+3. Run the following **git push** command to upload the branch to your GitHub repository.
+
+   **Bash**
+   ```
+   git push origin blue-green
+   ```
+
+4. In Azure Pipelines, go to the build. Then trace the build as it runs. When prompted, select **Permit** to grant deployment permissions to the different stages.
+
+5. After your pipeline run has been completed, navigate to the summary page to see your pipeline status.
+
+ ![](https://learn.microsoft.com/en-us/training/azure-devops/manage-release-cadence/media/3-stages-complete.png)
+
+7. Navigate to the URL that corresponds to each stage. Your web app should be deployed to each environment.
+
+   ![[](https://learn.microsoft.com/en-us/training/azure-devops/manage-release-cadence/media/3-app-service-dev.png)
+
+
+# 5.4 Exercise - Implement the blue-green deployment pattern
+
+
+In Create a multistage pipeline by using Azure Pipelines, you built a basic deployment pipeline that deploys a web application to Azure App Service in these stages: Dev, Test, and Staging.
+
+Here you add to that workflow by applying the blue-green deployment pattern during Staging.
+
+To do so, you:
+
+- Add a deployment slot to the App Service instance that corresponds to Staging.
+- Add a task to the pipeline to swap the deployment slots.
+
+## Add a deployment slot
+
+Here you add a deployment slot to the App Service instance that corresponds to Staging.
+
+By default, every App Service instance provides a default slot, named production. You deployed to the production slot when you set up the pipeline in the previous section.
+
+An App Service instance can have multiple slots. Here you add a second deployment slot to the App Service instance that corresponds to Staging. The deployment slot is named swap.
+
+### To add the slot:
+
+1. Go to the Azure portal and sign in.
+
+2. On the menu, select Cloud Shell. When you're prompted, select the Bash experience.
+
+3. Run the following command to get the name of the App Service instance that corresponds to Staging and to store the result in a Bash variable that's named staging.
+
+   **Azure CLI**
+   ```bash
+   staging=$(az webapp list \
+     --resource-group tailspin-space-game-rg \
+     --query "[?contains(@.name, 'tailspin-space-game-web-staging')].{name: name}" \
+     --output tsv)
+   ```
+
+   The `--query` argument uses JMESPath, which is a query language for JSON. The argument selects the App Service instance whose name field contains "tailspin-space-game-web-staging".
+
+4. Print the staging variable to verify that you get the correct name.
+
+   **Bash**
+   ```bash
+   echo $staging
+   ```
+
+   Here's an example of the output:
+
+   **Output**
+   ```
+   tailspin-space-game-web-staging-1234
+   ```
+
+5. Run the following command to add a slot named swap to your staging environment.
+
+   **Azure CLI**
+   ```bash
+   az webapp deployment slot create \
+     --name $staging \
+     --resource-group tailspin-space-game-rg \
+     --slot swap
+   ```
+
+6. Run the following command to list your deployment slot's host name.
+
+   **Azure CLI**
+   ```bash
+   az webapp deployment slot list \
+       --name $staging \
+       --resource-group tailspin-space-game-rg \
+       --query [].hostNames \
+       --output tsv
+   ```
+
+   The result resembles this output:
+
+   **Output**
+   ```
+   tailspin-space-game-web-staging-25391-swap.azurewebsites.net
+   ```
+
+   Make note of this host name for later.
+
+7. As an optional step, go to your site in a browser. You see the default home page because you haven't yet deployed your code to this slot.
+
+ 
+ ![](https://learn.microsoft.com/en-us/training/azure-devops/manage-release-cadence/media/3-app-service-dev.png)
+
+By default, a deployment slot is accessible from the internet. In practice, you could configure an Azure virtual network that places your swap slot in a network that's not routable from the internet but that only your team can access. Your production slot would remain reachable from the internet.
+
+## Swap deployment slots in Staging
+
+Here you use the `AzureAppServiceManage@0` task to swap deployment slots in your Staging environment.
+
+You can also use this task to start, stop, or delete a slot. Or you can use it to install site extensions or to enable continuous monitoring on App Service.
+
+1. In Visual Studio Code, modify `azure-pipelines.yml` by using this code:
+
+   > **Tip**  
+   > You can replace the entire file or just update the part that's highlighted.
+
+   **yml**
+   ```yaml
+   trigger:
+   - '*'
+
+   variables:
+     buildConfiguration: 'Release'
+
+   stages:
+   - stage: 'Build'
+     displayName: 'Build the web application'
+     jobs: 
+     - job: 'Build'
+       displayName: 'Build job'
+       pool:
+         vmImage: 'ubuntu-20.04'
+         demands:
+         - npm
+
+       variables:
+         wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+         dotnetSdkVersion: '6.x'
+
+       steps:
+       - task: UseDotNet@2
+         displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+         inputs:
+           version: '$(dotnetSdkVersion)'
+
+       - task: Npm@1
+         displayName: 'Run npm install'
+         inputs:
+           verbose: false
+
+       - script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
+         displayName: 'Compile Sass assets'
+
+       - task: gulp@1
+         displayName: 'Run gulp tasks'
+
+       - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+         displayName: 'Write build info'
+         workingDirectory: $(wwwrootDir)
+
+       - task: DotNetCoreCLI@2
+         displayName: 'Restore project dependencies'
+         inputs:
+           command: 'restore'
+           projects: '**/*.csproj'
+
+       - task: DotNetCoreCLI@2
+         displayName: 'Build the project - $(buildConfiguration)'
+         inputs:
+           command: 'build'
+           arguments: '--no-restore --configuration $(buildConfiguration)'
+           projects: '**/*.csproj'
+
+       - task: DotNetCoreCLI@2
+         displayName: 'Publish the project - $(buildConfiguration)'
+         inputs:
+           command: 'publish'
+           projects: '**/*.csproj'
+           publishWebProjects: false
+           arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+           zipAfterPublish: true
+
+       - publish: '$(Build.ArtifactStagingDirectory)'
+         artifact: drop
+
+   - stage: 'Dev'
+     displayName: 'Deploy to the dev environment'
+     dependsOn: Build
+     jobs:
+     - deployment: Deploy
+       pool:
+         vmImage: 'ubuntu-20.04'
+       environment: dev
+       variables:
+       - group: Release
+       strategy:
+         runOnce:
+           deploy:
+             steps:
+             - download: current
+               artifact: drop
+             - task: AzureWebApp@1
+               displayName: 'Azure App Service Deploy: website'
+               inputs:
+                 azureSubscription: 'Resource Manager - Tailspin - Space Game'
+                 appName: '$(WebAppNameDev)'
+                 package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+
+   - stage: 'Test'
+     displayName: 'Deploy to the test environment'
+     dependsOn: Dev
+     jobs:
+     - deployment: Deploy
+       pool:
+         vmImage: 'ubuntu-20.04'
+       environment: test
+       variables:
+       - group: 'Release'
+       strategy:
+         runOnce:
+           deploy:
+             steps:
+             - download: current
+               artifact: drop
+             - task: AzureWebApp@1
+               displayName: 'Azure App Service Deploy: website'
+               inputs:
+                 azureSubscription: 'Resource Manager - Tailspin - Space Game'
+                 appName: '$(WebAppNameTest)'
+                 package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+
+   - stage: 'Staging'
+     displayName: 'Deploy to the staging environment'
+     dependsOn: Test
+     jobs:
+     - deployment: Deploy
+       pool:
+         vmImage: 'ubuntu-20.04'
+       environment: staging
+       variables:
+       - group: 'Release'
+       strategy:
+         runOnce:
+           deploy:
+             steps:
+             - download: current
+               artifact: drop
+             - task: AzureWebApp@1
+               displayName: 'Azure App Service Deploy: website'
+               inputs:
+                 azureSubscription: 'Resource Manager - Tailspin - Space Game'
+                 deployToSlotOrASE: 'true'
+                 resourceGroupName: 'tailspin-space-game-rg'
+                 slotName: 'swap'
+                 appName: '$(WebAppNameStaging)'
+                 package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+             - task: AzureAppServiceManage@0
+               displayName: 'Swap deployment slots'
+               inputs:
+                 azureSubscription: 'Resource Manager - Tailspin - Space Game'
+                 resourceGroupName: 'tailspin-space-game-rg'
+                 webAppName: '$(WebAppNameStaging)'
+                 sourceSlot: 'swap'
+                 targetSlot: 'production'
+                 action: 'Swap Slots'
+   ```
+
+   Note these changes:
+
+   - The `AzureWebApp@1` task now specifies these values:
+     - `deployToSlotOrASE`, when set to true, deploys to an existing deployment slot.
+     - `resourceGroupName` specifies the name of the resource group. This value is required when `deployToSlotOrASE` is true.
+     - `slotName` specifies the name of the deployment slot. Here you deploy to the slot that's named swap.
+   - The new task, `AzureAppServiceManage@0`, swaps the deployment slots.
+     - `sourceSlot` and `targetSlot` specify the slots to swap.
+     - `action` specifies the action to take. Recall that you can use this task to start, stop, or delete a slot. Here, "Swap Slots" specifies to swap the source and target slots.
+
+   This configuration always deploys to the swap slot. It then swaps the production and swap slots. The swap process ensures that production points to the more recent deployment.
+
+2. In the integrated terminal, add `azure-pipelines.yml` to the index. Commit the changes, and then push the branch up to GitHub.
+
+   > **Tip**  
+   > Save `azure-pipelines.yml` before you run these Git commands.
+
+   **Bash**
+   ```bash
+   git add azure-pipelines.yml
+   git commit -m "Swap deployment slots"
+   git push origin blue-green
+   ```
+
+3. In Azure Pipelines, trace the build through each of the steps.
+
+   > **Note**  
+   > If your run into the following error ...'staging' slot did not respond to http ping. (CODE: 417) try restarting your app service. If the problem persists, reset auto swap for your slot.
+
+4. As an optional step, in a browser, go to the URL that corresponds to each stage.
+
+   Although you haven't yet made changes to the website, you see that the Space Game website successfully deployed to each App Service environment.
+
+   ![Screenshot of a browser that shows the Space Game website in the Dev environment.](#)
+
+
+# 5.5 Exercise - Push a change through the pipeline
+
+In this part, you see your deployment slots in action. On the website's home page, you change the background color and the text on the hero banner. You then push your changes to GitHub, watch the pipeline run, and verify the changes.
+
+To further practice the process, you then revert your changes and watch the pipeline run as a way of rolling forward.
+
+## Change the text on the hero banner
+
+Here you change the text on the hero banner. Later you'll see the change when you deploy to App Service.
+
+1. In Visual Studio Code, in the `Tailspin.SpaceGame.Web/Views/Home` directory, open `Index.cshtml`.
+
+2. Look for this text near the top of the page:
+
+   **HTML**
+   ```html
+   <p>An example site for learning</p>
+   ```
+
+   > **Tip**  
+   > Visual Studio Code provides a way to search for text in files. To access the search pane, select the magnifying glass icon in the side pane.
+
+3. Replace the example text with the following text, and then save the file.
+
+   **HTML**
+   ```html
+   <p>Welcome to the official Space Game site!</p>
+   ```
+
+## Change the background color
+
+Here you change the background color of the hero banner from gray to green.
+
+1. In Visual Studio Code, in the `Tailspin.SpaceGame.Web/wwwroot/css` directory, open `site.scss`.
+
+   > **Important**  
+   > Open `site.scss`, not `site.css`. The Build stage runs node-sass to convert `site.scss` (a Sass file) to `site.css` (a standard CSS file).
+
+2. Locate the following code near the top of the file:
+
+   **css**
+   ```css
+   .intro {
+     height: 350px;
+     background-color: #666;
+     background-image: url('/images/space-background.svg');
+     background-size: 1440px;
+     background-position: center top;
+     background-repeat: no-repeat;
+     background-attachment: fixed;
+   ```
+
+3. In the code, replace the highlighted text as shown in the following example. Then save the file.
+
+   **css**
+   ```css
+   .intro {
+     height: 350px;
+     background-color: green;
+     background-image: url('/images/space-background.svg');
+     background-size: 1440px;
+     background-position: center top;
+     background-repeat: no-repeat;
+     background-attachment: fixed;
+   ```
+
+## Push the change through the pipeline
+
+Normally you would build and run the site locally to verify the change. You might also run any associated unit tests to verify that your change doesn't break existing functionality.
+
+For brevity, here you commit the changes to your branch, push your branch to GitHub, and watch the pipeline run.
+
+1. Add `Index.cshtml` and `site.scss` to the index, commit the changes, and then push the changes up to GitHub.
+
+   **Bash**
+   ```bash
+   git add Tailspin.SpaceGame.Web/Views/Home/Index.cshtml Tailspin.SpaceGame.Web/wwwroot/css/site.scss
+   git commit -m "Change text and colors on the home page"
+   git push origin blue-green
+   ```
+
+2. In Azure Pipelines, trace the build through each step.
+
+3. Go to the URL that corresponds to the production slot for your Staging environment. This slot is the default slot that you configured when you set up the pipeline earlier.
+
+   You see that the deployed website shows the color and text changes.
+
+    ![](https://learn.microsoft.com/en-us/training/azure-devops/manage-release-cadence/media/5-app-service-staging.png)
+
+5. Go to the URL that corresponds to the swap slot for your Staging environment. The URL includes "-swap.azurewebsites.net" in its name.
+
+   You see the previous version of the website, without the color and text changes.
+
+    ![](https://learn.microsoft.com/en-us/training/azure-devops/manage-release-cadence/media/5-app-service-staging-swap.png)
+
+   You see no changes because you swapped the production slot and the swap slot. In other words, here you always deploy to the swap slot, and then you swap the production slot and swap slot. The swap process ensures that the production slot points to the more recent deployment.
+
+## Revert the change
+
+Let's say that you deployed a change that you want to revert. At this point, you could roll back the change by swapping the production slot and swap slot again. For example, you could swap the slots manually through the Azure portal. Or, instead of rolling back the changes, you could roll forward by pushing another change through the pipeline.
+
+That's what you'll do here. You'll revert your latest code changes and push another change through the pipeline. To do so, you use the `git revert` command.
+
+In Git, you seldom remove commits from a file's history. Unlike the "undo" operation in a text editor, the `git revert` command creates a new commit that's essentially the opposite of the specified set of commits. To see the commits, you first run the `git log` command to trace your commit history during the revert process.
+
+1. In your terminal, run the following `git log` command to view your commit history.
+
+   **Bash**
+   ```bash
+   git --no-pager log --oneline
+   ```
+
+   Your output resembles the following code example. In your output, you'll see additional commits and different commit IDs.
+
+   **Output**
+   ```
+   d6130b0 (HEAD -> blue-green, origin/blue-green) Change text and colors on the home page
+   ce56955 Swap deployment slots
+   0d6a123 Trigger the pipeline
+   ```
+
+   In the output, trace the commit history. The latest commit is on top.
+
+2. Run the following `git revert` command to revert by one commit.
+
+   **Bash**
+   ```bash
+   git revert --no-edit HEAD
+   ```
+
+   Think of HEAD as the current state of your branch. HEAD refers to the latest commit. This command specifies to revert only the HEAD, or latest, commit.
+
+3. Run `git log` again to see your updated commit history.
+
+   **Bash**
+   ```bash
+   git --no-pager log --oneline
+   ```
+
+   At the top of your output, you see an additional commit that reverts the previous commit. Here's an example:
+
+   **Output**
+   ```
+   e58896a (HEAD -> blue-green) Revert "Change text and colors on the home page"
+   d6130b0 (origin/blue-green) Change text and colors on the home page
+   ce56955 Swap deployment slots
+   0d6a123 Trigger the pipeline
+   ```
+
+## Push the reverted change through the pipeline
+
+Here you push your reverted change through the pipeline and see the results.
+
+1. Run the following `git push` command to upload the blue-green branch to your GitHub repository.
+
+   **Bash**
+   ```bash
+   git push origin blue-green
+   ```
+
+2. In Azure Pipelines, go to the build. Trace the build as it runs.
+
+3. Go to the URLs that correspond to the swap slot and production slot for your Staging environment.
+
+   The production slot now points to your reverted change, which is the original website.
+
+   ![Screenshot of a browser that shows the original Space Game website after reverting the changes. The website doesn't include the color and text changes.](#)
+
+   The swap slot now points to the previous change.
+
+   ![Screenshot of a browser that shows the Space Game website after reverting the change. The website shows the color and text changes.](#)
+
+Great work! The team now has a way to automate the releases. They can get new features to their users without incurring downtime.
+
+---
+
+## Team meeting
+
+The team gathers to demo the pipeline. This time, Tim pushes a change through the pipeline while everyone watches. But not everyone's convinced.
+
+**Andy:** It's great seeing deployment slots at work. But I don't get it. How do we benefit from zero-downtime deployments here? Staging is only for our team and management.
+
+**Tim:** Indeed, we won't see much benefit right now. But imagine when we apply blue-green deployments to a Production stage. We'll still have the manual approval from management before we promote to Production. But when we do release new features, the swap process will make the rollout nearly instantaneous. It will be seamless to our users.
+
+**Andy:** OK, I think I understand now. I like this improvement. The system of deployment slots was easy to set up, and it will benefit our users. Everyone wins.
+
+**Amita:** Speaking of improvements, why don't we revisit our value-stream mapping exercise we did a few weeks ago? I bet we'll see progress in how quickly we can release new features.
+
+**Mara:** Great, let's put that on the agenda for our next team meeting.
+
+
+
+
+# 5.6 Exercise - Clean up your environment
+
+
+You're done with the tasks for this module. Here you clean up your Azure resources, move the work item to the Done state in Azure Boards, and then clean up your Azure DevOps environment.
+
+> **Important**  
+> This page contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. It also helps ensure that you're not charged for Azure resources after you complete this module.
+
+## Clean up Azure resources
+
+Here you delete your Azure App Service instances. The easiest way to do that is to delete their parent resource group. Deleting a resource group deletes all resources in that group.
+
+### To clean up your resource group:
+
+1. Go to the Azure portal and sign in.
+
+2. From the menu, select Cloud Shell. When you're prompted, select the Bash experience.
+
+  
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-portal-menu-cloud-shell.png)
+
+4. Run the following `az group delete` command to delete the resource group that you used in this module, `tailspin-space-game-rg`.
+
+   **Azure CLI**
+   ```bash
+   az group delete --name tailspin-space-game-rg
+   ```
+
+   When you're prompted, confirm the operation by entering `y`.
+
+5. As an optional step, after the previous command finishes, run the following `az group list` command.
+
+   **Azure CLI**
+   ```bash
+   az group list --output table
+   ```
+
+   You see that the resource group `tailspin-space-game-rg` no longer exists.
+
+## Move the work item to Done
+
+Earlier in this module, you assigned the **Improve release cadence** work item to yourself. Here you move that work item to the **Done** column.
+
+In practice, "Done" often means putting working software into the hands of your users. For learning purposes, here you mark this work as complete because you can now choose a deployment pattern that enables you to release changes more quickly to your users.
+
+At the end of each sprint, or work iteration, your team might want to hold a retrospective meeting. In the meeting, you can share the work that you completed in the sprint, what went well, and what could be improved.
+
+### To complete the work item:
+
+1. In Azure DevOps, go to **Boards**, and then select **Boards** from the menu.
+
+2. Move the **Improve release cadence** work item from the **Doing** column to the **Done** column.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/manage-release-cadence/media/5-azure-boards-wi5-done.png)
+
+## Disable the pipeline or delete your project
+
+Each module in this learning path provides a template that you run to create a clean environment for the module.
+
+Running multiple templates gives you multiple Azure Pipelines projects. Each project points to the same GitHub repository. This setup can trigger multiple pipelines to run each time you push a change to your GitHub repository. These pipeline runs can consume free build minutes on our hosted agents. So it's important to disable or delete your pipeline before you move to the next module.
+
+Choose one of the following options.
+
+### Option 1: Disable the pipeline
+
+Here you disable the pipeline so that it processes no further build requests. You can reenable the build pipeline later if you want to. Choose this option if you want to keep your DevOps project and your build pipeline for future reference.
+
+#### To disable the pipeline:
+
+1. In Azure Pipelines, navigate to your pipeline.
+
+2. From the drop-down menu, select **Settings**:
+
+      ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-settings-button.png)
+
+4. Under **Processing of new run requests**, select **Disabled** and then select **Save**.
+
+   Your pipeline will no longer process build requests.
+
+### Option 2: Delete the Azure DevOps project
+
+Here you delete your Azure DevOps project, including what's in Azure Boards and your build pipeline. In future modules, you can run another template that brings up a new project in a state where this module leaves off. Choose this option if you don't need your DevOps project for future reference.
+
+#### To delete the project:
+
+1. In Azure DevOps, go to your project. Earlier we recommended that you name this project **Space Game - web - Deployment patterns**.
+
+2. Select **Project settings** in the lower corner.
+
+3. At the bottom of the **Project details** area, select **Delete**.
+
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-delete-project.png)
+
+5. In the window that appears, enter the project name, and then select **Delete** again.
+
+   Your project is now deleted.
+
+
+# 5.7 Summary
+
+In this module, you defined a deployment pattern as an automated way to smoothly roll out new application features to your users. A good deployment pattern can help you minimize downtime. It can also enable you to roll out new features progressively to your users.
+
+You can choose from several deployment patterns. The deployment pattern you choose depends on your reasons for the deployment and your resources. Do you have canary testers in place? Will you employ a dark launch and choose testers who don't know that they're testers? If you have a trusted set of testers that progressively increases from a small set to a larger set, then you could choose a progressive-exposure deployment. Or, if you want to know if one version performs better than another version, you could choose A/B testing.
+
+The Tailspin team chose to implement the blue-green deployment pattern, using deployment slots in Azure App Service. Deployment slots are live apps that have their own host names. The team can swap two deployment slots. By swapping, they can promote changes to production instantly. Although the team isn't ready to release their website to the public, they've proven that they can get new features to their users without incurring downtime.
+
+As a bonus, in this module you also learned how to roll forward an unintended change by reverting a Git commit and then pushing the reverted change through the pipeline.
+
+## How is the team measuring up?
+
+In the **Assess your existing software development process** module, Mara did a value-stream mapping exercise. The exercise helped the team analyze their current release-cycle process.
+
+Recall that the activity ratio, or efficiency, is process time divided by total lead time:
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow data-mjx-texclass="ORD">
+    <mi>A</mi>
+    <mi>c</mi>
+    <mi>t</mi>
+    <mi>i</mi>
+    <mi>v</mi>
+    <mi>i</mi>
+    <mi>t</mi>
+    <mi>y</mi>
+    <mtext>&#xA0;</mtext>
+    <mi>r</mi>
+    <mi>a</mi>
+    <mi>t</mi>
+    <mi>i</mi>
+    <mi>o</mi>
+    <mtext>&#xA0;</mtext>
+    <mo>=</mo>
+    <mtext>&#xA0;</mtext>
+  </mrow>
+  <mrow data-mjx-texclass="ORD">
+    <mstyle displaystyle="true" scriptlevel="0">
+      <mfrac>
+        <mrow>
+          <mi>P</mi>
+          <mi>r</mi>
+          <mi>o</mi>
+          <mi>c</mi>
+          <mi>e</mi>
+          <mi>s</mi>
+          <mi>s</mi>
+          <mtext>&#xA0;</mtext>
+          <mi>t</mi>
+          <mi>i</mi>
+          <mi>m</mi>
+          <mi>e</mi>
+        </mrow>
+        <mrow>
+          <mi>T</mi>
+          <mi>o</mi>
+          <mi>t</mi>
+          <mi>a</mi>
+          <mi>l</mi>
+          <mtext>&#xA0;</mtext>
+          <mi>l</mi>
+          <mi>e</mi>
+          <mi>a</mi>
+          <mi>d</mi>
+          <mtext>&#xA0;</mtext>
+          <mi>t</mi>
+          <mi>i</mi>
+          <mi>m</mi>
+          <mi>e</mi>
+        </mrow>
+      </mfrac>
+    </mstyle>
+  </mrow>
+</math>
+
+
+
+
+The Tailspin web team initially used this metric to determine that they were 23 percent efficient.
+
+The team first reduced some inefficiencies when they implemented continuous integration (CI). By applying continuous delivery (CD), they have now reduced inefficiencies even further.
+
+In previous learning paths, the team reduced:
+
+- **The time it takes to set up source control for new features.** The required time went from three days to zero days.
+
+  The team achieved this improvement by moving from centralized source control to Git, a form of distributed source control. By using distributed source control, they don't need to wait for files to be unlocked.
+
+- **The time it takes to deliver code to Amita, the tester.** The required time went from two days to zero days.
+
+  The team achieved this improvement by moving their build process to Azure Pipelines. Azure Pipelines automatically notifies Amita when a build is available. Developers no longer need to update Amita's spreadsheet to notify her.
+
+- **The time it takes Amita to test new features.** The required time went from three days to one day.
+
+  The team achieved this improvement by unit-testing their code. They run unit tests each time a change moves through the build pipeline, so fewer bugs and regressions reach Amita. The reduced workload means that Amita can complete each manual test faster.
+
+The release pipeline that you and the team built in this learning path reduced:
+
+- **The time it takes to get the build into the Test stage.** The required time went from three days to one day.
+
+  The team achieved this by using a scheduled trigger to deploy to Test every day at 3:00 AM.
+
+- **The time it takes to get the tested build into Staging.** The required time went from two days to zero days.
+
+  The team achieved this improvement by adding Selenium UI tests, a form of functional testing, to the Test stage. These automated tests are much faster than the manual versions.
+
+- **The time it takes to get the approved build from Staging to live.** The required time went from one day to less than one day.
+
+  The team achieved this improvement by adding manual approval checks to the pipeline. When management signs off, Tim can release the changes from Staging to live.
+
+These changes reduce the total lead time from 22 days to 10 days. When we substitute these numbers into the equation:
+
+
+  <mrow data-mjx-texclass="ORD">
+    <mi>A</mi>
+    <mi>c</mi>
+    <mi>t</mi>
+    <mi>i</mi>
+    <mi>v</mi>
+    <mi>i</mi>
+    <mi>t</mi>
+    <mi>y</mi>
+    <mtext>&#xA0;</mtext>
+    <mi>r</mi>
+    <mi>a</mi>
+    <mi>t</mi>
+    <mi>i</mi>
+    <mi>o</mi>
+    <mtext>&#xA0;</mtext>
+    <mo>=</mo>
+    <mtext>&#xA0;</mtext>
+  </mrow>
+  <mrow data-mjx-texclass="ORD">
+    <mstyle displaystyle="true" scriptlevel="0">
+      <mfrac>
+        <mrow>
+          <mn>5</mn>
+          <mtext>&#xA0;</mtext>
+          <mi>d</mi>
+          <mi>a</mi>
+          <mi>y</mi>
+          <mi>s</mi>
+        </mrow>
+        <mrow>
+          <mn>10</mn>
+          <mtext>&#xA0;</mtext>
+          <mi>d</mi>
+          <mi>a</mi>
+          <mi>y</mi>
+          <mi>s</mi>
+        </mrow>
+      </mfrac>
+    </mstyle>
+  </mrow>
+  <mrow data-mjx-texclass="ORD">
+    <mo>=</mo>
+    <mn>0.50</mn>
+  </mrow>
+</math>
+
+
+
+Multiply the result by 100 percent, and we get a 50 percent reduction.
+
+Although there's always room for improvement, this change is a win for the team. Not only do customers get value more quickly, the Tailspin team now spends less time waiting and more time doing what they enjoy most: delivering features that they know their customers will love.
+
+---
+
+## Learn more
+
+Use these additional resources to learn more about App Service, deployment slots, and rolling back changes:
+
+- [App Service documentation](#)
+- [Deploy a website to Azure by using App Service](#)
+- [Stage a web app deployment for testing and rollback by using App Service deployment slots](#)
+- [Set up staging environments in App Service](#)
