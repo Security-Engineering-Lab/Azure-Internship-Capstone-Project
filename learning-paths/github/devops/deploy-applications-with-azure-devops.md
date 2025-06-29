@@ -7694,3 +7694,880 @@ Use these additional resources to learn more about App Service, deployment slots
 - [Deploy a website to Azure by using App Service](#)
 - [Stage a web app deployment for testing and rollback by using App Service deployment slots](#)
 - [Set up staging environments in App Service](#)
+
+
+# 6 Automate Azure Functions deployments with Azure Pipelines
+
+Create an Azure DevOps pipeline that builds and deploys an ASP.NET web app and an Azure Function app to Azure.
+
+### Learning objectives
+After completing this module, you'll be able to:
+- Describe when to use Azure Functions for app development projects
+- Create Azure App Service and Azure Functions environments
+- Deploy to Azure App Service and Azure Functions simultaneously with Azure Pipelines
+#### Prerequisites
+- Ability to create a basic Azure DevOps pipeline and an understanding of the components of a pipeline (tasks, stages, jobs)
+- Ability to navigate the Azure portal and run Cloud Shell commands
+- An Azure subscription
+- An Azure DevOps organization with access to parallel jobs
+- A GitHub account
+
+
+# 6.1 Introduction
+
+In the **Create a release pipeline with Azure Pipelines** learning path, you built a basic release pipeline that deployed an ASP.NET Core application to Azure App Service. Although that scenario works for a single application, modern solutions often require a combination of applications, services, and other components. This module shows you how to build a more complicated pipeline.
+
+In this module, you learn how to add an Azure Functions project to an existing CI/CD pipeline and deploy to both Azure App Service and Azure Functions in a single process. This module focuses on the core build and deployment tasks.
+
+## Learning objectives
+
+After completing this module, you'll be able to:
+
+- Describe when to use Azure Functions for app development projects
+- Create Azure App Service and Azure Functions environments
+- Deploy to both Azure App Service and Azure Functions in a single pipeline with Azure Pipelines
+
+## Prerequisites
+
+The modules in this learning path form a progression:
+
+- Get started with Azure DevOps
+- Build applications with Azure DevOps
+
+This module also assumes you have basic familiarity with Azure Functions. That knowledge isn't required to complete the module. If you're new to Azure Functions, you can complete the **Create serverless applications** learning path first.
+
+## Meet the team
+
+You met the *Space Game* web team at Tailspin Toys in previous modules. As a refresher, here's who you work with in this module.
+
+**Andy** is the development lead.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/andy.png)
+
+**Irwin** is the product manager.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/irwin.png)
+
+**Tim** is in operations.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/tim.png)
+
+**Mara** just joined as a developer and reports to Andy.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/mara.png)
+
+Mara has prior experience with DevOps. Mara is helping the team adopt a more automated process that uses Azure DevOps.
+
+
+
+# 6.2 What is Azure Functions?
+
+
+You follow the Tailspin Space Game web team as they discuss how to best deliver on new marketing requirements driven by management. The team needs to integrate some serverless technology, specifically Azure Functions, into their DevOps process.
+
+You can check in with the team.
+
+## The new requirements
+
+**Irwin:** Thanks for meeting on such short notice. Things are heating up, and the marketing team has made some promises that could complicate things for all of us. They really like our site. They think the leaderboard can be used to promote the game as we head toward the final launch and beyond. They want to scale it out way beyond what we'd originally planned.
+
+**Mara:** That's great, right? We're on Azure, so we can scale out the service as much as needed.
+
+**Irwin:** They just want the ability for anyone to integrate leaderboard data into their own applications. They think it would be really cool to have the same leaderboard options on our site, in the game, on gaming-review sites, and even on external blogs and personal sites. One challenge is that the game engine team currently owns the production database that we pull leaderboard data from. They think they should build and own the API moving forward.
+
+**Andy:** Mara, do you have any thoughts?
+
+**Mara:** I'm sure we can come up with something. Here are my notes:
+
+- We need to deliver quickly, so we have to find a solution where we can use our code and skills.
+- We need to refactor a small piece of functionality into an independent service.
+- We need to minimize administrative overhead in production.
+- We need to have massive scale without making a massive commitment.
+
+The team nods in agreement.
+
+## It works on my machine
+
+The meeting breaks up. The next morning, Andy excitedly pops into Mara's office for an impromptu chat.
+
+**Andy:** I've got it! I found a solution that meets all of our requirements for the leaderboard API. It's a serverless offering called Azure Functions.
+
+**Mara:** That's great! How long before we have something we can demo?
+
+**Andy:** I have already spiked something out. I forked our GitHub repo and refactored the leaderboard code into a new Azure Functions project. It exposes the leaderboard data via a simple HTTP GET request. I also updated the web site to use that endpoint when requesting the leaderboard, and anyone else can do the same.
+
+**Mara:** This sounds like exactly what we need. I can help extend the existing CI/CD pipeline to support building and deploying it like we do for the main site project.
+
+> **Note**  
+> This module doesn't focus on how to connect your app to Azure Functions. If you're interested, review the source code. The code uses the Azure Functions runtime for C# to read leaderboard data from Azure Functions.
+
+## What is Azure Functions?
+
+Azure Functions is a specific offering within the broader spectrum of Azure serverless computing technologies. It provides an easy way for developers to build straightforward functions that exist in a stateless, serverless environment. Functions can be triggered using various methods, such as HTTP requests, changes to data in storage, and receipt of a message from a queue. You can learn more about the trigger bindings in Azure Functions triggers and bindings concepts.
+
+The Tailspin team selected Azure Functions for this scenario because it met all their needs:
+
+- **We need to deliver quickly, so we have to find a solution where we can use our code and skills.**  
+  We can build the solution quickly as an ASP.NET Core application applying code we already have.
+
+- **We need to refactor a small piece of functionality into an independent service.**  
+  We can deliver an independent function with no other application surface area to worry about.
+
+- **We need to minimize administrative overhead in production.**  
+  Azure Functions removes the need to worry about hosting environments.
+
+- **We need to have massive scale without making a massive commitment.**  
+  Serverless technologies have virtually unlimited scale that can automatically ramp up and down faster than virtual machines or app services.
+
+Azure Functions and other serverless technologies aren't always the right fit for every solution. Later on, learn about where you can find resources to help you select the right technology for the job.
+
+---
+
+## Check your knowledge
+
+### 1. Which of these projects is a good candidate for serverless computing?
+
+- **✅ A service that recognizes people in images.**
+- ❌ A peer-to-peer file sharing network.
+- ❌ A service that manages an online shopping cart.
+
+**Explanation:** Image recognition is a perfect use case for serverless computing because it's event-driven, stateless, and has variable workloads. Peer-to-peer networks require persistent connections, and shopping carts need state management, making them less suitable for pure serverless architectures.
+
+### 2. Which of the following isn't a good reason to use Azure Functions?
+
+- ❌ They don't require any special configuration to be massively scalable.
+- ❌ They can be written in virtually any mainstream language.
+- **✅ They're a replacement for app services and virtual machines.**
+
+**Explanation:** Azure Functions are not a universal replacement for all hosting options. They're designed for specific use cases like event-driven, stateless workloads. Complex applications with persistent state, long-running processes, or specific infrastructure requirements may be better suited for App Services or VMs.
+
+### 3. Which of the following isn't a supported way to directly trigger an Azure Functions app?
+
+- ❌ Making an HTTP request over the public Internet.
+- ❌ Detecting a new message on a message queue.
+- **✅ Receiving a carefully filled-out form via fax machine.**
+
+**Explanation:** Azure Functions support various digital triggers like HTTP requests, queue messages, database changes, timer schedules, etc. However, physical fax machines are not supported as direct triggers since they're not part of the digital cloud ecosystem.
+
+
+# 6.3 Exercise - Set up your Azure DevOps environment
+
+In this unit, make sure that your Azure DevOps organization is set up to complete the rest of this module. You also create the Azure App Service environments that you deploy to.
+
+To accomplish these goals, you do these tasks:
+
+- Add a user to ensure Azure DevOps can connect to your Azure subscription.
+- Set up an Azure DevOps project for this module.
+- On Azure Boards, move the work item for this module to the Doing column.
+- Make sure your project is set up locally so that you can push changes to the pipeline.
+- Create the Azure App Service and Azure Functions app using the Azure CLI in Azure Cloud Shell.
+- Create pipeline variables that define the names of your App Service and Azure Functions instance.
+- Create a service connection that enables Azure Pipelines to securely access your Azure subscription.
+
+## Add a user to Azure DevOps
+
+To complete this module, you need your own Azure subscription. You can get started with Azure for free.
+
+Although you don't need an Azure subscription to work with Azure DevOps, this exercise uses Azure DevOps to deploy to Azure resources in your Azure subscription. To simplify the process, use the same Microsoft account to sign in to both your Azure subscription and your Azure DevOps organization.
+
+> **Important**  
+> If you sign in with different accounts, add a user to your DevOps organization under the Microsoft account that you use to sign in to Azure. For more information, see Add users to your organization or project. When you add the user, choose the Basic access level.
+>
+> Then, sign out of Azure DevOps and sign in with the new user account. Use the Microsoft account that you use to sign in to your Azure subscription.
+
+## Get the Azure DevOps project
+
+Make sure that your Azure DevOps organization is set up to complete the rest of this module. To do so, run a template that creates a project in Azure DevOps.
+
+The modules in this learning path form a progression as you follow the Tailspin web team through their DevOps journey. For learning purposes, each module has its own Azure DevOps project.
+
+### Run the template
+
+Run a template that sets up your Azure DevOps organization.
+
+1. Get and run the ADOGenerator project in Visual Studio or the IDE of your choice.
+
+2. When prompted to **Enter the template number from the list of templates**, enter **38** for **Automate Azure Function deployments with Azure Pipelines**, then press Enter.
+
+3. Choose your authentication method. You can set up and use a Personal Access Token (PAT) or use device login.
+
+   > **Note**  
+   > If you set up a PAT, make sure to authorize the necessary scopes. For this module, you can use Full access, but in a real-world situation, you should grant only the necessary scopes.
+
+4. Enter your Azure DevOps organization name, then press Enter.
+
+5. If prompted, enter your Azure DevOps PAT, then press Enter.
+
+6. Enter a project name such as **Space Game - web - Azure Functions**, then press Enter.
+
+7. After your project is created, go to your Azure DevOps organization in your browser (at `https://dev.azure.com/<your-organization-name>/`) and select the project.
+
+### Fork the repository
+
+If you haven't already, create a fork of the `mslearn-tailspin-spacegame-web-azure-functions` repository.
+
+1. On GitHub, go to the [mslearn-tailspin-spacegame-web-azure-functions](https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web-azure-functions) repository.
+
+2. Select **Fork** at the top-right of the screen.
+
+3. Choose your GitHub account as the Owner, then select **Create fork**.
+
+> **Important**  
+> The **Clean up your Azure DevOps environment** page in this module contains important steps that you must complete, even if you don't complete this module. Cleaning up helps ensure that you don't run out of free build minutes.
+
+### Set your project's visibility
+
+Initially, your fork of the Space Game repository on GitHub is set to public while the project created by the Azure DevOps template is set to private. A public repository on GitHub can be accessed by anyone, while a private repository is only accessible to you and the people you choose to share it with. Similarly, on Azure DevOps, public projects provide read-only access to non-authenticated users, while private projects require users to be granted access and authenticated to access the services.
+
+At the moment, it is not necessary to modify any of these settings for the purposes of this module. However, for your personal projects, you must determine the visibility and access you wish to grant to others. For instance, if your project is open source, you may choose to make both your GitHub repository and your Azure DevOps project public. If your project is proprietary, you would typically make both your GitHub repository and your Azure DevOps project private.
+
+Later on, you may find the following resources helpful in determining which option is best for your project:
+
+- [Use private and public projects](#)
+- [Change project visibility to public or private](#)
+- [Setting repository visibility](#)
+
+## Assign a work item and move it to the Doing state
+
+Here, you assign a work item to yourself on Azure Boards and set the work item state to **Doing**. In practice, you and your team would create work items at the start of each sprint, or work iteration.
+
+This exercise creates a checklist from which to work. It gives other team members visibility into what you're working on and how much work is left. The work item also helps enforce work-in-progress (WIP) limits so that the team doesn't take on too much work at one time.
+
+1. From Azure DevOps, navigate to **Boards** category, and then select **Boards** from the menu.
+
+     ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-boards-menu.png)
+
+3. Open the **Refactor leaderboard API as an Azure Function** work item by selecting the title. Assign this work item to yourself, and then select **Save & Close**.
+
+4. Select the down arrow at the bottom of the card and select **Doing** or select the card and drag it to the **Doing** column.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-boards-down-chevron.png)
+
+   The work item is moved from the **To Do** column to the **Doing** column.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-azure-functions/media/3-azure-boards-wi1-doing.png)
+
+At the end of this module, move the card to the **Done** column after you complete the task.
+
+## Create the Azure App Service and Azure Functions environments
+
+Here, you create the App Service and Azure Functions app required to deploy the new version of the site and API.
+
+In the **Create a release pipeline with Azure Pipelines** Learn module, you brought up App Service through the Azure portal. Although the portal is a great way to explore what's available on Azure or to do basic tasks, bringing up components such as App Service can be tedious.
+
+In this module, you use the Azure CLI to bring up an App Service instance. You can access the Azure CLI from a terminal or through Visual Studio Code. Used Azure CLI from Azure Cloud Shell. This browser-based shell experience is hosted in the cloud. In Cloud Shell, the Azure CLI is configured for use with your Azure subscription.
+
+> **Important**  
+> You need your own Azure subscription to complete the exercises in this module.
+
+### Bring up Cloud Shell through the Azure portal
+
+1. Sign in to the [Azure portal](https://portal.azure.com).
+
+2. From the global controls in the page header, select **Cloud Shell**.
+
+  ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-portal-menu-cloud-shell.png)
+
+   A terminal opens and connects to the Azure Cloud Shell.
+
+4. If necessary, select **Bash** from the terminal menu.
+
+   > **Note**  
+   > Cloud Shell requires an Azure storage resource to persist any files that you create in Cloud Shell. When you first open Cloud Shell, you're prompted to create a resource group, storage account, and Azure Files share. This setup is automatically used for all future Cloud Shell sessions.
+
+### Select an Azure region
+
+A region is one or more Azure datacenters within a geographic location. East US, West US, and North Europe are examples of regions. Every Azure resource, including an App Service instance, is assigned a region.
+
+To make commands easier to run, start by setting a default region. After you specify the default region, commands you enter use that region until you specify a different region.
+
+1. From Cloud Shell, run the following `az account list-locations` command to list the regions that are available from your Azure subscription:
+
+   **Azure CLI**
+   ```bash
+   az account list-locations \
+     --query "[].{Name: name, DisplayName: displayName}" \
+     --output table
+   ```
+
+2. From the **Name** column in the output, choose a region that's close to you. For example, choose `eastasia` or `westus2`.
+
+3. Run `az configure` to set your default region. Replace `<REGION>` with the name of the region you chose.
+
+   **Azure CLI**
+   ```bash
+   az configure --defaults location=<REGION>
+   ```
+
+   This example sets `westus2` as the default region:
+
+   **Azure CLI**
+   ```bash
+   az configure --defaults location=westus2
+   ```
+
+### Create Bash variables
+
+Here, create Bash variables to make the setup process more convenient and less error-prone. Using variables for shared text strings helps avoid accidental typos.
+
+1. From Cloud Shell, generate a random number, which you use to create globally unique names for certain services in the next step.
+
+   **Bash**
+   ```bash
+   resourceSuffix=$RANDOM
+   ```
+
+2. Create three globally unique names for your App Service, Azure Function, and storage accounts. These commands use double quotes, which instruct Bash to resolve the variables using inline syntax.
+
+   **Bash**
+   ```bash
+   webName="tailspin-space-game-web-${resourceSuffix}"
+   leaderboardName="tailspin-space-game-leaderboard-${resourceSuffix}"
+   storageName="tailspinspacegame${resourceSuffix}"
+   ```
+
+3. Create two more Bash variables to store the names of your resource group and service plan.
+
+   **Bash**
+   ```bash
+   rgName='tailspin-space-game-rg'
+   planName='tailspin-space-game-asp'
+   ```
+
+### Create the Azure resources required
+
+Your solution requires several Azure resources for deployment, which you create now.
+
+> **Note**  
+> This exercise uses the default network settings, so your site is accessible from the internet. In practice, you could configure an Azure virtual network to put your website in a network that only you and your team can access. Later, you could reconfigure your virtual network to make the website available to your users.
+
+1. Run the following `az group create` command to create a resource group using the name defined earlier:
+
+   **Azure CLI**
+   ```bash
+   az group create --name $rgName
+   ```
+
+2. Run the following `az appservice plan create` command to create an App Service plan using the name defined in the previous task:
+
+   **Azure CLI**
+   ```bash
+   az appservice plan create \
+     --name $planName \
+     --resource-group $rgName \
+     --sku B1 \
+     --is-linux
+   ```
+
+   The `--sku` parameter specifies the B1 plan. This plan runs on the Basic tier. The `--is-linux` parameter specifies Linux workers (threads used in events and task scheduling).
+
+   > **Important**  
+   > If the B1 SKU isn't available in your Azure subscription, choose a different plan, such as S1 (Standard).
+
+3. Run the following `az webapp create` command to create the App Service instance:
+
+   **Azure CLI**
+   ```bash
+   az webapp create \
+     --name $webName \
+     --resource-group $rgName \
+     --plan $planName \
+     --runtime "DOTNETCORE|8.0"
+   ```
+
+4. Azure Functions requires a storage account for deployment. Run the following `az storage account create` command to create it:
+
+   **Azure CLI**
+   ```bash
+   az storage account create \
+     --name $storageName \
+     --resource-group $rgName \
+     --sku Standard_LRS
+   ```
+
+5. Run the following `az functionapp create` command to create the Azure Functions app instance. Replace the `<region>` with your preferred region.
+
+   **Azure CLI**
+   ```bash
+   az functionapp create \
+     --name $leaderboardName \
+     --resource-group $rgName \
+     --storage-account $storageName \
+     --functions-version 4 \
+     --consumption-plan-location <region>
+   ```
+
+6. Run the following `az webapp list` command to list the host name and state of the App Service instance:
+
+   **Azure CLI**
+   ```bash
+   az webapp list \
+     --resource-group $rgName \
+     --query "[].{hostName: defaultHostName, state: state}" \
+     --output table
+   ```
+
+   Note the host name for your running service. It should look similar to the following, but with a different random-number. You need the web host name later when you verify your work.
+
+   **Output**
+   ```
+   HostName                                        State
+   ----------------------------------------------  -------
+   tailspin-space-game-web-4692.azurewebsites.net  Running
+   ```
+
+7. Run the following `az functionapp list` command to list the host name and state of the Azure Functions instance.
+
+   **Azure CLI**
+   ```bash
+   az functionapp list \
+     --resource-group $rgName \
+     --query "[].{hostName: defaultHostName, state: state}" \
+     --output table
+   ```
+
+   Note the host name for your running service. It should look similar to the following, but with a different random number identifier. You need the leaderboard host name later when you verify your work.
+
+   **Output**
+   ```
+   HostName                                                State
+   ------------------------------------------------------  -------
+   tailspin-space-game-leaderboard-4692.azurewebsites.net  Running
+   ```
+
+8. Copy these two host names to a location you can easily access later.
+
+9. As an optional step, open a browser and enter a host name to verify that it's running. The default home page appears.
+
+> **Important**  
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you're not charged for Azure resources after you complete this module. Be sure to perform the cleanup steps even if you don't complete this module.
+
+## Create pipeline variables in Azure Pipelines
+
+In the **Create a release pipeline with Azure Pipelines** module, you added a variable to your pipeline that stores the name of your web app in App Service. Here, do the same. Also, add the name of your leaderboard app for the Azure Functions instance.
+
+You could hard-code these names in your pipeline configuration, but if you define them as variables, your configuration is more reusable. Plus, if the names of your instances change, you can update the variables and trigger your pipeline without modifying your configuration.
+
+### Add a variable group to your project
+
+1. Your **Space Game - web - Azure Functions** project should be open in Azure DevOps.
+
+2. In the menu, select **Pipelines**, and then, under **Pipelines** select **Library**. The Library pane appears.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-azure-functions/media/3-pipelines-library.png)
+
+4. In the command bar or in the middle of the pane, select **Variable group**. The **New variable group** page appears.
+
+5. For the variable group name, enter **Release**.
+
+6. Under **Variables**, select **Add**.
+
+7. For the name of your variable, enter **WebAppName**. For the value, enter the name of the App Service instance that was created for your web app, such as `tailspin-space-game-web-4692`.
+
+   > **Important**  
+   > Set the name of the App Service instance, not its full host name. In this exercise, for example, `tailspin-space-game-web-4692` is the instance part of the host name `tailspin-space-game-web-4692.azurewebsites.net`.
+
+8. Add another variable named **LeaderboardAppName** with the value of your leaderboard instance, for example, `tailspin-space-game-leaderboard-4692`.
+
+9. Add a final variable named **ResourceGroupName** with the value `tailspin-space-game-rg`.
+
+10. In the command bar near the top of the page, select **Save** to save your **Release** variable group to the pipeline.
+
+   The variables in your variable group should be similar:
+
+  
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/pipelines-environments.png)
+
+## Create the spike environment
+
+In previous modules, you created environments for dev, test, and staging environments. Here, do the same. This time, create an environment named **spike**.
+
+1. From the Azure DevOps menu, under **Pipelines**, select **Environments**.
+
+   ![A screenshot of Azure Pipelines showing the location of the Environments menu option.](#)
+
+2. Select **Create environment**. The **New environment** pane appears.
+
+3. For **Name**, enter **spike**.
+
+4. Leave the remaining fields at their default values.
+
+5. Select **Create**.
+
+## Create a service connection
+
+Here, you create a service connection that enables Azure Pipelines to access your Azure subscription. Azure Pipelines uses this service connection to deploy the website to App Service. You created a similar service connection in the previous module.
+
+> **Important**  
+> Make sure that you're signed in to both the Azure portal and Azure DevOps under the same Microsoft account.
+
+1. In Azure DevOps, **Space Game - web - Azure Functions** pipeline project, below the menu, select **Project settings**. The **Project details** pane appears.
+
+2. In the menu, under **Pipelines**, select **Service connections**.
+
+3. On the **Service connections** page, select **New service connection**, and then in the **New service connection** pane, select **Azure Resource Manager**, and then select **Next**.
+
+4. In the **New service connection** pane, select **Service principal (automatic)**, and then select **Next**.
+
+5. In the **New Azure service connection** pane, select or enter the following settings:
+
+   | Field | Value |
+   |-------|-------|
+   | Scope level | Subscription |
+   | Subscription | Select your Azure subscription |
+   | Resource Group | tailspin-space-game-rg |
+   | Service connection name | Resource Manager - Tailspin - Space Game |
+
+   During the process, you might be prompted to sign in to your Microsoft account.
+
+6. Ensure that **Grant access permission to all pipelines** is selected.
+
+7. Select **Save**.
+
+   Azure DevOps performs a test connection to verify that it can connect to your Azure subscription. If Azure DevOps can't connect, you have the chance to sign in a second time.
+
+
+
+# 6.4 Exercise - Deploy an Azure Functions app to Azure
+
+Your project came with a pipeline that builds the projects in the solution and deploys the web app to Azure App Service. Now it's time to extend that pipeline to also deploy the new Azure Functions project.
+
+In this part, you do these tasks:
+
+- Review the Build stage.
+- Add a task to deploy your function app.
+- Add a task configure the published App Service to use the published function.
+- Save the pipeline to trigger a CI/CD workflow.
+
+## Review the Build stage
+
+Here, review the existing CI/CD pipeline defined in `azure-pipelines.yml`.
+
+1. From Azure DevOps, navigate to **Pipelines**.
+
+2. Select the pipeline.
+
+3. Select **Edit**. Ensure that the branch is set to **main** by selecting it from the dropdown menu. This brings up the `azure-pipelines.yml` file that defines the existing CI/CD pipeline.
+
+Because of the use of wildcards to the project paths, the highlighted tasks in this file automatically restore, build, and publish the new Azure Functions project.
+
+**yml**
+```yaml
+stages:
+- stage: 'Build'
+  displayName: 'Build the web application'
+  jobs: 
+  - job: 'Build'
+    displayName: 'Build job'
+    pool:
+      vmImage: 'ubuntu-20.04'
+      demands:
+      - npm
+
+    variables:
+      wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+      dotnetSdkVersion: '6.0.x'
+
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+      inputs:
+        version: '$(dotnetSdkVersion)'
+
+    - task: Npm@1
+      displayName: 'Run npm install'
+      inputs:
+        verbose: false
+
+    - script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
+      displayName: 'Compile Sass assets'
+
+    - task: gulp@1
+      displayName: 'Run gulp tasks'
+
+    - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+      displayName: 'Write build info'
+      workingDirectory: $(wwwrootDir)
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build the project - $(buildConfiguration)'
+      inputs:
+        command: 'build'
+        arguments: '--no-restore --configuration $(buildConfiguration)'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish the project - $(buildConfiguration)'
+      inputs:
+        command: 'publish'
+        projects: '**/*.csproj'
+        publishWebProjects: false
+        arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+        zipAfterPublish: true
+
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: drop
+```
+
+**Andy:** This was our previous build stage. I didn't change it from the original project because the tasks were already configured to run against all projects based on the wildcard matching pattern.
+
+**Mara:** Yes, this should work as-is. I don't think we need to make any changes here. After this build task runs, the zip file artifacts for both the web and leaderboard projects will be published for the Deploy stage to use.
+
+## Add a task to deploy the Azure Function
+
+**Andy:** I think we can also reuse the App Service deployment task as-is. Hopefully there's something similar we can use for deploying a function app.
+
+**Mara:** I have good news. After a little research, it looks like there's a task that's conceptually similar to the App Service deployment task, but for Azure Functions deployments. Let's review it now.
+
+### Azure Function App Task
+
+The `AzureFunctionApp@1` task is designed to deploy function apps. It's conceptually similar to the `AzureWebApp@1` task and includes everything needed for this function-app scenario:
+
+- `azureSubscription` refers to the name of your Azure service connection pipeline variable.
+- `appType` indicates whether the app is being deployed for Linux (`functionAppLinux`) or Windows (`functionApp`).
+- `appName` specifies the name of the Azure Functions app instance in your Azure account.
+- `package` specifies the path to the package to be deployed.
+- `runtimeStack` indicates which image the function should be run on, which is required for Linux deployments.
+- `startUpCommand` specifies the startup command to run after the function has been deployed, which is required for Linux deployments.
+
+You can learn more about the flexibility of this task in the documentation for the Azure Function App task.
+
+Add the following highlighted code to the end of your pipeline.
+
+**yml**
+```yaml
+- stage: 'Deploy'
+  displayName: 'Deploy the web application'
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: spike
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppName)'
+              appType: webAppLinux
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.Web.zip'
+
+          - task: AzureFunctionApp@1
+            displayName: 'Azure Function Deploy: leaderboard'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appType: functionAppLinux
+              appName: '$(LeaderboardAppName)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.LeaderboardFunction.zip'
+              runtimeStack: DOCKER|microsoft/azure-functions-dotnet:4
+              startUpCommand: 'func azure functionapp publish $(functionAppName) --no-bundler'
+```
+
+> **Tip**  
+> In a YAML file, whitespace is important. Ensure that the task you add here uses the same indentation as the previous task.
+
+## Add a task to update the App Service's app settings
+
+**Andy:** Now all we need to do is to configure the web app to use the published leaderboard API. We usually configure variables in the portal, but it would be better if we could do it here. It expects an AppSettings parameter named `LeaderboardFunctionUrl`.
+
+**Mara:** I agree. Adding a task for that to our pipeline will help us avoid accidental oversights down the road if we change either service. We can put it right at the end.
+
+Add the following highlighted code to the end of your pipeline. Be sure to match the indentation of the task above it. If you'd like to learn more about this task, you can review the docs for Azure App Service Settings task.
+
+**yml**
+```yaml
+- task: AzureFunctionApp@1
+  displayName: 'Azure Function Deploy: leaderboard'
+  inputs:
+    azureSubscription: 'Resource Manager - Tailspin - Space Game'
+    appType: functionAppLinux
+    appName: '$(LeaderboardAppName)'
+    package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/Tailspin.SpaceGame.LeaderboardFunction.zip'
+    runtimeStack: DOCKER|microsoft/azure-functions-dotnet:4
+    startUpCommand: 'func azure functionapp publish $(functionAppName) --no-bundler'
+
+- task: AzureAppServiceSettings@1
+  displayName: 'Update web app settings'
+  inputs:
+    azureSubscription: 'Resource Manager - Tailspin - Space Game'
+    appName: $(WebAppName)
+    resourceGroupName: $(ResourceGroupName)
+    appSettings: |
+      [
+        {
+          "name": "AppSettings__LeaderboardFunctionUrl",
+          "value": "http://$(LeaderboardAppName).azurewebsites.net/api/LeaderboardFunction",
+          "slotSetting": false
+        }
+      ]
+```
+
+## Save the pipeline to trigger a build and release
+
+1. Select **Save** from the top right corner of the page. Confirm the **Save** to trigger a run.
+
+2. In Azure Pipelines, go to the build. Trace the build as it runs.
+
+3. After the build succeeds, select the web site's deploy task and select the URL to view the deployed site.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-azure-functions/media/4-deploy-url.png)
+
+5. You get a page with the site running on App Service. Scroll down to confirm that the leaderboard has real data in it. This feature is powered by the function app.
+
+     ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-azure-functions/media/4-space-game.png)
+
+   > **Note**  
+   > If there's an error loading the leaderboard, double-check the steps you followed in this module. If you see the exception message "An attempt was made to access a socket in a way forbidden by its access permissions", make sure that the app service's `AppSettings__LeaderboardFunctionUrl` setting is being set correctly.
+
+7. You can also test out the function app directly. Just navigate to your URL using the following format. The response is JSON, which should just render as text in your browser.
+
+   **HTTP**
+   ```
+   http://<leaderboard function name>.azurewebsites.net/api/LeaderboardFunction?pageSize=10
+   ```
+
+   such as
+
+   **HTTP**
+   ```
+   http://tailspin-space-game-leaderboard-4692.azurewebsites.net/api/LeaderboardFunction?pageSize=10
+   ```
+
+**Andy:** This turned out great! Everyone should be pretty impressed with the potential we've shown here.
+
+
+
+
+
+# 6.5 Exercise - Clean up your Azure DevOps environment
+
+You're finished with the tasks for this module. Here, you clean up your Azure resources, move the work item to the Done state on Azure Boards, and clean up your Azure DevOps environment.
+
+> **Important**  
+> This page contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. It also helps ensure that you're not charged for Azure resources after you complete this module.
+
+## Clean up Azure resources
+
+Here, you delete your Azure App Service and Azure Functions instances. The easiest way to delete the instances is to delete their parent resource group. When you delete a resource group, you delete all resources in that group.
+
+In the **Create a release pipeline with Azure Pipelines** module, you managed Azure resources through the Azure portal. Tear down your deployment by using the Azure CLI through Azure Cloud Shell. The steps are similar to the steps that you used when you created the resources.
+
+### To clean up your resource group:
+
+1. Go to the Azure portal and sign in.
+
+2. From the menu bar, select **Cloud Shell**. When prompted, select the **Bash** experience.
+
+     ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-portal-menu-cloud-shell.png)
+
+4. Run the following `az group delete` command to delete the resource group that you used, `tailspin-space-game-rg`.
+
+   **Azure CLI**
+   ```bash
+   az group delete --name tailspin-space-game-rg
+   ```
+
+   When prompted, enter `y` to confirm the operation.
+
+5. As an optional step, after the previous command finishes, run the following `az group list` command.
+
+   **Azure CLI**
+   ```bash
+   az group list --output table
+   ```
+
+   You see that the resource group `tailspin-space-game-rg` no longer exists.
+
+## Move the work item to Done
+
+Here, move the work item that you assigned to yourself earlier in this module. You move **Refactor leaderboard API as an Azure Functions app** to the **Done** column.
+
+In practice, "Done" often means putting working software into the hands of your users. For learning purposes, here you mark this work as done because you fulfilled the goal for the Tailspin team. They wanted to refactor their project to extract a leaderboard API as a function app.
+
+At the end of each sprint, or work iteration, you and your team can hold a retrospective meeting. In the meeting, share the work you completed, what went well, and what you can improve.
+
+### To complete the work item:
+
+1. From Azure DevOps, navigate to **Boards**, then select **Boards** from the menu.
+
+2. Move the **Refactor leaderboard API as an Azure Functions app** work item from the **Doing** column to the **Done** column.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-azure-functions/media/5-azure-boards-wi1-done.png)
+
+## Disable the pipeline or delete your project
+
+Each module in this learning path provides a template. You can run the template to create a clean environment for the module.
+
+Running multiple templates gives you multiple Azure Pipelines projects. Each project points to the same GitHub repository. This setup can trigger multiple pipelines to run each time you push a change to your GitHub repository. The pipeline runs use up free build minutes on our hosted agents. To avoid losing those free build minutes, disable or delete your pipeline before you move to the next module.
+
+Choose one of the following options.
+
+### Option 1: Disable the pipeline
+
+Disable the pipeline so that it doesn't process build requests. You can re-enable the build pipeline later if you want to. Choose this option if you want to keep your DevOps project and your build pipeline for future reference.
+
+#### To disable the pipeline:
+
+1. In Azure Pipelines, navigate to your pipeline.
+
+2. From the dropdown menu, select **Settings**:
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-settings-button.png)
+
+4. Under **Processing of new run requests**, select **Disabled** and then select **Save**.
+
+   Your pipeline no longer processes build requests.
+
+### Option 2: Delete the Azure DevOps project
+
+Delete your Azure DevOps project, including the contents of Azure Boards and your build pipeline. In future modules, you can run another template that brings up a new project in a state where this project leaves off. Choose this option if you don't need your DevOps project for future reference.
+
+#### To delete the project:
+
+1. In Azure DevOps, navigate to your project. Earlier, we recommended that you name this project **Space Game - web - Azure Functions**.
+
+2. Select **Project settings** in the lower corner.
+
+3. In the **Overview** area, go to the bottom and select **Delete**.
+
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-delete-project.png)
+
+5. In the window that appears, enter the project name. Select **Delete** again.
+
+   Your project is now deleted.
+
+
+
+# 6.6 Summary
+
+**Completed**  
+**100 XP**  
+**1 minute**
+
+Great work! In this module, you extended a release pipeline to add support for deploying an Azure Functions app. The single release pipeline now builds a multi-project solution and deploys different components to different cloud targets in Azure.
+
+While this module focused on an app that uses Azure App Service and Azure Functions, the fundamentals covered apply across a wide range of build and deployment targets. You can also see how Azure Pipelines can scale to support even the most sophisticated scenarios.
+
+## Learn more
+
+In this module, you worked with Azure Functions, which are one of the development models within the broader Azure serverless computing offerings. Azure Functions was a great solution for the Tailspin team, but your needs might vary, and it's important to understand which compute options are best for your scenario. To learn more, explore these resources.
+
+There are quite a few serverless offerings under the Azure umbrella, and there's some overlap between various services. For a more in-depth review of some key serverless options, including Azure Functions, Microsoft Flow, Azure Logic Apps, and Azure App Service WebJobs, see [Choose the right integration and automation services in Azure](#).
+
+Azure Functions is also a great option for microservice solutions like the one the Tailspin team is evolving towards here. To understand the different options for microservices on Azure, including Azure Functions, Kubernetes, and Service Fabric, see [Choosing an Azure compute option for microservices](#).
+
+However, serverless isn't always appropriate for every situation. Stateful applications, for example, aren't a good fit for serverless computing. Fortunately, Azure provides many different compute offerings that cover virtually every cloud scenario. For help with finding the right one for your application, see [Choose an Azure compute service for your application](#).
+
+
+
