@@ -9337,6 +9337,956 @@ After completing this module, you'll be able to:
 
 
 
+# 8.1 Introduction
+
+
+By following the instructions outlined in **Automate Docker container deployments with Azure Pipelines**, you were able to enhance a release pipeline to build and publish an ASP.NET Core application as a Docker container, which was then deployed to Azure App Service. This migration to a container-based project resulted in numerous benefits for the product team. Moreover, the adoption of container technologies has the potential to unlock various innovative opportunities for the future.
+
+As development organizations expand, the complexity of the solutions they provide also grows. As various products and services become more interdependent, different development and operations requirements arise for various components within a given application. One way to enhance architectural efficiency is by refactoring those components into separate microservices.
+
+A microservice is a small, independent service designed to be self-contained and fulfill a specific business capability. Containers provide an excellent technical foundation for building and deploying these services, but a new question arises: how do we manage all of these containers that are in use?
+
+This is where orchestration technologies such as Kubernetes can be useful. Kubernetes is a platform designed to manage containerized workloads and services. It's an excellent choice for organizations that have an increasing number of containers that must be deployed, integrated, and monitored across various environments.
+
+In this module, you join the Tailspin Toys web team as they explore one way to use Kubernetes on Azure. You learn how to update a release pipeline to build, publish, and deploy multiple Docker containers to a Kubernetes cluster.
+
+While this module focuses on the core tasks that are required to build and deploy your container app, it's important to understand that all the other features of Azure Pipelines are still available for container deployments to Kubernetes. You can integrate testing, define multiple stages, and perform other tasks just like you would for your existing applications. We omit these tasks here to keep things focused.
+
+## Learning objectives
+
+After completing this module, you'll be able to:
+
+- Explain the benefits of Kubernetes and when to use it.
+- Create Azure resources to support a Kubernetes cluster.
+- Update a basic release pipeline to build, publish, and deploy multiple Docker containers to the Kubernetes cluster.
+- Monitor the build and deployment of your project.
+
+## Prerequisites
+
+The modules in this learning path form a progression. To follow the progression of this series from the beginning, complete the **Get started with Azure DevOps** and **Build applications with Azure DevOps** learning paths.
+
+To begin this learning path from the start, follow the link here: **Deploy applications with Azure DevOps**. This module picks up where **Automate Docker container deployments with Azure Pipelines** leaves off.
+
+This module also assumes you have basic familiarity with Kubernetes, although that knowledge isn't required to complete it. If you're new to the topic, we recommend that you complete the **Administer containers in Azure** learning path learning path first.
+
+> **Note**  
+> Azure Pipelines support a vast array of **languages and application types**. In this module, you'll be working with a .NET application but you can apply the patterns you learn here to your own projects that use your favorite programming languages and frameworks.
+
+## Meet the team
+
+In earlier modules, you met the Space Game web team at Tailspin Toys. The Space Game web team is here again to work with you in this module:
+
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/andy.png)
+
+**Andy** is the development lead.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/amita.png)
+
+**Amita** is in QA.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/tim.png)
+
+**Tim** is in operations.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/mara.png)
+
+**Mara** just joined as a developer and reports to Andy.
+
+Mara has prior experience with DevOps. She's helping the team adopt a more automated process that uses Azure DevOps.
+
+
+
+
+# 8.2 Why is container orchestration important?
+
+In this unit, you can follow the Tailspin team as they explore strategies for delivering on a new directive from management. The team examines how Kubernetes can assist in their transition to a microservices architecture.
+
+## The future is smaller
+
+Things are looking up at Tailspin. At a recent management offsite, Andy presented his team's recent successes with Azure DevOps, which were well received. Andy also presented a demo of the team's recent proof-of-concept project using Docker containers. These demonstrations led to a series of productive conversations on the technical future of the organization. The next day, Andy returns to share the news with the Space Game web team.
+
+**Andy:** Things went really well at my offsite presentation yesterday. Management is impressed with the work we've done so far, and has issued us a special assignment.
+
+**Tim:** Uh oh. I've been around long enough to see a trap like that coming from a mile away.
+
+**Andy:** No, this is a great opportunity for us. Management loved our Docker container demo and wants us to explore adopting a microservices architecture.
+
+**Amita:** Microservices? Like apps for phones and watches?
+
+**Andy:** No, microservices are typical apps, like our web app. The main difference is that instead of building and deploying a single monolithic app, we refactor any components that would be better maintained and managed as autonomous services. We then build those services to be good at what they do and deploy them to operate independently.
+
+**Tim:** I'm not sure I like the sound of that. I'm already dealing with so many services across our environments. I don't know if I want more on my plate.
+
+**Andy:** That's an understandable concern. Fortunately, there are some great tools for managing a multitude of containers in a given environment. We've been asked to spike out a multi-container solution for our web app that is orchestrated using Kubernetes. They also want to know how it will impact our DevOps process.
+
+**Mara:** I've been reading up on Kubernetes. Azure has great support for it through Azure Kubernetes Service, and I know there's pipeline support for it in Azure DevOps.
+
+**Amita:** This process sounds like it's going to get complex. How will it impact testing?
+
+**Mara:** It shouldn't be a significant change. Kubernetes offers a way for us to deploy to different namespaces. This enables us to partition our deployments so that we can have entire environments dedicated to testing versus production. And since they all run in the same cluster and use the same containers, the testing experience should offer what we expect to see in production.
+
+**Amita:** Is it going to be hard to keep track of what environment is where?
+
+**Mara:** No, we can use Azure DevOps environments to do all of that. You'll be able to find out where each service is and how it got there by using the portal. It's all automated through the pipeline, so there will be nothing that we have to manually keep track of. The only concern I have now is how much impact it will have on our development experience to build this.
+
+**Andy:** The good news is that the impact is minimal. Assuming we have our projects set up to build Docker containers, all we need to deploy to Kubernetes are some manifest files that describe the services and their deployments.
+
+**Mara:** Have you thought about what we will refactor out as the second container? I know there have been several teams asking us to make our leaderboard available through a web API.
+
+**Andy:** I'm one step ahead of you. I forked the Docker project last night and refactored the leaderboard data functionality into its own microservice. This leaves us with one container for the website and another for a leaderboard API. Both containers are configured to have their own public endpoints that we can share with anyone who wants to use the site or API, regardless of what technology stack their app uses. If the load grows substantially for either, we can scale its containers independently.
+
+**Mara:** This project sounds awesome! Let's get started on updating the release pipeline.
+
+## What is Kubernetes?
+
+Kubernetes is an open-source container orchestration platform that automates the deployment, scaling, and management of containerized applications. It provides a framework for running distributed systems in a declarative, responsive fashion and can run containers across multiple hosts, providing efficient use of resources and increased reliability.
+
+The Tailspin team selected Kubernetes for this scenario because it met all their needs:
+
+- **Complexity of multi-container deployments:** Kubernetes is designed, first and foremost, to automate the processes around deploying and maintaining container deployments.
+
+- **Consistency across environments and stages:** just as containers ensure a consistent deployment for the apps they contain, Kubernetes ensures a consistent deployment for the containers a cluster manages.
+
+- **Azure DevOps support:** Azure DevOps offers first-class support for working with Kubernetes.
+
+- **Ease of development:** the impact of Kubernetes on a source project is comparable to that of adding Docker support, which is minimal and limited to declarative configuration.
+
+Adopting Kubernetes drastically simplifies the process of adopting a microservices architecture that makes use of multiple Docker containers.
+
+---
+
+## Check your knowledge
+
+### 1. Which of the following isn't a good reason to use microservices?
+
+- **✅ You need to deploy software to really small devices, like watches.**
+- ❌ You want to modernize your monolithic application functionality into smaller services that can be developed and maintained independently.
+- ❌ You want to empower different teams to use the best technologies for each independent service in an overall solution.
+
+**Explanation:** Microservices refer to application architecture patterns, not device size. The term "micro" relates to the scope and functionality of the service, not the physical size of the deployment target. Watches and small devices typically run mobile apps or embedded software, not microservices architectures which are designed for server-side distributed systems.
+
+### 2. How are Docker and Kubernetes similar?
+
+- ❌ They're both effective at packaging applications into self-sufficient containers.
+- **✅ They both use declarative manifests to define how their constituent components are exposed.**
+- ❌ They're both designed for orchestrating deployed containers.
+
+**Explanation:** Both Docker and Kubernetes use declarative configuration files (Dockerfiles for Docker, YAML manifests for Kubernetes) to define how their components should be configured and exposed. Docker is primarily for containerization, while Kubernetes is for orchestration. Only Kubernetes is designed specifically for orchestrating containers.
+
+### 3. Suppose your team has multiple .NET Core projects in a solution that produces multiple Docker containers. How much overhead does adding Kubernetes support require?
+
+- ❌ A lot. Kubernetes uses its own programming languages and development framework, so applications need to be rebuilt.
+- ❌ Quite a bit. Containers will need to be adjusted to load Kubernetes settings and configuration data.
+- **✅ Very little. The application should require no changes and the containers can be produced as before. Only one or more Kubernetes manifest files that specify container requirements will need to be added.**
+
+**Explanation:** Kubernetes is primarily an orchestration platform that manages existing containers. The applications and containers themselves typically don't need changes. You only need to add Kubernetes manifest files (YAML) that describe how the containers should be deployed, scaled, and managed within the cluster.
+
+
+
+
+# 8.3 Exercise - Set up your Azure DevOps environment
+
+
+In this section, you'll configure your Azure DevOps organization to proceed with the rest of this module and create an Azure Kubernetes Service (AKS) environment to deploy your application to.
+
+To achieve these objectives, you will:
+
+- Add a user to your Azure DevOps organization.
+- Set up your Azure DevOps project.
+- Manage your workflow with Azure Boards.
+- Create Azure resources using Azure CLI.
+- Create pipeline variables in Azure Pipelines.
+- Create a service connection tto authenticate with Azure.
+- Update your Kubernetes deployment manifest.
+
+## Add a user to your organization
+
+To complete this module, an Azure subscription is required. You can get started with Azure for free.
+
+Although not necessary to work with Azure DevOps, an Azure subscription is necessary to deploy to Azure resources via Azure DevOps. To make the process more straightforward, use the same Microsoft account to sign in to both your Azure subscription and your Azure DevOps organization.
+
+If you sign in to Azure and Azure DevOps using different Microsoft accounts, you can still proceed by adding a user to your DevOps organization under the Microsoft account associated with your Azure subscription. See [Add users to your organization or project](#) for more details. While adding the user, select the **Basic** access level.
+
+After adding the user with Basic access level, sign out of Azure DevOps and sign back in using the Microsoft account associated with your Azure subscription.
+
+## Get the Azure DevOps project
+
+In this section, you run a template to create your project in Azure DevOps.
+
+### Run the template
+
+Run a template that sets up your Azure DevOps organization.
+
+1. Get and run the ADOGenerator project in Visual Studio or the IDE of your choice.
+
+2. When prompted to **Enter the template number from the list of templates**, enter **40** for **Automate multi-container deployments to Azure Kubernetes Services with Azure Pipelines**, then press Enter.
+
+3. Choose your authentication method. You can set up and use a Personal Access Token (PAT) or use device login.
+
+   > **Note**  
+   > If you set up a PAT, make sure to authorize the necessary scopes. For this module, you can use Full access, but in a real-world situation, you should ensure you grant only the necessary scopes.
+
+4. Enter your Azure DevOps organization name, then press Enter.
+
+5. If prompted, enter your Azure DevOps PAT, then press Enter.
+
+6. Enter a project name such as **Space Game - web - Kubernetes**, then press Enter.
+
+7. Once your project is created, go to your Azure DevOps organization in your browser (at `https://dev.azure.com/<your-organization-name>/`) and select the project.
+
+### Fork the repository
+
+If you haven't already, create a fork of the `mslearn-tailspin-spacegame-web-kubernetes` repository.
+
+1. On GitHub, go to the [mslearn-tailspin-spacegame-web-kubernetes](#) repository.
+
+2. Select **Fork** at the top-right of the screen.
+
+3. Choose your GitHub account as the Owner, then select **Create fork**.
+
+> **Important**  
+> The unit **Clean up your Azure DevOps environment** in this module includes crucial steps for cleanup. It is recommended to perform these steps to avoid running out of free build minutes. Even if you don't finish this module, it is important to follow the cleanup steps.
+
+### Set your project's visibility
+
+Initially, your fork of the Space Game repository on GitHub is set to public while the project created by the Azure DevOps template is set to private. A public repository on GitHub can be accessed by anyone, while a private repository is only accessible to you and the people you choose to share it with. Similarly, on Azure DevOps, public projects provide read-only access to non-authenticated users, while private projects require users to be granted access and authenticated to access the services.
+
+At the moment, it is not necessary to modify any of these settings for the purposes of this module. However, for your personal projects, you must determine the visibility and access you wish to grant to others. For instance, if your project is open source, you may choose to make both your GitHub repository and your Azure DevOps project public. If your project is proprietary, you would typically make both your GitHub repository and your Azure DevOps project private.
+
+Later on, you may find the following resources helpful in determining which option is best for your project:
+
+- [Use private and public projects](#)
+- [Change project visibility to public or private](#)
+- [Setting repository visibility](#)
+
+## Move the work item to Doing
+
+In this step, you assign a work item to yourself on Azure Boards and move it to the **Doing** state. In real-world scenarios, you and your team would create work items at the beginning of each sprint or work iteration.
+
+Assigning work items provides you with a checklist to work from and gives other team members visibility into your progress and remaining work. It also helps enforce work-in-progress (WIP) limits to prevent the team from taking on too much work at once.
+
+1. Navigate to **Boards** in Azure DevOps, and then select **Boards** from the menu.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-boards-menu.png)
+
+3. Assign the **Create multi-container version of web site orchestrated with Kubernetes** work item to yourself by selecting the down arrow located at the bottom of the card.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-boards-down-chevron.png)
+
+5. Drag and drop the work item from the **To Do** column to the **Doing** column. You'll move the task to the **Done** column at the end of this module after you complete it.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-kubernetes/media/3-azure-boards-wi1-doing.png)
+
+## Create the Azure Kubernetes Service environment
+
+In this step, you create the necessary Azure Kubernetes Service resources to deploy the new container version of the website.
+
+In the previous module, **Create a release pipeline with Azure Pipelines**, you used the Azure portal to create Azure resources. While the portal is useful for exploring Azure capabilities and performing basic tasks, creating components like Azure Kubernetes Service can be a time-consuming process.
+
+In this module, you use the Azure CLI to create the resources required to deploy and run your application on Azure Kubernetes Service. The Azure CLI can be accessed from a terminal or through Visual Studio Code. However, in this module, you access the Azure CLI from Azure Cloud Shell. Cloud Shell is a browser-based shell experience hosted in the cloud, which comes preconfigured with the Azure CLI for use with your Azure subscription.
+
+> **Important**  
+> To complete the exercises in this module, you need your own Azure subscription.
+
+### Launch Cloud Shell
+
+1. Navigate to [Azure portal](https://portal.azure.com) and sign in.
+
+2. Select **Cloud Shell** option from the menu, and then choose the **Bash** experience when prompted.
+
+      ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-portal-menu-cloud-shell.png)
+
+   > **Note**  
+   > Cloud Shell requires an Azure storage resource to persist any files that you create in Cloud Shell. When you first open Cloud Shell, you're prompted to create a resource group, storage account, and Azure Files share. This setup is automatically used for all future Cloud Shell sessions.
+
+### Select an Azure region
+
+A region refers to one or more Azure datacenters located in a geographic area. Regions such as East US, West US, and North Europe are examples of such areas. Each Azure resource, including an App Service instance, is associated with a region.
+
+To simplify the execution of commands, begin by setting a default region. Once you set a default region, subsequent commands use that region by default, unless you explicitly specify a different region.
+
+1. From Cloud Shell, run the following command to list the regions available in your Azure subscription:
+
+   **Azure CLI**
+   ```bash
+   az account list-locations \
+     --query "[].{Name: name, DisplayName: displayName}" \
+     --output table
+   ```
+
+2. Select a region from the **Name** column in the output that is geographically close to you. For instance, you could choose `eastasia` or `westus2`.
+
+3. Run the following command to set your default region. Replace `REGION` with the name of the region you chose earlier.
+
+   **Azure CLI**
+   ```bash
+   az configure --defaults location=<REGION>
+   ```
+
+   This example sets `westus2` as the default region.
+
+   **Azure CLI**
+   ```bash
+   az configure --defaults location=westus2
+   ```
+
+### Create Bash variables
+
+Using Bash variables can make the setup process more convenient and less error-prone. This approach helps avoid accidental typos by defining shared text strings as variables that can be used throughout your script.
+
+1. From Cloud Shell, generate a random number to simplify the creation of globally unique names for certain services in the next step.
+
+   **Bash**
+   ```bash
+   resourceSuffix=$RANDOM
+   ```
+
+2. Create globally unique names for your Azure Container Registry and Azure Kubernetes Service instance. Note that these commands use double quotes, which instruct Bash to interpolate the variables using the inline syntax.
+
+   **Bash**
+   ```bash
+   registryName="tailspinspacegame${resourceSuffix}"
+   aksName="tailspinspacegame-${resourceSuffix}"
+   ```
+
+3. Create another Bash variable to store the name of your resource group.
+
+   **Bash**
+   ```bash
+   rgName='tailspin-space-game-rg'
+   ```
+
+4. Find the latest AKS version.
+
+   **Azure CLI**
+   ```bash
+   az aks get-versions
+   ```
+
+   Make note of the latest version.
+
+### Create Azure resources
+
+> **Note**  
+> In this tutorial, default network settings are used for learning purposes. These settings enable your website to be accessed from the internet. However, in practice, you might choose to configure an Azure virtual network that places your website in a network that isn't internet-routable and is only accessible by you and your team. Later, you could reconfigure your network to make the website available to your users.
+
+1. Run the following command to create a resource group with the name you defined earlier:
+
+   **Azure CLI**
+   ```bash
+   az group create --name $rgName
+   ```
+
+2. Run the `az acr create` command to create an Azure Container Registry with the name you defined earlier:
+
+   **Azure CLI**
+   ```bash
+   az acr create \
+     --name $registryName \
+     --resource-group $rgName \
+     --sku Standard
+   ```
+
+3. Run the `az aks create` command to create an AKS instance with the name you defined earlier. Replace `<latest-AKS-version>` with the version you noted earlier.
+
+   **Azure CLI**
+   ```bash
+   az aks create \
+     --name $aksName \
+     --resource-group $rgName \
+     --enable-addons monitoring \
+     --kubernetes-version <latest-AKS-version> \
+     --generate-ssh-keys
+   ```
+
+   > **Note**  
+   > AKS deployment completion might take 10-15 minutes.
+
+4. Create a variable to store the ID of the service principal configured for the AKS instance:
+
+   **Azure CLI**
+   ```bash
+   clientId=$(az aks show \
+     --resource-group $rgName \
+     --name $aksName \
+     --query "identityProfile.kubeletidentity.clientId" \
+     --output tsv)
+   ```
+
+5. Create a variable to store the ID of the Azure Container Registry:
+
+   **Azure CLI**
+   ```bash
+   acrId=$(az acr show \
+     --name $registryName \
+     --resource-group $rgName \
+     --query "id" \
+     --output tsv)
+   ```
+
+6. Run the `az acr list` command to retrieve the login server URL for your Azure Container Registry (ACR) instance:
+
+   **Azure CLI**
+   ```bash
+   az acr list \
+    --resource-group $rgName \
+    --query "[].{loginServer: loginServer}" \
+    --output table
+   ```
+
+   Make sure to take note of the login server for your container registry. You need this information later when configuring your pipeline. Here's an example:
+
+   **Output**
+   ```
+   LoginServer                      
+   --------------------------------
+   tailspinspacegame4692.azurecr.io
+   ```
+
+7. Run the `az role assignment create` command to create a role assignment to authorize the AKS cluster to connect to the Azure Container Registry:
+
+   **Azure CLI**
+   ```bash
+   az role assignment create \
+     --assignee $clientId \
+     --role AcrPull \
+     --scope $acrId
+   ```
+
+> **Important**  
+> The unit **Clean up your Azure DevOps environment** in this module includes crucial steps for cleanup. It's recommended to perform these steps to avoid running out of free build minutes. Even if you don't finish this module, it's important to follow the cleanup steps.
+
+## Create a variable group
+
+In this section, you'll add a variable to your pipeline to store the name of your Azure Container Registry. Defining the name of your Azure Container Registry instance as a variable in your pipeline configuration is recommended over hard-coding it. This makes your configuration more reusable and in case the name of your instance changes, you can easily update the variable and trigger your pipeline without having to modify your configuration.
+
+1. Sign in to your Azure DevOps organization, and then navigate to your project.
+
+2. Select **Pipelines**, and then select **Library** from the left navigation pane.
+
+ ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-kubernetes/media/3-pipelines-library.png)
+
+4. Select **Variable groups**, and then select **+ Variable group** to add a new variable group.
+
+5. In the **Properties** section, enter **Release** for the variable group name.
+
+6. Under the **Variables** section, select **Add**.
+
+7. Enter **RegistryName** for the variable name, and for the value, enter the login server of your Azure Container Registry, such as `tailspinspacegame4692.azurecr.io`.
+
+8. At the top of the page, select **Save** to save your pipeline variable. This is an example of what your variable group might look like
+
+   
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-kubernetes/media/3-library-variable-group.png)
+
+## Create service connections
+
+The next step is to create service connections that allow Azure Pipelines to access your Azure Container Registry and Azure Kubernetes Service instances. By creating these service connections, Azure Pipelines can push your containers and instruct your AKS cluster to pull them in to update the deployed service.
+
+> **Important**  
+> Make sure that you're signed in to the Azure portal and Azure DevOps with the same Microsoft account.
+
+### Create a Docker Registry service connection
+
+1. Sign in to your Azure DevOps organization, and then navigate to your project.
+
+2. Select **Project settings** from the bottom corner of the page.
+
+3. Select **Service connections** under the **Pipelines** section.
+
+4. Select **New service connection**, then select **Docker Registry**, and then select **Next**.
+
+5. Near the top of the page, select **Azure Container Registry**, and then select **Service Principal** for authentication type.
+
+6. Enter the following values for each setting:
+
+   | Setting | Value |
+   |---------|-------|
+   | Subscription | Your Azure subscription |
+   | Azure container registry | Select the one you created earlier |
+   | Service connection name | Container Registry Connection |
+
+7. Make sure that the checkbox for **Grant access permission to all pipelines** is selected.
+
+8. Select **Save** when you're done.
+
+### Create ARM service connection
+
+Now you'll create an Azure Resource Manager service connection to authenticate with your AKS cluster. We're using an ARM service connection instead of Kubernetes because long-lived tokens are no longer created by default since Kubernetes 1.24. Check out this DevOps blog post for more details: [Service Connection guidance for AKS customers using Kubernetes tasks](#).
+
+1. Select **New service connection**, select **Azure Resource Manager**, and then select **Next**.
+
+2. Select **Service Principal (automatic)**, and then select **Next**.
+
+3. Select **Subscription** for scope level.
+
+4. Enter the following values for each setting.
+
+   | Setting | Value |
+   |---------|-------|
+   | Subscription | Your Azure subscription |
+   | Resource group | Select the one you created earlier |
+   | Service connection name | Kubernetes Cluster Connection |
+
+5. Make sure that the checkbox for **Grant access permission to all pipelines** is selected.
+
+6. Select **Save** when you're done.
+
+## Create a pipeline environment
+
+1. Select **Pipelines**, and then select **Environments**.
+
+  
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-kubernetes/media/3-pipelines-environments.png)
+
+3. Select **Create environment** to create a new environment.
+
+4. In the **Name** field, enter **Dev**.
+
+5. Select **None** from the **Resource** section, and then select **Create** to create your pipeline environment.
+
+## Update the Kubernetes deployment manifest
+
+In this section, you'll update the Kubernetes manifest `deployment.yml` to point to the container registry you created earlier.
+
+1. Navigate to your GitHub account and select the repository you forked for this module: `mslearn-tailspin-spacegame-web-kubernetes`.
+
+2. Open the `manifests/deployment.yml` file in edit mode.
+
+     ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-kubernetes/media/3-github-edit-mode.png)
+
+4. Change the container image references to use your ACR login server. The following manifest uses `tailspinspacegame2439.azurecr.io` as an example.
+
+   **yml**
+   ```yaml
+   apiVersion : apps/v1
+   kind: Deployment
+   metadata:
+     name: web
+   spec:
+     replicas: 1
+     selector:
+       matchLabels:
+         app: web
+     template:
+       metadata:
+         labels:
+           app: web
+       spec:
+         containers:
+           - name: web
+             image: tailspinspacegame4692.azurecr.io/web
+             ports:
+             - containerPort: 80
+
+   apiVersion : apps/v1
+   kind: Deployment
+   metadata:
+     name: leaderboard
+   spec:
+     replicas: 1
+     selector:
+       matchLabels:
+         app: leaderboard
+     template:
+       metadata:
+         labels:
+           app: leaderboard
+       spec:
+         containers:
+           - name: leaderboard
+             image: tailspinspacegame4692.azurecr.io/leaderboard
+             ports:
+             - containerPort: 80
+   ```
+
+5. Commit the changes to your main branch.
+
+
+
+
+# 8.4 Exercise - Deploy a multi-container solution to a Kubernetes cluster
+
+
+The release pipeline provided with your project is designed to build the solution as a Docker container and deploy it to Azure App Service. To support the deployment of multiple containers to a Kubernetes cluster, you need to modify this pipeline.
+
+In this unit, you'll learn how to:
+
+- Update the pipeline to trigger on a commit to the main branch.
+- Define variables to be shared across the pipeline.
+- Build and publish Docker images.
+- Publish Kubernetes manifests.
+- Add a task to create an image pull secret for use between your Kubernetes and container registry instances.
+- Deploy updated images to a Kubernetes cluster.
+
+## Update the pipeline to support triggers
+
+1. Sign in to your Azure DevOps organization, and then navigate to your project.
+
+2. Select **Pipelines**, and then select your pipeline.
+
+3. Select **Edit** to edit your `azure-pipelines.yml`.
+
+**Andy:** This was the build stage we had in place for the previous single-container solution. I knew it wasn't going to run properly, so I disabled it. We can start off by re-enabling triggers on commits to the main branch.
+
+4. Replace the existing trigger line at the top of the file with the following snippet. This triggers a pipeline run every time a commit is made to the main branch.
+
+   **yml**
+   ```yaml
+   trigger:
+   - 'main'
+   ```
+
+## Define variables accessible across pipeline
+
+**Andy:** We're going to need to add two pipeline variables. One for specifying the name of the leaderboard repository, which is `leaderboard`. The other is for the name of the image pull secret used for sharing between AKS and ACR instances during deployment.
+
+Add the following highlighted code to the variables section.
+
+**yml**
+```yaml
+variables:
+  buildConfiguration: 'Release'
+  leaderboardRepository: 'leaderboard'
+  webRepository: 'web'
+  tag: '$(Build.BuildId)'
+  imagePullSecret: 'secret'
+```
+
+## Build and publish Docker image to Azure Container Registry
+
+**Andy:** We already have a task for building the web app as a Docker container, which we publish to our container registry. We can just use a second task to do the same for our leaderboard.
+
+Add a second `Docker@2` task to build and publish the leaderboard container using the following highlighted snippet. Add this task right after the web container task.
+
+**yml**
+```yaml
+- task: Docker@2
+  displayName: 'Build and push the web image to container registry'
+  inputs:
+    command: buildAndPush
+    buildContext: $(Build.Repository.LocalPath)
+    repository: $(webRepository)
+    dockerfile: '$(Build.SourcesDirectory)/Tailspin.SpaceGame.Web/Dockerfile'
+    containerRegistry: 'Container Registry Connection'
+    tags: |
+      $(tag)
+
+- task: Docker@2
+  displayName: 'Build and push the leaderboard image to container registry'
+  inputs:
+    command: buildAndPush
+    buildContext: $(Build.Repository.LocalPath)
+    repository: $(leaderboardRepository)
+    dockerfile: '$(Build.SourcesDirectory)/Tailspin.SpaceGame.LeaderboardContainer/Dockerfile'
+    containerRegistry: 'Container Registry Connection'
+    tags: |
+      $(tag)
+```
+
+> **Tip**  
+> Make sure that the task you add here uses consistent indentation with the previous task as whitespace is important in a YAML file.
+
+## Publish the Kubernetes manifests
+
+**Andy:** I think we can move on to the next stage. Do you see anything missing?
+
+**Mara:** You mentioned that there were some manifest files in the source project that define the deployment, and services Kubernetes needs when we deploy. We should publish those before we finish this stage.
+
+**Andy:** Do we need to? Won't they still be on the local disk?
+
+**Mara:** They would be if we were adding the deployment tasks within the same stage as the build. However, since our deployment tasks happen in their own Deploy stage, it runs on a fresh environment, probably even on a different agent. We should be sure to publish anything this stage produces that the other stage needs.
+
+**Andy:** That's a great point. Is it easy to do? We just need to ensure the manifests folder is copied to the new agent.
+
+**Mara:** That's what the `PublishBuildArtifacts@1` task is for. It's so common that there's even a shorthand for it, `publish`.
+
+Add a `publish` task that stores the manifests folder for a future stage as shown in the following code snippet. Make sure that the indentation of this task matches that of the previous task.
+
+**yml**
+```yaml
+- task: Docker@2
+  displayName: 'Build and push the leaderboard image to container registry'
+  inputs:
+    command: buildAndPush
+    buildContext: $(Build.Repository.LocalPath)
+    repository: $(leaderboardRepository)
+    dockerfile: '$(Build.SourcesDirectory)/Tailspin.SpaceGame.LeaderboardContainer/Dockerfile'
+    containerRegistry: 'Container Registry Connection'
+    tags: |
+      $(tag)
+
+- publish: '$(Build.SourcesDirectory)/manifests'
+  artifact: manifests
+```
+
+## Replace the deploy stage
+
+**Mara:** I'm going to replace our existing Deploy stage with one that uses a deployment job. A deployment job is a special kind of job that allows us to associate our deployment with the Azure DevOps environment created earlier. This makes it easier to track deployment history, which will be especially useful as our solutions get more sophisticated.
+
+Remove the existing Deploy stage (everything after the build stage) and replace it with the following snippet. Take note of the highlighted line that indicates the deployment environment to be utilized.
+
+**yml**
+```yaml
+- stage: 'Deploy'
+  displayName: 'Deploy the containers'
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: 'Dev'
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+```
+
+**Mara:** The first step we'll add in the deployment stage is to download the manifest artifacts published earlier using the `DownloadBuildArtifacts@0` task.
+
+**Andy:** Let me guess, is there a download shorthand for that task?
+
+**Mara:** Exactly correct! We can use the `current` specifier to indicate that we want the artifact from the current run of the pipeline.
+
+Add the highlighted lines as the first step of the Deploy stage.
+
+**yml**
+```yaml
+- stage: 'Deploy'
+  displayName: 'Deploy the containers'
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: 'ubuntu-20.04'
+    environment: 'spike.default'
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: manifests
+```
+
+**Andy:** Now we need to create an image pull secret that will be shared between our ACR and AKS instances. Do you know if there's a task we can use?
+
+**Mara:** I was just looking that up, and we're in luck. The `KubernetesManifest@0` task supports an action to create the secret needed.
+
+### Kubernetes manifest task
+
+The Kubernetes manifest task is designed to manage all of the mainstream deployment operations required for Kubernetes. It supports multiple action options that range from creating secrets to deploying images. In this case, the `createSecret` action is used, along with the following parameters:
+
+- `action` indicates the feature to run. In this case, `createSecret` creates the shared secret.
+- `connectionType` specifies the type of service connection to use. Options: `azureResourceManager` or `kubernetesServiceConnection`.
+- `secretName` specifies the name of the secret to create.
+- `dockerRegistryEndpoint` specifies the name of the Azure Container Registry Services connection.
+- `azureSubscriptionConnection` specifies the name of the ARM Services connection.
+- `azureResourceGroup` specifies the name of your resource group.
+- `kubernetesCluster` specifies the name of your AKS cluster.
+- `namespace` specifies the Kubernetes namespace this action applies to.
+
+Add the following snippet to the end of your pipeline. Make sure that both the resource group name and the cluster name match the names of the ones you created earlier. Ensure that the indentation of this task matches that of the download task.
+
+**yml**
+```yaml
+- task: KubernetesManifest@1
+  displayName: Create imagePullSecret
+  inputs:
+    action: createSecret
+    connectionType: azureResourceManager
+    secretName: $(imagePullSecret)
+    dockerRegistryEndpoint: 'Container Registry Connection'
+    azureSubscriptionConnection: 'Kubernetes Cluster Connection'
+    azureResourceGroup: 'tailspin-space-game-rg'
+    kubernetesCluster: 'tailspinspacegame-24591'
+    namespace: 'default'
+```
+
+**Andy:** The final step is to trigger the deployment of our images to the Kubernetes cluster. Based on the documentation, it looks like we can use the same task but with a different action and parameters.
+
+- `action` indicates the feature to run. In this case, `deploy` to deploy to AKS cluster.
+- `connectionType` specifies the type of service connection to use. Options: `azureResourceManager` or `kubernetesServiceConnection`.
+- `azureSubscriptionConnection` specifies the name of the ARM Services connection.
+- `azureResourceGroup` specifies the name of your resource group.
+- `kubernetesCluster` specifies the name of your AKS cluster.
+- `namespace` specifies the Kubernetes namespace this action applies to.
+- `imagePullSecrets` specifies the list of secrets needed to pull from the container registry.
+- `containers` specifies the list of container images to deploy.
+
+Add the following snippet to the end of the pipeline. Make sure that both the resource group name and the cluster name match the names of the ones you created earlier. Ensure that the indentation of this task matches that of the previous task.
+
+**yml**
+```yaml
+- task: KubernetesManifest@1
+  displayName: Deploy to Kubernetes cluster
+  inputs:
+    action: deploy
+    connectionType: azureResourceManager
+    azureSubscriptionConnection: 'Kubernetes Cluster Connection'
+    azureResourceGroup: 'tailspin-space-game-rg'
+    kubernetesCluster: 'tailspinspacegame-24591'
+    namespace: 'default'
+    manifests: |
+      $(Pipeline.Workspace)/manifests/deployment.yml
+      $(Pipeline.Workspace)/manifests/service.yml
+    imagePullSecrets: |
+      $(imagePullSecret)
+    containers: |
+      $(RegistryName)/$(webRepository):$(tag)
+      $(RegistryName)/$(leaderboardRepository):$(tag)
+```
+
+## Run your pipeline
+
+1. Select **Save** from the upper-right corner of the page. Select **Save** to confirm your commit message.
+
+2. Select **Run**, confirm your branch name and then select **Run** to trigger a pipeline run.
+
+3. Select **Pipelines**, and then select your pipeline to view the logs as your pipeline runs.
+
+4. After the pipeline run is complete, select **Environments** from the left pane, and then select the **Dev** environment to view your deployment jobs.
+
+Now let's go check out our deployed web app and API endpoint. To do so, we need to get the external IP addresses for both the web and leaderboard services.
+
+5. Navigate to [Azure portal](https://portal.azure.com), select your AKS cluster, and then select **Services and ingresses**.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-kubernetes/media/aks-external-ip.png)
+
+7. Select the **External IP** for your web service to view your site on AKS.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-kubernetes/media/4-space-game.png)
+
+9. Go back to your Azure portal window where you left off and then copy the **External IP** for your leaderboard service. This IP address is where the leaderboard API is publicly hosted.
+
+10. Replace the placeholder in the following link with the external IP you copied. You can also add a `pageSize=10` query parameter to make it easier to view the JSON response in your browser. Use a URL like the following one in a new browser tab.
+
+   ```
+   http://[IP]/api/Leaderboard?pageSize=10
+   ```
+
+11. You can view the raw JSON response from the leaderboard API hosted in your AKS cluster. You now have a REST API that you can call from other applications.
+
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-kubernetes/media/4-leaderboard-api.png)
+
+**Andy:** This turned out great! I think using Kubernetes would be a great way for us to adopt a broader microservices strategy.
+
+
+
+
+# 8.5 Exercise - Clean up your Azure DevOps environment
+
+
+After completing the assigned tasks for this module, the next steps involve cleaning up your Azure resources, transitioning the work item to the **Done** state on Azure Boards, and cleaning up your Azure DevOps environment.
+
+> **Important**  
+> Performing this cleanup is essential in order to to prevent incurring charges for Azure resources beyond the completion of this module.
+
+## Clean up Azure resources
+
+The easiest way to clean up your Azure resources is to delete their parent resource group. When you delete a resource group, you delete all resources in that group. To delete your resource group:
+
+1. Navigate to the Azure portal and sign in.
+
+2. Select **Cloud Shell** from the menu, and then select **Bash**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-portal-menu-cloud-shell.png)
+
+3. Run the following command to delete the resource group you created. Type in **y** when prompted to confirm the deletion.
+
+   **Azure CLI**
+   ```bash
+   az group delete --name tailspin-space-game-rg
+   ```
+
+4. Optionally, after the previous command finishes, you can run the following command to confirm the deletion. You'll notice that the resource group *tailspin-space-game-rg* no longer appears in the list.
+
+   **Azure CLI**
+   ```bash
+   az group list --output table
+   ```
+
+## Move the work item to Done
+
+In this step, you move the work item that you previously assigned to yourself in this module to the **Done** column. In practice, **Done** typically means delivering working software to users. However, for the purposes of this learning module, it means that the specific goal was accomplished. To complete the work item:
+
+1. Navigate to your Azure DevOps project, and then select **Boards** then **Boards**.
+
+2. Move the **Create multi-container version of web site orchestrated with Kubernetes** work item to the **Done** column.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-kubernetes/media/5-azure-boards-wi1-done.png)
+
+## Disable the pipeline or delete your project
+
+This learning path provides a template for each module that you can use to create a fresh environment. If you run multiple templates, you end up with multiple Azure Pipelines projects that point to the same GitHub repository. This setup can cause multiple pipelines to run each time you push a change to your GitHub repository, which can create issues. Therefore, before moving to the next module, you should disable or delete the pipeline to avoid losing free build minutes.
+
+Choose one of the following options:
+
+### Option 1: Disable the pipeline
+
+Disable the pipeline to stop it from processing new requests. You can choose to re-enable your pipeline later if you wish to. This option is suitable if you want to retain your DevOps project and deployment pipeline for future reference.
+
+#### To disable the pipeline:
+
+1. Select **Pipelines**, and then select your pipeline.
+
+2. Select **Settings** from the drop-down menu.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-settings-button.png)
+
+4. Select **Disabled** and then select **Save**.
+
+### Option 2: Delete the Azure DevOps project
+
+If you don't need your DevOps project for future reference, you can delete it. For future modules, you can run another template that spins up a new project in the state where this project leaves off. This option is suitable if you're certain you won't need this project again.
+
+#### To delete the project:
+
+1. Navigate to your project in the Azure DevOps portal.
+
+2. Select **Project settings** from the bottom-left corner.
+
+3. From the **Overview** section, scroll all the way down and then select **Delete**.
+
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-delete-project.png)
+
+5. Confirm the project name and then select **Delete** to delete your project.
+
+
+# 8.6 Summary
+
+Great work! In this module, you updated a release pipeline to build, publish, and deploy the team's multi-container solution to Azure Kubernetes Service. The team is now well on its way to implementing a broader microservices strategy that offers increased agility in its development and operations.
+
+While this module focused on orchestrating a collection of Docker containers using Kubernetes, the fundamentals covered apply across a wide range of build and deployment targets. You can also see how Azure Pipelines can scale to support even the most sophisticated scenarios.
+
+## Learn more
+
+In this module, you worked with a microservices solution using containers. However, there are many ways to implement microservice solutions in Azure using a wide variety of technologies. To learn more, see [Building microservices on Azure](#).
+
+The microservices solution in this module had been refactored from a larger monolithic application. To learn more about migrating larger applications into smaller services, see [Decompose a monolithic application into a microservices architecture](#).
+
+The microservices solution in this module used various platforms and services, including Docker, Azure Container Registry, and Kubernetes. To learn more about these and related container-centric technologies in Azure, such as Azure Container Instances and App Service, see the [Administer containers in Azure](#) learning path.
+
+## Learning path summary
+
+Congratulations. You completed the final module in the *Deploy applications with Azure DevOps* learning path. The main focus of this learning path is deploying applications by using Azure Pipelines.
+
+In this learning path, you accomplished a lot, including:
+
+- Building a basic release pipeline that deploys a web application to App Service.
+- Expanding your basic release pipeline to a multistage pipeline that deploys to various development, test, and staging environments.
+- Running both functional and nonfunctional tests in the pipeline.
+- Implementing a blue-green deployment that updates the application and requires minimal downtime.
+- Extending pipelines to add support for different deployment targets, such as Azure Functions and Kubernetes.
+
+You can apply what you learned to the applications and services that you work on.
 
 
 
