@@ -8551,10 +8551,6 @@ Delete your Azure DevOps project, including the contents of Azure Boards and you
 
 # 6.6 Summary
 
-**Completed**  
-**100 XP**  
-**1 minute**
-
 Great work! In this module, you extended a release pipeline to add support for deploying an Azure Functions app. The single release pipeline now builds a multi-project solution and deploys different components to different cloud targets in Azure.
 
 While this module focused on an app that uses Azure App Service and Azure Functions, the fundamentals covered apply across a wide range of build and deployment targets. You can also see how Azure Pipelines can scale to support even the most sophisticated scenarios.
@@ -8570,4 +8566,754 @@ Azure Functions is also a great option for microservice solutions like the one t
 However, serverless isn't always appropriate for every situation. Stateful applications, for example, aren't a good fit for serverless computing. Fortunately, Azure provides many different compute offerings that cover virtually every cloud scenario. For help with finding the right one for your application, see [Choose an Azure compute service for your application](#).
 
 
+
+
+# 7 Automate Docker container deployments with Azure Pipelines
+
+Use Azure Pipelines to deploy Docker containers to Azure App Service.
+### Learning objectives
+After completing this module, you'll be able to:
+- Create Azure resources to support a Docker container web application.
+- Use YAML pipelines to build, publish, and deploy a Docker container.
+- Monitor the build and deployment of your project.
+
+If you just want to learn how to deploy Docker containers to Azure Web App for Containers, please refer to the Deploy to Azure Web App for Containers guide.
+
+#### Prerequisites
+- An Azure subscription
+- An Azure DevOps organization with access to Microsoft-hosted parallel jobs. Check your parallel jobs and request a free grant.
+- A GitHub account
+
+
+# 7.1  Introduction
+
+
+In **Create a release pipeline with Azure Pipelines**, you built a basic release pipeline that deploys an ASP.NET Core application to Azure App Service. Although this process covers the needs for basic applications, modern solutions often require a combination of applications, services, and other components.
+
+Azure provides great support for traditional app deployments, such as to virtual machines or application services. Another option you might consider is to deploy your app by using a container. A *container* app is one that's packaged and published as a single artifact that can be deployed with all of its dependencies to run in an isolated environment.
+
+In this module, you'll join the Tailspin Toys web team as they explore one way to use containers in Azure. You'll learn how to update your CI/CD pipeline to build a Docker container, publish the container to Azure Container Registry, and deploy the container to App Service.
+
+While this module focuses on the core tasks that are required to build and deploy your container app, it's important to understand that all of the other features of Azure Pipelines are still available for Docker container deployments. You can integrate testing, define multiple stages, and perform other tasks just like you would for your existing applications. We omit these tasks here to keep things focused.
+
+## Learning objectives
+
+After completing this module, you'll be able to:
+
+- Create Azure resources to support a Docker container web application.
+- Use YAML pipeline to build, publish, and deploy a Docker container.
+- Monitor the build and deployment of your project.
+
+## Prerequisites
+
+The modules in this learning path form a progression. If you want to follow the progression from the beginning, complete the following learning paths:
+
+- Get started with Azure DevOps
+- Build applications with Azure DevOps
+
+This module assumes you have basic familiarity with Docker, although that knowledge isn't required to complete it. If you're new to the topic, it's recommended that you complete the **Introduction to Docker containers** module first.
+
+> **Note**  
+> Azure Pipelines support a vast array of **languages and application types**. In this module, you'll be working with a .NET application but you can apply the patterns you learn here to your own projects that use your favorite programming languages and frameworks.
+
+## Meet the team
+
+You met the *Space Game* web team at Tailspin Toys in previous modules. As a refresher, here's who you'll work with in this module.
+
+**Andy** is the development lead.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/andy.png)
+
+
+**Amita** is in QA.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/amita.png)
+
+**Tim** is in operations.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/tim.png)
+
+**Mara** just joined as a developer and reports to Andy.
+![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/mara.png)
+
+Mara has prior experience with DevOps. She's helping the team adopt a more automated process that uses Azure DevOps.
+
+
+# 7.2 Why are containers important?
+
+In this unit, you'll follow the Tailspin team as they discuss some much-needed improvements to their DevOps process. In this scenario, the team uses Docker to containerize their web application. The team then updates their CI/CD pipeline to support it.
+
+## It's been a few rough weeks
+
+The past few weeks have been a challenging time at Tailspin. Teams struggle to meet deadlines for a number of reasons, and there's been concern over productivity across the company. Andy has called some key stakeholders from the Space Game website team together to gather feedback for an upcoming presentation to management.
+
+**Andy:** Thanks for stopping by. I know the last few weeks have been rough for everyone, but I have some good news. Management is holding an offsite tomorrow to hear proposals on changes we can make to improve performance. They've invited me to present a case study on our DevOps successes and said they're also open to any other ideas we might have. I was hoping we could use this meeting as an opportunity to brainstorm. Who wants to go first?
+
+Everyone looks at Amita. She has been especially frustrated lately.
+
+**Amita:** I'll go first. As you know, I test for multiple teams, and it can be challenging because each team uses their own technology stack. Even when they use the same underlying platforms, like .NET or Java, they often target different versions. I feel like I sometimes spend half of my day simply getting test environments in a state where they can run the code I need to test. When something doesn't work, it's hard to tell whether there's a bug in the code or if I accidentally configured version 4.2.3 instead of 4.3.2.
+
+Andy writes "Dependency versioning challenges for QA" on the whiteboard.
+
+**Tim:** I'd like to add operations to that frustration. We have a few teams with unique version requirements, so we have to publish their apps on their own virtual machines just to ensure their version and component requirements don't conflict with our other apps. Besides the overhead involved in maintaining the extra set of VMs, it also costs us more than it would if those apps could run side by side.
+
+Andy writes "Overhead due to solving app isolation with VMs" on the whiteboard.
+
+**Mara:** I have something from the development side. A few weeks ago, I was working on the peer-to-peer update system and had it all working on my machine. But when I handed it off for deployment, it didn't work in production. I had forgotten that I needed to open port 315 as part of the service. It took us over a day of troubleshooting to realize what was going on. Once we opened that up in production, things worked as expected.
+
+Andy writes "Configuration inconsistencies between deployment stages" on the whiteboard.
+
+**Andy:** I think this conversation is a good start. Let me research these issues and see what I can come up with. Here are the concerns that I heard:
+
+- Dependency versioning challenges for QA
+- Overhead due to solving app isolation with VMs
+- Configuration inconsistencies between deployment stages
+
+## Putting it all together (in one container)
+
+The next morning, Andy calls a meeting to present a new idea to the team.
+
+**Andy:** I spoke with some colleagues yesterday about the challenges we're facing, and they made some interesting suggestions. The one I'm excited to try out is Docker. It's a technology for packaging entire applications as containers.
+
+**Amita:** What's a container? Is that like a .zip file?
+
+**Andy:** Not exactly. It's more like a lightweight virtual machine designed to run directly on the host operating system. When you build your project, the output is a container that includes your software and its dependencies. However, it's not a complete virtualized system, so it can spin up in as little as less than one second.
+
+**Tim:** How does it handle security and isolation?
+
+**Andy:** Security and isolation are handled by the host operating system. When your container runs in a host process, the container is isolated from the other processes on that same host machine. This isolation allows your container to load whatever versions of components it needs, regardless of what other containers are doing. It also means you can easily run multiple containers on the same host simultaneously.
+
+**Amita:** That sounds great for the production environment, but does it solve the challenges we're facing earlier in the pipeline?
+
+**Andy:** Absolutely! Instead of shipping source code or a set of binaries, the entire container becomes the artifact. That means that when Mara is developing, her debugging sessions run locally against the container hosted on her machine. When Amita tests, she tests against a copy of that same container, which already includes all the required versions of its dependencies. When Tim manages our production environment, the containers he monitors are standalone copies of the same containers developed by Mara and tested by Amita.
+
+**Mara:** How hard is it to develop a container application? Do we have to make significant changes to our existing code?
+
+**Andy:** Containers are more of a packaging and deployment technology. They don't impact the fundamental software we're writing. We can just instruct our tools to produce a Docker container at the end of the build. Then, when we debug, the application runs out of that local container instead of our local web server. In fact, tools like Visual Studio even let you switch between debug environments like Docker and IIS Express to give us the flexibility we need. I actually forked our web site project last night and converted it to build as a Docker container to test out the process. I only needed to add some basic container configuration; I didn't need to change any of our existing code.
+
+**Mara:** That's great to know. I bet we can even update the release pipeline in Azure Pipelines from your fork to build and deploy the Docker version.
+
+**Andy:** You read my mind.
+
+## What is Docker?
+
+Docker is a technology for automating the packaging and deployment of portable, self-sufficient containers. Docker containers can run anywhere a Docker host is found, whether on a development machine, a departmental server, an enterprise datacenter, or in the cloud. Azure provides multiple ways to run container-based applications, including App Service or as part of clusters managed with orchestration technologies like Kubernetes.
+
+The Tailspin team selected Docker containers for this scenario because it met all their needs:
+
+- **Dependency versioning challenges for QA:** Applications are packaged as containers that bring the correct versions of their dependencies with them.
+
+- **Overhead due to solving app isolation with VMs:** Many isolated containers can run on the same host with benefits over virtual machines including faster startup time to greater resource efficiency.
+
+- **Configuration inconsistencies between DevOps stages:** Containers ship with manifests that automate configuration requirements, such as which ports need to be exposed.
+
+Adopting Docker containers can be a key step towards a microservices architecture. We'll discuss more about that later on.
+
+---
+
+## Check your knowledge
+
+### 1. Which of the following options is not a good reason to use Docker?
+
+- **✅ You build mobile apps and want a single mobile container to run across different operating systems.**
+- ❌ Your application has specific dependency requirements and you want to package them along with the app itself for deployment.
+- ❌ You want the different stages of your pipeline to use the same environment used in production.
+
+**Explanation:** Docker containers run on the host operating system, so they cannot run a mobile app across different operating systems. Mobile apps are platform-specific and require different runtimes for iOS, Android, etc. Docker is better suited for server-side applications that need consistent environments and dependency management.
+
+### 2. How are containers and virtual machines similar?
+
+- ❌ They both run their own virtualized operating systems.
+- **✅ They both provide isolation for the applications they contain.**
+- ❌ They both offer the same performance.
+
+**Explanation:** Both containers and virtual machines provide isolation for applications, but they achieve it differently. VMs run complete virtualized operating systems, while containers share the host OS kernel. Containers typically offer better performance due to lower overhead compared to VMs.
+
+### 3. How much overhead does migrating an existing .NET Core application to use a Docker container require?
+
+- ❌ A lot. Docker uses its own programming languages and development framework, so applications need to be rebuilt.
+- ❌ Quite a bit. Application code will need to be adjusted to load Docker settings and configuration data.
+- **✅ Very little. The application should require no changes, but a Docker manifest that specifies application requirements will need to be added.**
+
+**Explanation:** Docker is primarily a packaging and deployment technology. Existing applications typically require minimal changes - mainly adding a Dockerfile that specifies how to build the container image. The application code itself usually remains unchanged.
+
+
+# 7.3 Exercise - Set up your Azure DevOps environment
+
+
+In this section, you'll lean how to set up your Azure DevOps organization and create the Azure App Service environment that you'll deploy to.
+
+You'll learn how to:
+
+- Set up your Azure DevOps project.
+- Manage your work items with Azure Boards.
+- Create your Azure App Service environment.
+- Create pipeline variables in Azure Pipelines.
+- Create a service connection to authenticate with your Azure subscription.
+
+## Add a user to Azure DevOps
+
+To complete this module, you need your own Azure subscription. You can get started with Azure for free.
+
+You don't need an Azure subscription to work with Azure DevOps, but in this module you'll use Azure DevOps to deploy to Azure resources. To simplify the process, use the same Microsoft account to sign in to both Azure and Azure DevOps.
+
+If you use different Microsoft accounts to sign in to Azure and Azure DevOps, add a user with Basic access level to your DevOps organization under the Microsoft account that you use to sign in to Azure. See [Add users to your organization or project](#) for more details.
+
+Then, sign out of Azure DevOps and sign back in using the same account you used to sign in to your Azure subscription.
+
+## Get the Azure DevOps project
+
+Here, you'll ensure that your Azure DevOps organization is set up to complete the rest of this module. To do so, you'll run a template that creates a project in Azure DevOps.
+
+The modules in this learning path form a progression. You follow the Tailspin web team through their DevOps journey. For learning purposes, each module has its own Azure DevOps project.
+
+### Run the template
+
+Run a template that sets up your Azure DevOps organization.
+
+1. Get and run the ADOGenerator project in Visual Studio or the IDE of your choice.
+
+2. When prompted to **Enter the template number from the list of templates**, enter **39** for **Automate Docker container deployments with Azure Pipelines**, then press Enter.
+
+3. Choose your authentication method. You can set up and use a Personal Access Token (PAT) or use device login.
+
+   > **Note**  
+   > If you set up a PAT, make sure to authorize the necessary scopes. For this module, you can use Full access, but in a real-world situation, you should ensure you grant only the necessary scopes.
+
+4. Enter your Azure DevOps organization name, then press Enter.
+
+5. If prompted, enter your Azure DevOps PAT, then press Enter.
+
+6. Enter a project name such as **Space Game - web - Docker**, then press Enter.
+
+7. Once your project is created, go to your Azure DevOps organization in your browser (at `https://dev.azure.com/<your-organization-name>/`) and select the project.
+
+### Fork the repository
+
+If you haven't already, create a fork of the `mslearn-tailspin-spacegame-web-docker` repository.
+
+1. On GitHub, go to the [mslearn-tailspin-spacegame-web-docker](#) repository.
+
+2. Select **Fork** at the top-right of the screen.
+
+3. Choose your GitHub account as the Owner, then select **Create fork**.
+
+> **Important**  
+> In this module, the **Clean up your Azure DevOps environment** page contains important cleanup steps. Cleaning up helps ensure that you don't run out of free build minutes. Be sure to follow the cleanup steps even if you don't complete this module.
+
+### Set your project's visibility
+
+Initially, your fork of the Space Game repository on GitHub is set to public while the project created by the Azure DevOps template is set to private. A public repository on GitHub can be accessed by anyone, while a private repository is only accessible to you and the people you choose to share it with. Similarly, on Azure DevOps, public projects provide read-only access to non-authenticated users, while private projects require users to be granted access and authenticated to access the services.
+
+At the moment, it is not necessary to modify any of these settings for the purposes of this module. However, for your personal projects, you must determine the visibility and access you wish to grant to others. For instance, if your project is open source, you may choose to make both your GitHub repository and your Azure DevOps project public. If your project is proprietary, you would typically make both your GitHub repository and your Azure DevOps project private.
+
+Later on, you may find the following resources helpful in determining which option is best for your project:
+
+- [Use private and public projects](#)
+- [Change project visibility to public or private](#)
+- [Setting repository visibility](#)
+
+## Move the work item to Doing
+
+Here, you'll assign a work item to yourself on Azure Boards. You'll also move the work item to the **Doing** state. In practice, you and your team would create work items at the start of each sprint, or work iteration.
+
+This work assignment gives you a checklist to work from. It gives other team members visibility into what you're working on and how much work is left. The work item also helps enforce work-in-progress (WIP) limits so that the team doesn't take on too much work at one time.
+
+Here, you'll move the first item, **Create container version of web site using Docker**, to the **Doing** column, then assign yourself to the work item.
+
+### To set up the work item:
+
+1. From Azure DevOps, navigate to **Boards**. Then select **Boards** from the menu.
+
+   
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-boards-menu.png)
+
+3. In the **Create container version of web site using Docker** work item, select the down arrow at the bottom of the card, then assign the work item to yourself.
+
+    ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-boards-down-chevron.png)
+
+5. Move the work item from the **To Do** column to the **Doing** column.
+
+    ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-docker/media/3-azure-boards-wi1-doing.png)
+
+At the end of this module, you'll move the card to the **Done** column after you complete the task.
+
+## Create the Azure App Service environment
+
+In the **Create a release pipeline with Azure Pipelines** module, you created an App Service instance using Azure portal. Although the portal is an excellent tool for exploring Azure's offerings, setting up components like App Service can become cumbersome.
+
+In this module, you'll employ the Azure CLI to launch the resources necessary for deploying and running an App Service instance. You can access the Azure CLI from a terminal or through Visual Studio Code.
+
+> **Important**  
+> You must have your own Azure subscription to complete the exercises in this module.
+
+### Launch Cloud Shell inn Azure portal
+
+1. Navigate to the [Azure portal](https://portal.azure.com) and sign in.
+
+2. Select the **Cloud Shell** from the menu bar, and then select the **Bash** experience.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-portal-menu-cloud-shell.png)
+
+   > **Note**  
+   > Cloud Shell requires an Azure storage resource to persist any files that you create in Cloud Shell. When you first open Cloud Shell, you're prompted to create a resource group, storage account, and Azure Files share. This setup is automatically used for all future Cloud Shell sessions.
+
+### Select an Azure region
+
+A region is one or more Azure datacenters located within a particular geographic location. East US, West US, and North Europe are a few examples of regions. Each Azure resource, such as an App Service instance, is allocated to a specific region.
+
+To simplify the process of running commands, begin by selecting a default region. Once the default region is specified, subsequent commands will use that region by default unless a different region is explicitly specified.
+
+1. Run the following command to list the available regions for your Azure subscription.
+
+   **Azure CLI**
+   ```bash
+   az account list-locations \
+     --query "[].{Name: name, DisplayName: displayName}" \
+     --output table
+   ```
+
+2. Select a region that is in proximity to your location from the **Name** column in the output. For example, you can choose `eastasia` or `westus2`.
+
+3. Run the following command to set your default region. Replace the placeholder with the name of the region you've selected.
+
+   **Azure CLI**
+   ```bash
+   az configure --defaults location=<REGION>
+   ```
+
+   This example sets `westus2` as the default region:
+
+   **Azure CLI**
+   ```bash
+   az configure --defaults location=westus2
+   ```
+
+### Create Bash variables
+
+In this section, you'll create Bash variables to make the setup process more convenient and less error-prone. Using variables for shared text strings helps avoid accidental typos.
+
+1. From Cloud Shell, generate a random number. This will make it easier to create globally unique names for certain services in the next step.
+
+   **Bash**
+   ```bash
+   resourceSuffix=$RANDOM
+   ```
+
+2. Create globally unique names for your App Service Web App and Azure Container Registry. Using double quotes in these commands prompts Bash to interpolate the variables using the inline syntax.
+
+   **Bash**
+   ```bash
+   webName="tailspin-space-game-web-${resourceSuffix}"
+   registryName="tailspinspacegame${resourceSuffix}"
+   ```
+
+3. Create two more Bash variables to store the names of your resource group and App Service plan.
+
+   **Bash**
+   ```bash
+   rgName='tailspin-space-game-rg'
+   planName='tailspin-space-game-asp'
+   ```
+
+### Create the Azure resources
+
+> **Note**  
+> For learning purposes, you'll the default network settings here. These settings make your site accessible from the internet. In practice, you could configure an Azure virtual network that places your website in a network that's not internet routable and that only you and your team can access. Later, you could reconfigure your network to make the website available to your users.
+
+1. Run the following `az group create` command to create a resource group using the name defined earlier.
+
+   **Azure CLI**
+   ```bash
+   az group create --name $rgName
+   ```
+
+2. Run the following `az acr create` command to create an Azure Container Registry using the name defined earlier.
+
+   **Azure CLI**
+   ```bash
+   az acr create --name $registryName \
+     --resource-group $rgName \
+     --sku Standard \
+     --admin-enabled true
+   ```
+
+3. Run the following `az appservice plan create` command to create an App Service plan using the name defined earlier.
+
+   **Azure CLI**
+   ```bash
+   az appservice plan create \
+     --name $planName \
+     --resource-group $rgName \
+     --sku B1 \
+     --is-linux
+   ```
+
+   The `--sku` argument specifies the B1 plan. This plan runs on the Basic tier. The `--is-linux` argument specifies to use Linux workers.
+
+   > **Important**  
+   > If the B1 SKU isn't available in your Azure subscription, choose a different plan, such as S1 (Standard).
+
+4. Run the following `az webapp create` command to create the App Service instance.
+
+   **Azure CLI**
+   ```bash
+   az webapp create \
+     --name $webName \
+     --resource-group $rgName \
+     --plan $planName \
+     --deployment-container-image-name $registryName.azurecr.io/web:latest
+   ```
+
+5. Run the following `az webapp list` command to list the host name and state of the App Service instance.
+
+   **Azure CLI**
+   ```bash
+   az webapp list \
+     --resource-group $rgName \
+     --query "[].{hostName: defaultHostName, state: state}" \
+     --output table
+   ```
+
+   Note the host name for the running service. You'll need it later when you verify your work. Here's an example:
+
+   **Output**
+   ```
+   HostName                                        State
+   ----------------------------------------------  -------
+   tailspin-space-game-web-4692.azurewebsites.net  Running
+   ```
+
+6. Run the following `az acr list` command to list the login server of the Azure Container Registry instance. You'll need this server name when creating pipeline variables later.
+
+   **Azure CLI**
+   ```bash
+   az acr list \
+     --resource-group $rgName \
+     --query "[].{loginServer: loginServer}" \
+     --output table
+   ```
+
+   Note the login server. You'll need it later when you configure the pipeline. Here's an example:
+
+   **Output**
+   ```
+   LoginServer
+   ---------------------------------
+   tailspinspacegame4692.azurecr.io    
+   ```
+
+> **Important**  
+> The **Clean up your Azure DevOps environment** page in this module contains important cleanup steps. Cleaning up helps ensure that you're not charged for Azure resources after you complete this module. Be sure to perform the cleanup steps even if you don't complete this module.
+
+## Create pipeline variables in Azure Pipelines
+
+In **Create a release pipeline with Azure Pipelines**, you added a variable to your pipeline that stores the name of your web app in App Service. You'll do the same thing here. In addition, you'll add the name of your Azure Container Registry.
+
+You could hard-code these names in your pipeline configuration, but if you define them as variables, your configuration will be more reusable. Plus, if your instance names change, you can update the variables and trigger your pipeline without modifying your configuration.
+
+### To add the variables:
+
+1. In Azure DevOps, go to your **Space Game - web - Docker** project.
+
+2. Under **Pipelines**, select **Library**.
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-docker/media/3-pipelines-library.png)
+
+4. Select **+ Variable group**.
+
+5. Under **Properties**, enter **Release** for the variable group name.
+
+6. Under **Variables**, select **+ Add**.
+
+7. For the name of your variable, enter **WebAppName**. For the value, enter the name of the App Service instance created above, such as `tailspin-space-game-web-4692`.
+
+   > **Important**  
+   > Set the name of the App Service instance, not its host name. In this example, you would enter `tailspin-space-game-web-4692` and not `tailspin-space-game-web-4692.azurewebsites.net`.
+
+8. Repeat the process to add another variable named **RegistryName** with the value of your Azure Container Registry login server, such as `tailspinspacegame4692.azurecr.io`.
+
+9. Select **Pipeline permissions**, and then select the **+** sign to add a pipeline. Select **mslearn-tailspin-spacegame-web-docker** to give your pipeline permission to access the variable group.
+
+10. Select **Save** at the top of the page to save your variables. Your variable group should look like the following:
+
+    ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-docker/media/3-library-variable-group.png)
+
+## Create required service connections
+
+Here, you'll create a service connection that enables Azure Pipelines to access your Azure subscription. Azure Pipelines uses this service connection to deploy the website to App Service. You created a similar service connection in the previous module. You'll also create a Docker Registry connection to publish your container to the Azure Container Registry.
+
+> **Important**  
+> Ensure that you're signed in to both the Azure portal and Azure DevOps under the same Microsoft account.
+
+1. In Azure DevOps, go to your **Space Game - web - Docker** project.
+
+2. From the bottom corner of the page, select **Project settings**.
+
+3. Under **Pipelines**, select **Service connections**.
+
+4. Select **New service connection**, then choose **Azure Resource Manager**, then select **Next**.
+
+5. Near the top of the page, **Service principal (automatic)**. Then select **Next**.
+
+6. Fill in these fields:
+
+   | Field | Value |
+   |-------|-------|
+   | Scope level | Subscription |
+   | Subscription | Your Azure subscription |
+   | Resource Group | tailspin-space-game-rg |
+   | Service connection name | Resource Manager - Tailspin - Space Game |
+
+   During the process, you might be prompted to sign in to your Microsoft account.
+
+7. Ensure that **Grant access permission to all pipelines** is selected.
+
+8. Select **Save**.
+
+   Azure DevOps performs a test connection to verify that it can connect to your Azure subscription. If Azure DevOps can't connect, you have the chance to sign in a second time.
+
+9. Select **New service connection**, then choose **Docker Registry**, then select **Next**.
+
+10. Near the top of the page, select **Azure Container Registry**.
+
+11. Fill in these fields:
+
+    | Field | Value |
+    |-------|-------|
+    | Subscription | Your Azure subscription |
+    | Azure container registry | Select the one you created earlier |
+    | Service connection name | Container Registry Connection |
+
+12. Ensure that **Grant access permission to all pipelines** is selected.
+
+13. Select **Save** when you're done.
+
+
+
+#  7.4 Exercise - Deploy a Docker container to Azure
+
+Your project came with a release pipeline that builds the projects in the solution and deploys the web app to its App Service. Now, it's time to update that pipeline build and deploy the project as a container instead.
+
+In this unit, you'll:
+
+- Define some pipeline variables to make the build pipeline easier to maintain.
+- Replace the existing Build tasks with a unified task to build and push a Docker container.
+- Replace the existing Deploy task with one that updates the App Service Web App with the new container image.
+- Save the pipeline to trigger a build and release.
+
+## Define variables to be shared within the pipeline
+
+Here, you'll add a new pipeline variable to your existing YAML pipeline defined in `azure-pipelines.yml`.
+
+1. From Azure DevOps, navigate to **Pipelines**.
+
+2. Select the pipeline.
+
+3. Select **Edit**. Ensure that the branch is set to **main** by selecting it from the drop-down menu. This brings up your `azure-pipelines.yml` file.
+
+4. Add the highlighted line below to add a pipeline variables named `webRepository` and `tag`. These will be used in multiple tasks to uniquely identify the specific version of the container being referenced. You can also remove the `buildConfiguration` variable; you won't need it anymore.
+
+   **yml**
+   ```yaml
+   trigger:
+   - '*'
+
+   variables:
+     buildConfiguration: 'Release'
+     webRepository: 'web'
+     tag: '$(Build.BuildId)'
+   ```
+
+## Replace the build stage tasks
+
+**Andy:** I don't think we need any of these build tasks anymore, because the Dockerfile in the project folder already defines the build we want. However, I haven't had the chance to see what we can use to build the image using a Dockerfile yet. Any ideas?
+
+**Mara:** I was just looking that up. It seems like should be able to build the container and even push it to the repository with a single task. Let's add it now.
+
+### Docker task
+
+You can use the Docker task to build and deploy Docker images. Replace the entire Build stage with the YAML snippet below.
+
+- `command`: Specifies the Docker command to run.
+- `buildContext`: Specifies the path to the build context.
+- `repository`: Specifies the name of the repository.
+- `dockerfile`: Specifies the path to the Dockerfile.
+- `containerRegistry`: Specifies the name of the Docker registry service connection.
+- `tags`: Specifies a list of tags on separate lines. These tags are used in build, push, and buildAndPush commands.
+
+**yml**
+```yaml
+- stage: 'Build'
+  displayName: 'Build and push'
+  jobs:  
+  - job: 'Build'
+    displayName: 'Build job'
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+    - task: Docker@2
+      displayName: 'Build and push the image to container registry'
+      inputs:
+        command: buildAndPush
+        buildContext: $(Build.Repository.LocalPath)
+        repository: $(webRepository)
+        dockerfile: '$(Build.SourcesDirectory)/Tailspin.SpaceGame.Web/Dockerfile'
+        containerRegistry: 'Container Registry Connection'
+        tags: |
+          $(tag)
+```
+
+## Replace the deploy stage task
+
+**Andy:** Well, that seems pretty straightforward. Now all we need is to find a task that will instruct App Service to use the newly pushed version of the container image.
+
+**Mara:** I'm already on it. It's a bit different from deploying a build to Azure Pipelines, but still direct enough that we can get the job done in one task. Let's add it now.
+
+### Azure Web App for Container task
+
+The Azure Web App for Container task is designed to deploy Docker containers to Azure App Service. Replace the entire Deploy stage with the YAML snippet below.
+
+- `appName`: Specifies the name of an existing Azure App Service.
+- `azureSubscription`: Specifies the name of the Azure Resource Manager subscription for the deployment.
+- `imageName`: Specifies the fully qualified container image name; for example, `myregistry.azurecr.io/nginx:latest` or `python:3.7.2-alpine/`.
+
+**yml**
+```yaml
+- stage: 'Deploy'
+  displayName: 'Deploy the container'
+  dependsOn: Build
+  jobs:
+  - job: 'Deploy'
+    displayName: 'Deploy job'
+    pool:
+      vmImage: 'ubuntu-20.04'
+    variables:
+    - group: Release
+    steps:
+    - task: AzureWebAppContainer@1
+      inputs:
+       appName: $(WebAppName)
+       azureSubscription: 'Resource Manager - Tailspin - Space Game'
+       imageName: $(RegistryName)/$(webRepository):$(build.buildId)
+```
+
+## Save the pipeline to trigger a build and release
+
+1. Select **Save** from the top-right corner of the page. Type your commit message and select **Save** to confirm.
+
+2. Select **Run**, and make sure your branch is set to **main**. Select **Run** when you're done.
+
+3. Select your pipeline to view the logs. After the build has succeeded, select the **AzureWebAppContainer** task and then select the **App Service Application URL** to view your deployed web app.
+
+     ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-docker/media/4-deploy-url.png)
+
+5. You should see your web app running on App Service.
+
+     ![](https://learn.microsoft.com/en-us/training/azure-devops/deploy-docker/media/4-space-game.png)
+
+**Andy:** This turned out great! I think adopting containers could be a huge win for our team.
+
+
+
+# 7.5 Exercise - Clean up your Azure DevOps environment
+
+
+You've completed all the tasks for this module. Here, you'll clean up your Azure resources, move the work item to the Done state in Azure Boards, and clean up your Azure DevOps environment.
+
+## Clean up Azure resources
+
+The easiest way to delete your Azure App Service instances is to delete their parent resource group. When you delete a resource group, you delete all resources within that group. To delete your resource group:
+
+1. Navigate to [Azure portal](https://portal.azure.com) and sign in.
+
+2. From the menu bar, select **Cloud Shell**. When prompted, select the **Bash** experience.
+
+     ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-portal-menu-cloud-shell.png)
+
+4. Run the following command to delete your resource group (`tailspin-space-game-rg`). When prompted, enter `y` to confirm your choice.
+
+   **Azure CLI**
+   ```bash
+   az group delete --name tailspin-space-game-rg
+   ```
+
+5. To confirm the deletion, execute the following command and ensure that your resource group is not listed anymore.
+
+   **Azure CLI**
+   ```bash
+   az group list --output table
+   ```
+
+## Move the work item to Done
+
+Here, you'll move the work item that you assigned to yourself earlier in this module. You'll move **Create container version of web site using Docker** to the **Done** column.
+
+In practice, "Done" often means putting working software into the hands of your users. For learning purposes, you'll mark this work as "Done" because you fulfilled the goal for the Tailspin team. They wanted to package and deploy their web app as a Docker container.
+
+At the end of each sprint, or work iteration, you and your team can hold a retrospective meeting. In the meeting, share the work you completed, what went well, and what you can improve.
+
+### To complete the work item:
+
+1. From Azure DevOps, navigate to **Boards** and then select **Boards** from the menu.
+
+2. Move the **Create container version of web site using Docker** work item from the **Doing** column to the **Done** column.
+
+
+   ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-settings-button.png)
+
+## Disable the pipeline or delete your project
+
+Each module in this learning path provides a template. You can run the template to create a clean environment for the module.
+
+Running multiple templates gives you multiple Azure Pipelines projects. Each project points to the same GitHub repository. This setup can trigger multiple pipelines to run each time you push a change to your GitHub repository. The pipeline runs use up free build minutes on our hosted agents. To avoid losing those free build minutes, disable or delete your pipeline before you move to the next module.
+
+Choose one of the following options:
+
+### Option 1: Disable the pipeline
+
+Disable the pipeline so that it doesn't process build requests. You can re-enable the build pipeline later if you want to. Choose this option if you want to keep your DevOps project and your build pipeline for future reference.
+
+#### To disable the pipeline:
+
+1. In Azure Pipelines, navigate to your pipeline.
+
+2. From the **More actions (...)** drop-down menu, select **Settings**:
+
+  ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-pipelines-settings-button.png)
+
+4. Under **Processing of new run requests**, select **Disabled**, then select **Save**. Your pipeline will no longer process new build requests.
+
+### Option 2: Delete the Azure DevOps project
+
+Delete your Azure DevOps project, including the contents of Azure Boards and your build pipeline. In future modules, you can run another template that brings up a new project in a state where this project leaves off. Choose this option if you don't need your DevOps project for future reference.
+
+#### To delete the project:
+
+1. In Azure DevOps, navigate to your project. Earlier, we recommended that you name this project **Space Game - web - Docker**.
+
+2. Select **Project settings** in the lower corner.
+
+3. Navigate to the bottom of the **Project details** section and choose the **Delete** option.
+
+
+    ![](https://learn.microsoft.com/en-us/training/azure-devops/shared/media/azure-devops-delete-project.png)
+
+
+5. Once the new window appears, input the project name and select **Delete** once more.
+
+
+
+
+# 7.6 Summary
+
+
+Great work! In this module, you created a release pipeline to build, publish, and deploy the team's web site project to Azure as a Docker container.
+
+While this module specifically focused on a Docker container app, the fundamentals covered apply across a wide range of build and deployment targets. You can also see how Azure Pipelines can scale to support even the most sophisticated scenarios.
+
+## Learn more
+
+In this module, you worked with Docker, which is the leading standard for container technologies.
+
+- To learn more about the fundamentals of Docker containers, see [Introduction to Docker containers](#).
+- To learn more about packaging web apps so that they can be deployed as Docker images, see [Build a containerized web application with Docker](#).
+- To learn more about running containerized apps using Docker containers with Azure Container Instances (ACI), see [Run Docker containers with Azure Container Instances](#).
 
