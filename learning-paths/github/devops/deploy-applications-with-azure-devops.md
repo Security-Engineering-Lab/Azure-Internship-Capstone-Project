@@ -9317,3 +9317,27 @@ In this module, you worked with Docker, which is the leading standard for contai
 - To learn more about packaging web apps so that they can be deployed as Docker images, see [Build a containerized web application with Docker](#).
 - To learn more about running containerized apps using Docker containers with Azure Container Instances (ACI), see [Run Docker containers with Azure Container Instances](#).
 
+
+# 8 Automate multi-container Kubernetes deployments with Azure Pipelines
+
+Deploy multiple containers to an Azure Kubernetes Service cluster with Azure Pipelines.
+
+#### Learning objectives
+After completing this module, you'll be able to:
+- Explain the benefits of Kubernetes and when to use it.
+- Create Azure resources to support a Kubernetes cluster.
+- Update a basic release pipeline to build, publish, and deploy multiple Docker containers to the Kubernetes cluster.
+- Monitor the build and deployment of your project.
+
+### Prerequisites
+- An Azure DevOps organization with access to Microsoft-hosted parallel jobs. Check your parallel jobs and request a free grant.
+- An Azure subscription.
+- An Azure DevOps organization.
+- A GitHub account.
+
+
+
+
+
+
+
