@@ -223,10 +223,8 @@ This module discusses each phase in the next units.
 
 
 
-# Step 1 - Design
+# 1.3 Step 1 - Design
 
-**200 XP**  
-*6 minutes*
 
 The design phase is the starting ground for your threat modeling activities. Gather as much data as possible about what you're building and what you're using to build it.
 
@@ -340,3 +338,233 @@ To help you understand how much information to include, choose between these fou
 
 - Option 2 is wrong - you DO need to research security guarantees, assumptions, and gaps during the Design phase
 - Option 3 is wrong - identifying and resolving security issues happens in later phases (Break and Fix), not during Design
+
+
+
+# 1.4 Step 2 - Break
+
+
+The break phase is where you use the data-flow diagram to find potential threats against your system. The process uses a threat-modeling framework to help you find the most common threats and ways to protect against them.
+
+## Goals
+
+- Choose between *protecting the system* and *understanding the attacker* focused approaches
+- Use the STRIDE framework to identify common threats
+
+> **Important**
+> 
+> If you don't complete this phase, you won't find potential threats in your system, which can lead to future breaches.
+
+## Focus your approach
+
+Start by choosing whether you want to find ways to protect your system, or you want to understand all you can about an attacker and their motives. Examples include:
+
+| Focus | Example of what you can find |
+|-------|------------------------------|
+| **System** | You find an issue with an unencrypted connection between the user and the system. |
+| **Attacker** | You find out more about means, motivation, and ways to harden the system entry points. |
+| **Asset** | You identify critical assets based on things like classified data handling, and focus mostly on protecting those assets. |
+
+> **Note**
+> 
+> Microsoft product engineers mostly focus on protecting the system. Penetration testing teams focus on both.
+
+## Select a threat framework
+
+Next, select a framework to help generate potential threats in your system. Microsoft traditionally uses STRIDE, an acronym for the six main threat categories to provide an extensive—but not exhaustive—list of threats.
+
+The framework helps you ask a few important questions about your system:
+
+| Threat | Definition | Question | Threat example |
+|--------|------------|----------|----------------|
+| **Spoofing** | Attacker pretends to be someone or something else | Are both sides of the communication authenticated? | Sending an email to users from an account that seems legitimate with malicious links and attachments to capture their credentials, data, and device access |
+| **Tampering** | Attacker changes data without authorization | How do I know someone can't change data in transit, in use, or at rest? | Modifying memory through weak API call handling to cause crashes and disclosure of sensitive error messages |
+| **Repudiation** | Attacker claims to not have done something | Can every action be tied to an identity? | Claiming to not have deleted database records |
+| **Information Disclosure** | Attacker sees data they aren't supposed to see | How do I know someone can't see data in transit, in use, or at rest? | Accessing unauthorized documents and folders with weak security controls |
+| **Denial of Service** | Attacker brings your system down | Are there areas in the system where resource is limited? | Flooding the network with requests |
+| **Elevation of Privilege** | Attacker has unauthorized access to data | How do I know someone is allowed to take this action? | Extracting data by exploiting weaknesses in input-handling logic or memory |
+
+---
+
+## Check your knowledge
+
+**1. What happens at the Break Phase?**
+
+**Correct Answer:** You select a focus area with an associated framework to systematically identify potential threats in your system.
+
+**Explanation:** The Break Phase is specifically about identifying potential threats in your system using a systematic approach. You choose a focus area (system, attacker, or asset-focused) and then apply a threat modeling framework like STRIDE to systematically find potential threats. The other options are incorrect because:
+
+- Option 2 is wrong - the Break phase is about identifying threats, not solutions (solutions come in the Fix phase)
+- Option 3 is wrong - while meeting with the security team can be helpful, it's not a requirement of the Break phase itself
+
+
+
+
+# 1.5 Step 3 - Fix
+
+The fix phase is where the fate of all threats is decided. Each STRIDE threat maps to one or more security controls, which offer different functions and types to choose from.
+
+## Goals
+- Measure each threat against a prioritization framework or security bug bar
+- Track each threat as a task or work item in a bug-management service
+- Generate security control recommendations that are mapped to STRIDE threats
+- Address each threat by selecting one or more security control types and functions
+- Resolve tasks
+
+> **Important**
+> 
+> If you don't complete this phase, you won't find the security controls to help reduce risk or track each threat properly.
+
+## Set up a threat tracking workflow
+Set up a threat tracking workflow that prioritizes threats and creates tasks to address them.
+
+### Prioritize threats
+Start by measuring each threat against a prioritization framework or security bug bar. This process helps you arrange resources to fix issues deemed most important to your organization.
+
+The process uses three key variables:
+
+| Variable | Description |
+|----------|-------------|
+| Impact | Uses STRIDE categories to assign impact |
+| Severity | Uses internal bug bar or prioritization framework to assign severity using worst-case scenarios |
+| Risk | Uses a calculation of security control effectiveness and implementation cost |
+
+> **Tip**
+> 
+> Microsoft engineers use an internal security bug bar that assigns threats with a Critical, Important, Moderate, Low, or Information severity rating. Check with your security team to confirm how to prioritize your issues.
+
+### Create tasks
+Next, add each threat in a bug-management solution like Azure DevOps Services. Some of the benefits include:
+
+- Reinforces issue ownership
+- Effectively tracks history
+- Gives you the ability to use standardized templates for priority and resolution exercises
+
+## Rate security control effectiveness and cost
+Visit each security control recommendation mapped to STRIDE threats. Write down the ones that are most effective and least expensive to implement. Here are a few examples:
+
+| Threat | Security Control | Security Control Example |
+|--------|------------------|--------------------------|
+| Spoofing | Authentication | Ensure message integrity and authenticate origin by sending and receiving messages signed with digital signatures |
+| Tampering | Integrity | Validate input to prevent the processing of malicious payloads and mishandling of unexpected behavior |
+| Repudiation | Nonrepudiation | Create and protect security logs that contain user actions and timestamps |
+| Information disclosure | Confidentiality | Apply access control lists to ensure the right users can access the right data |
+| Denial of service | Availability | Use elastic resources to manage the growing or shrinking usage |
+| Elevation of privilege | Authorization | Run the service using the least possible amount of access |
+
+> **Tip**
+> 
+> You might come across security controls that reduce or completely eliminate multiple threats at once. As an example, using SSL/TLS creates secure transmission channels to help prevent malicious data modification or disclosure.
+
+## Security control types and functions
+Security controls have different types and functions. When combined, they help secure your system and create multiple layers of security, also known as defense-in-depth.
+
+You can choose one or more security control types:
+
+- **Physical**, like cameras
+- **Technical**, like encryption
+- **Administrative**, like policies
+
+These types have one or more security control functions:
+
+| Function | Description |
+|----------|-------------|
+| Preventive | Reduces the probability or impact of a threat, like firewalls |
+| Detective | Identifies attacks as they happen, like surveillance |
+| Corrective | Controls how the system responds to an ongoing attack, like system patches |
+| Recovery | Recovers system from an attack, like backups |
+| Deterrent | Keeps attackers away from the system, like least privilege |
+
+## Add security control details to each issue
+Add the details to each issue in the bug management solution, then resolve each issue with one of the following resolutions. They vary slightly from organization to organization:
+
+| Resolution | Description |
+|------------|-------------|
+| Reduce | Use bug fixes or redesign to reduce or eliminate threat impact and severity |
+| Transfer | Assign issue to another system or team |
+| Avoid | Cut the part of the system that contains the issue |
+| Accept | Risk is accepted without a resolution. This resolution requires approval of an authorized risk decision maker. The decision might be based on threat severity. Critical severity threats might require approval from senior leadership, while a defense-in-depth risk might require approval by a senior engineer. Speak with your team for strategic guidance |
+
+---
+
+## Check your knowledge
+
+**Question:** What happens at the Fix Phase?
+
+**Варіанти відповідей:**
+1. It's when all fixes are verified before the system is deployed.
+2. It's when you generate, validate, and prioritize a list of security controls to reduce or eliminate risk.
+3. It's when a framework is selected to help generate potential threats.
+
+**Правильна відповідь:** **Варіант 2** - It's when you generate, validate, and prioritize a list of security controls to reduce or eliminate risk.
+
+**Пояснення:** На етапі Fix основна мета - це створення, валідація та пріоритизація списку засобів безпеки (security controls) для зменшення або усунення ризиків. Це включає оцінку загроз, створення завдань для їх вирішення, вибір відповідних типів та функцій засобів безпеки, а також вирішення кожної загрози через один із запропонованих методів (зменшення, передача, уникнення або прийняття ризику).
+
+
+
+# 1.6 Step 4 - Verify
+
+The verify phase is the last step of the threat-modeling process, which often happens before the system is deployed. It involves ensuring requirements are met, assumptions are validated, and security controls are in place.
+
+## Goals
+- Confirm that the system satisfies all previous and new security requirements
+- Configure cloud provider, operating system, and components to meet security requirements
+- Ensure that all issues are addressed with the right security controls
+- Take the system through manual and automated verification before deployment
+
+> **Important**
+> 
+> If you don't complete this phase, you won't be able to verify the security work was successfully completed.
+
+## Verify requirements and set defaults
+
+Start by verifying that all requirements created in the first phase are met.
+
+**Examples:**
+- Network security plans
+- Secrets-management solution implementation
+- Logging and monitoring systems
+- Identity and access controls
+
+Then make sure to change all the default configuration settings from the cloud provider, operating system, and components so you can meet all security requirements.
+
+**Examples:**
+- Enable Azure SQL Database transparent data encryption to protect data on disk
+- Use role-based access control to assign permissions to users, groups, and applications
+- Enable Windows Firewall across all profiles
+
+You should resolve all issues logged in the bug-management solution. Verify all fixes.
+
+## Run verification
+
+The last part involves running both manual and automated verification. At Microsoft, systems are subject to a verification process before deployment. The process might include automated scanners, code reviews, and penetration tests. The process can be enforced before each deployment or across time intervals, like every **6-12 months**.
+
+If you answer **yes** to any of the following questions, you might want to have shorter verification cadences:
+
+- Is my system used externally?
+- Does my system handle confidential data?
+- Do I have to comply with regulations?
+- Does my organization require extra security processes such as privacy implications, operational risk, or development requirements?
+
+---
+
+## Check your knowledge
+
+**Question:** What happens at the Verify Phase?
+
+**Варіанти відповідей:**
+1. You implement the list of applicable security controls that reduces or eliminates risk.
+2. Code is reviewed manually before being pushed to the staging branch for deployment.
+3. System is verified manually or automatically against previously generated threats to verify security controls reduced or eliminated risk.
+
+**Правильна відповідь:** **Варіант 3** - System is verified manually or automatically against previously generated threats to verify security controls reduced or eliminated risk.
+
+**Пояснення:** На етапі Verify основна мета - це перевірка системи (як ручна, так і автоматична) відповідно до раніше ідентифікованих загроз, щоб переконатися, що впроваджені засоби безпеки дійсно зменшили або усунули ризики. Це заключний етап процесу моделювання загроз, який включає:
+
+- Підтвердження виконання всіх вимог безпеки
+- Налаштування системних компонентів згідно з вимогами
+- Запуск процесів верифікації (сканери, code review, penetration testing)
+- Перевірку ефективності впроваджених security controls
+
+Етап Verify відрізняється від етапу Fix тим, що тут ми не впроваджуємо нові засоби захисту, а перевіряємо ефективність уже впроваджених.
+
