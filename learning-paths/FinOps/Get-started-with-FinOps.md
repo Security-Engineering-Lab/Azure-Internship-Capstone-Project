@@ -20,4 +20,7 @@ On the other hand, when a company embraces cloud services, it moves away from th
 
 While the OpEx model offers several benefits, it also can present some challenges that organizations must consider. One significant challenge is the potential for overspending, particularly when there's a lack of control or accountability over expenses. Therefore, implementing robust controls and accountability measures is essential to ensure financial stability and efficiency.
 
+
+![](<img width="800" height="451" alt="image" src="https://github.com/user-attachments/assets/e662a0f3-f0d4-4e0c-81ea-24f17d137591" />)
+
 Moving from CapEx to OpEx is a business-critical transformation that requires detailed planning and operational changes. To capitalize on the benefits of the cloud, organizations need to go through an organizational and cultural transformation that enables their teams to take advantage of the OpEx model. The FinOps framework provides an operating model to guide you on this journey.
