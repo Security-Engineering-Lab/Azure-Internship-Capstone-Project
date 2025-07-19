@@ -294,11 +294,11 @@ A data-flow diagram shows the flow of data in a given system. It usually starts 
 
 | Element | Shape | Definition |
 |---------|--------|------------|
-| **Process** | ![Process shape: circle](circle) | Task that receives, modifies, or redirects input to output, like a web service. |
-| **Data store** | ![Data store shape: two parallel horizontal lines](parallel-lines) | Permanent and temporary data storage, like a web cache and Azure-managed databases. |
-| **External entity** | ![External entity shape: square](square) | Task, entity, or data store outside of your direct control, like users and third-party APIs. |
-| **Data-flow** | ![Data-flow shape: two parallel diagonal arrows](arrows) | Data movement between processes, data stores, and external entities, like connection strings and payloads. |
-| **Trust boundary** | ![Trust boundary: dashed square/line](dashed-line) | Trust-zone changes as data flows through the system, like users using the internet to access a secured corporate network. |
+| **Process** | ![Process shape: circle](https://learn.microsoft.com/en-us/training/modules/tm-introduction-to-threat-modeling/media/process50.png) | Task that receives, modifies, or redirects input to output, like a web service. |
+| **Data store** | ![Data store shape: two parallel horizontal lines](https://learn.microsoft.com/en-us/training/modules/tm-introduction-to-threat-modeling/media/data-store50.png) | Permanent and temporary data storage, like a web cache and Azure-managed databases. |
+| **External entity** | ![External entity shape: square](https://learn.microsoft.com/en-us/training/modules/tm-introduction-to-threat-modeling/media/external-entity50.png) | Task, entity, or data store outside of your direct control, like users and third-party APIs. |
+| **Data-flow** | ![Data-flow shape: two parallel diagonal arrows](https://learn.microsoft.com/en-us/training/modules/tm-introduction-to-threat-modeling/media/data-flow50.png) | Data movement between processes, data stores, and external entities, like connection strings and payloads. |
+| **Trust boundary** | ![Trust boundary: dashed square/line](https://learn.microsoft.com/en-us/training/modules/tm-introduction-to-threat-modeling/media/trust-boundary-box50.png) | Trust-zone changes as data flows through the system, like users using the internet to access a secured corporate network. |
 
 Data-flow diagram elements also need context to help anyone understand how they're used and secured in the system.
 
