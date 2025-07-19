@@ -11,3 +11,10 @@ This is a guided project module where you’ll complete an end-to-end project by
 In this module, you'll practice how to:
 - Build a branded, seamless, and secure sign-up and sign-in experiences for your web application
 - Assess Microsoft Entra External ID identity provider capabilities against consumer and business customer needs
+
+
+#### Prerequisites
+- An Azure subscription and Azure account
+- If you don’t have any Azure subscriptions, you can create a free trial tenant using your existing Outlook or Hotmail account, or GitHub or personal email address (you’ll be prompted to create an Outlook account with your GitHub or personal email)
+- (Optional) The latest version of Visual Studio Code
+- (Optional) The latest version of PowerShell
