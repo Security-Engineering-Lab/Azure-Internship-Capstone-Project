@@ -9,6 +9,6 @@ This learning path provides a comprehensive guide to designing and implementing 
 ### Prerequisites
 Successful learners will have prior knowledge and understanding of the following:
 
-Cloud computing concepts include understanding PaaS, SaaS, and IaaS implementations.
-Azure administration and Azure development with proven expertise in at least one of these areas.
-Intermediate to advanced DevOps concepts, including version control, Agile software development, and core software development principles. It would be helpful to have experience in an organization that delivers software.
+- Cloud computing concepts include understanding PaaS, SaaS, and IaaS implementations.
+- Azure administration and Azure development with proven expertise in at least one of these areas.
+- Intermediate to advanced DevOps concepts, including version control, Agile software development, and core software development principles. It would be helpful to have experience in an organization that delivers software.
