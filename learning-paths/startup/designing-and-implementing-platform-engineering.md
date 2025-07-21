@@ -652,7 +652,7 @@ For virtual machine-based workloads, Azure Site Recovery (ASR) is a key service 
 
 Regular testing and validation of disaster recovery plans are crucial for ensuring that they'll function as expected during a real-world event. Services like Azure Chaos Studio and Azure Site Recovery helps you measure, understand, and improve the resilience of your cloud applications and services by simulating outages and validate failover processes without impacting production environments. By integrating Azure's native disaster recovery tools with a solid testing strategy, businesses can validate their disaster recovery plans.
 
-# 1.6 Module assessment
+# 2.6 Module assessment
 
 Use the following questions to check what you've learned in this module.
 
@@ -707,7 +707,7 @@ Use the following questions to check what you've learned in this module.
 - **CI/CD pipelines** як основа Everything as Code
 
 
-# 1.7 Summary
+# 2.7 Summary
 
 In platform engineering, creating secure, scalable, and resilient architectures is crucial for supporting dynamic cloud environments. Security is a foundational aspect, with platform engineers integrating principles like zero-trust and least-privilege access throughout the architecture. Identity and access management (IAM), secure API design, and robust encryption mechanisms are vital to protect resources and data. Scalability, too, is central to platform engineering, where systems must be designed to seamlessly adjust to varying loads. Horizontal scaling, serverless architectures, and the use of cloud-native technologies allow platforms to efficiently manage increased demand, ensuring that resources are used optimally while remaining fully operational and performant.
 
@@ -726,3 +726,63 @@ You learned how to describe the benefits and usage of:
 - Overview of Azure Policy - Azure Policy.
 - About GitHub Advanced Security.
 - Understanding GitHub Actions.
+
+
+
+
+
+# 3 Implement Developer Self-Service
+
+This module focuses on enabling developers to independently manage their resources and workflows, fostering agility and innovation. Learners will understand the importance of combining flexibility with robust governance to ensure security, compliance, and operational consistency. The module also covers best practices for implementing and managing self-service capabilities within an organization.
+
+
+
+# 3.1 Introduction
+
+In the context of platform engineering, enabling developers to independently manage their resources and workflows has become a cornerstone of productivity and innovation. Providing developers with the tools to provision and managing infrastructure fosters agility and accelerates development cycles. However, this flexibility must be combined with robust governance to ensure security, compliance, and operational consistency across the platform.
+
+Developer self-service thrives when paired with thoughtful governance frameworks and automation strategies that maintain oversight without stifling flexibility. This approach ensures developers can work efficiently while the platform adheres to organizational standards and safeguards. By using modern tools and techniques, organizations can create controlled yet agile environments where developers have seamless access to resources, supported by secure access controls, audit trails, and automated workflows that align with best practices.
+
+This module introduces you to the concept of developer self-service within platform engineering. It covers the importance of enabling developers to independently manage their resources and workflows, and the balance between self-service and governance. The module explores various tools and techniques, such as Azure Deployment Environments and Microsoft Dev Box, to streamline and automate developer workflows. It also delves into the architecture of a developer self-service platform, including components like the Developer Platform API, Developer Platform Graph, and Developer Platform Orchestrator. Additionally, the module discusses governance and security measures to ensure compliance and protect against risks associated with self-service workflows.
+
+## Learning objectives
+
+After completing this module, students and professionals can:
+
+* Learn how to enable developers to independently manage their resources and workflows, fostering agility and innovation.
+* Understand the importance of combining flexibility with robust governance to ensure security, compliance, and operational consistency.
+* Explore the benefits of developer self-service in accelerating development cycles and reducing bottlenecks.
+* Recognize the role of self-service platforms in enhancing developer satisfaction and productivity.
+* Identify best practices for implementing and managing self-service capabilities within an organization.
+
+## Prerequisites
+
+* Understanding of what DevOps is and its concepts.
+* Beneficial to have experience in an organization that delivers software.
+
+
+# 3.2 Introduction to Developer Self-Service
+
+
+In modern software development, developer self-service plays a pivotal role in enhancing agility and productivity. By allowing developers to provision, manage, and scale resources independently, organizations can significantly reduce bottlenecks caused by an overly restrictive reliance on operations teams. Empowering developers to swiftly access the infrastructure and services they need accelerates releases and deployment cycles. This increased autonomy not only speeds up development but also fosters innovation, as developers can experiment with new ideas and technologies without waiting for administrative approval.
+
+## Why Developer Self-Service is Important
+
+Enhancing developer self-service capabilities is a foundational challenge to address early in your platform engineering efforts. Self-service is crucial in modern development environments for several reasons, including speed, efficiency, and empowerment. By allowing developers to provision and manage their own resources, organizations can eliminate delays typically caused by operations teams. This speed is essential in the fast-paced world of software development, where time-to-market is often a key competitive advantage. Developers can access the infrastructure they need without waiting for approvals, which accelerates the development process.
+
+In addition to speeding up workflows, self-service promotes innovation by giving developers the freedom to experiment with new ideas and technologies without having to wait for administrative intervention. Another benefit is reduction of bottlenecks and administrative overhead, enabling teams to focus on core development tasks.
+
+Furthermore, self-service aligns with the principles of DevOps and Continuous Integration/Continuous Deployment (CI/CD), emphasizing the automation of provisioning and deployment processes. Tools such as Azure Deployment Environments allow developers to provision pre-configured environments that adhere to organizational policies, while solutions like Microsoft Dev Box streamline the setup of cloud-hosted, ready-to-code developer workstations.
+
+## The Balance Between Self-Service and Governance
+
+While self-service offers significant benefits, it must be managed carefully to prevent risks associated with resource mismanagement, sprawl, and security vulnerabilities. Governance is essential to ensure that self-service workflows remain compliant with organizational policies and security standards. Without proper governance, organizations may face the consequences of developers provisioning resources outside of the approved environment, leading to inconsistent configurations, security holes, or unexpected costs.
+
+Governance mechanisms can include guidelines for acceptable use, policy enforcement for resource provisioning, and audits to ensure compliance. Tools like Azure Policy and policy-as-code frameworks can automatically enforce compliance during provisioning, ensuring resources adhere to organizational standards. By integrating monitoring solutions like Azure Monitor and Log Analytics, organizations can track resource usage and detect potential misconfigurations or violations.
+
+Security is another critical aspect of balancing self-service and governance. With self-service, developers might have the ability to provision sensitive resources, which could pose a risk if not properly controlled. Implementing Role-Based Access Control (RBAC) through Microsoft Entra ID ensures developers access only the resources they're authorized to use, applying the principle of least privilege.
+
+The role of policy enforcement in self-service workflows can't be overstated. Policies must be automated to ensure that they're consistently applied without slowing down development. By applying IaC and policy-as-code frameworks, organizations can define and enforce security and operational policies during resource provisioning. For example, non-compliant configurations can be automatically flagged or rejected during deployment processes integrated into Azure Pipelines or GitHub Workflows. These measures reduce the potential for mistakes and ensure that self-service remains secure and in alignment with organizational goals.
+
+
+
