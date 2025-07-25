@@ -596,3 +596,71 @@ In the next few modules of this learning path, you learn about each concept intr
 - [Microsoft Security Development Lifecycle](https://www.microsoft.com/en-us/securityengineering/sdl/)
 
 
+
+
+# 2 Create a threat model using data-flow diagram elements
+
+Data-flow diagrams are graphical representations of your system and should specify each element, their interactions, and helpful context.
+
+# 2.1 Introduction
+
+Data-flow diagrams are made up of elements represented as shapes and lines. They graphically represent every major part of your system.
+
+Examples include:
+* An Azure DB used to store customer data.
+* A web service that handles a user request.
+* A user interacting with your system.
+* Data flow crossing a trust-zone level change.
+
+We use elements and their interactions in threat modeling to help identify threats and reduce system risk. The process helps engineers collaborate more efficiently while securing their systems against the most common threats.
+
+In this module, you explore each element of a data-flow diagram. These elements have distinct shapes and functions and require specific context.
+
+> **Note**
+> 
+> We might also refer to elements as *Stencils* throughout this learning path.
+
+## When to use elements
+
+Use elements whenever you create a data-flow diagram. The diagram shows how data is created, manipulated, stored, and removed from your system. Let's build on the examples from the first module:
+
+* **Azure micro-service**: Add elements to specify users, authentication processes, data storage, data-request processes, and response-handling processes.
+  * Don't forget to specify trust-zone level changes.
+* **Public API**: Add elements to specify users, data storage, logging and monitoring processes, and other parts of the system.
+* **New feature on existing application**: Add elements to represent existing and new parts of the system.
+
+## Learning objectives
+
+In this module, you learn how to:
+* Distinguish between the shape and function of each element.
+* Include the right context for an element when creating a data-flow diagram.
+
+## Prerequisites
+
+* None
+
+
+# 2.2 Data-flow diagram elements
+
+Data-flow diagrams are made up of shapes that create graphical representations of your system. Each shape represents a unique function. Each interaction is analyzed to help you identify potential threats and ways to reduce risk.
+
+Using shapes correctly helps you receive better input from colleagues and security teams. They allow everyone to understand how the system works. It can also help everyone avoid going through countless design documents and development plans to get them up and running.
+
+> **Note**
+> 
+> If you fail to properly account for all the parts of a system in the data-flow diagram, you'll risk deploying the system with potential vulnerabilities.
+
+| Element | Shape | Definition | Example |
+|---------|-------|------------|---------|
+| Process | ![](https://learn.microsoft.com/en-us/training/modules/tm-create-a-threat-model-using-foundational-data-flow-diagram-elements/media/process50.png) | Task that receives, modifies, or redirects input to output | Web service |
+| Data store | ![](https://learn.microsoft.com/en-us/training/modules/tm-create-a-threat-model-using-foundational-data-flow-diagram-elements/media/data-store50.png) | Permanent and temporary data storage | Web cache and Azure DB |
+| External entity |![](https://learn.microsoft.com/en-us/training/modules/tm-create-a-threat-model-using-foundational-data-flow-diagram-elements/media/external-entity50.png) | Task, entity, or data store outside of your direct control | Users and third-party APIs |
+| Data-flow | ![](https://learn.microsoft.com/en-us/training/modules/tm-create-a-threat-model-using-foundational-data-flow-diagram-elements/media/data-flow50.png) | Data movement between processes, data stores, and external entities | Connection strings and payloads |
+| Trust boundary | ![](https://learn.microsoft.com/en-us/training/modules/tm-create-a-threat-model-using-foundational-data-flow-diagram-elements/media/trust-boundary-box50.png) | Trust zone changes as data flows through the system | Users connecting to a secured corporate network over the internet |
+
+In the next few units, we discuss each of the elements.
+
+
+
+
+
