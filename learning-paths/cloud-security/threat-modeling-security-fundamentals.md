@@ -723,3 +723,110 @@ C. A third-party API sends requested data to its requestor.
 **Ключ до розуміння:** Процес завжди виконує активні дії - обробляє, валідує, трансформує, або перенаправляє дані між іншими елементами системи.
 
 
+
+# 2.4 Data store - The storage element
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-create-a-threat-model-using-foundational-data-flow-diagram-elements/media/data-store.png)
+
+The **data store element** is depicted as parallel lines. This element represents data stored on a temporary or permanent basis.
+
+Examples include:
+* Using the browser cache to store user session-related data.
+* Adding a security log event to a database.
+
+## When to use the data store element
+
+* Whenever you're storing data somewhere, like Azure DB or a local cache.
+* If you're establishing communication between two data stores, don't forget to add a process between them.
+* Data stores and external entities start the data flow, so verify you have either one in place.
+* Make sure to include any post-processing of data, such as analytics services like Azure Analytics. This process is often missed.
+
+## Include context
+
+Include the following context with each data store element:
+
+| Context | Questions |
+|---------|-----------|
+| Type | Does the system use Azure SQL, cookies, local, or some other type of storage? If so, what is it? |
+| Function | How is the storage used? Is it used to share data, store backups, security logs, credentials, or secrets? |
+| Permission level | How is access control implemented? Who has read and write permissions? |
+| Additional controls | Is data encrypted? What about the disk? Are digital signatures used? |
+
+## Check your knowledge
+
+**1.**
+**Which one of these actions best describes a data store?**
+
+A. A web portal asks a user for their credentials.  
+B. A cache stores service-related cookies for a user.  
+C. A third-party API sends requested data to its requestor.
+
+
+**Відповідь на запитання:**
+
+**Правильна відповідь: B. A cache stores service-related cookies for a user.**
+
+**Пояснення:**
+
+- **A. A web portal asks a user for their credentials** - це **процес** (process), оскільки веб-портал активно виконує дію запиту та обробки даних.
+
+- **B. A cache stores service-related cookies for a user** - це **сховище даних** (data store), оскільки кеш пасивно зберігає дані (cookies) на тимчасовій або постійній основі. Це точно відповідає визначенню data store як елемента, що представляє збережені дані.
+
+- **C. A third-party API sends requested data to its requestor** - це **зовнішня сутність** (external entity), оскільки API третьої сторони знаходиться поза вашим прямим контролем.
+
+**Ключ до розуміння:** Data store завжди пасивно зберігає дані (тимчасово або постійно), не виконуючи активних дій з їх обробки. У цьому випадку кеш саме зберігає cookies користувача.
+
+
+
+# 2.5 External entity - The no control element
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-create-a-threat-model-using-foundational-data-flow-diagram-elements/media/external-entity.png)
+
+The **external entity element** is depicted as a square. The external entity can be a process, data store, or even a full-fledged system outside of your direct control.
+
+Examples include:
+* A user interacting with your service.
+* Tight integration with a third-party authentication service.
+* Services created by other teams within your organization.
+
+## When to use the external entity element
+
+* When representing an entity that you can't directly modify.
+* Data stores and external entities start the data flow, so verify you have either one in place.
+
+## Include context
+
+Include the following context with each external entity element:
+
+| Context | Questions |
+|---------|-----------|
+| Source | Is the entity internal or external? |
+| Type | Is the entity human, a service provider, or web service? |
+| Authentication | Does the process rely on Microsoft Entra ID for authentication? If not, on what does it rely? |
+| Authorization | Does it rely on Access Control Lists (ACL) for authorization? If not, on what does it rely? |
+
+## Check your knowledge
+
+**1.**
+**Which one of these actions best describes an external entity?**
+
+A. A web portal asks a user for their credentials.  
+B. A cache stores service-related cookies for a user.  
+C. A third-party API sends requested data to its requestor.
+
+**Відповідь на запитання:**
+
+**Правильна відповідь: C. A third-party API sends requested data to its requestor.**
+
+**Пояснення:**
+
+- **A. A web portal asks a user for their credentials** - це **процес** (process), оскільки веб-портал активно обробляє дані та виконує дії всередині вашої системи.
+
+- **B. A cache stores service-related cookies for a user** - це **сховище даних** (data store), оскільки кеш пасивно зберігає дані.
+
+- **C. A third-party API sends requested data to its requestor** - це **зовнішня сутність** (external entity), оскільки API третьої сторони знаходиться поза вашим прямим контролем. Ви не можете модифікувати його код, логіку роботи, або безпосередньо керувати ним.
+
+**Ключ до розуміння:** External entity завжди представляє сутність (людину, сервіс, систему), яку ви **не можете безпосередньо контролювати або модифікувати**. API третьої сторони є класичним прикладом такої сутності - ви можете з нею взаємодіяти, але не можете змінювати її внутрішню логіку роботи.
+
+
+
