@@ -829,4 +829,103 @@ C. A third-party API sends requested data to its requestor.
 **Ключ до розуміння:** External entity завжди представляє сутність (людину, сервіс, систему), яку ви **не можете безпосередньо контролювати або модифікувати**. API третьої сторони є класичним прикладом такої сутності - ви можете з нею взаємодіяти, але не можете змінювати її внутрішню логіку роботи.
 
 
+# 2.6 Data-flow - The data in transit element
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-create-a-threat-model-using-foundational-data-flow-diagram-elements/media/data-flow.png)
+
+The **data-flow element** is depicted as directional arrows. This element represents data movement between elements. The directional arrows indicate communication between the data source and destination.
+
+Examples include:
+* Credentials submitted by a user to access your service.
+* A request from a process to add an entry to your data store.
+
+## When to use the data-flow element
+
+* Between each element interaction.
+* To call out the data type being transmitted, and include how you're transmitting it.
+* In most cases, include responses to each request.
+
+## Include context
+
+Include the following context with each data-flow element:
+
+| Context | Questions |
+|---------|-----------|
+| Description | Is the data flow passing a session token, SQL string, or user credentials? If not, what's it passing? |
+| Protocol | Does the flow use HTTPS or SOAP? If not, what does it use? |
+| Flow sequence | Is the data flow enumerated to make it easier to follow the flow sequence? |
+| Type | What type of data is in the data flow? Cookies? XML? SOAP payload? REST payload? JSON payload? |
+| Additional controls | Does the data flow have forgery protection enabled? Other security flags enabled? |
+| Authentication | Does the process rely on Microsoft Entra ID for authentication? If not, on what does it rely? |
+| Authorization | Does it rely on Access Control Lists (ACL) for authorization? If not, on what does it rely? |
+
+## Check your knowledge
+
+**1.**
+**Which one of these actions best describes a data-flow?**
+
+User credentials being transmitted from a process to an authentication service provider.  
+Session tokens being stored for later use.  
+A third-party API handling service analyzing a request.
+
+
+
+
+# 2.7 Trust boundary - The trust zone change element
+
+Trust boundary box
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-create-a-threat-model-using-foundational-data-flow-diagram-elements/media/trust-boundary-box.png)
+
+Trust boundary line
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-create-a-threat-model-using-foundational-data-flow-diagram-elements/media/trust-boundary-line.png)
+
+The **trust boundary element** is represented by dotted lines or squares. Trust boundaries are used to describe data flow as it crosses different trust zone levels.
+
+Examples include:
+* Firewalls
+* Connections to third-party services
+* Parts of your system only available to administrators
+
+Areas with changing trust zones are the most targeted by attackers and should be carefully designed.
+
+Microsoft has predefined trust-zone requirements for engineers to use internally. It takes the guesswork out of which boundaries to apply. If you work at Microsoft, contact your security team to learn more.
+
+## When to use the trust boundary element
+
+Here are a few important points to remember about trust boundaries:
+* Include trust boundaries to handle data flow as it crosses different trust zones.
+* Trust boundary **lines** represent data flow as it crosses large environments, like the internet.
+* Trust boundary **boxes** represent smaller environments, like sandbox environments and corporate networks.
+
+## Include context
+
+Include the following context with each trust boundary element:
+
+| Context | Questions |
+|---------|-----------|
+| Description | Is it a corporate network boundary? Internet? Azure subscription? |
+
+## Check your knowledge
+
+**1.**
+**Which one of these actions best describes data crossing a trust boundary?**
+
+Data sent from the user to a web service hosted on Azure.  
+Data sent from the web service to the data store on Azure under the same Azure subscription.  
+Data sent from the data store to a process on Azure under the same tenant.
+
+
+# 3.8 Summary
+
+Data-flow diagrams are graphical representations of your system and should contain each applicable process, data-store, external entity, data-flow, and trust boundary.
+
+In this module, you:
+* Distinguished between the shape and function of each element.
+* Learned about the right context for an element when creating a data-flow diagram.
+
+## Get started with Azure
+
+Choose the Azure account that's right for you. Pay as you go or try Azure free for up to 30 days. Sign up.
 
