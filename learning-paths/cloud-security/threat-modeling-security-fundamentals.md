@@ -917,7 +917,7 @@ Data sent from the web service to the data store on Azure under the same Azure s
 Data sent from the data store to a process on Azure under the same tenant.
 
 
-# 3.8 Summary
+# 2.8 Summary
 
 Data-flow diagrams are graphical representations of your system and should contain each applicable process, data-store, external entity, data-flow, and trust boundary.
 
