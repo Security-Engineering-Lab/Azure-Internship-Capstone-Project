@@ -929,3 +929,62 @@ In this module, you:
 
 Choose the Azure account that's right for you. Pay as you go or try Azure free for up to 30 days. Sign up.
 
+
+
+# 3 Provide context with the right depth layer
+
+Threat models can get complex if all parties involved can't agree on a data-flow diagram depth layer that provides enough context to satisfy requirements
+
+
+# 3.1 Introduction
+
+
+Threat modeling gives engineers the ability to graphically describe their system to others. It creates a common ground and enables more focused security conversations.
+
+## The importance of depth layers
+
+Threat models can either get too complex or too high-level, depending on the system you're building and the required context.
+
+Data-flow diagram depth layers help you understand how much context to include. In this module, you'll learn about data-flow diagram depth layers and when to use them.
+
+> **Tip**
+> 
+> Talk to your colleagues and security team to select the right depth layer. You can also use this module as reference.
+
+## Learning objectives
+
+In this module, you'll:
+
+* Learn the differences between the data-flow diagram depth layers.
+* Learn when to use each layer.
+
+## Prerequisites
+
+* None
+
+
+
+# 3.2 Data-flow diagram depth layers
+
+Data-flow diagram depth layers can help you decide how much context to include for a successful threat-modeling exercise. There are many factors that can help you decide how much depth you should go into.
+
+Every system should have a high-level overview of how it works. Most should have further data-flow diagrams focusing on parts of the system that need a closer look.
+
+Examples include:
+
+* A process parsing highly sensitive data.
+* Third-party authentication systems.
+
+At a high level, there are four depth layers used in threat modeling:
+
+| Layer | Description |
+|-------|-------------|
+| 0 | This layer is required for all systems, and contains major system parts. |
+| 1 | This layer is required for most systems, and contains diagrams for each system part. |
+| 2 | This layer is required for highly sensitive systems, and contains diagrams for system subparts. |
+| 3 | This layer is required for critical or kernel level systems, and contains diagrams for every process. |
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-provide-context-with-the-right-depth-layer/media/depthlayers.png)
+
+We review each depth layer in the next few units.
+
