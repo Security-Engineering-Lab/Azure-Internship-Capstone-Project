@@ -1137,4 +1137,54 @@ The result is a series of data-flow diagrams in the **lower-level layer**, known
 The path-like file-naming structure helps you differentiate between the different levels.
 
 
+# 3.6 **Layer 3 - The lower-level layer**
+
+The lower-level layer is the last layer, and you should use it whenever you create a kernel-level or critical level system. Data-flow diagrams at this layer contain separate data-flow diagrams detailing each **low-level** system subpart.
+
+**Goal**: Represent **low-level system subparts** with enough context to help you understand how they work and interact with each other.
+
+Similar to the process layer, data-flow diagrams in the lower-level layer should fit in a single page and contain all processes for their respective system subparts.
+
+## **Important**
+Check with your team to make sure this level of depth is required.
+
+## **When to use the lower-level layer**
+Highly critical systems and kernel-level systems should be threat modeled at this layer. Data-flow diagrams should describe each subprocess in minute detail. Also, it's common to have multiple rounds of security reviews just for one subprocess.
+
+Follow the steps from the previous layers to track each of your diagrams to their respective system parts.
+
+# 3.7 **Summary**
+
+Threat modeling allows engineers to graphically describe their system to others. It creates a common ground and enables more focused security conversations.
+
+However, threat models can either get too complex or too high-level, depending on the system you're building and the required context.
+
+In this module, you learned to prioritize your issues and apply the right layer of security controls based on type and function.
+
+In this module, you:
+* Learned the differences between the data-flow diagram depth layers.
+* Learned when to use each layer.
+
+## **Note**
+**Did You Know?** In addition to the four layers, you can also create diagrams based on user roles to help identify authentication and authorization weaknesses. According to sources like **OWASP**, those mishaps are among the top security issues across organizations today, so applying threat modeling per applicable role can strengthen your overall system security and help protect your customers.
+
+---
+
+## **Check your knowledge**
+
+**1.**
+
+**Which statement summarizes the importance of defining context depth layers earlier in the threat modeling stage?**
+
+- [ ] It allows me to gather details about all of the external components used.
+- [ ] It helps me generate the right level of context according to requirements and expectations.
+- [ ] It helps me identify all applicable threats before a security review takes place.
+
+---
+
+## **Відповідь:**
+
+**✅ It helps me generate the right level of context according to requirements and expectations.**
+
+**Пояснення:** У тексті чітко зазначено, що "threat models can either get too complex or too high-level, depending on the system you're building and the required context" і що в модулі ви навчилися "apply the right layer of security controls based on type and function". Це означає, що визначення рівнів глибини контексту допомагає генерувати правильний рівень контексту відповідно до вимог та очікувань.
 
