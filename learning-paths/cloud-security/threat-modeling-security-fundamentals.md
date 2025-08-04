@@ -988,3 +988,153 @@ At a high level, there are four depth layers used in threat modeling:
 
 We review each depth layer in the next few units.
 
+
+# 3.3 Layer 0 - The system layer
+
+# **Layer 0 - The system layer**
+
+**200 XP**
+* 5 minutes
+
+The system layer of data-flow diagrams is the starting point for any system. You need to create it for all your systems.
+
+**Goal**: Represent **major system parts** with enough context to help you understand how they work and interact with each other.
+
+Data-flow diagrams in the system layer should fit in a single page. They should also contain only major processes handled by the system. Provide as much as context as possible and clearly label each element so anyone can understand how it works.
+
+## **Tip**
+The **system layer** is also called the **context layer**.
+
+## **When to use the system layer**
+The system layer should be required for every system you create. The high-level context can help anyone learn more about your system so they can engage in more meaningful discussions.
+
+## **Deep diving into a system part**
+In most cases, system parts **will** require a deeper dive because of the risk they introduce.
+
+Examples include:
+* **Any** new system that introduces unknown risks to the environment.
+* New parsers, protocols, and file formats.
+* New authentication and authorization mechanisms.
+* New secret storage or encryption algorithms.
+* Integration with third-party authentication systems like Facebook.
+* Required elevated privileges for main functionality.
+* Required unencrypted communication channels.
+
+If that's the case, create data-flow diagrams for each system part. Follow these steps:
+
+| Step | Guidance |
+|------|----------|
+| 1 | Create a process element with a clear description label, such as *Web Service Name*. |
+| 2 | Create a new file and name it exactly the same way as the description label. |
+| 3 | Focus the data-flow diagram only on the system part you're "zooming into". |
+
+The result is a series of data-flow diagrams in the **process layer**, known as layer 1.
+
+---
+
+## **Check your knowledge**
+
+**1.**
+
+**Layer 0 is commonly referred to as the:**
+
+- [ ] Context Layer
+- [ ] Process Layer  
+- [ ] Subprocess Layer
+
+Відповідь:
+✅ Context Layer
+Пояснення: У розділі "Tip" чітко зазначено: "The system layer is also called the context layer". Оскільки Layer 0 є system layer, то він також називається context layer.
+
+
+
+# 3.4 **Layer 1 - The process layer**
+
+**200 XP**
+* 5 minutes
+
+The process layer of data-flow diagrams is the second layer. You should use it for most systems. Data-flow diagrams at this layer contain separate data-flow diagrams detailing each system part.
+
+**Goal**: Represent **secondary system parts** with enough context to help you understand how they work and interact with each other.
+
+Similar to the system layer, data-flow diagrams in the process layer should fit in a single page and contain all processes for their respective system parts.
+
+## **Important**
+Most data-flow diagrams **require** a process-level depth layer for proper assessment.
+
+## **When to use the process layer**
+Use the process layer for every system, especially if it handles sensitive data. Systems with sensitive data are at a higher risk of being breached. The context at this level helps you identify threats and ways to reduce or eliminate risks more efficiently.
+
+## **Deep diving into a system part**
+In some cases, system parts might require more granular context because of their increased sensitivity and risk. You can best assess threats and risk-reduction strategies by going down to this layer. Follow the same rule from the system layer.
+
+| Step | Guidance |
+|------|----------|
+| 1 | Create a process element with a clear description label, such as *Web Service Worker Name*. |
+| 2 | Create a new file and name it exactly the same way as the description label, with a path-like structure, such as *Web Service Name - Web Service Worker Name*. |
+| 3 | Focus the data-flow diagram only on the system subpart you're "zooming into." |
+
+The result is a series of data-flow diagrams in the **subprocess layer**, known as layer 2.
+
+## **Tip**
+The path-like file-naming structure helps you differentiate between the different levels.
+
+---
+
+## **Check your knowledge**
+
+**1.**
+
+**Under which layer do most applications fall?**
+
+- [ ] Context Layer
+- [ ] Process Layer  
+- [ ] Subprocess Layer
+
+---
+
+## **Відповідь:**
+
+**✅ Process Layer**
+
+**Пояснення:** Згідно з текстом, "Most data-flow diagrams **require** a process-level depth layer for proper assessment" і "You should use it for most systems". Це означає, що більшість додатків потребують деталізації на рівні процесів (Layer 1 - Process Layer) для належної оцінки безпеки та ризиків.
+
+
+# 3.5 **Layer 2 - The subprocess layer**
+
+**Completed 100 XP**
+* 5 minutes
+
+The subprocess layer of data-flow diagrams is the third layer. You should use it whenever you create systems that are highly sensitive. Data-flow diagrams at this layer contain separate data-flow diagrams detailing each system subpart.
+
+**Goal**: Represent **system subparts** with enough context to help you understand how they work and interact with each other.
+
+Similar to the process layer, data-flow diagrams in the system subprocess layer should fit in a single page and contain all processes for their respective system subparts.
+
+## **Important**
+Check with your team to make sure this level of depth is required.
+
+## **When to use the subprocess layer**
+Use the subprocess layer for systems the organization considers critical. A breach in a system subpart could put the entire system, customers, and organization at critical risk.
+
+Examples include systems that:
+* Are used in secured environments.
+* Handle sensitive data.
+* Have a high risk rating.
+
+## **Deep diving into a system subpart**
+Any system subparts requiring deeper dives should follow the same rule from the process layer and have their own separate data-flow diagrams. The lower-level view allows users to "zoom-in" and "zoom-out" of the system with as much context and clarity as possible. Here's how:
+
+| Step | Guidance |
+|------|----------|
+| 1 | Create a process element with a clear description label, such as *Input Parser Name*. |
+| 2 | Create a new file and name it exactly the same as the description label, with a tree-like structure, such as *Web Service Name - Web Service Worker Name - Input Parser Name*. |
+| 3 | Focus the data-flow diagram only on the lower-level system subpart you're "zooming into." |
+
+The result is a series of data-flow diagrams in the **lower-level layer**, known as layer 3.
+
+## **Tip**
+The path-like file-naming structure helps you differentiate between the different levels.
+
+
+
