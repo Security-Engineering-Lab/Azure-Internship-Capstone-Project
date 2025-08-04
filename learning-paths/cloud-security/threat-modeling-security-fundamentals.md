@@ -1188,3 +1188,12 @@ In this module, you:
 
 **Пояснення:** У тексті чітко зазначено, що "threat models can either get too complex or too high-level, depending on the system you're building and the required context" і що в модулі ви навчилися "apply the right layer of security controls based on type and function". Це означає, що визначення рівнів глибини контексту допомагає генерувати правильний рівень контексту відповідно до вимог та очікувань.
 
+
+# 4 Approach your data-flow diagram with the right threat model focus
+
+Threat modeling is an effective technique to help you identify threats and ways to reduce or eliminate risk. We start by deciding to focus on either what needs to be protected or who it needs protection from.
+
+
+
+
+
