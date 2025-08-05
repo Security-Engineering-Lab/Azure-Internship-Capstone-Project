@@ -1246,10 +1246,7 @@ Here, you evaluate risk for each asset. This approach identifies critical assets
 ## **Note**
 Microsoft engineers focus on protecting the system. Penetration testing teams focus on both protecting the system and understanding the attacker.
 
-# **System and other focused approaches**
-
-**200 XP**
-* 3 minutes
+# 4.3 **System and other focused approaches**
 
 ## **The importance of a system-focused approach**
 Authenticating your users with Azure is a good thing. Understanding how that authentication works and interacts with each part of the system is better, and avoids creating unknown post-deployment risk.
