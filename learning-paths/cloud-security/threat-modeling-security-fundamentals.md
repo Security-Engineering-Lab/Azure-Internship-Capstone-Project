@@ -1193,6 +1193,13 @@ In this module, you:
 
 Threat modeling is an effective technique to help you identify threats and ways to reduce or eliminate risk. We start by deciding to focus on either what needs to be protected or who it needs protection from.
 
+# Threat modeling is an effective technique to help you identify threats and ways to reduce or eliminate risk. We start by deciding to focus on either what needs to be protected or who it needs protection from.
+
+## **Learning objectives**
+In this module, you learn how to:
+* Define a system focused threat modeling exercise
+* Explain the high-level differences between the system, asset, and attacker focused approaches
+
 
 
 
