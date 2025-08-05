@@ -1246,3 +1246,59 @@ Here, you evaluate risk for each asset. This approach identifies critical assets
 ## **Note**
 Microsoft engineers focus on protecting the system. Penetration testing teams focus on both protecting the system and understanding the attacker.
 
+# **System and other focused approaches**
+
+**200 XP**
+* 3 minutes
+
+## **The importance of a system-focused approach**
+Authenticating your users with Azure is a good thing. Understanding how that authentication works and interacts with each part of the system is better, and avoids creating unknown post-deployment risk.
+
+After all, the goals of threat modeling are to validate assumptions you previously made, identify potential threats, and reduce risk earlier in the development lifecycle.
+
+## **Practical example of a system-focused approach**
+Let's take the file-sharing application example. In this case, when you look at your data-flow diagram, you might see these flows:
+* User requests access to the application
+* Authentication flow kicks off
+* User shares files with other users
+
+This approach analyzes and secures each element. The elements include the user, web service, authentication service, data store, trust boundary between internet and Azure, and data flow.
+
+## **Note**
+The system-focused approach incorporates a few of the other approaches, but you may want to try them individually to get more granular results.
+
+---
+
+## **Check your knowledge**
+
+**1.**
+
+**What is the benefit of the system-focused approach?**
+
+- [ ] This approach allows you to focus on one critical asset at a time to help identify all potential threats and ways to reduce or eliminate risk.
+- [ ] This approach provides information into a potential attacker, including their means, motive, and plan of action.
+- [ ] This approach allows you to focus on how the system handles users and data. It also validates security assumptions across physical and logical assets used with the service.
+
+**2.**
+
+**What is the benefit of the attacker-focused approach?**
+
+- [ ] This approach allows you to focus on one critical asset at a time and identifies all potential threats and ways to reduce risk.
+- [ ] Instead of focusing on the service, this approach focuses on the attacker, their motivations and means to attack your system.
+- [ ] This approach provides information into the system, especially as it handles errors and requests.
+
+---
+
+## **Відповіді:**
+
+**1. ✅ This approach allows you to focus on how the system handles users and data. It also validates security assumptions across physical and logical assets used with the service.**
+
+**Пояснення:** У тексті зазначено, що system-focused підхід аналізує та забезпечує безпеку кожного елементу системи, включаючи користувачів, веб-сервіси, сервіси автентифікації, сховища даних та межі довіри. Також згадується, що цілі threat modeling включають валідацію припущень.
+
+**2. ✅ Instead of focusing on the service, this approach focuses on the attacker, their motivations and means to attack your system.**
+
+**Пояснення:** У попередньому тексті чітко зазначено: "In the attacker-focused approach, you emphasize the attacker, their motive, means, and all the ways they can wreak havoc in your system."
+
+
+
+
