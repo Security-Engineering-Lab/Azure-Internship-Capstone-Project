@@ -1441,3 +1441,16 @@ Examples include:
 - [ ] Sender digitally signs a message so the receiver knows who the message came from.
 - [ ] System logs all actions and users to keep everyone accountable.
 - [ ] System grants administrative access to users listed on the access control list.
+
+
+
+## **Відповідь:**
+
+**✅ Sender digitally signs a message so the receiver knows who the message came from.**
+
+**Пояснення:** Spoofing полягає в тому, що зловмисник видає себе за когось іншого. Цифровий підпис повідомлення дозволяє отримувачу переконатися в автентичності відправника, що безпосередньо протидіє спуфінгу. Інші варіанти стосуються інших типів загроз:
+- Логування дій відноситься до Non-repudiation (протидія відмові від дій)
+- Надання адміністративного доступу відноситься до Authorization (авторизації)
+
+
+
