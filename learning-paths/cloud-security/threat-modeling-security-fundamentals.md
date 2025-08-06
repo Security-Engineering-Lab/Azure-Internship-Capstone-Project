@@ -1399,9 +1399,9 @@ Examples include:
 ### **Interaction**
 | Name | Interaction | Definition |
 |------|-------------|------------|
-| Process <-> Process | | A task receives or sends data to or from a task |
-| Process <-> Data store | | A task sends or receives data to or from a data store |
-| Process <-> External entity | | A task sends or receives data to or from an external entity |
+| Process <-> Process | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-process.png) | A task receives or sends data to or from a task |
+| Process <-> Data store | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-datastore.png) | A task sends or receives data to or from a data store |
+| Process <-> External entity | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-externalentity.png) | A task sends or receives data to or from an external entity |
 
 ## **How to prevent spoofing**
 **Authentication** verifies that users and systems are who they claim to be.
