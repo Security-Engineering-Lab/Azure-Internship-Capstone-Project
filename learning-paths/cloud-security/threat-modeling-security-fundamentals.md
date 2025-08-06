@@ -1608,17 +1608,17 @@ Examples include:
 ### **Element**
 | Name | Shape | Definition |
 |------|-------|------------|
-| Process | | Activity that modifies or redirects input to an output. |
-| Data store | | Permanent or temporary data storage. |
-| Data-flow | | Data movement between elements. |
+| Process | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process50.png) | Activity that modifies or redirects input to an output. |
+| Data store | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/data-store50.png)| Permanent or temporary data storage. |
+| Data-flow | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/data-flow50.png)| Data movement between elements. |
 
 ### **Interaction**
 | Name | Interaction | Definition |
 |------|-------------|------------|
-| Process -> Process | | A task sends data to another task. |
-| Process <-> External entity | | A task sends or receives data to or from a user. |
-| Process <-> Data store | | A task sends or receives data to or from a data store. |
-| Data Flow <-> Trust boundary | | Data is transmitted from a trusted environment to someone over the internet (and vice-versa). |
+| Process -> Process |![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-process-unilateral.png)| A task sends data to another task. |
+| Process <-> External entity | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-externalentity.png)| A task sends or receives data to or from a user. |
+| Process <-> Data store | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-datastore.png) | A task sends or receives data to or from a data store. |
+| Data Flow <-> Trust boundary | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/flow-trustboundary.png) | Data is transmitted from a trusted environment to someone over the internet (and vice-versa). |
 
 ## **How to prevent information disclosure**
 **Confidentiality** ensures data is protected.
