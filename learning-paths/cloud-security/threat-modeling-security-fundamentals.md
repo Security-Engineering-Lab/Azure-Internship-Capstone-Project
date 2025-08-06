@@ -1308,5 +1308,136 @@ In this module, you:
 * Explained the high-level differences between the system-, asset-, and attacker-focused approaches.
 
 
+# 5 Use a framework to identify threats and find ways to reduce or eliminate risk
+
+Threat modeling helps you generate a list of potential threats using the threat modeling framework and find ways to reduce or eliminate risk with corresponding security controls.
+
+# 5.1 **Introduction**
 
 
+A threat-modeling framework helps you generate a list of potential threats and find ways to reduce or eliminate risk.
+
+As long as you have a working knowledge of information security, the framework takes you through the major categories of threats to make sure they're tackled appropriately.
+
+## **When to use the framework**
+You should apply this framework to every data-flow diagram created for a new or existing system.
+
+## **Note**
+The goal is to find and fix as many issues early in the development lifecycle. The longer you wait, the greater the risk for your customers.
+
+## **What to expect**
+The framework takes you through six major threat categories, with countless potential threats under each one.
+
+Using the framework, you're able to answer questions like:
+* Are both sides of the communication authenticated?
+* How do I know someone can't change data in transit, in use, or at rest?
+* Can every action be tied to an identity?
+* How do I know someone can't see data in transit, in use, or at rest?
+* Are there areas in the system where resources are limited?
+* How do I know someone is allowed to take this action?
+
+In this module, you learn about each threat category and its corresponding security controls.
+
+## **Learning objectives**
+By the end of this module, you're able to:
+* Discuss each threat category in the threat-modeling framework.
+* Learn about the security controls to help reduce or eliminate risk.
+
+## **Prerequisites**
+* None
+
+
+# 5.2 **Threat modeling framework**
+
+
+The threat-modeling framework looks at each element in the data-flow diagram, including each one's interactions. It helps you find potential threats and ways to reduce or eliminate risk.
+
+## **Threat categories**
+Microsoft engineers find security design issues using the six major threat categories in the STRIDE framework:
+
+| Category | Description |
+|----------|-------------|
+| Spoofing | Pretending to be someone or something else |
+| Tampering | Changing data without authorization |
+| Repudiation | Not claiming responsibility for an action taken |
+| Information disclosure | Seeing data without permission |
+| Denial of service | Overwhelming the system |
+| Elevation of privilege | Having permissions I shouldn't have |
+
+## **Security control categories**
+Each threat category is associated with a security control to help you reduce or eliminate risk:
+
+| Category | Security Control | Description |
+|----------|------------------|-------------|
+| Spoofing | Authentication | They are who they say they are |
+| Tampering | Integrity | Prevents data from being maliciously modified |
+| Repudiation | Non-repudiation | Actions are tied to users |
+| Information disclosure | Confidentiality | Data is protected against unintended disclosure |
+| Denial of service | Availability | System handles all requests appropriately |
+| Elevation of privilege | Authorization | User has appropriate permissions to carry out a request |
+
+In the next few units, we look at each threat category.
+
+
+
+# 5.3 **Spoofing - pretending to be someone or something else**
+
+**Spoofing** occurs when a malicious person or a program successfully impersonates you or your system to conduct malicious activities.
+
+Examples include:
+* An attacker sends an email to users from an account that seems legitimate with malicious links and attachments to capture their credentials, data, and device access.
+* An attacker spoofs Service Set Identifiers (SSIDs) and IP addresses while using open and inherently insecure TCP/IP protocols to send malicious payloads to victims.
+
+## **Elements and interactions at risk from spoofing attacks**
+
+### **Element**
+| Name | Shape | Definition |
+|------|-------|------------|
+| Process | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process50.png) | Activity that modifies or redirects input to an output |
+| External Entity | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/external-entity50.png) | Process, data store, or even full fledged applications outside your control |
+
+### **Interaction**
+| Name | Interaction | Definition |
+|------|-------------|------------|
+| Process <-> Process | | A task receives or sends data to or from a task |
+| Process <-> Data store | | A task sends or receives data to or from a data store |
+| Process <-> External entity | | A task sends or receives data to or from an external entity |
+
+## **How to prevent spoofing**
+**Authentication** verifies that users and systems are who they claim to be.
+
+Examples include:
+* Sending and receiving messages signed with digital signatures to authenticate origin and ensure message integrity.
+* Securing data transmissions with TLS/SSL to encrypt traffic between source and target.
+* The use of unique credentials with expiring tokens, passwords, or multifactor authentication to help secure user, admin, and service accounts.
+
+## **Common security controls to reduce or eliminate risk**
+
+**For your data:**
+* Hashes
+* Message Authentication Codes
+* Digital Signatures
+
+**For your system:**
+* User Authentication
+* Cookie Authentication
+* Kerberos
+* TLS/SSL
+* Certificates
+* IPSec
+* Digitally Signed Packets
+
+## **Tip**
+**Good question to ask:** Have I authenticated both sides of the communication?
+
+---
+
+## **Check your knowledge**
+
+**1.**
+
+**Which statement describes a potential security control against spoofing?**
+
+- [ ] Sender digitally signs a message so the receiver knows who the message came from.
+- [ ] System logs all actions and users to keep everyone accountable.
+- [ ] System grants administrative access to users listed on the access control list.
