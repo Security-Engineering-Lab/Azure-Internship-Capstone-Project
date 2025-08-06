@@ -1525,5 +1525,137 @@ Examples include:
 
 -------------------------------------------------------------
 
+# 5.5 **Repudiation - not claiming responsibility for an action taken**
+
+**Repudiation** occurs when someone, with or without malicious intent, takes an action but claims otherwise.
+
+Examples include:
+* Denying the modification of logs containing sensitive actions.
+* Using someone else's account to avoid getting caught.
+* Claiming not to have deleted database records.
+
+## **Note**
+System logs are a goldmine for an attacker, not just to manipulate, but also to gather data about users, environment, and weaknesses.
+
+## **Elements and interactions at risk from repudiation attacks**
+
+### **Element**
+| Name | Shape | Definition |
+|------|-------|------------|
+| Process | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process50.png) | Activity that modifies or redirects input to an output |
+| External entity | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/external-entity50.png)| Process, data store, or even full-fledged applications outside your control |
+| Data store | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/data-store50.png)| Permanent or temporary data storage |
+
+### **Interaction**
+| Name | Interaction | Definition |
+|------|-------------|------------|
+| Process <-> Process | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-process.png) | A task sends or receives data to or from another task. |
+| Process <-> External Entity | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-externalentity.png) | A task sends or receives data to or from a user. |
+| Process <-> Data Store | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-datastore.png) | A task sends or receives data to or from a data store. |
+
+## **How to prevent repudiation**
+**Non-repudiation** ensures each action can be traced back to its origin by creating and protecting security logs.
+
+## **Common security controls to reduce or eliminate risk**
+* Strong authentication
+* Secure logging and monitoring
+* Digital signatures
+* Secure timestamps
+* Trusted third parties
+
+## **Tip**
+**Good question to ask:** Can I tie every action to an identity?
+
+---
+
+## **Check your knowledge**
+
+**1.**
+
+**Which statement describes a potential security control against repudiation?**
+
+- [ ] Sender digitally signs a message so the receiver knows who the message came from.
+- [ ] System logs all actions and users to keep everyone accountable.
+- [ ] System grants administrative access to users listed on the access control list.
+
+---
+
+## **Відповідь:**
+
+**✅ System logs all actions and users to keep everyone accountable.**
+
+**Пояснення:** Repudiation - це відмова від відповідальності за вчинені дії. Захист від цього типу загроз називається Non-repudiation і забезпечує можливість довести, хто саме виконав конкретну дію. Системне логування всіх дій та користувачів створює аудиторський слід, який дозволяє прив'язати кожну дію до конкретної особи, що унеможливлює відмову від відповідальності.
+
+Інші варіанти стосуються інших типів загроз:
+- Цифровий підпис відноситься до Authentication (захист від spoofing)
+- Надання адміністративного доступу відноситься до Authorization (захист від elevation of privilege)
 
 
+
+
+
+# 5.6 **Information disclosure - seeing data I'm not supposed to see**
+
+**Information disclosure** occurs when sensitive data is exposed to unauthorized individuals. It can happen with or without intention.
+
+Examples include:
+* System reveals sensitive data through error messages.
+* Users access unauthorized documents and folders with weak security controls.
+* Users access data flowing through an unsecured network.
+
+## **Elements and interactions at risk from information disclosure**
+
+### **Element**
+| Name | Shape | Definition |
+|------|-------|------------|
+| Process | | Activity that modifies or redirects input to an output. |
+| Data store | | Permanent or temporary data storage. |
+| Data-flow | | Data movement between elements. |
+
+### **Interaction**
+| Name | Interaction | Definition |
+|------|-------------|------------|
+| Process -> Process | | A task sends data to another task. |
+| Process <-> External entity | | A task sends or receives data to or from a user. |
+| Process <-> Data store | | A task sends or receives data to or from a data store. |
+| Data Flow <-> Trust boundary | | Data is transmitted from a trusted environment to someone over the internet (and vice-versa). |
+
+## **How to prevent information disclosure**
+**Confidentiality** ensures data is protected.
+
+Examples include:
+* Applying access-control lists to ensure the right users can access the right data.
+* Encrypting data at rest, in transit, and in use.
+* Enforcing TLS/SSL to secure transmission.
+* Using IPSec tunnels to secure communication across endpoints.
+
+## **Common security controls to reduce or eliminate risk**
+* Encryption
+* Access Control Lists (ACL)
+
+## **Tip**
+**Good question to ask:** Can I be sure no one can see my data in transit and at rest?
+
+---
+
+## **Check your knowledge**
+
+**1.**
+
+**Which statement describes a potential security control against information disclosure?**
+
+- [ ] Sender digitally signs a message so the receiver knows who the message came from.
+- [ ] System grants administrative access to users listed on the access control list.
+- [ ] System logs all actions and users to keep everyone accountable.
+
+---
+
+## **Відповідь:**
+
+**✅ System grants administrative access to users listed on the access control list.**
+
+**Пояснення:** Information disclosure - це несанкціонований доступ до конфіденційної інформації. Access Control Lists (ACL) забезпечують контроль доступу, дозволяючи переглядати дані лише авторизованим користувачам, що безпосередньо протидіє розкриттю інформації. Навіть якщо це стосується адміністративного доступу, принцип контролю доступу є основним механізмом захисту конфіденційності.
+
+Інші варіанти стосуються інших типів загроз:
+- Цифровий підпис відноситься до Authentication (захист від spoofing)
+- Логування дій відноситься до Non-repudiation (захист від repudiation)
