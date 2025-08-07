@@ -1748,3 +1748,127 @@ Examples include:
 Еластичні ресурси дозволяють системі динамічно адаптуватися до змін навантаження, що є основною стратегією боротьби з DoS атаками типу "flooding the network with requests".
 
 
+
+# 5.8 Elevation of privilege - having permissions I should not have
+
+**Elevation of privilege** occurs when individuals access resources without permission. Examples include:
+* Extracting data by exploiting weaknesses in input-handling logic or memory.
+* Finding and using privileged accounts to corrupt the service (used in combination with spoofing and tampering threats).
+
+## Elements and interactions at risk from elevation of privilege
+
+### Element
+| Name | Shape | Definition |
+|------|-------|------------|
+| Process | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process50.png) | Activity that modifies or redirects input to an output. |
+
+### Interaction
+| Name | Interaction | Definition |
+|------|-------------|------------|
+| Process <-> Process | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-process.png)| A task sends data to another task. |
+| Process <- External entity | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-externalentity-unilateral.png)| A task receives data from a user. |
+| Process <- Data store | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-datastore-unilateral.png)| A task receives data from a data store. |
+
+## How to prevent elevation of privilege
+
+**Authorization** ensures users have proper permissions. Examples include:
+* Implementing authorization mechanisms to verify permissions to data and resources.
+* Applying security controls to run the service using the least possible amount of access.
+* Monitoring access to detect anomalies and unauthorized access attempts.
+
+### Common security controls to reduce or eliminate risk
+* Access-control lists (ACL)
+* Role-based access controls (RBAC)
+* Group-based access
+* Permissions
+* Input validation
+
+> **💡 Tip**
+> 
+> **Good question to ask:** How do I know the user is allowed to do this?
+
+---
+
+## Check your knowledge
+
+**1. Which statement describes a potential security control against elevation of privilege?**
+
+- [x] **System runs a process with the least possible amount of privilege.**
+- [ ] Sender digitally signs a message so the receiver knows who the message came from.
+- [ ] System logs all actions and users to keep everyone accountable.
+
+---
+
+## 📝 Відповідь на запитання
+
+**Правильна відповідь: System runs a process with the least possible amount of privilege.**
+
+**Пояснення:**
+
+1. **Перший варіант** (запуск процесів з мінімальними привілеями) є **прямим засобом захисту** від підвищення привілеїв, оскільки:
+   - Реалізує **принцип найменших привілеїв (Principle of Least Privilege)**
+   - Обмежує потенційну шкоду у випадку компрометації процесу
+   - Запобігає несанкціонованому доступу до ресурсів
+   - Є основним контрольним заходом проти **Elevation of Privilege** атак
+
+2. **Другий варіант** (цифровий підпис) стосується **аутентифікації та неспростовності**, а не контролю привілеїв.
+
+3. **Третій варіант** (логування) відноситься до **аудиту та підзвітності**, що допомагає виявити порушення, але не запобігає підвищенню привілеїв.
+
+**Контекст безпеки:** Elevation of Privilege - це загроза з моделі STRIDE, яка виникає коли зловмисник отримує права доступу вищого рівня, ніж йому дозволено. Запуск процесів з мінімальними необхідними привілеями є фундаментальним принципом захисту від цієї загрози.
+
+
+
+# Summary
+**Completed • 100 XP • 3 minutes**
+
+A threat-model framework helps you generate a list of potential threats and find ways to reduce or eliminate risk for your system. You learned about each threat category with its corresponding security controls.
+
+In this module, you:
+* Discussed each threat category in the threat-modeling framework.
+* Learned about the security controls to help reduce or eliminate risk.
+
+> **💡 Tip**
+> 
+> **Did you know?** There are many other frameworks you can use to accomplish different goals. Examples include using LINDDUN for privacy threats and attack trees for penetration-testing teams. Attack trees help determine how an attack can take place with an "assumed breach" mentality.
+
+## Learn more
+
+* **LINDDUN**: privacy threat-modeling methodology that supports analysts in systematically finding and resolving privacy threats in software architectures.
+* **Cyber kill chain**: describes the typical workflow, including techniques, tactics, and procedures used by attackers to infiltrate an organization's networks and systems.
+
+---
+
+## 📚 Додаткова інформація про frameworks
+
+### LINDDUN Framework
+**LINDDUN** - це акронім для семи категорій загроз приватності:
+- **L**inkability - можливість пов'язати дії користувача
+- **I**dentifiability - можливість ідентифікувати користувача
+- **N**on-repudiation - неможливість заперечити дії
+- **D**etectability - можливість виявити присутність користувача
+- **D**isclosure of information - розкриття приватної інформації
+- **U**nawareness - відсутність усвідомлення обробки даних
+- **N**on-compliance - недотримання вимог приватності
+
+### Attack Trees
+**Дерева атак** - це структурований метод аналізу безпеки, що:
+- Показує різні шляхи досягнення цілі атаки
+- Використовує "assumed breach" підхід
+- Допомагає penetration testing командам
+- Визначає найбільш ймовірні векторі атак
+
+### Cyber Kill Chain
+**Ланцюг кібервбивства** включає етапи:
+1. **Reconnaissance** - розвідка
+2. **Weaponization** - створення зброї
+3. **Delivery** - доставка
+4. **Exploitation** - експлуатація
+5. **Installation** - встановлення
+6. **Command & Control** - управління
+7. **Actions on Objectives** - дії для досягнення цілей
+
+
+
+
+
