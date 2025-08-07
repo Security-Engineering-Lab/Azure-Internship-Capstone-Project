@@ -1,5 +1,15 @@
 
 
+- Лекція 1 - Термінологічні особливості напрямків роботи з дисципліни, https://www.youtube.com/watch?v=ptR927T5GIg&list=PLFGelpaZu_4_pJVl5RbggaeyNYk7Cr1e6&index=1
+- Лекція 2 – Захист від загроз інформаційної безпеки, https://www.youtube.com/watch?v=ohBq6wL8WAw&list=PLFGelpaZu_4_pJVl5RbggaeyNYk7Cr1e6&index=2
+- Лекція 3 – Основи роботи з програмним інструментом моделювання загроз Microsoft Threat Modeling Tool, https://www.youtube.com/watch?v=0DY00dWU-0U&list=PLFGelpaZu_4_pJVl5RbggaeyNYk7Cr1e6&index=3
+- Лекція 8 – Моделі керування санкціонованим доступом до даних, https://www.youtube.com/watch?v=I8rFuWD0qjA&list=PLFGelpaZu_4_pJVl5RbggaeyNYk7Cr1e6&index=4
+- Лекція 9 – Методика захисту програмного забезпечення від атак на основі SQL-ін’єкцій, https://www.youtube.com/watch?v=z1sdSot5Le8&list=PLFGelpaZu_4_pJVl5RbggaeyNYk7Cr1e6&index=5
+- Лекція 10 - Криптографічний захист клієнт-серверної взаємодії в СКБД PostgreSQL, https://www.youtube.com/watch?v=H8AevDmIo3w&list=PLFGelpaZu_4_pJVl5RbggaeyNYk7Cr1e6&index=6
+- Лекція 11 – Захист програмного забезпечення від атак на засоби аутентифікації в СКБД PostgreSQL, https://www.youtube.com/watch?v=UM95Ss8hOqY&list=PLFGelpaZu_4_pJVl5RbggaeyNYk7Cr1e6&index=7
+- Лекція 12 – Етапи компіляції та автоматизація побудови С-програм, https://www.youtube.com/watch?v=Jb4shuZYGj8
+
+
 
 # Курс "Основи моделювання загроз" (Threat Modeling Fundamentals)
 
