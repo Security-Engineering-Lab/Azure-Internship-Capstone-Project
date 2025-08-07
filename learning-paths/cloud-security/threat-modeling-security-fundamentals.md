@@ -1659,3 +1659,82 @@ Examples include:
 Інші варіанти стосуються інших типів загроз:
 - Цифровий підпис відноситься до Authentication (захист від spoofing)
 - Логування дій відноситься до Non-repudiation (захист від repudiation)
+
+
+
+# 5.7 Denial of Service - overwhelming the system
+
+**Denial of service** occurs when an attacker causes the system to be unavailable.
+
+Examples include:
+* Flooding the network with requests.
+* Absorbing memory and CPU processes.
+* Crashing data stores with an overwhelming number of requests.
+
+## Elements and interactions at risk from denial of service
+
+### Element
+| Name | Shape | Definition |
+|------|-------|------------|
+| Process | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process50.png) | Activity that modifies or redirects input to an output. |
+| Data store | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/data-store50.png) | Permanent or temporary data storage. |
+| Data-flow | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/data-flow50.png)| Data movement between elements |
+
+### Interaction
+| Name | Interaction | Definition |
+|------|-------------|------------|
+| Process -> Process | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-process-unilateral.png) | A task sends data to another task. |
+| Process <-> External Entity | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-externalentity.png)| A task sends or receives data to or from a user. |
+| Process <-> Data Store | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/process-datastore.png) | A task sends or receives data to or from a data store. |
+| Data Flow <-> Trust Boundary | ![](https://learn.microsoft.com/en-us/training/modules/tm-use-a-framework-to-identify-threats-and-find-ways-to-reduce-or-eliminate-risk/media/flow-trustboundary.png) | Data is transmitted from a trusted environment to someone over the internet (and vice-versa). |
+
+## How to prevent denial of service
+
+**Availability** ensures your system is up and running for users. Examples include:
+* Using network access-control lists to control incoming and outgoing traffic.
+* Using elastic resources to manage usage when it grows or shrinks.
+* Monitoring the system to detect anomalies.
+* Enabling operating-system flags to handle memory and CPU processes.
+
+### Common security controls to reduce or eliminate risk
+* Access control lists (ACL)
+* Filtering
+* Quotas
+* Authorization
+* High availability
+
+> **💡 Tip**
+> 
+> **Good question to ask:** Are there areas where my service is resource-limited?
+
+---
+
+## Check your knowledge
+
+**1. Which statement describes a potential security control against denial of service?**
+
+- [ ] Sender digitally signs a message so the receiver knows who the message came from.
+- [ ] System logs all actions and users to keep everyone accountable.
+- [x] **System relies on elastic resources to handle more requests as they arrive**
+
+---
+
+## 📝 Відповідь на запитання
+
+**Правильна відповідь: System relies on elastic resources to handle more requests as they arrive**
+
+**Пояснення:**
+
+1. **Перший варіант** (цифровий підпис) стосується **автентифікації та неспростовності**, а не захисту від DoS атак.
+
+2. **Другий варіант** (логування дій) відноситься до **аудиту та підзвітності**, що не допомагає проти DoS.
+
+3. **Третій варіант** (еластичні ресурси) є **прямим засобом захисту від DoS**, оскільки:
+   - Автоматично масштабує ресурси при зростанні навантаження
+   - Запобігає перевантаженню системи через збільшення запитів
+   - Забезпечує **доступність (Availability)** - ключовий принцип проти DoS атак
+   - Відповідає концепції **High availability** з списку контрольних заходів
+
+Еластичні ресурси дозволяють системі динамічно адаптуватися до змін навантаження, що є основною стратегією боротьби з DoS атаками типу "flooding the network with requests".
+
+
