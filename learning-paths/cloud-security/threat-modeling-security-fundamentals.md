@@ -2058,3 +2058,219 @@ In this module, you:
 * Learned to prioritize your issues.
 * Categorized security controls.
 * Understood each security control type and function.
+
+
+# 7 Use recommended tools to create a data-flow diagram
+
+You can use any canvas, physical or virtual, to create a data-flow diagram. Engineers at Microsoft recommend a few tools to help you in your threat modeling journey.
+
+# 7.1 Introduction
+
+A data-flow diagram is a graphical representation of how your system works. It includes all data stores, processes, external entities, trust boundaries, and data-flows. Using these diagrams helps all users in your organization collaborate to enhance your threat modeling work.
+
+## Creating a data-flow diagram
+
+You can use any canvas, physical or virtual, to create a data-flow diagram. However, you do need a working knowledge of threat modeling to analyze it properly.
+
+Some applications provide you with the tools to create a data-flow diagram alongside a threat-generation engine and risk-reduction strategies. Other tools only provide you with the ability to create a data-flow diagram.
+
+The goal of this learning path is to teach you the fundamentals of threat modeling allowing you to threat model on any canvas. We also recommend a couple tools along the way to assist.
+
+## Learning objectives
+
+In this module, you'll:
+* Learn more about the Microsoft Threat Modeling Tool.
+* Learn more about Visio.
+
+# 7.2 Recommended tools
+
+Threat modeling takes your data-flow diagram and applies a framework to help find threats and ways to reduce or eliminate risk. It helps meet security goals early in the development lifecycle and secures your systems, applications, networks, and services.
+
+Some tools help you create a data-flow diagram, while others also help with the threat-generation exercise. Your level of expertise with threat modeling may dictate which tool fits best. We'll look at two tools in the next couple units.
+
+## Microsoft Threat Modeling Tool
+
+The Microsoft Threat Modeling Tool enables you to create data-flow diagrams. It allows anyone to communicate about the security design of their systems, analyze those designs for potential security issues, and suggest and manage mitigations for security issues.
+
+We look at the different sections, stencils, and elements to see how the different properties work together. Then we analyze risk-reduction strategies to specify how threat generation works.
+
+## Visio
+
+Our other recommended tool is Visio. It gives you a clean canvas to create data-flow diagrams. With the Visio desktop and web applications, you can view, edit, and share Visio diagrams as well. You can also save them in Sharepoint or OneDrive to share with others.
+
+We talk about some of the basic functionality of Visio as well as pros and cons associated with the tool.
+
+
+# 7.2 Threat modeling tool
+
+The Microsoft Threat Modeling Tool, recognized by the threat-modeling community, helps engineers create data-flow diagrams. It offers customizable templates and a threat-generation engine with threats and risk-reduction strategies.
+
+The default template is called SDL TM Knowledge Base and gives you a basic set of elements and threat-generation capabilities. All you need is a basic understanding of data-flow diagrams and STRIDE.
+
+## STRIDE
+
+STRIDE is a model that categorizes security threats to help identify them. The Microsoft Threat Modeling Tool helps apply STRIDE for threat-modeling work. STRIDE is the acronym for the six major threat categories:
+
+- **Spoofing**: Pretending to be someone or something else.
+- **Tampering**: Changing data without authorization.
+- **Repudiation**: Not claiming responsibility for an action taken.
+- **Information disclosure**: Seeing data without permission.
+- **Denial of service**: Overwhelming the system.
+- **Elevation of privilege**: Having permissions I shouldn't have.
+
+With this in mind, you can customize your template across the areas we'll discuss next in stencils, threat properties, and risk reduction strategies.
+
+## Stencils
+
+Stencils are made up of parent stencils that include process, external interactor, data store, data-flow, and trust boundaries. They can be drag-and-dropped onto your canvas to build your data-flow diagram.
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-use-recommended-tools-to-create-a-data-flow-diagram/media/parentstencils.jpg)
+
+You can also create child stencils to help provide granularity for more context, actionable threat generation, and risk-reduction strategies.
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-use-recommended-tools-to-create-a-data-flow-diagram/media/expandedflowstencils.jpg)
+
+### Example of how child elements work
+
+The data-flow parent element gives you the option to choose between the HTTP and HTTPS child elements. HTTP should generate more threats because tampering, information disclosure, and spoofing threats are common with unencrypted channels. Following are images of using HTTP vs. HTTPS.
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-use-recommended-tools-to-create-a-data-flow-diagram/media/http.jpg)
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-use-recommended-tools-to-create-a-data-flow-diagram/media/https.jpg)
+
+### Add element properties
+
+If you have other properties that must be included in the default template, you can add them to each element in the administrator view.
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-use-recommended-tools-to-create-a-data-flow-diagram/media/stencilpropertiesadmin.jpg)
+
+You can see the changes whenever you drag and drop that element onto the canvas.
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-use-recommended-tools-to-create-a-data-flow-diagram/media/stencilproperties.jpg)
+
+## Threat properties
+
+These properties allow you to create fields that are filled out for each generated threat, just like stencil properties allow you to create fields for each element. Remember, the goal is to have as much context as possible in the simplest manner.
+
+### Administrator and User Views
+
+Administrators can add fields that give you more context and actionable steps. Examples include:
+
+- **Issue priority**: Understand which issues need to be worked on first.
+- **Hyperlinks**: Link issues to online documentation.
+- **External risk mapping**: Speak the same risk language of other organizations by using reliable third-party sources, such as OWASP (Open Worldwide Application Security Project) Top 10 and CWE (Common Weakness Enumeration) Details.
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-use-recommended-tools-to-create-a-data-flow-diagram/media/threatadminview.jpg)
+
+Then in the User view, the Threat Modeling Tool users see changes whenever they analyze their data-flow diagrams.
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-use-recommended-tools-to-create-a-data-flow-diagram/media/threatuserview.jpg)
+
+## Threats and risk reduction strategies
+
+This section is the heart of the threat modeling tool. The threat-generation engine looks at individual and connected elements to decide which threats to generate.
+
+**Step 1** specifies sources and targets. The threat-generation engine uses simple sentences to generate a threat. Examples include target is [element name] and source is [element name]. You can also use the element name on titles and descriptions. The format is {target.Name} or {source.Name}.
+
+**Step 2** combines sources and targets. You can be precise with the way a threat is generated. Combine targets, sources, and their individual properties with AND/OR operators. Examples include:
+
+- target.[property name] is 'Yes' AND source.[property name] is 'No'
+- flow crosses [trust boundary name]
+
+**Step 3** generates or ignores threats. The threat-generation engine uses two fields to generate or ignore a threat:
+
+- **Include**: A threat is generated if sentences added in this field are true.
+- **Exclude**: A threat isn't generated if sentences added in this field are true.
+
+Here's an actual example from the default template to bring these steps together:
+
+**Threat**: Cross Site Scripting  
+**Include**: (target is [Web Server]) OR (target is [Web Application])  
+**Exclude**: (target.[Sanitizes Output] is 'Yes') AND (target.[Sanitizes Input] is 'Yes')
+
+The Cross Site Scripting threat in this example is only generated when the process is either a Web Server or a Web Application and Input and output aren't sanitized.
+
+![](https://learn.microsoft.com/en-us/training/modules/tm-use-recommended-tools-to-create-a-data-flow-diagram/media/includeexclude.jpg)
+
+> **Note**
+> 
+> Microsoft Threat Modeling Tool template creation is a complex topic and won't be fully discussed in this learning path.
+
+## Check your knowledge
+
+**1. What benefit does the threat modeling tool not provide?**
+
+- Generated threats are based on the entire diagram, not just each element or each individual interaction.
+- Threats, stencils, and stencil properties can be changed.
+- Ways to reduce or eliminate risk are included with each generated threat.
+
+**Відповідь на запитання:**
+
+**Generated threats are based on the entire diagram, not just each element or each individual interaction.**
+
+Це правильна відповідь, оскільки згідно з текстом, Microsoft Threat Modeling Tool генерує загрози на основі окремих елементів та їх з'єднань ("The threat-generation engine looks at individual and connected elements to decide which threats to generate"), а не на основі цілісного аналізу всієї діаграми як єдиного цілого.
+
+Інші два варіанти описують переваги, які інструмент **надає**:
+- Загрози, шаблони та властивості шаблонів можуть бути змінені (це підтверджується описом можливостей кастомізації)
+- Способи зменшення або усунення ризиків включені з кожною згенерованою загрозою (це частина функціональності інструменту)
+
+
+# 7.3 Visio
+
+Microsoft Visio is recognized for its robust set of features to help anyone create quality flowcharts and data-flow diagrams. Visio tools help you visualize how an application or systems is organized towards threat modeling.
+
+You can use Visio to create flowcharts, basic network diagrams, Venn diagrams, block diagrams, and business matrices. All while being able to start quickly and in a collaborative manner. Let's look at some other pros to using Visio and review any cons.
+
+## Pros
+
+Visio provides drag-and-drop functionality and the ability to annotate diagrams. Both are helpful when creating a diagram for your system.
+
+In addition, the tool is accessible for a wide variety of users. The intuitive interface and ease of use takes minimal time to learn and set up. It shares a familiar experience to other Microsoft 365 apps.
+
+It also includes templates for diagrams and flowcharts to help you start quickly. This alongside real-time collaboration, commenting, and sharing with the Visio web app or Visio app in Microsoft Teams makes it a valuable tool across your organization towards your threat modeling goals.
+
+## Cons
+
+The application doesn't offer automated threat-modeling capabilities. As a result, there's no threat-generation engine to help engineers brainstorm threats and risk-reduction strategies.
+
+Also, when you use Visio you'll be responsible for threat modeling each element and interaction manually.
+
+## Check your knowledge
+
+**1. What benefit does Visio not provide?**
+
+- Provides drag-and-drop functionality with default stencils.
+- Outputs a list of generated threats to help engineers brainstorm possible ways to reduce or eliminate risk.
+- Allows engineers to annotate their dataflow diagrams to provide service context.
+
+---
+
+**Відповідь на запитання:**
+
+**Outputs a list of generated threats to help engineers brainstorm possible ways to reduce or eliminate risk.**
+
+Це правильна відповідь, оскільки в розділі "Cons" чітко зазначено, що Visio не пропонує автоматизованих можливостей моделювання загроз і не має движка генерації загроз ("there's no threat-generation engine to help engineers brainstorm threats and risk-reduction strategies").
+
+Інші два варіанти описують переваги, які Visio **надає**:
+- Забезпечує функціональність drag-and-drop з шаблонами за замовчуванням
+- Дозволяє інженерам анотувати діаграми потоків даних для надання контексту сервісу
+
+
+# 7.4 Summary
+
+You can use any canvas, physical or virtual, to create a data-flow diagram. Engineers at Microsoft recommend a few tools to help you in your threat modeling journey.
+
+You learned about the different tools you can use to create your data-flow diagrams.
+
+In this module, you:
+* Learned more about the Microsoft Threat Modeling Tool.
+* Learned more about Visio.
+
+**Note**  
+There are many other tools available to help with your threat-modeling needs. Some require a paid subscription, while others are completely open source. You may even use a whiteboard, which does have a low learning curve but assumes threat-modeling expertise and could be difficult to save.
+
+## Learn more
+
+* Threat Modeling Tool
+* Visio
+
