@@ -1872,3 +1872,189 @@ In this module, you:
 
 
 
+
+# 6 Prioritize your issues and apply security controls
+
+Threat modeling provides you with a list of threats and ways to reduce or eliminate risk, but it doesn't prioritize them for you. Also, there are no layered security control recommendations based on their type and function.
+
+
+# 6.1 Introduction
+
+The threat-modeling framework helps you generate a list of threats and ways to reduce risk, but it doesn't prioritize them for you.
+
+It also doesn't recommend layered security controls based on their type and function, which makes it harder to decide which controls to implement.
+
+## Prioritizing issues
+
+Deciding the priority of issues is an important piece of threat modeling. It helps you to distribute your limited resources to the most critical issues.
+
+Examples include:
+* Having to choose between implementing a feature to log all administrative actions or using SSL/TLS to encrypt traffic.
+* Deciding whether to implement access-control lists or strengthen the input validation process for your system first.
+
+## When to prioritize
+
+Assign a priority to each issue according to its risk factor. Also, select security controls that work with others to help provide a layered security-protection mechanism for your system.
+
+This process can take some time. It also requires assistance from your colleagues and security team. Save enough time to work with them.
+
+## Learning objectives
+
+By the end of this module, you're able to:
+* Assign priorities to issues.
+* Categorize security controls.
+* Understand each security control type and function.
+
+## Prerequisites
+
+* None
+
+
+# 6.2 Issue prioritization, security control types, and functions
+
+The threat-modeling exercise helps you find issues, sometimes more than you expected. The lack of prioritization can leave engineers overwhelmed and unsure of which issues to tackle first.
+
+## How to start
+
+First, determine how critical the issue would be to your system. Second, select the security controls that help provide the most protection at the lowest possible cost.
+
+## Determine priority of security issues
+
+Security issues are prioritized according to the severity of the risk if an attacker exploits the threat. The labels might change from organization to organization. However, they tend to follow a pattern from low-risk to critical.
+
+## Types and functions
+
+Security controls have different types and functions.
+
+There are three main types of security controls that are meant to help you look at three different forms of security.
+
+Examples include:
+* **Physical**: Cameras, badges, and fences
+* **Technical**: Encryption, virtual firewalls, and antivirus
+* **Administrative**: Policies, regulations, and written requirements
+
+Functions are meant to help protect your system against each phase of a potential threat.
+
+Examples include:
+* Preventing break-ins with locks.
+* Installing cameras to detect break-ins in process.
+* Enacting a response plan to correct the break-in.
+* Repairing the damage caused by the break-in.
+* Deterring future break-ins with signs and added security controls.
+
+In the next few units, we look at priorities, types, and functions.
+
+
+# 6.3 Prioritize security issues
+
+Generate the list of threats with ways to reduce or eliminate risk, then work with your colleagues to assign priorities.
+
+## Choose the priority framework
+
+The prioritization exercise should follow the internal security bug bar created by your organization.
+
+For reference purposes, the internal bug bar used by engineers at Microsoft is similar to the following table:
+
+| Icon | Severity | Description |
+|------|----------|-------------|
+| | **Critical** | May cause critical impact for system users. Examples include breaches involving sensitive information disclosure and threats that require privacy and legal involvement. |
+| | **Important** | May cause serious impact for system users. Examples include rendering a system unusable with no known workarounds. |
+| | **Moderate** | May cause moderate impact for system users. Examples include availability issues with possible workarounds. |
+| | **Low** | May cause low impact for system users. |
+| | **Information** | Potential threat has been considered, evaluated, and determined not relevant. |
+
+## Check your knowledge
+
+**1. An issue that may cause serious impact for users typically falls under which priority?**
+
+- Important
+- Critical  
+- Moderate
+
+---
+
+**Відповідь:** **Important**
+
+Згідно з таблицею пріоритетів, рівень "Important" визначається як "May cause serious impact for system users" (може спричинити серйозний вплив для користувачів системи), що точно відповідає формулюванню запитання.
+
+
+
+# 6.4 Security control types and functions
+
+After you determine a priority for each issue, check out the list of security controls and select the options that provide the most benefit for your system.
+
+The most beneficial security controls are found across multiple STRIDE categories. In most cases, they're also relatively inexpensive to implement.
+
+## Security-control types
+
+As you assess each security control, notice how they fall into one of the following types:
+
+| Icon | Type | Description |
+|------|------|-------------|
+| | **Physical** | Controls that physically prevent or detect unauthorized access. Examples include gates, badges, cameras, lighting, and suppression systems. |
+| | **Technical** | Controls that logically protect your system. Examples include firewalls, antivirus, access control lists, and encryption. |
+| | **Administrative** | Controls referring to policies that define processes for your system. Examples include data classification, auditing, and restrictions. |
+
+**Note**  
+Depending on your system, you should apply security controls across all types to help create layers for a more secure system.
+
+## Security-control functions
+
+Along with the three main types, security controls also have five different functions to help you apply multiple layers of security.
+
+| Function | Description | Example |
+|----------|-------------|---------|
+| **Preventative** | Does this strategy help reduce the probability or impact of this threat? | Locks, firewalls, data classification |
+| **Detective** | Does this strategy help identify attacks against my system as they happen? | Surveillance, honeypots, audit logs |
+| **Corrective** | Does this strategy help control how I respond to an incoming attack? | Physical repair, system patches, incident response plans |
+| **Recovery** | Does this mitigation help my service recover from an attack? | Hot-sites, system backups, disaster recovery plan |
+| **Deterrent** | Does this mitigation help keep attackers away from my system? | Fences, least privilege, authorized use policy |
+
+**Tip**  
+Depending on issue priority, you may want to consider multiple security-control functions to secure your system before, during, and after a potential breach.
+
+## How it all comes together
+
+Together with the security-control types, security-control functions create a matrix that helps you make the right selections. Here are a few examples:
+
+| Function | Physical | Logical | Administrative |
+|----------|----------|---------|----------------|
+| **Preventative** | Locks | Firewalls | Data classification |
+| **Detective** | Surveillance | Honeypots | Audit logs |
+| **Corrective** | Physical repair | System patches | Incident response plans |
+| **Recovery** | Hot sites | System backups | Disaster recovery plan |
+| **Deterrent** | Fences | Least privilege | Authorized use policy |
+
+## Check your knowledge
+
+**1. What is an example of an administrative security control?**
+
+- Creating an Incident Response Plan
+- Installing a new firewall
+- Adding badge scanners to the entrance door
+
+**2. What does a corrective security control do?**
+
+- It stops a malicious activity from occurring. Examples include firewalls, data classification, and locks.
+- It detects and alerts a malicious attack before it happens. Examples include honeypots and alarms.
+- It repairs and restores your system after a malicious attack. Examples include patches and incident response plans.
+
+---
+
+**Відповіді:**
+
+**1.** **Creating an Incident Response Plan** - це приклад адміністративного контролю безпеки, оскільки він стосується політик і процесів для системи.
+
+**2.** **It repairs and restores your system after a malicious attack. Examples include patches and incident response plans.** - коригувальні контролі безпеки допомагають контролювати реагування на атаку та відновлювати систему після неї.
+
+
+# 6.5 Summary
+
+The threat-modeling framework provides you with a list of threats and ways to reduce or eliminate risk. However, it doesn't prioritize them for you. There are also no layered security-control recommendations based on their type and function.
+
+You learned how to determine the priority of your issues and apply the right layer of security controls based on type and function.
+
+In this module, you:
+* Learned to prioritize your issues.
+* Categorized security controls.
+* Understood each security control type and function.
